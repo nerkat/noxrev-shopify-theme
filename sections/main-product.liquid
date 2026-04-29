@@ -1,0 +1,114 @@
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign color_option = nil
+
+  for option in product.options_with_values
+    if option.name == 'Color'
+      assign color_option = option
+      break
+    endif
+  endfor
+%}
+
+<div class="main-product">
+  <div class="main-product__media">
+    {% if product.featured_image %}
+      {{
+        product.featured_image
+        | image_url: width: 1200
+        | image_tag:
+          class: 'main-product__image',
+          loading: 'eager',
+          alt: product.featured_image.alt | default: product.title
+      }}
+    {% endif %}
+  </div>
+
+  <div class="main-product__content">
+    <h1 class="main-product__title">{{ product.title }}</h1>
+
+    {% if current_variant %}
+      <p class="main-product__price">{{ current_variant.price | money }}</p>
+    {% endif %}
+
+    <div class="main-product__description">{{ product.description }}</div>
+
+    {% if color_option %}
+      <fieldset class="main-product__option">
+        <legend class="main-product__option-label">{{ color_option.name }}</legend>
+
+        <div class="main-product__option-values">
+          {% for value in color_option.values %}
+            {% assign option_variant = value.variant %}
+
+            {% if option_variant %}
+              {% if value.available %}
+                <a
+                  class="main-product__option-value"
+                  href="{{ product.url }}?variant={{ option_variant.id }}"
+                  {% if value.selected %}
+                    aria-current="true"
+                  {% endif %}
+                >
+                  {{ value.name }}
+                </a>
+              {% else %}
+                <span
+                  class="main-product__option-value"
+                  aria-disabled="true"
+                  {% if value.selected %}
+                    aria-current="true"
+                  {% endif %}
+                >
+                  {{ value.name }}
+                </span>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endif %}
+
+    {% form 'product', product %}
+      {% if current_variant %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {% endif %}
+
+      <div class="main-product__quantity">
+        <label for="Quantity-{{ section.id }}">{{ 'product.quantity' | t }}</label>
+        <input
+          id="Quantity-{{ section.id }}"
+          type="number"
+          name="quantity"
+          min="1"
+          value="1"
+          inputmode="numeric"
+        >
+      </div>
+
+      <button
+        class="main-product__submit"
+        type="submit"
+        {% if current_variant == nil or current_variant.available == false %}
+          disabled
+        {% endif %}
+      >
+        {% if current_variant and current_variant.available %}
+          {{ 'product.add_to_cart' | t }}
+        {% else %}
+          {{ 'product.sold_out' | t }}
+        {% endif %}
+      </button>
+    {% endform %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:general.product",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
