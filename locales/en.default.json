@@ -15,12 +15,15 @@
   },
   "cart": {
     "checkout": "Checkout",
-    "title": "Cart",
-    "update": "Update",
+    "title": "Your cart",
+    "update": "Update cart",
     "remove": "Remove",
     "subtotal": "Subtotal",
-    "empty": "Your cart is empty.",
-    "continue_shopping": "Continue shopping"
+    "empty": "Your cart is empty",
+    "continue_shopping": "Continue shopping",
+    "product": "Product",
+    "quantity": "Quantity",
+    "total": "Total"
   },
   "customers": {
     "login": {
