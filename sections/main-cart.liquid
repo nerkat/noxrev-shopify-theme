@@ -1,0 +1,93 @@
+<div class="main-cart">
+  <h1 class="main-cart__title">{{ 'cart.title' | t }}</h1>
+
+  {% if cart.item_count == 0 %}
+    <div class="main-cart__empty">
+      <p>{{ 'cart.empty' | t }}</p>
+      <a href="{{ routes.root_url }}">{{ 'cart.continue_shopping' | t }}</a>
+    </div>
+  {% else %}
+    {% form 'cart', cart %}
+      <div class="main-cart__items" role="list">
+        {% for item in cart.items %}
+          <article class="main-cart__item" role="listitem">
+            <div class="main-cart__item-media">
+              {% if item.image %}
+                <a href="{{ item.url }}">
+                  {{
+                    item.image
+                    | image_url: width: 320
+                    | image_tag:
+                      class: 'main-cart__image',
+                      loading: 'lazy',
+                      alt: item.image.alt | default: item.product.title
+                  }}
+                </a>
+              {% endif %}
+            </div>
+
+            <div class="main-cart__item-details">
+              <h2 class="main-cart__item-title">
+                <a href="{{ item.url }}">{{ item.product.title }}</a>
+              </h2>
+
+              {% unless item.product.has_only_default_variant %}
+                <p class="main-cart__item-variant">{{ item.variant.title }}</p>
+
+                {% if item.options_with_values != blank %}
+                  <ul class="main-cart__item-options" role="list">
+                    {% for option in item.options_with_values %}
+                      <li>{{ option.name }}: {{ option.value }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              {% endunless %}
+
+              <div class="main-cart__item-actions">
+                <div class="main-cart__item-quantity">
+                  <label for="Quantity-{{ section.id }}-{{ forloop.index }}">{{ 'product.quantity' | t }}</label>
+                  <input
+                    id="Quantity-{{ section.id }}-{{ forloop.index }}"
+                    type="number"
+                    name="updates[]"
+                    min="0"
+                    value="{{ item.quantity }}"
+                    inputmode="numeric"
+                  >
+                </div>
+
+                <a class="main-cart__item-remove" href="{{ item.url_to_remove }}">
+                  {{ 'cart.remove' | t }}
+                </a>
+              </div>
+            </div>
+
+            <p class="main-cart__item-price">{{ item.final_line_price | money }}</p>
+          </article>
+        {% endfor %}
+      </div>
+
+      <div class="main-cart__footer">
+        <div class="main-cart__subtotal">
+          <p>{{ 'cart.subtotal' | t }}</p>
+          <p>{{ cart.total_price | money }}</p>
+        </div>
+
+        <div class="main-cart__buttons">
+          <button class="main-cart__update" type="submit">{{ 'cart.update' | t }}</button>
+          <button class="main-cart__checkout" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button>
+        </div>
+      </div>
+    {% endform %}
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "t:general.cart",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
