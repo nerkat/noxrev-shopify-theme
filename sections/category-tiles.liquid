@@ -15,10 +15,6 @@
           if tile_title == blank and tile_collection != blank
             assign tile_title = tile_collection.title
           endif
-
-          capture placeholder_name
-            echo 'collection-' | append: forloop.index
-          endcapture
         %}
 
         <article class="category-tiles__item" {{ block.shopify_attributes }}>
@@ -29,15 +25,14 @@
           {% endif %}
 
           <div class="category-tiles__media">
-            {% if tile_collection != blank and tile_collection.featured_image %}
-              {{
-                tile_collection.featured_image
-                | image_url: width: 900
-                | image_tag: class: 'category-tiles__image', loading: 'lazy', alt: tile_title
-              }}
-            {% else %}
-              {{ placeholder_name | placeholder_svg_tag: 'category-tiles__placeholder' }}
-            {% endif %}
+            {% render 'responsive-image',
+              image: tile_collection.featured_image,
+              alt: tile_title,
+              class: 'category-tiles__image',
+              loading: 'lazy',
+              sizes: '(min-width: 861px) 33vw, 100vw',
+              widths: '320, 480, 720, 960'
+            %}
           </div>
 
           <div class="category-tiles__content">
@@ -87,8 +82,7 @@
     overflow: hidden;
   }
 
-  .category-tiles__image,
-  .category-tiles__placeholder {
+  .category-tiles__image {
     width: 100%;
     height: 100%;
     object-fit: cover;

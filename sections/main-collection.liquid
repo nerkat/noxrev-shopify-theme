@@ -36,23 +36,19 @@
           <article class="main-collection__card">
             <a class="main-collection__card-link" href="{{ product.url }}">
               <div class="main-collection__card-media">
-                {% if product.featured_image %}
-                  {{
-                    product.featured_image
-                    | image_url: width: 720
-                    | image_tag:
-                      class: 'main-collection__card-image',
-                      loading: 'lazy',
-                      alt: product.featured_image.alt | default: product.title
-                  }}
-                {% else %}
-                  {{ 'product-1' | placeholder_svg_tag: 'main-collection__card-placeholder' }}
-                {% endif %}
+                {% render 'responsive-image',
+                  image: product.featured_image,
+                  alt: product.title,
+                  class: 'main-collection__card-image',
+                  loading: 'lazy',
+                  sizes: '(min-width: 861px) 25vw, 50vw',
+                  widths: '240, 360, 540, 720, 960'
+                %}
               </div>
 
               <div class="main-collection__card-content">
                 <h2 class="main-collection__card-title">{{ product.title }}</h2>
-                <p class="main-collection__card-price">{{ product.price | money }}</p>
+                <p class="main-collection__card-price">{% render 'price', amount: product.price %}</p>
               </div>
             </a>
           </article>
@@ -140,8 +136,7 @@
     background: #f3f3f3;
   }
 
-  .main-collection__card-image,
-  .main-collection__card-placeholder {
+  .main-collection__card-image {
     width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;

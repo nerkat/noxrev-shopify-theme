@@ -12,7 +12,16 @@
     {% for item in cart.items %}
       <tr>
         <td>
-          {% render 'image', image: item.image, url: item.url %}
+          <a href="{{ item.url }}">
+            {% render 'responsive-image',
+              image: item.image,
+              alt: item.product.title,
+              class: 'cart-item__image',
+              loading: 'lazy',
+              sizes: '96px',
+              widths: '96, 160, 240, 320'
+            %}
+          </a>
         </td>
         <td>
           <p>{{ item.product.title }}</p>

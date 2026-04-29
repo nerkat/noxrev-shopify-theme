@@ -11,19 +11,19 @@
   {% paginate collection.products by 20 %}
     {% for product in collection.products %}
       <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
+        <a href="{{ product.url }}">
+          {% render 'responsive-image',
             image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
+            alt: product.title,
+            class: 'collection-product__image',
+            loading: 'lazy',
+            sizes: '(min-width: 861px) 33vw, 100vw',
+            widths: '240, 360, 480, 720'
           %}
-        {% endif %}
+        </a>
         <div class="collection-product__content">
           <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
+          <p>{% render 'price', amount: product.price %}</p>
         </div>
       </div>
     {% endfor %}

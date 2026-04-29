@@ -1,6 +1,7 @@
 {% liquid
   assign current_variant = product.selected_or_first_available_variant
   assign current_media = current_variant.featured_media | default: product.featured_media | default: product.media.first
+  assign current_image = current_media.preview_image | default: current_media
   assign excerpt = product.description | strip_html | truncatewords: 28
 %}
 
@@ -8,58 +9,33 @@
   <div class="main-product__main">
     <div class="main-product__media-column">
       <div class="main-product__media">
-        {% if current_media %}
-          {% if current_media.media_type == 'image' %}
-            {{
-              current_media
-              | image_url: width: 1400
-              | image_tag:
-                class: 'main-product__image',
-                loading: 'eager',
-                alt: current_media.alt | default: product.title
-            }}
-          {% elsif current_media.preview_image %}
-            {{
-              current_media.preview_image
-              | image_url: width: 1400
-              | image_tag:
-                class: 'main-product__image',
-                loading: 'eager',
-                alt: current_media.preview_image.alt | default: product.title
-            }}
-          {% endif %}
-        {% else %}
-          {{ 'product-1' | placeholder_svg_tag: 'main-product__placeholder' }}
-        {% endif %}
+        {% render 'responsive-image',
+          image: current_image,
+          alt: product.title,
+          class: 'main-product__image',
+          loading: 'eager',
+          sizes: '(min-width: 861px) 55vw, 100vw',
+          widths: '400, 640, 900, 1200, 1400'
+        %}
       </div>
 
       {% if product.media.size > 1 %}
         <ul class="main-product__thumbnails" role="list">
           {% for media in product.media %}
+            {% assign thumbnail_image = media.preview_image | default: media %}
             <li class="main-product__thumbnail-item">
               <div
                 class="main-product__thumbnail{% if current_media and media.id == current_media.id %} is-active{% endif %}"
                 aria-current="{% if current_media and media.id == current_media.id %}true{% else %}false{% endif %}"
               >
-                {% if media.media_type == 'image' %}
-                  {{
-                    media
-                    | image_url: width: 200
-                    | image_tag:
-                      class: 'main-product__thumbnail-image',
-                      loading: 'lazy',
-                      alt: media.alt | default: product.title
-                  }}
-                {% elsif media.preview_image %}
-                  {{
-                    media.preview_image
-                    | image_url: width: 200
-                    | image_tag:
-                      class: 'main-product__thumbnail-image',
-                      loading: 'lazy',
-                      alt: media.preview_image.alt | default: product.title
-                  }}
-                {% endif %}
+                {% render 'responsive-image',
+                  image: thumbnail_image,
+                  alt: product.title,
+                  class: 'main-product__thumbnail-image',
+                  loading: 'lazy',
+                  sizes: '72px',
+                  widths: '72, 96, 144, 200'
+                %}
               </div>
             </li>
           {% endfor %}
@@ -71,7 +47,7 @@
       <h1 class="main-product__title">{{ product.title }}</h1>
 
       {% if current_variant %}
-        <p class="main-product__price">{{ current_variant.price | money }}</p>
+        <p class="main-product__price">{% render 'price', amount: current_variant.price %}</p>
       {% endif %}
 
       {% if excerpt != blank %}
@@ -136,7 +112,7 @@
         </div>
 
         <button
-          class="main-product__submit"
+          class="main-product__submit btn btn--primary"
           type="submit"
           {% if current_variant == nil or current_variant.available == false %}
             disabled
@@ -164,7 +140,6 @@
 
 {% stylesheet %}
   .page-width.main-product {
-    width: 100%;
     padding: 2rem 0 3rem;
   }
 
@@ -184,8 +159,7 @@
     background: #f3f3f3;
   }
 
-  .main-product__image,
-  .main-product__placeholder {
+  .main-product__image {
     width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
@@ -289,17 +263,7 @@
   }
 
   .main-product__submit {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
-    min-height: 3.25rem;
-    padding: 0.85rem 1.25rem;
-    border: 1px solid var(--color-foreground);
-    background: var(--color-foreground);
-    color: var(--color-background);
-    font: inherit;
-    cursor: pointer;
   }
 
   .main-product__submit[disabled] {

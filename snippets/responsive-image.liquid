@@ -1,0 +1,32 @@
+{% doc %}
+  Renders a responsive Shopify image with configurable srcset widths and sizes.
+
+  @param {image} [image] - The image object to render
+  @param {string} [alt] - Optional alt override
+  @param {string} [class] - Optional class for the rendered image
+  @param {string} [loading] - Optional loading strategy
+  @param {string} [sizes] - Optional sizes attribute
+  @param {string} [widths] - Optional comma-separated widths for srcset
+
+  @example
+  {% render 'responsive-image', image: product.featured_image %}
+  {% render 'responsive-image', image: product.featured_image, class: 'card__image', widths: '320, 640, 960' %}
+{% enddoc %}
+
+{%- liquid
+  assign image_loading = loading | default: 'lazy'
+  assign image_widths = widths | default: '320, 640, 960, 1280'
+  assign width_values = image_widths | split: ','
+  assign image_width = width_values.last | strip | plus: 0
+  assign image_alt = alt | default: image.alt
+-%}
+
+{%- if image != blank -%}
+  {%- if sizes != blank -%}
+    {{- image | image_url: width: image_width | image_tag: class: class, loading: image_loading, alt: image_alt, sizes: sizes, widths: image_widths -}}
+  {%- else -%}
+    {{- image | image_url: width: image_width | image_tag: class: class, loading: image_loading, alt: image_alt, widths: image_widths -}}
+  {%- endif -%}
+{%- else -%}
+  {{- 'image' | placeholder_svg_tag: class -}}
+{%- endif -%}

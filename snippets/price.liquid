@@ -1,0 +1,27 @@
+{% doc %}
+  Renders a formatted money amount.
+
+  @param {number} [amount] - The amount to format
+  @param {string} [class] - Optional class for a wrapping span
+  @param {boolean} [show_currency] - When true, uses money_with_currency
+
+  @example
+  {% render 'price', amount: product.price %}
+  {% render 'price', amount: line_item.final_line_price, class: 'cart__price' %}
+{% enddoc %}
+
+{%- if amount != blank -%}
+  {%- capture formatted_price -%}
+    {%- if show_currency -%}
+      {{- amount | money_with_currency -}}
+    {%- else -%}
+      {{- amount | money -}}
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- if class != blank -%}
+    <span class="{{ class }}">{{- formatted_price | strip -}}</span>
+  {%- else -%}
+    {{- formatted_price | strip -}}
+  {%- endif -%}
+{%- endif -%}

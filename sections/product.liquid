@@ -7,13 +7,20 @@
 
 <div class="product-images">
   {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
+    {% render 'responsive-image',
+      image: image,
+      alt: product.title,
+      class: 'product-image',
+      loading: 'lazy',
+      sizes: '(min-width: 861px) 33vw, 100vw',
+      widths: '320, 480, 720, 960'
+    %}
   {% endfor %}
 </div>
 
 <div class="product-info">
   <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
+  <p>{% render 'price', amount: product.price %}</p>
   <p>{{ product.description }}</p>
 </div>
 
@@ -29,7 +36,7 @@
             selected="selected"
           {% endif %}
         >
-          {{ variant.title }} - {{ variant.price | money }}
+          {{ variant.title }} - {% render 'price', amount: variant.price %}
         </option>
       {% endfor %}
     </select>

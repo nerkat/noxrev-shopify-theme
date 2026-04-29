@@ -19,17 +19,18 @@
     {% for product in catalog_collection.products limit: product_limit %}
       <article class="featured-catalog__item">
         <a class="featured-catalog__link" href="{{ product.url }}">
-          {% if product.featured_image %}
-            {{
-              product.featured_image
-              | image_url: width: 720
-              | image_tag: class: 'featured-catalog__image', loading: 'lazy', alt: product.title
-            }}
-          {% endif %}
+          {% render 'responsive-image',
+            image: product.featured_image,
+            alt: product.title,
+            class: 'featured-catalog__image',
+            loading: 'lazy',
+            sizes: '(min-width: 861px) 25vw, 50vw',
+            widths: '240, 360, 540, 720, 960'
+          %}
 
           <div class="featured-catalog__content">
             <h3 class="featured-catalog__product-title">{{ product.title | escape }}</h3>
-            <p class="featured-catalog__price">{{ product.price | money }}</p>
+            <p class="featured-catalog__price">{% render 'price', amount: product.price %}</p>
           </div>
         </a>
       </article>
