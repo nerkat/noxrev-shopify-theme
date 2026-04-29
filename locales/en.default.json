@@ -51,7 +51,9 @@
   "product": {
     "quantity": "Quantity",
     "add_to_cart": "Add to cart",
-    "sold_out": "Sold out"
+    "sold_out": "Sold out",
+    "help_text": "Questions about materials, sizing, or shipping? Contact the store before you order.",
+    "details": "Product details"
   },
   "search": {
     "title": "Search",
