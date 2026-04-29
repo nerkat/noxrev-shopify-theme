@@ -52,6 +52,15 @@
     "password": "Password",
     "enter": "Enter"
   },
+  "page": {
+    "placeholder_intro": "We build simple product pages and clear shopping flows that help customers find what they need quickly.",
+    "placeholder_paragraph_1": "This placeholder About page is here so the page template has useful preview content before store copy is added in the Shopify admin.",
+    "placeholder_paragraph_2": "Keep the final content straightforward: explain what the shop offers, how products are selected, and what kind of support customers can expect after purchase.",
+    "placeholder_list_1": "Focused catalog with a small set of strong products",
+    "placeholder_list_2": "Clear product details and native Shopify purchasing flow",
+    "placeholder_list_3": "Easy-to-maintain theme sections for future updates",
+    "placeholder_cta": "Update this page in the admin when your final brand story and contact details are ready."
+  },
   "product": {
     "quantity": "Quantity",
     "add_to_cart": "Add to cart",

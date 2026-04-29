@@ -1,0 +1,79 @@
+<div class="page-width main-page">
+  <div class="main-page__content">
+    <h1 class="main-page__title">{{ page.title }}</h1>
+
+    {% if section.settings.intro != blank %}
+      <p class="main-page__intro">{{ section.settings.intro | escape }}</p>
+    {% endif %}
+
+    {% if page.content != blank %}
+      <div class="main-page__body">{{ page.content }}</div>
+    {% else %}
+      <div class="main-page__body">
+        <p>{{ 'page.placeholder_intro' | t }}</p>
+        <p>{{ 'page.placeholder_paragraph_1' | t }}</p>
+        <p>{{ 'page.placeholder_paragraph_2' | t }}</p>
+        <ul>
+          <li>{{ 'page.placeholder_list_1' | t }}</li>
+          <li>{{ 'page.placeholder_list_2' | t }}</li>
+          <li>{{ 'page.placeholder_list_3' | t }}</li>
+        </ul>
+        <p>{{ 'page.placeholder_cta' | t }}</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .page-width.main-page {
+    width: 100%;
+    padding: 2rem 0 3rem;
+  }
+
+  .main-page__content {
+    max-width: 48rem;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .main-page__title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .main-page__intro {
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .main-page__body {
+    line-height: 1.7;
+  }
+
+  .main-page__body > * + * {
+    margin-top: 1rem;
+  }
+
+  .main-page__body ul {
+    padding-left: 1.25rem;
+  }
+
+  .main-page__body li + li {
+    margin-top: 0.35rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
