@@ -1,0 +1,191 @@
+{% liquid
+  assign current_sort = collection.sort_by | default: collection.default_sort_by
+%}
+
+<div class="page-width main-collection">
+  <div class="main-collection__header">
+    <div class="main-collection__intro">
+      <h1 class="main-collection__title">{{ collection.title }}</h1>
+
+      {% if collection.description != blank %}
+        <div class="main-collection__description">{{ collection.description }}</div>
+      {% endif %}
+
+      <p class="main-collection__count">{{ collection.products_count }} {{ 'collections.products' | t }}</p>
+    </div>
+
+    <form class="main-collection__sort" action="{{ collection.url }}" method="get">
+      <label class="main-collection__sort-label" for="SortBy-{{ section.id }}">{{ 'collections.sort_label' | t }}</label>
+      <div class="main-collection__sort-controls">
+        <select id="SortBy-{{ section.id }}" name="sort_by">
+          {% for option in collection.sort_options %}
+            <option value="{{ option.value }}" {% if option.value == current_sort %}selected="selected"{% endif %}>
+              {{ option.name }}
+            </option>
+          {% endfor %}
+        </select>
+        <button type="submit">{{ 'collections.sort_submit' | t }}</button>
+      </div>
+    </form>
+  </div>
+
+  {% paginate collection.products by 12 %}
+    {% if paginate.items > 0 %}
+      <div class="main-collection__grid">
+        {% for product in collection.products %}
+          <article class="main-collection__card">
+            <a class="main-collection__card-link" href="{{ product.url }}">
+              <div class="main-collection__card-media">
+                {% if product.featured_image %}
+                  {{
+                    product.featured_image
+                    | image_url: width: 720
+                    | image_tag:
+                      class: 'main-collection__card-image',
+                      loading: 'lazy',
+                      alt: product.featured_image.alt | default: product.title
+                  }}
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'main-collection__card-placeholder' }}
+                {% endif %}
+              </div>
+
+              <div class="main-collection__card-content">
+                <h2 class="main-collection__card-title">{{ product.title }}</h2>
+                <p class="main-collection__card-price">{{ product.price | money }}</p>
+              </div>
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <div class="main-collection__pagination">
+          {{ paginate | default_pagination }}
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="main-collection__empty">
+        <p>{{ 'collections.empty' | t }}</p>
+      </div>
+    {% endif %}
+  {% endpaginate %}
+</div>
+
+{% stylesheet %}
+  .page-width.main-collection {
+    width: 100%;
+    padding: 2rem 0 3rem;
+  }
+
+  .main-collection__header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .main-collection__intro {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .main-collection__title {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .main-collection__description {
+    line-height: 1.6;
+  }
+
+  .main-collection__sort {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 16rem;
+  }
+
+  .main-collection__sort-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .main-collection__sort select,
+  .main-collection__sort button {
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    background: transparent;
+    font: inherit;
+  }
+
+  .main-collection__sort select {
+    flex: 1 1 auto;
+  }
+
+  .main-collection__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .main-collection__card-link {
+    display: grid;
+    gap: 0.75rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .main-collection__card-media {
+    background: #f3f3f3;
+  }
+
+  .main-collection__card-image,
+  .main-collection__card-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .main-collection__card-content {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .main-collection__card-title {
+    font-size: 1rem;
+  }
+
+  .main-collection__pagination {
+    margin-top: 2rem;
+  }
+
+  .main-collection__empty {
+    padding: 2rem 0;
+  }
+
+  @media (max-width: 860px) {
+    .main-collection__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .main-collection__sort {
+      width: 100%;
+    }
+
+    .main-collection__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
