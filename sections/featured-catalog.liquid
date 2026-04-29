@@ -1,0 +1,63 @@
+{% liquid
+  assign product_limit = section.settings.product_limit | default: 8 | at_least: 1 | at_most: 8
+
+  if section.settings.collection != blank
+    assign catalog_collection = section.settings.collection
+  else
+    assign catalog_collection = collections.all
+  endif
+%}
+
+<section class="featured-catalog">
+  {% if section.settings.heading != blank %}
+    <header class="featured-catalog__header">
+      <h2 class="featured-catalog__title">{{ section.settings.heading | escape }}</h2>
+    </header>
+  {% endif %}
+
+  <div class="featured-catalog__grid">
+    {% for product in catalog_collection.products limit: product_limit %}
+      <article class="featured-catalog__item">
+        <a class="featured-catalog__link" href="{{ product.url }}">
+          {% if product.featured_image %}
+            {{
+              product.featured_image
+              | image_url: width: 720
+              | image_tag: class: 'featured-catalog__image', loading: 'lazy', alt: product.title
+            }}
+          {% endif %}
+
+          <div class="featured-catalog__content">
+            <h3 class="featured-catalog__product-title">{{ product.title | escape }}</h3>
+            <p class="featured-catalog__price">{{ product.price | money }}</p>
+          </div>
+        </a>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured catalog",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured catalog"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "number",
+      "id": "product_limit",
+      "label": "Product limit",
+      "default": 8
+    }
+  ]
+}
+{% endschema %}

@@ -12,9 +12,17 @@
     "main": {
       "type": "hello-world",
       "settings": {}
+    },
+    "featured_catalog": {
+      "type": "featured-catalog",
+      "settings": {
+        "heading": "Featured catalog",
+        "product_limit": 8
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "featured_catalog"
   ]
 }
