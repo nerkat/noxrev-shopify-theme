@@ -1,59 +1,120 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{% liquid
+  assign has_nav_links = false
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+  if section.settings.menu != blank
+    for link in section.settings.menu.links
+      unless link.url == routes.search_url
+        assign has_nav_links = true
+        break
+      endunless
+    endfor
+  endif
+%}
+
+<header class="site-header">
+  <div class="site-header__brand">
+    <a class="site-header__title" href="{{ routes.root_url }}">{{ shop.name }}</a>
   </div>
 
-  <div class="header__icons">
+  {% if has_nav_links %}
+    <nav class="site-header__nav" aria-label="Primary">
+      {% for link in section.settings.menu.links %}
+        {% unless link.url == routes.search_url %}
+          <a class="site-header__nav-link" href="{{ link.url }}">{{ link.title }}</a>
+        {% endunless %}
+      {% endfor %}
+    </nav>
+  {% endif %}
+
+  <div class="site-header__actions">
     {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
+      <shopify-account class="site-header__account" menu="{{ section.settings.customer_account_menu }}">
         {{ 'icon-account.svg' | inline_asset_content }}
       </shopify-account>
     {% endif %}
 
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
-      {{ 'icon-cart.svg' | inline_asset_content }}
+    <a class="site-header__cart" href="{{ routes.cart_url }}">
+      <span class="site-header__cart-icon">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+      <span class="site-header__cart-count">{{ cart.item_count }}</span>
     </a>
   </div>
 </header>
 
 {% stylesheet %}
-  header {
-    height: 5rem;
+  .site-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   }
-  header a {
-    position: relative;
+
+  .site-header__title,
+  .site-header__nav-link,
+  .site-header__cart,
+  .site-header__account {
     text-decoration: none;
     color: var(--color-foreground);
+  }
+
+  .site-header__title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .site-header__nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+  }
+
+  .site-header__nav-link {
+    font-size: 0.95rem;
+  }
+
+  .site-header__actions {
     display: flex;
     align-items: center;
-    justify-content: center;
-  }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
-    display: flex;
     gap: 1rem;
+  }
+
+  .site-header__account svg,
+  .site-header__cart-icon svg {
+    width: 1.5rem;
+  }
+
+  .site-header__cart {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .site-header__cart-count {
+    min-width: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 860px) {
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .site-header__nav {
+      justify-content: flex-start;
+    }
+
+    .site-header__actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
   }
 {% endstylesheet %}
 

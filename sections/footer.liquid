@@ -1,39 +1,88 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
+{% liquid
+  assign has_footer_links = false
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+  if section.settings.menu != blank
+    for link in section.settings.menu.links
+      unless link.url == routes.search_url
+        assign has_footer_links = true
+        break
+      endunless
+    endfor
+  endif
+%}
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
+<footer class="site-footer">
+  <div class="site-footer__brand">
+    <a class="site-footer__title" href="{{ routes.root_url }}">{{ shop.name }}</a>
+
+    {% if section.settings.text != blank %}
+      <p class="site-footer__text">{{ section.settings.text | escape }}</p>
     {% endif %}
   </div>
+
+  {% if has_footer_links %}
+    <nav class="site-footer__nav" aria-label="Footer">
+      {% for link in section.settings.menu.links %}
+        {% unless link.url == routes.search_url %}
+          <a class="site-footer__link" href="{{ link.url }}">{{ link.title }}</a>
+        {% endunless %}
+      {% endfor %}
+    </nav>
+  {% endif %}
+
+  <p class="site-footer__meta">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
 </footer>
 
 {% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
+  .site-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
   }
-  footer a {
+
+  .site-footer__title,
+  .site-footer__link {
     text-decoration: none;
     color: var(--color-foreground);
   }
-  footer .footer__links,
-  footer .footer__payment {
+
+  .site-footer__brand {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 28rem;
+  }
+
+  .site-footer__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .site-footer__text {
+    line-height: 1.6;
+  }
+
+  .site-footer__nav {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
+  }
+
+  .site-footer__meta {
+    text-align: right;
+  }
+
+  @media (max-width: 860px) {
+    .site-footer {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer__meta {
+      text-align: left;
+    }
   }
 {% endstylesheet %}
 
@@ -47,10 +96,10 @@
       "label": "t:labels.menu"
     },
     {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
-      "default": true
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "A minimal footer for contact, policy, and support links."
     }
   ]
 }

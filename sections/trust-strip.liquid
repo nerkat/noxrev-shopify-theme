@@ -1,0 +1,79 @@
+{% if section.blocks.size > 0 %}
+  <section class="trust-strip full-width">
+    <div class="trust-strip__inner">
+      {% for block in section.blocks %}
+        <div class="trust-strip__item" {{ block.shopify_attributes }}>
+          {% if block.settings.heading != blank %}
+            <h2 class="trust-strip__heading">{{ block.settings.heading | escape }}</h2>
+          {% endif %}
+
+          {% if block.settings.text != blank %}
+            <p class="trust-strip__text">{{ block.settings.text | escape }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .trust-strip {
+    background: #f8f7f3;
+    padding: 1.5rem 0;
+    border-block: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .trust-strip__inner {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .trust-strip__item {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .trust-strip__heading {
+    font-size: 1rem;
+  }
+
+  .trust-strip__text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 860px) {
+    .trust-strip__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trust strip",
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Fast dispatch"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Simple promise copy that supports the storefront without adding extra features."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3
+}
+{% endschema %}

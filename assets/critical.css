@@ -78,6 +78,11 @@ body {
   color: var(--color-foreground);
 }
 
+main {
+  display: block;
+  flex: 1 0 auto;
+}
+
 /** Section layout utilities */
 
 /**

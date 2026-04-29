@@ -10,8 +10,45 @@
 {
   "sections": {
     "main": {
-      "type": "hello-world",
-      "settings": {}
+      "type": "home-hero",
+      "settings": {
+        "eyebrow": "Fresh storefront layout",
+        "heading": "A simple storefront built for focused product catalogs",
+        "text": "Use a clean homepage structure to guide customers from hero messaging into category browsing and featured products.",
+        "button_label": "Shop all products",
+        "button_link": ""
+      }
+    },
+    "category_tiles": {
+      "type": "category-tiles",
+      "blocks": {
+        "tile_1": {
+          "type": "tile",
+          "settings": {
+            "title": "Everyday essentials"
+          }
+        },
+        "tile_2": {
+          "type": "tile",
+          "settings": {
+            "title": "Weekend picks"
+          }
+        },
+        "tile_3": {
+          "type": "tile",
+          "settings": {
+            "title": "New arrivals"
+          }
+        }
+      },
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3"
+      ],
+      "settings": {
+        "heading": "Shop by collection"
+      }
     },
     "featured_catalog": {
       "type": "featured-catalog",
@@ -19,10 +56,44 @@
         "heading": "Featured catalog",
         "product_limit": 8
       }
+    },
+    "trust_strip": {
+      "type": "trust-strip",
+      "blocks": {
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "heading": "Straightforward shopping",
+            "text": "Simple sections keep the storefront easy to browse and easy to maintain."
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "heading": "Flexible collections",
+            "text": "Merchants can swap in collections and featured products without changing the layout."
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "heading": "Native cart flow",
+            "text": "Product and cart interactions stay standard Shopify with no drawer or AJAX layer."
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3"
+      ],
+      "settings": {}
     }
   },
   "order": [
     "main",
-    "featured_catalog"
+    "category_tiles",
+    "featured_catalog",
+    "trust_strip"
   ]
 }

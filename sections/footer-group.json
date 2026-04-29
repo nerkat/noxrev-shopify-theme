@@ -14,8 +14,8 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "menu": "footer",
+        "text": "A simple footer for support, policies, and shop information."
       }
     }
   },

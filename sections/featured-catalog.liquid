@@ -37,6 +37,55 @@
   </div>
 </section>
 
+{% stylesheet %}
+  .featured-catalog {
+    padding: 3rem 0;
+  }
+
+  .featured-catalog__header {
+    margin-bottom: 1.25rem;
+  }
+
+  .featured-catalog__title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .featured-catalog__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .featured-catalog__link {
+    display: grid;
+    gap: 0.75rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .featured-catalog__image {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background: #f3f3f3;
+  }
+
+  .featured-catalog__content {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .featured-catalog__product-title {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 860px) {
+    .featured-catalog__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Featured catalog",
