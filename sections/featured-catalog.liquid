@@ -9,11 +9,21 @@
 %}
 
 <section class="container section featured-catalog">
-  {% if section.settings.heading != blank %}
-    <header class="featured-catalog__header">
-      <h2 class="featured-catalog__title">{{ section.settings.heading | escape }}</h2>
-    </header>
-  {% endif %}
+  <header class="featured-catalog__header">
+    <div>
+      {% if section.settings.eyebrow != blank %}
+        <p class="kicker">{{ section.settings.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h2 class="featured-catalog__title heading-gradient">{{ section.settings.heading | escape }}</h2>
+      {% endif %}
+    </div>
+
+    {% if section.settings.text != blank %}
+      <p class="featured-catalog__text">{{ section.settings.text | escape }}</p>
+    {% endif %}
+  </header>
 
   <div class="featured-catalog__grid grid grid--4">
     {% for product in catalog_collection.products limit: product_limit %}
@@ -24,11 +34,32 @@
 
 {% stylesheet %}
   .featured-catalog__header {
-    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
   }
 
   .featured-catalog__title {
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    max-width: 42rem;
+    margin-top: 0.75rem;
+    font-size: clamp(2rem, 6vw, 3rem);
+    line-height: 1.04;
+  }
+
+  .featured-catalog__text {
+    max-width: 34rem;
+    color: var(--theme-color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 749px) {
+    .featured-catalog__header {
+      display: grid;
+      gap: 1rem;
+    }
   }
 
 {% endstylesheet %}
@@ -39,9 +70,20 @@
   "settings": [
     {
       "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Featured products"
+    },
+    {
+      "type": "text",
       "id": "heading",
       "label": "Heading",
       "default": "Featured catalog"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
     },
     {
       "type": "collection",

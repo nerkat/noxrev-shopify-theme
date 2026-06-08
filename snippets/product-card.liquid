@@ -12,13 +12,19 @@
   assign compare_at_price = current_variant.compare_at_price
   assign price = current_variant.price | default: product.price
   assign on_sale = false
+  assign meta_label = product.type
+  assign option_count = product.variants.size
 
   if compare_at_price > price
     assign on_sale = true
   endif
+
+  if meta_label == blank and show_vendor and product.vendor != blank
+    assign meta_label = product.vendor
+  endif
 -%}
 
-<article class="product-card card">
+<article class="product-card card panel link-surface">
   <div class="product-card__badges">
     {% unless product.available %}
       <span class="badge badge--secondary">Sold out</span>
@@ -28,6 +34,12 @@
       <span class="badge">Sale</span>
     {% endif %}
   </div>
+
+  {% if meta_label != blank %}
+    <div class="product-card__meta">
+      <span class="chip">{{ meta_label | escape }}</span>
+    </div>
+  {% endif %}
 
   <a class="product-card__link" href="{{ product.url }}">
     <div class="product-card__media card__media">
@@ -48,15 +60,25 @@
         <p class="product-card__vendor">{{ product.vendor | escape }}</p>
       {% endif %}
 
-      <div class="product-card__price" aria-label="Product price">
-        <p class="product-card__price-current">{% render 'price', amount: price %}</p>
+      <div class="product-card__footer">
+        <div>
+          <div class="product-card__price" aria-label="Product price">
+            <p class="product-card__price-current">{% render 'price', amount: price %}</p>
 
-        {% if on_sale %}
-          <p class="product-card__price-compare">
-            <span class="visually-hidden">Regular price</span>
-            {% render 'price', amount: compare_at_price %}
-          </p>
-        {% endif %}
+            {% if on_sale %}
+              <p class="product-card__price-compare">
+                <span class="visually-hidden">Regular price</span>
+                {% render 'price', amount: compare_at_price %}
+              </p>
+            {% endif %}
+          </div>
+
+          {% if option_count > 1 %}
+            <p class="product-card__status">{{ option_count }} options</p>
+          {% endif %}
+        </div>
+
+        <span class="product-card__cta">Open product</span>
       </div>
 
       {% unless product.available %}

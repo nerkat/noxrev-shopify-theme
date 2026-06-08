@@ -61,6 +61,20 @@
           <p>{{ section.settings.contact_info | escape }}</p>
         {% endif %}
       </div>
+
+      {% if has_social_links %}
+        <div class="footer__social footer__social--brand">
+          {% if section.settings.social_instagram != blank %}
+            <a class="footer__social-link" href="{{ section.settings.social_instagram }}">Instagram</a>
+          {% endif %}
+          {% if section.settings.social_facebook != blank %}
+            <a class="footer__social-link" href="{{ section.settings.social_facebook }}">Facebook</a>
+          {% endif %}
+          {% if section.settings.social_tiktok != blank %}
+            <a class="footer__social-link" href="{{ section.settings.social_tiktok }}">TikTok</a>
+          {% endif %}
+        </div>
+      {% endif %}
     </div>
 
     {% if has_primary_menu %}
@@ -100,21 +114,6 @@
         </div>
       {% endif %}
 
-      {% if has_social_links %}
-        <div class="footer__social">
-          <h2 class="footer__heading">Social</h2>
-          {% if section.settings.social_instagram != blank %}
-            <a class="footer__link" href="{{ section.settings.social_instagram }}">Instagram</a>
-          {% endif %}
-          {% if section.settings.social_facebook != blank %}
-            <a class="footer__link" href="{{ section.settings.social_facebook }}">Facebook</a>
-          {% endif %}
-          {% if section.settings.social_tiktok != blank %}
-            <a class="footer__link" href="{{ section.settings.social_tiktok }}">TikTok</a>
-          {% endif %}
-        </div>
-      {% endif %}
-
       <p class="footer__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
     </div>
   </div>
@@ -123,13 +122,14 @@
 {% stylesheet %}
   .footer {
     display: grid;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    border-top: 1px solid var(--theme-color-border);
+    background: linear-gradient(180deg, rgba(2, 8, 20, 0.74), rgba(2, 8, 20, 0.96));
   }
 
   .footer__inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr) minmax(0, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
   }
 
   .footer__brand,
@@ -146,6 +146,14 @@
   .footer__link {
     color: inherit;
     text-decoration: none;
+    transition: color var(--transition-base);
+  }
+
+  .footer__link:hover,
+  .footer__brand-link:hover,
+  .footer__contact a:hover,
+  .footer__social-link:hover {
+    color: var(--theme-color-secondary);
   }
 
   .footer__brand {
@@ -153,6 +161,7 @@
   }
 
   .footer__brand-text {
+    font-family: var(--theme-font-display);
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -168,19 +177,56 @@
 
   .footer__text,
   .footer__contact p {
+    color: var(--theme-color-text-muted);
     line-height: 1.6;
+  }
+
+  .footer__contact,
+  .footer__contact a {
+    color: var(--theme-color-text-muted);
+    font-size: 0.95rem;
   }
 
   .footer__heading {
     margin: 0;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    color: var(--theme-color-text-soft);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
+  }
+
+  .footer__menu,
+  .footer__policies {
+    align-content: start;
+  }
+
+  .footer__link {
+    color: var(--theme-color-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .footer__social--brand {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .footer__social-link {
+    border: 1px solid var(--theme-color-border);
+    border-radius: var(--theme-radius-pill);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--theme-color-text-muted);
+    padding: 0.35rem 0.7rem;
+    font-size: 0.78rem;
+    text-decoration: none;
   }
 
   .footer__copyright {
     margin-top: 0.5rem;
+    color: var(--theme-color-text-soft);
+    font-size: 0.85rem;
   }
 
   @media (max-width: 860px) {
