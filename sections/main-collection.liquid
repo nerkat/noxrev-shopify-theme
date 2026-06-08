@@ -2,7 +2,7 @@
   assign current_sort = collection.sort_by | default: collection.default_sort_by
 %}
 
-<div class="page-width main-collection">
+<div class="container section main-collection">
   <div class="main-collection__header">
     <div class="main-collection__intro">
       <h1 class="main-collection__title">{{ collection.title }}</h1>
@@ -17,41 +17,23 @@
     <form class="main-collection__sort" action="{{ collection.url }}" method="get">
       <label class="main-collection__sort-label" for="SortBy-{{ section.id }}">{{ 'collections.sort_label' | t }}</label>
       <div class="main-collection__sort-controls">
-        <select id="SortBy-{{ section.id }}" name="sort_by">
+        <select id="SortBy-{{ section.id }}" class="select" name="sort_by">
           {% for option in collection.sort_options %}
             <option value="{{ option.value }}" {% if option.value == current_sort %}selected="selected"{% endif %}>
               {{ option.name }}
             </option>
           {% endfor %}
         </select>
-        <button type="submit">{{ 'collections.sort_submit' | t }}</button>
+        <button class="button button--secondary" type="submit">{{ 'collections.sort_submit' | t }}</button>
       </div>
     </form>
   </div>
 
   {% paginate collection.products by 12 %}
     {% if paginate.items > 0 %}
-      <div class="main-collection__grid">
+      <div class="main-collection__grid grid grid--4">
         {% for product in collection.products %}
-          <article class="main-collection__card">
-            <a class="main-collection__card-link" href="{{ product.url }}">
-              <div class="main-collection__card-media">
-                {% render 'responsive-image',
-                  image: product.featured_image,
-                  alt: product.title,
-                  class: 'main-collection__card-image',
-                  loading: 'lazy',
-                  sizes: '(min-width: 861px) 25vw, 50vw',
-                  widths: '240, 360, 540, 720, 960'
-                %}
-              </div>
-
-              <div class="main-collection__card-content">
-                <h2 class="main-collection__card-title">{{ product.title }}</h2>
-                <p class="main-collection__card-price">{% render 'price', amount: product.price %}</p>
-              </div>
-            </a>
-          </article>
+          {% render 'product-card', product: product, show_vendor: section.settings.show_vendor %}
         {% endfor %}
       </div>
 
@@ -69,11 +51,6 @@
 </div>
 
 {% stylesheet %}
-  .page-width.main-collection {
-    width: 100%;
-    padding: 2rem 0 3rem;
-  }
-
   .main-collection__header {
     display: flex;
     align-items: end;
@@ -106,49 +83,8 @@
     gap: 0.5rem;
   }
 
-  .main-collection__sort select,
-  .main-collection__sort button {
-    min-height: 2.75rem;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid rgba(0, 0, 0, 0.16);
-    background: transparent;
-    font: inherit;
-  }
-
   .main-collection__sort select {
     flex: 1 1 auto;
-  }
-
-  .main-collection__grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem;
-  }
-
-  .main-collection__card-link {
-    display: grid;
-    gap: 0.75rem;
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .main-collection__card-media {
-    background: #f3f3f3;
-  }
-
-  .main-collection__card-image {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-  }
-
-  .main-collection__card-content {
-    display: grid;
-    gap: 0.25rem;
-  }
-
-  .main-collection__card-title {
-    font-size: 1rem;
   }
 
   .main-collection__pagination {
@@ -168,17 +104,20 @@
     .main-collection__sort {
       width: 100%;
     }
-
-    .main-collection__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.collection",
-  "settings": [],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

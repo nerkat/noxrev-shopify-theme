@@ -1,119 +1,203 @@
 {% liquid
-  assign has_nav_links = false
+  assign brand_text = section.settings.brand_text | default: shop.name
+  assign has_primary_nav = false
+  assign has_mobile_nav = false
 
   if section.settings.menu != blank
     for link in section.settings.menu.links
-      unless link.url == routes.search_url
-        assign has_nav_links = true
-        break
-      endunless
+      assign has_primary_nav = true
+      assign has_mobile_nav = true
+      break
     endfor
   endif
-%}
+-%}
 
-<header class="site-header">
-  <div class="site-header__brand">
-    <a class="site-header__title" href="{{ routes.root_url }}">{{ shop.name }}</a>
-  </div>
+<header class="header">
+  <div class="container">
+    <div class="header__inner">
+      <div class="header__brand">
+        <a class="header__brand-link" href="{{ routes.root_url }}">
+          {% if section.settings.logo != blank %}
+            {{
+              section.settings.logo
+              | image_url: width: 400
+              | image_tag: class: 'header__logo', loading: 'eager', alt: brand_text
+            }}
+          {% else %}
+            <span class="header__brand-text">{{ brand_text | escape }}</span>
+          {% endif %}
+        </a>
+      </div>
 
-  {% if has_nav_links %}
-    <nav class="site-header__nav" aria-label="Primary">
-      {% for link in section.settings.menu.links %}
-        {% unless link.url == routes.search_url %}
-          <a class="site-header__nav-link" href="{{ link.url }}">{{ link.title }}</a>
-        {% endunless %}
-      {% endfor %}
-    </nav>
-  {% endif %}
+      {% if has_primary_nav %}
+        <nav class="header__nav hidden-mobile" aria-label="Primary">
+          {% for link in section.settings.menu.links %}
+            <a class="header__nav-link" href="{{ link.url }}">{{ link.title }}</a>
+          {% endfor %}
+        </nav>
+      {% endif %}
 
-  <div class="site-header__actions">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account class="site-header__account" menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
+      <div class="header__actions">
+        {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+          <a class="button button--secondary hidden-mobile" href="{{ section.settings.cta_link }}">
+            {{ section.settings.cta_label | escape }}
+          </a>
+        {% endif %}
 
-    <a class="site-header__cart" href="{{ routes.cart_url }}">
-      <span class="site-header__cart-icon">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-      <span class="site-header__cart-count">{{ cart.item_count }}</span>
-    </a>
+        {% if shop.customer_accounts_enabled %}
+          <shopify-account class="header__account" menu="{{ section.settings.customer_account_menu }}">
+            <span class="visually-hidden">Account</span>
+            {{ 'icon-account.svg' | inline_asset_content }}
+          </shopify-account>
+        {% endif %}
+
+        <a class="header__cart" href="{{ routes.cart_url }}">
+          <span class="header__cart-icon">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+          <span class="header__cart-label visually-hidden">Cart</span>
+          <span class="header__cart-count" aria-live="polite">{{ cart.item_count }}</span>
+        </a>
+
+        {% if has_mobile_nav %}
+          <details class="header__mobile hidden-desktop">
+            <summary class="header__mobile-toggle">Menu</summary>
+            <div class="header__mobile-panel">
+              <nav class="header__mobile-nav" aria-label="Mobile">
+                {% for link in section.settings.menu.links %}
+                  <a class="header__mobile-link" href="{{ link.url }}">{{ link.title }}</a>
+                {% endfor %}
+              </nav>
+
+              {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+                <a class="button" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label | escape }}</a>
+              {% endif %}
+            </div>
+          </details>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </header>
 
 {% stylesheet %}
-  .site-header {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1.25rem 0;
+  .header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   }
 
-  .site-header__title,
-  .site-header__nav-link,
-  .site-header__cart,
-  .site-header__account {
-    text-decoration: none;
-    color: var(--color-foreground);
+  .header__inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1.25rem;
   }
 
-  .site-header__title {
+  .header__brand-link,
+  .header__nav-link,
+  .header__cart,
+  .header__account,
+  .header__mobile-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .header__brand-link {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .header__brand-text {
     font-size: 1.2rem;
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
-  .site-header__nav {
+  .header__logo {
+    display: block;
+    max-width: 180px;
+    width: auto;
+    height: auto;
+  }
+
+  .header__nav {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 1rem 1.5rem;
   }
 
-  .site-header__nav-link {
+  .header__nav-link,
+  .header__mobile-link,
+  .header__mobile-toggle {
     font-size: 0.95rem;
   }
 
-  .site-header__actions {
+  .header__actions {
     display: flex;
     align-items: center;
     gap: 1rem;
+    justify-self: end;
   }
 
-  .site-header__account svg,
-  .site-header__cart-icon svg {
+  .header__account svg,
+  .header__cart-icon svg {
     width: 1.5rem;
   }
 
-  .site-header__cart {
+  .header__cart {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
   }
 
-  .site-header__cart-count {
+  .header__cart-count {
     min-width: 1.5rem;
     text-align: center;
     font-size: 0.9rem;
   }
 
-  @media (max-width: 860px) {
-    .site-header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
+  .header__mobile {
+    position: relative;
+  }
 
-    .site-header__nav {
-      justify-content: flex-start;
-    }
+  .header__mobile-toggle {
+    list-style: none;
+    cursor: pointer;
+  }
 
-    .site-header__actions {
-      width: 100%;
-      justify-content: flex-end;
+  .header__mobile-toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .header__mobile-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.75rem);
+    z-index: 5;
+    display: grid;
+    gap: 0.75rem;
+    min-width: 14rem;
+    padding: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: var(--style-border-radius-inputs);
+    background: var(--color-background);
+  }
+
+  .header__mobile-nav {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 989px) {
+    .header__inner {
+      grid-template-columns: auto 1fr auto;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .header__inner {
+      grid-template-columns: 1fr auto;
+      gap: 0.75rem;
     }
   }
 {% endstylesheet %}
@@ -123,15 +207,36 @@
   "name": "t:general.header",
   "settings": [
     {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Brand text",
+      "default": "Store name"
+    },
+    {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
+      "label": "Primary menu"
     },
     {
       "type": "link_list",
       "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
+      "label": "Customer account menu",
       "default": "customer-account-main-menu"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA link"
     }
   ]
 }

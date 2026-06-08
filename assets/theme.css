@@ -1,0 +1,242 @@
+:root {
+  --spacing-2xs: 0.25rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  --border-width: 1px;
+  --border-color: rgba(0, 0, 0, 0.12);
+  --border-color-strong: rgba(0, 0, 0, 0.2);
+  --color-muted: rgba(0, 0, 0, 0.64);
+  --color-surface: rgba(0, 0, 0, 0.03);
+  --color-surface-strong: rgba(0, 0, 0, 0.06);
+  --button-padding-inline: 1.25rem;
+  --button-padding-block: 0.75rem;
+  --card-padding: var(--spacing-md);
+  --transition-base: 160ms ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.container,
+.page-width {
+  width: min(100% - (var(--page-margin) * 2), var(--page-width));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--spacing-2xl);
+}
+
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.button,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  min-height: 2.75rem;
+  padding: var(--button-padding-block) var(--button-padding-inline);
+  border: var(--border-width) solid var(--color-foreground);
+  border-radius: var(--style-border-radius-inputs);
+  background: var(--color-foreground);
+  color: var(--color-background);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base),
+    opacity var(--transition-base);
+}
+
+.button:hover,
+.btn:hover {
+  opacity: 0.88;
+}
+
+.button--secondary,
+.btn--secondary {
+  background: transparent;
+  color: var(--color-foreground);
+}
+
+.card {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.card__media {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.card__content {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.badge--secondary {
+  background: var(--color-surface-strong);
+  color: var(--color-foreground);
+}
+
+.field,
+.select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: var(--border-width) solid var(--border-color-strong);
+  border-radius: var(--style-border-radius-inputs);
+  background: transparent;
+  color: inherit;
+}
+
+.list-unstyled {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hidden-mobile {
+  display: block;
+}
+
+.hidden-desktop {
+  display: none;
+}
+
+.product-card {
+  position: relative;
+}
+
+.product-card__link {
+  display: grid;
+  gap: var(--spacing-md);
+  color: inherit;
+  text-decoration: none;
+}
+
+.product-card__media {
+  aspect-ratio: 4 / 5;
+}
+
+.product-card__image,
+.product-card__placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card__badges {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  pointer-events: none;
+}
+
+.product-card__title {
+  font-size: 1rem;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.product-card__vendor,
+.product-card__status {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.product-card__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+}
+
+.product-card__price-current,
+.product-card__price-compare {
+  margin: 0;
+}
+
+.product-card__price-compare {
+  color: var(--color-muted);
+  text-decoration: line-through;
+}
+
+@media (max-width: 989px) {
+  .grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hidden-mobile {
+    display: none;
+  }
+
+  .hidden-desktop {
+    display: block;
+  }
+}
+
+@media (max-width: 749px) {
+  .section {
+    padding-block: var(--spacing-xl);
+  }
+
+  .grid--2,
+  .grid--3,
+  .grid--4 {
+    grid-template-columns: 1fr;
+  }
+}

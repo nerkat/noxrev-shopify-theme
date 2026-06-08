@@ -14,8 +14,9 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "footer",
-        "text": "A simple footer for support, policies, and shop information."
+        "brand_text": "Skeleton",
+        "primary_menu": "footer",
+        "text": "Use the footer for store information, support details, and policy links."
       }
     }
   },

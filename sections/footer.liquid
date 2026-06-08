@@ -1,87 +1,191 @@
 {% liquid
-  assign has_footer_links = false
+  assign brand_text = section.settings.brand_text | default: shop.name
+  assign has_primary_menu = false
+  assign has_secondary_menu = false
+  assign has_social_links = false
 
-  if section.settings.menu != blank
-    for link in section.settings.menu.links
-      unless link.url == routes.search_url
-        assign has_footer_links = true
-        break
-      endunless
+  if section.settings.primary_menu != blank
+    for link in section.settings.primary_menu.links
+      assign has_primary_menu = true
+      break
     endfor
   endif
-%}
 
-<footer class="site-footer">
-  <div class="site-footer__brand">
-    <a class="site-footer__title" href="{{ routes.root_url }}">{{ shop.name }}</a>
+  if section.settings.secondary_menu != blank
+    for link in section.settings.secondary_menu.links
+      assign has_secondary_menu = true
+      break
+    endfor
+  endif
 
-    {% if section.settings.text != blank %}
-      <p class="site-footer__text">{{ section.settings.text | escape }}</p>
+  if section.settings.social_instagram != blank
+    assign has_social_links = true
+  endif
+
+  if section.settings.social_facebook != blank
+    assign has_social_links = true
+  endif
+
+  if section.settings.social_tiktok != blank
+    assign has_social_links = true
+  endif
+-%}
+
+<footer class="footer">
+  <div class="container section footer__inner">
+    <div class="footer__brand">
+      <a class="footer__brand-link" href="{{ routes.root_url }}">
+        {% if section.settings.logo != blank %}
+          {{
+            section.settings.logo
+            | image_url: width: 400
+            | image_tag: class: 'footer__logo', loading: 'lazy', alt: brand_text
+          }}
+        {% else %}
+          <span class="footer__brand-text">{{ brand_text | escape }}</span>
+        {% endif %}
+      </a>
+
+      {% if section.settings.text != blank %}
+        <p class="footer__text">{{ section.settings.text | escape }}</p>
+      {% endif %}
+
+      <div class="footer__contact">
+        {% if section.settings.contact_email != blank %}
+          <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
+        {% endif %}
+        {% if section.settings.contact_phone != blank %}
+          <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a>
+        {% endif %}
+        {% if section.settings.contact_info != blank %}
+          <p>{{ section.settings.contact_info | escape }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if has_primary_menu %}
+      <nav class="footer__menu" aria-label="Footer primary">
+        <h2 class="footer__heading">Browse</h2>
+        {% for link in section.settings.primary_menu.links %}
+          <a class="footer__link" href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+      </nav>
     {% endif %}
+
+    <div class="footer__meta">
+      {% if has_secondary_menu %}
+        <nav class="footer__menu" aria-label="Footer secondary">
+          <h2 class="footer__heading">Help</h2>
+          {% for link in section.settings.secondary_menu.links %}
+            <a class="footer__link" href="{{ link.url }}">{{ link.title }}</a>
+          {% endfor %}
+        </nav>
+      {% endif %}
+
+      {% if shop.privacy_policy or shop.refund_policy or shop.shipping_policy or shop.terms_of_service %}
+        <div class="footer__policies">
+          <h2 class="footer__heading">Policies</h2>
+          {% if shop.privacy_policy != blank %}
+            <a class="footer__link" href="{{ shop.privacy_policy.url }}">Privacy policy</a>
+          {% endif %}
+          {% if shop.refund_policy != blank %}
+            <a class="footer__link" href="{{ shop.refund_policy.url }}">Refund policy</a>
+          {% endif %}
+          {% if shop.shipping_policy != blank %}
+            <a class="footer__link" href="{{ shop.shipping_policy.url }}">Shipping policy</a>
+          {% endif %}
+          {% if shop.terms_of_service != blank %}
+            <a class="footer__link" href="{{ shop.terms_of_service.url }}">Terms of service</a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if has_social_links %}
+        <div class="footer__social">
+          <h2 class="footer__heading">Social</h2>
+          {% if section.settings.social_instagram != blank %}
+            <a class="footer__link" href="{{ section.settings.social_instagram }}">Instagram</a>
+          {% endif %}
+          {% if section.settings.social_facebook != blank %}
+            <a class="footer__link" href="{{ section.settings.social_facebook }}">Facebook</a>
+          {% endif %}
+          {% if section.settings.social_tiktok != blank %}
+            <a class="footer__link" href="{{ section.settings.social_tiktok }}">TikTok</a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <p class="footer__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
+    </div>
   </div>
-
-  {% if has_footer_links %}
-    <nav class="site-footer__nav" aria-label="Footer">
-      {% for link in section.settings.menu.links %}
-        {% unless link.url == routes.search_url %}
-          <a class="site-footer__link" href="{{ link.url }}">{{ link.title }}</a>
-        {% endunless %}
-      {% endfor %}
-    </nav>
-  {% endif %}
-
-  <p class="site-footer__meta">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
 </footer>
 
 {% stylesheet %}
-  .site-footer {
+  .footer {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) auto;
-    gap: 1.5rem;
-    padding: 2.5rem 0;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
   }
 
-  .site-footer__title,
-  .site-footer__link {
-    text-decoration: none;
-    color: var(--color-foreground);
+  .footer__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr) minmax(0, 1fr);
+    gap: 1.5rem;
   }
 
-  .site-footer__brand {
+  .footer__brand,
+  .footer__menu,
+  .footer__meta,
+  .footer__policies,
+  .footer__social,
+  .footer__contact {
     display: grid;
     gap: 0.75rem;
+  }
+
+  .footer__brand-link,
+  .footer__link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .footer__brand {
     max-width: 28rem;
   }
 
-  .site-footer__title {
+  .footer__brand-text {
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
-  .site-footer__text {
+  .footer__logo {
+    display: block;
+    max-width: 180px;
+    width: auto;
+    height: auto;
+  }
+
+  .footer__text,
+  .footer__contact p {
     line-height: 1.6;
   }
 
-  .site-footer__nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+  .footer__heading {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
-  .site-footer__meta {
-    text-align: right;
+  .footer__copyright {
+    margin-top: 0.5rem;
   }
 
   @media (max-width: 860px) {
-    .site-footer {
+    .footer__inner {
       grid-template-columns: 1fr;
-    }
-
-    .site-footer__meta {
-      text-align: left;
     }
   }
 {% endstylesheet %}
@@ -91,15 +195,61 @@
   "name": "t:general.footer",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
     },
     {
       "type": "text",
+      "id": "brand_text",
+      "label": "Brand text",
+      "default": "Store name"
+    },
+    {
+      "type": "textarea",
       "id": "text",
-      "label": "Text",
-      "default": "A minimal footer for contact, policy, and support links."
+      "label": "Description",
+      "default": "Use this footer area for store information, support details, and policy links."
+    },
+    {
+      "type": "link_list",
+      "id": "primary_menu",
+      "label": "Primary menu"
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_menu",
+      "label": "Secondary menu"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Contact phone"
+    },
+    {
+      "type": "textarea",
+      "id": "contact_info",
+      "label": "Contact details"
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok",
+      "label": "TikTok URL"
     }
   ]
 }

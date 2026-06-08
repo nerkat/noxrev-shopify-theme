@@ -5,15 +5,31 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/404
 {% endcomment %}
 
-<h1>{{ '404.title' | t }}</h1>
+<section class="container section error-page">
+  <div class="error-page__content">
+    <h1 class="error-page__title">{{ '404.title' | t }}</h1>
+    <p class="error-page__text">{{ '404.not_found' | t }}</p>
+    <a class="button" href="{{ routes.all_products_collection_url }}">
+      {{ '404.back_to_shopping' | t }}
+    </a>
+  </div>
+</section>
 
-<p>
-  {{ '404.not_found' | t }}
-</p>
+{% stylesheet %}
+  .error-page__content {
+    display: grid;
+    gap: 1rem;
+    max-width: 32rem;
+  }
 
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
+  .error-page__title {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .error-page__text {
+    line-height: 1.6;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
