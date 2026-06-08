@@ -11,19 +11,6 @@
   "sections": {
     "main": {
       "type": "home-hero",
-      "settings": {
-        "rating_text": "4.9 out of 5 stars based on 3672 reviews Verified",
-        "eyebrow": "Premium iPad accessory rebuild",
-        "heading": "Real NaiDun keyboards, rotating cases, and magnetic upgrades.",
-        "text": "Use a cinematic hero to lead shoppers into featured products, reinforce trust, and make your primary call to action unmistakable.",
-        "button_label": "Browse featured keyboards",
-        "button_link": "",
-        "secondary_label": "Browse collections",
-        "secondary_link": "",
-        "slide_1_external": "https://ipadkeyboard.shop/cdn/shop/files/8_282bf360-c999-4b07-8095-796b982106bd.jpg?v=1741923254&width=1800",
-        "slide_2_external": "https://ipadkeyboard.shop/cdn/shop/files/9_2b41a72b-d950-47aa-a84d-c916aacf5f73.jpg?v=1741844115&width=1800",
-        "slide_3_external": "https://ipadkeyboard.shop/cdn/shop/files/11_77953d2a-beb8-447a-a8c5-72bcb3e57687.jpg?v=1741844336&width=1800"
-      },
       "blocks": {
         "card_1": {
           "type": "card",
@@ -64,7 +51,20 @@
         "card_1",
         "card_2",
         "card_3"
-      ]
+      ],
+      "settings": {
+        "rating_text": "4.9 out of 5 stars based on 3672 reviews Verified",
+        "eyebrow": "Premium iPad accessory rebuild",
+        "heading": "Real NaiDun keyboards, rotating cases, and magnetic upgrades.",
+        "text": "Use a cinematic hero to lead shoppers into featured products, reinforce trust, and make your primary call to action unmistakable.",
+        "button_label": "Browse featured keyboards",
+        "button_link": "",
+        "secondary_label": "Browse collections",
+        "secondary_link": "",
+        "slide_1_external": "https://ipadkeyboard.shop/cdn/shop/files/8_282bf360-c999-4b07-8095-796b982106bd.jpg?v=1741923254&width=1800",
+        "slide_2_external": "https://ipadkeyboard.shop/cdn/shop/files/9_2b41a72b-d950-47aa-a84d-c916aacf5f73.jpg?v=1741844115&width=1800",
+        "slide_3_external": "https://ipadkeyboard.shop/cdn/shop/files/11_77953d2a-beb8-447a-a8c5-72bcb3e57687.jpg?v=1741844336&width=1800"
+      }
     },
     "category_tiles": {
       "type": "category-tiles",
@@ -136,7 +136,8 @@
         "item_1",
         "item_2",
         "item_3"
-      ]
+      ],
+      "settings": {}
     }
   },
   "order": [

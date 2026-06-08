@@ -15,7 +15,9 @@
       "type": "announcement-bar",
       "settings": {
         "text": "Free standard shipping on orders over $100",
-        "link": ""
+        "link": "",
+        "secondary_text": "Track order",
+        "secondary_link": ""
       }
     },
     "header": {
@@ -23,7 +25,11 @@
       "settings": {
         "brand_text": "NOXREV",
         "menu": "main-menu",
-        "cta_label": "View catalog"
+        "customer_account_menu": "customer-account-main-menu",
+        "utility_text": "",
+        "utility_link": "",
+        "cta_label": "View catalog",
+        "cta_link": ""
       }
     }
   },
