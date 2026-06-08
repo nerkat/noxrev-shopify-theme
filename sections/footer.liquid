@@ -32,7 +32,7 @@
 -%}
 
 <footer class="footer">
-  <div class="container section footer__inner">
+  <div class="section footer__inner">
     <div class="footer__brand">
       <a class="footer__brand-link" href="{{ routes.root_url }}">
         {% if section.settings.logo != blank %}
@@ -127,6 +127,8 @@
   }
 
   .footer__inner {
+    width: 100%;
+    padding-inline: clamp(1rem, 3vw, 2rem);
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr) minmax(0, 1fr);
     gap: clamp(2rem, 4vw, 4rem);

@@ -96,7 +96,7 @@ main {
  * When a child element is given the `full-width` class, it will span
  * the entire viewport.
  */
-.shopify-section {
+.shopify-section.section-grid {
   --content-width: min(
     calc(var(--page-width) - var(--page-margin) * 2),
     calc(100% - var(--page-margin) * 2)
@@ -112,12 +112,12 @@ main {
 }
 
 /* Child elements, by default, are constrained to the central column of the grid. */
-.shopify-section > * {
+.shopify-section.section-grid > * {
   grid-column: 2;
 }
 
 /* Child elements that use the full-width utility class span the entire viewport. */
-.shopify-section > .full-width {
+.shopify-section.section-grid > .full-width {
   grid-column: 1 / -1;
 }
 

@@ -54,14 +54,13 @@
 
 {% stylesheet %}
   .welcome {
-    display: grid;
-    grid-template-columns: var(--content-grid);
     background-color: #f6f6f7;
     padding: 72px 0;
   }
 
   .welcome-content {
-    grid-column: 2;
+    width: min(100% - (var(--page-margin) * 2), var(--page-width));
+    margin-inline: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;

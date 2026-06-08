@@ -27,8 +27,10 @@
     {{ content_for_header }}
   </head>
 
-  <body class="theme">
-    {% sections 'header-group' %}
+  <body class="theme template-{{ template.name | handle }}">
+    <div class="site-header-shell" data-site-header-shell>
+      {% sections 'header-group' %}
+    </div>
 
     <main id="MainContent" role="main">
       {{ content_for_layout }}

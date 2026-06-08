@@ -32,11 +32,8 @@
     transform: translate(-50%, -50%);
   }
   .custom-section__content {
-    display: grid;
-    grid-template-columns: var(--content-grid);
-  }
-  .custom-section__content > * {
-    grid-column: 2;
+    width: min(100% - (var(--page-margin) * 2), var(--page-width));
+    margin-inline: auto;
   }
 {% endstylesheet %}
 

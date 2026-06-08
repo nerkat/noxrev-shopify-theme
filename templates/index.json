@@ -12,12 +12,59 @@
     "main": {
       "type": "home-hero",
       "settings": {
-        "eyebrow": "Fresh storefront layout",
-        "heading": "A simple storefront built for focused product catalogs",
-        "text": "Use a clean homepage structure to guide customers from hero messaging into category browsing and featured products.",
-        "button_label": "Shop all products",
-        "button_link": ""
-      }
+        "rating_text": "4.9 out of 5 stars based on 3672 reviews Verified",
+        "eyebrow": "Premium iPad accessory rebuild",
+        "heading": "Real NaiDun keyboards, rotating cases, and magnetic upgrades.",
+        "text": "Use a cinematic hero to lead shoppers into featured products, reinforce trust, and make your primary call to action unmistakable.",
+        "button_label": "Browse featured keyboards",
+        "button_link": "",
+        "secondary_label": "Browse collections",
+        "secondary_link": "",
+        "slide_1_external": "https://ipadkeyboard.shop/cdn/shop/files/8_282bf360-c999-4b07-8095-796b982106bd.jpg?v=1741923254&width=1800",
+        "slide_2_external": "https://ipadkeyboard.shop/cdn/shop/files/9_2b41a72b-d950-47aa-a84d-c916aacf5f73.jpg?v=1741844115&width=1800",
+        "slide_3_external": "https://ipadkeyboard.shop/cdn/shop/files/11_77953d2a-beb8-447a-a8c5-72bcb3e57687.jpg?v=1741844336&width=1800"
+      },
+      "blocks": {
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "card_style": "promo",
+            "label": "Promo code",
+            "heading": "Use \"ND\"",
+            "text": "Source-store promo code surfaced upfront so the main shop CTA feels like a live offer, not a placeholder badge.",
+            "link_label": "Shop with code",
+            "link": ""
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "card_style": "reviews",
+            "label": "Reviews",
+            "heading": "4.91 / 5",
+            "text": "3,672 verified source-store reviews give the hero a real trust signal instead of a plain count."
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "card_style": "support",
+            "label": "Support",
+            "heading": "Talk to NaiDun",
+            "contact_label_1": "Email",
+            "contact_value_1": "naidun2021@163.com",
+            "contact_link_1": "mailto:naidun2021@163.com",
+            "contact_label_2": "WhatsApp",
+            "contact_value_2": "WhatsApp +86 13610355551",
+            "contact_link_2": "https://wa.me/8613610355551"
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3"
+      ]
     },
     "category_tiles": {
       "type": "category-tiles",
@@ -63,22 +110,25 @@
         "item_1": {
           "type": "item",
           "settings": {
-            "heading": "Straightforward shopping",
-            "text": "Simple sections keep the storefront easy to browse and easy to maintain."
+            "eyebrow": "Store promise",
+            "heading": "Set one practical expectation clearly.",
+            "text": "Use concise copy for shipping, quality, support response, or any reassurance that helps shoppers commit."
           }
         },
         "item_2": {
           "type": "item",
           "settings": {
-            "heading": "Flexible collections",
-            "text": "Merchants can swap in collections and featured products without changing the layout."
+            "eyebrow": "Support",
+            "heading": "Keep service messaging easy to scan.",
+            "text": "This block works well for contact guidance, returns confidence, or a short explanation of how help is delivered."
           }
         },
         "item_3": {
           "type": "item",
           "settings": {
-            "heading": "Native cart flow",
-            "text": "Product and cart interactions stay standard Shopify with no drawer or AJAX layer."
+            "eyebrow": "Quality",
+            "heading": "Reinforce what makes the offer dependable.",
+            "text": "Use the final tile for materials, fulfillment confidence, customization notes, or another merchant-editable trust point."
           }
         }
       },
@@ -86,8 +136,7 @@
         "item_1",
         "item_2",
         "item_3"
-      ],
-      "settings": {}
+      ]
     }
   },
   "order": [
