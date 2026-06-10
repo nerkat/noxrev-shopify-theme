@@ -21,6 +21,46 @@
 
 <header class="header" data-site-header>
   <div class="header__inner container">
+      {% if has_mobile_nav %}
+        <details class="header__mobile hidden-desktop">
+          <summary class="header__mobile-toggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </summary>
+          <div class="header__mobile-panel">
+            <nav class="header__mobile-nav" aria-label="Mobile">
+              {% for link in section.settings.menu.links %}
+                <a
+                  class="header__mobile-link{% if link.current or link.child_active %} is-active{% endif %}"
+                  href="{{ link.url }}"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >
+                  {{ link.title }}
+                </a>
+              {% endfor %}
+            </nav>
+
+            {% if has_utility %}
+              {% if utility_link != blank %}
+                <a class="header__mobile-utility" href="{{ utility_link }}">{{ utility_text | escape }}</a>
+              {% else %}
+                <p class="header__mobile-utility">{{ utility_text | escape }}</p>
+              {% endif %}
+            {% endif %}
+
+            {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+              <a class="button" href="{{ section.settings.cta_link }}">
+                <span class="button__content">
+                  <span>{{ section.settings.cta_label | escape }}</span>
+                  <span class="button__icon" aria-hidden="true">&rarr;</span>
+                </span>
+              </a>
+            {% endif %}
+          </div>
+        </details>
+      {% endif %}
+
       <div class="header__brand">
         <a class="header__brand-link" href="{{ routes.root_url }}">
           {% if section.settings.logo != blank %}
@@ -79,46 +119,6 @@
           <span class="header__cart-label visually-hidden">Cart</span>
           <span class="header__cart-count" aria-live="polite">{{ cart.item_count }}</span>
         </a>
-
-        {% if has_mobile_nav %}
-          <details class="header__mobile hidden-desktop">
-            <summary class="header__mobile-toggle" aria-label="Menu">
-              <span></span>
-              <span></span>
-              <span></span>
-            </summary>
-            <div class="header__mobile-panel">
-              <nav class="header__mobile-nav" aria-label="Mobile">
-                {% for link in section.settings.menu.links %}
-                  <a
-                    class="header__mobile-link{% if link.current or link.child_active %} is-active{% endif %}"
-                    href="{{ link.url }}"
-                    {% if link.current %}aria-current="page"{% endif %}
-                  >
-                    {{ link.title }}
-                  </a>
-                {% endfor %}
-              </nav>
-
-              {% if has_utility %}
-                {% if utility_link != blank %}
-                  <a class="header__mobile-utility" href="{{ utility_link }}">{{ utility_text | escape }}</a>
-                {% else %}
-                  <p class="header__mobile-utility">{{ utility_text | escape }}</p>
-                {% endif %}
-              {% endif %}
-
-              {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
-                <a class="button" href="{{ section.settings.cta_link }}">
-                  <span class="button__content">
-                    <span>{{ section.settings.cta_label | escape }}</span>
-                    <span class="button__icon" aria-hidden="true">&rarr;</span>
-                  </span>
-                </a>
-              {% endif %}
-            </div>
-          </details>
-        {% endif %}
       </div>
   </div>
 </header>
@@ -371,13 +371,80 @@
   @media (max-width: 989px) {
     .header__inner {
       grid-template-columns: auto 1fr auto;
+      gap: 0.75rem;
+    }
+
+    .header__nav {
+      display: none;
+    }
+
+    .header__brand {
+      min-width: 0;
+      justify-self: start;
+    }
+
+    .header__brand-link {
+      gap: 0.7rem;
+      justify-content: flex-start;
+    }
+
+    .header__brand-text {
+      font-size: 1.05rem;
+      letter-spacing: 0.03em;
+    }
+
+    .header__logo {
+      max-width: 160px;
+    }
+
+    .header__actions {
+      justify-self: end;
+      gap: 0.55rem;
+    }
+
+    .header__mobile {
+      position: relative;
+      justify-self: start;
+    }
+
+    .header__mobile-toggle {
+      width: 2.4rem;
+      height: 2.4rem;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+    }
+
+    .header__mobile-toggle span {
+      width: 1.2rem;
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .header__account,
+    .header__cart {
+      min-width: 2.45rem;
+      min-height: 2.45rem;
+    }
+
+    .header__mobile-panel {
+      position: fixed;
+      top: calc(var(--announcement-height, 2.7rem) + 4.5rem);
+      left: 1rem;
+      right: 1rem;
+      min-width: 0;
+      padding: 1rem;
+    }
+
+    .header__mobile-nav {
+      display: grid;
+      gap: 0.4rem;
     }
   }
 
   @media (max-width: 749px) {
-    .header__inner {
-      grid-template-columns: 1fr auto;
-      gap: 0.75rem;
+    .header__cart {
+      padding-inline: 0.7rem;
     }
   }
 {% endstylesheet %}

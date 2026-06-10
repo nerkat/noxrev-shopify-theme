@@ -1,51 +1,92 @@
 {% liquid
   assign current_variant = product.selected_or_first_available_variant
   assign current_media = current_variant.featured_media | default: product.featured_media | default: product.media.first
-  assign current_image = current_media.preview_image | default: current_media
+  assign current_preview = current_media.preview_image | default: current_media
+  assign current_alt = current_media.alt | default: product.title
   assign excerpt = product.description | strip_html | truncatewords: 28
 %}
 
 <div class="page-width main-product">
   <div class="main-product__main">
-    <div class="main-product__media-column">
-      <div class="main-product__media">
-        {% render 'responsive-image',
-          image: current_image,
-          alt: product.title,
-          class: 'main-product__image',
-          loading: 'eager',
-          sizes: '(min-width: 861px) 55vw, 100vw',
-          widths: '400, 640, 900, 1200, 1400'
-        %}
-      </div>
+    <h1 class="main-product__title heading-gradient">{{ product.title }}</h1>
 
-      {% if product.media.size > 1 %}
-        <ul class="main-product__thumbnails" role="list">
-          {% for media in product.media %}
-            {% assign thumbnail_image = media.preview_image | default: media %}
-            <li class="main-product__thumbnail-item">
-              <div
-                class="main-product__thumbnail{% if current_media and media.id == current_media.id %} is-active{% endif %}"
-                aria-current="{% if current_media and media.id == current_media.id %}true{% else %}false{% endif %}"
+    <div class="main-product__media-column">
+      <div
+        class="main-product__gallery panel"
+        data-product-gallery
+        {% if current_media %}data-active-media-id="{{ current_media.id }}"{% endif %}
+      >
+        <div class="main-product__gallery-main">
+          <div class="main-product__gallery-frame">
+            <span class="main-product__gallery-zoom" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"></circle>
+                <path d="M16 16 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                <path d="M11 8.5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                <path d="M8.5 11h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+              </svg>
+            </span>
+
+            {% if current_preview != blank %}
+              <img
+                class="main-product__gallery-image"
+                data-gallery-main-image
+                src="{{ current_preview | image_url: width: 1400 }}"
+                srcset="
+                  {{ current_preview | image_url: width: 400 }} 400w,
+                  {{ current_preview | image_url: width: 640 }} 640w,
+                  {{ current_preview | image_url: width: 900 }} 900w,
+                  {{ current_preview | image_url: width: 1200 }} 1200w,
+                  {{ current_preview | image_url: width: 1400 }} 1400w
+                "
+                sizes="(min-width: 861px) 55vw, 100vw"
+                alt="{{ current_alt | escape }}"
+                width="{{ current_preview.width }}"
+                height="{{ current_preview.height }}"
+                loading="eager"
               >
-                {% render 'responsive-image',
-                  image: thumbnail_image,
-                  alt: product.title,
-                  class: 'main-product__thumbnail-image',
-                  loading: 'lazy',
-                  sizes: '72px',
-                  widths: '72, 96, 144, 200'
-                %}
-              </div>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+            {% else %}
+              {{ 'image' | placeholder_svg_tag: 'main-product__gallery-placeholder' }}
+            {% endif %}
+          </div>
+        </div>
+
+        {% if product.media.size > 1 %}
+          <div class="main-product__gallery-thumbnails" role="list" aria-label="Product media thumbnails">
+            {% for media in product.media %}
+              {% assign thumbnail_image = media.preview_image | default: media %}
+              {% assign thumbnail_alt = media.alt | default: product.title %}
+              <button
+                class="main-product__gallery-thumb{% if current_media and media.id == current_media.id %} is-active{% endif %}"
+                type="button"
+                data-gallery-thumb
+                data-media-id="{{ media.id }}"
+                data-image-src="{{ thumbnail_image | image_url: width: 1400 }}"
+                data-image-srcset="{{ thumbnail_image | image_url: width: 400 }} 400w, {{ thumbnail_image | image_url: width: 640 }} 640w, {{ thumbnail_image | image_url: width: 900 }} 900w, {{ thumbnail_image | image_url: width: 1200 }} 1200w, {{ thumbnail_image | image_url: width: 1400 }} 1400w"
+                data-image-width="{{ thumbnail_image.width }}"
+                data-image-height="{{ thumbnail_image.height }}"
+                data-image-alt="{{ thumbnail_alt | escape }}"
+                aria-label="Show media {{ forloop.index }}"
+                aria-pressed="{% if current_media and media.id == current_media.id %}true{% else %}false{% endif %}"
+              >
+                <span class="main-product__gallery-thumb-media">
+                  {% render 'responsive-image',
+                    image: thumbnail_image,
+                    alt: thumbnail_alt,
+                    class: 'main-product__gallery-thumb-image',
+                    loading: 'lazy',
+                    sizes: '88px',
+                    widths: '88, 120, 176'
+                  %}
+                </span>
+              </button>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
     </div>
 
     <div class="main-product__content">
-      <h1 class="main-product__title">{{ product.title }}</h1>
-
       {% if current_variant %}
         <p class="main-product__price">{% render 'price', amount: current_variant.price %}</p>
       {% endif %}
@@ -145,9 +186,18 @@
 
   .main-product__main {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
-    gap: 2rem;
+    gap: 1.5rem;
     align-items: start;
+  }
+
+  .main-product__title {
+    margin: 0;
+    font-family: var(--theme-font-display);
+    font-size: clamp(2.8rem, 12vw, 4.75rem);
+    font-weight: 800;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    color: #ff4da6;
   }
 
   .main-product__media-column {
@@ -155,32 +205,129 @@
     gap: 1rem;
   }
 
-  .main-product__media {
-    background: #f3f3f3;
+  .main-product__gallery {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 1.8rem;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)),
+      rgba(7, 21, 37, 0.72);
   }
 
-  .main-product__image {
+  .main-product__gallery-main {
+    display: grid;
+  }
+
+  .main-product__gallery-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: rgba(2, 8, 20, 0.9);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .main-product__gallery-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+  }
+
+  .main-product__gallery-image,
+  .main-product__gallery-placeholder {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1;
     object-fit: cover;
   }
 
-  .main-product__thumbnails {
+  .main-product__gallery-zoom {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999px;
+    background: rgba(4, 11, 24, 0.72);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+      0 0 24px rgba(0, 0, 0, 0.24);
+    color: var(--theme-color-text);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    pointer-events: none;
+  }
+
+  .main-product__gallery-zoom svg {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+
+  .main-product__gallery-thumbnails {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(4.5rem, 1fr));
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(5rem, 5.4rem);
     gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.15rem;
+    scrollbar-width: thin;
   }
 
-  .main-product__thumbnail {
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    background: #f8f8f8;
+  .main-product__gallery-thumb {
+    display: block;
+    padding: 0;
+    border: 0;
+    border-radius: 1rem;
+    background: transparent;
+    cursor: pointer;
+    color: inherit;
+    text-align: left;
   }
 
-  .main-product__thumbnail.is-active {
-    border-color: var(--color-foreground);
+  .main-product__gallery-thumb-media {
+    display: block;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: rgba(6, 16, 31, 0.82);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition:
+      box-shadow var(--transition-base),
+      transform var(--transition-base);
   }
 
-  .main-product__thumbnail-image {
+  .main-product__gallery-thumb:hover .main-product__gallery-thumb-media {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 229, 255, 0.32),
+      0 0 18px rgba(0, 229, 255, 0.08);
+  }
+
+  .main-product__gallery-thumb.is-active .main-product__gallery-thumb-media {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 0 0 1.5px rgba(255, 45, 120, 0.95),
+      0 0 0 3px rgba(0, 229, 255, 0.4),
+      0 0 22px rgba(255, 45, 120, 0.18);
+  }
+
+  .main-product__gallery-thumb:focus-visible {
+    outline: none;
+  }
+
+  .main-product__gallery-thumb:focus-visible .main-product__gallery-thumb-media {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 0 0 2px rgba(0, 229, 255, 0.95),
+      0 0 22px rgba(0, 229, 255, 0.18);
+  }
+
+  .main-product__gallery-thumb-image {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
@@ -189,11 +336,6 @@
   .main-product__content {
     display: grid;
     gap: 1rem;
-  }
-
-  .main-product__title {
-    font-size: clamp(1.75rem, 3vw, 2.75rem);
-    line-height: 1.1;
   }
 
   .main-product__price {
@@ -282,16 +424,95 @@
     font-size: clamp(1.35rem, 2vw, 1.75rem);
   }
 
-  @media (max-width: 860px) {
+  @media (min-width: 861px) {
     .main-product__main {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
+      gap: 2rem;
     }
 
-    .main-product__submit {
-      width: 100%;
+    .main-product__title {
+      grid-column: 1 / -1;
+      font-size: clamp(2.4rem, 4.6vw, 4.2rem);
+    }
+
+    .main-product__gallery {
+      padding: 1.15rem;
+    }
+
+    .main-product__gallery-image,
+    .main-product__gallery-placeholder {
+      aspect-ratio: 4 / 5;
     }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    const initGallery = (gallery) => {
+      if (!gallery || gallery.dataset.initialized === 'true') {
+        return;
+      }
+
+      const mainImage = gallery.querySelector('[data-gallery-main-image]');
+      const thumbs = Array.from(gallery.querySelectorAll('[data-gallery-thumb]'));
+
+      if (!mainImage || thumbs.length < 2) {
+        gallery.dataset.initialized = 'true';
+        return;
+      }
+
+      const setActiveThumb = (thumb) => {
+        thumbs.forEach((item) => {
+          const isActive = item === thumb;
+          item.classList.toggle('is-active', isActive);
+          item.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+
+        const nextSrc = thumb.dataset.imageSrc;
+        const nextSrcset = thumb.dataset.imageSrcset;
+        const nextAlt = thumb.dataset.imageAlt || '';
+        const nextWidth = thumb.dataset.imageWidth;
+        const nextHeight = thumb.dataset.imageHeight;
+
+        if (nextSrc) {
+          mainImage.setAttribute('src', nextSrc);
+        }
+
+        if (nextSrcset) {
+          mainImage.setAttribute('srcset', nextSrcset);
+        }
+
+        mainImage.setAttribute('alt', nextAlt);
+
+        if (nextWidth) {
+          mainImage.setAttribute('width', nextWidth);
+        }
+
+        if (nextHeight) {
+          mainImage.setAttribute('height', nextHeight);
+        }
+      };
+
+      thumbs.forEach((thumb) => {
+        thumb.addEventListener('click', () => setActiveThumb(thumb));
+      });
+
+      gallery.dataset.initialized = 'true';
+    };
+
+    const initAllGalleries = () => {
+      document.querySelectorAll('[data-product-gallery]').forEach(initGallery);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAllGalleries);
+    } else {
+      initAllGalleries();
+    }
+
+    document.addEventListener('shopify:section:load', initAllGalleries);
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
