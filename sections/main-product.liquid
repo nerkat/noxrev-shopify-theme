@@ -103,34 +103,100 @@
         {% unless product.has_only_default_variant %}
           <div class="main-product__options">
             {% for option in product.options_with_values %}
+              {% liquid
+                assign option_name_downcase = option.name | downcase
+                assign is_color_option = false
+                if option_name_downcase == 'color' or option_name_downcase == 'colour'
+                  assign is_color_option = true
+                endif
+              %}
               <fieldset class="main-product__option">
-                <legend class="main-product__option-label">{{ option.name }}</legend>
+                <legend class="main-product__option-label{% if is_color_option %} main-product__option-label--color{% endif %}">
+                  {% if is_color_option %}
+                    {{ forloop.index }}. {{ option.name }}
+                  {% else %}
+                    {{ option.name }}
+                  {% endif %}
+                </legend>
 
-                <div class="main-product__option-values">
+                <div class="main-product__option-values{% if is_color_option %} main-product__option-values--swatches{% endif %}">
                   {% for value in option.values %}
                     {% assign option_variant = value.variant %}
 
                     {% if option_variant %}
-                      {% if value.available %}
-                        <a
-                          class="main-product__option-value"
-                          href="{{ product.url }}?variant={{ option_variant.id }}"
-                          {% if value.selected %}
-                            aria-current="true"
-                          {% endif %}
-                        >
-                          {{ value.name }}
-                        </a>
+                      {% liquid
+                        assign swatch_image = value.swatch.image
+                        assign swatch_color = value.swatch.color
+                        assign fallback_color_name = value.name | downcase
+                      %}
+
+                      {% if is_color_option %}
+                        {% capture swatch_style %}
+                          {% if swatch_color != blank %}--swatch-color: {{ swatch_color }};{% endif %}
+                          {% if swatch_image != blank %}--swatch-image: url('{{ swatch_image | image_url: width: 128 }}');{% endif %}
+                          {% if swatch_color == blank and swatch_image == blank %}--swatch-color: {{ fallback_color_name }};{% endif %}
+                        {% endcapture %}
+                        {% assign has_native_swatch = false %}
+                        {% if swatch_color != blank or swatch_image != blank %}
+                          {% assign has_native_swatch = true %}
+                        {% endif %}
+
+                        {% if value.available %}
+                          <a
+                            class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
+                            href="{{ product.url }}?variant={{ option_variant.id }}"
+                            aria-label="Choose color: {{ value.name | escape }}"
+                            style="{{ swatch_style | strip }}"
+                            {% if value.selected %}
+                              aria-current="true"
+                            {% endif %}
+                          >
+                            <span class="main-product__swatch-fill" aria-hidden="true">
+                              {% unless has_native_swatch %}{% unless fallback_color_name == 'white' or fallback_color_name == 'black' or fallback_color_name == 'pink' or fallback_color_name == 'blue' or fallback_color_name == 'purple' or fallback_color_name == 'orange' %}{{ value.name | slice: 0, 2 }}{% endunless %}{% endunless %}
+                            </span>
+                            <span class="visually-hidden">
+                              {{ value.name }}
+                              {% if value.selected %} selected{% endif %}
+                            </span>
+                          </a>
+                        {% else %}
+                          <span
+                            class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
+                            aria-disabled="true"
+                            aria-label="Choose color: {{ value.name | escape }} unavailable"
+                            style="{{ swatch_style | strip }}"
+                            {% if value.selected %}
+                              aria-current="true"
+                            {% endif %}
+                          >
+                            <span class="main-product__swatch-fill" aria-hidden="true">
+                              {% unless has_native_swatch %}{% unless fallback_color_name == 'white' or fallback_color_name == 'black' or fallback_color_name == 'pink' or fallback_color_name == 'blue' or fallback_color_name == 'purple' or fallback_color_name == 'orange' %}{{ value.name | slice: 0, 2 }}{% endunless %}{% endunless %}
+                            </span>
+                            <span class="visually-hidden">{{ value.name }} unavailable</span>
+                          </span>
+                        {% endif %}
                       {% else %}
-                        <span
-                          class="main-product__option-value"
-                          aria-disabled="true"
-                          {% if value.selected %}
-                            aria-current="true"
-                          {% endif %}
-                        >
-                          {{ value.name }}
-                        </span>
+                        {% if value.available %}
+                          <a
+                            class="main-product__option-value"
+                            href="{{ product.url }}?variant={{ option_variant.id }}"
+                            {% if value.selected %}
+                              aria-current="true"
+                            {% endif %}
+                          >
+                            {{ value.name }}
+                          </a>
+                        {% else %}
+                          <span
+                            class="main-product__option-value"
+                            aria-disabled="true"
+                            {% if value.selected %}
+                              aria-current="true"
+                            {% endif %}
+                          >
+                            {{ value.name }}
+                          </span>
+                        {% endif %}
                       {% endif %}
                     {% endif %}
                   {% endfor %}
@@ -365,10 +431,22 @@
     font-weight: 600;
   }
 
+  .main-product__option-label--color {
+    color: var(--theme-color-secondary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
   .main-product__option-values {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+  }
+
+  .main-product__option-values--swatches {
+    gap: 1rem;
   }
 
   .main-product__option-value {
@@ -389,6 +467,95 @@
 
   .main-product__option-value[aria-disabled='true'] {
     opacity: 0.45;
+  }
+
+  .main-product__swatch {
+    position: relative;
+    width: 3.75rem;
+    min-width: 3.75rem;
+    min-height: 3.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    box-shadow: none;
+    isolation: isolate;
+  }
+
+  .main-product__swatch::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+      inset 0 0 18px rgba(255, 255, 255, 0.04);
+    transition:
+      box-shadow var(--transition-base),
+      transform var(--transition-base),
+      opacity var(--transition-base);
+  }
+
+  .main-product__swatch:hover::before {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      0 0 20px rgba(0, 229, 255, 0.08);
+  }
+
+  .main-product__swatch-fill {
+    position: absolute;
+    inset: 0.4rem;
+    border-radius: inherit;
+    background-color: var(--swatch-color, rgba(255, 255, 255, 0.06));
+    background-image: var(--swatch-image);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+      inset 0 0 0 6px rgba(10, 16, 28, 0.48);
+  }
+
+  .main-product__swatch[aria-current='true']::before {
+    box-shadow:
+      0 0 0 1px rgba(255, 77, 166, 0.95),
+      0 0 0 3px rgba(255, 77, 166, 0.28),
+      0 0 22px rgba(255, 77, 166, 0.22),
+      0 0 38px rgba(110, 200, 255, 0.18);
+  }
+
+  .main-product__swatch[aria-current='true'] .main-product__swatch-fill {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+      inset 0 0 0 6px rgba(10, 16, 28, 0.52);
+  }
+
+  .main-product__swatch:focus-visible {
+    outline: none;
+  }
+
+  .main-product__swatch:focus-visible::before {
+    box-shadow:
+      0 0 0 2px rgba(110, 200, 255, 0.98),
+      0 0 24px rgba(110, 200, 255, 0.22);
+  }
+
+  .main-product__swatch[aria-disabled='true']::before,
+  .main-product__swatch[aria-disabled='true'] .main-product__swatch-fill {
+    opacity: 0.52;
+  }
+
+  .main-product__swatch--fallback .main-product__swatch-fill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--theme-color-text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .main-product__quantity {
