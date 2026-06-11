@@ -127,14 +127,12 @@
                       {% liquid
                         assign swatch_image = value.swatch.image
                         assign swatch_color = value.swatch.color
-                        assign fallback_color_name = value.name | downcase
                       %}
 
                       {% if is_color_option %}
                         {% capture swatch_style %}
                           {% if swatch_color != blank %}--swatch-color: {{ swatch_color }};{% endif %}
                           {% if swatch_image != blank %}--swatch-image: url('{{ swatch_image | image_url: width: 128 }}');{% endif %}
-                          {% if swatch_color == blank and swatch_image == blank %}--swatch-color: {{ fallback_color_name }};{% endif %}
                         {% endcapture %}
                         {% assign has_native_swatch = false %}
                         {% if swatch_color != blank or swatch_image != blank %}
@@ -152,7 +150,7 @@
                             {% endif %}
                           >
                             <span class="main-product__swatch-fill" aria-hidden="true">
-                              {% unless has_native_swatch %}{% unless fallback_color_name == 'white' or fallback_color_name == 'black' or fallback_color_name == 'pink' or fallback_color_name == 'blue' or fallback_color_name == 'purple' or fallback_color_name == 'orange' %}{{ value.name | slice: 0, 2 }}{% endunless %}{% endunless %}
+                              {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
                             </span>
                             <span class="visually-hidden">
                               {{ value.name }}
@@ -170,7 +168,7 @@
                             {% endif %}
                           >
                             <span class="main-product__swatch-fill" aria-hidden="true">
-                              {% unless has_native_swatch %}{% unless fallback_color_name == 'white' or fallback_color_name == 'black' or fallback_color_name == 'pink' or fallback_color_name == 'blue' or fallback_color_name == 'purple' or fallback_color_name == 'orange' %}{{ value.name | slice: 0, 2 }}{% endunless %}{% endunless %}
+                              {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
                             </span>
                             <span class="visually-hidden">{{ value.name }} unavailable</span>
                           </span>
