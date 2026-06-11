@@ -107,12 +107,12 @@
           </a>
         {% endif %}
 
-        {% if shop.customer_accounts_enabled %}
+        {% comment %} {% if shop.customer_accounts_enabled %}
           <shopify-account class="header__account" menu="{{ section.settings.customer_account_menu }}">
             <span class="visually-hidden">Account</span>
             {{ 'icon-account.svg' | inline_asset_content }}
           </shopify-account>
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         <a class="header__cart" href="{{ routes.cart_url }}">
           <span class="header__cart-icon">{{ 'icon-cart.svg' | inline_asset_content }}</span>
