@@ -50,6 +50,7 @@
   --theme-shadow-lg: 0 26px 70px rgba(0, 0, 0, 0.42);
   --theme-glow-primary: 0 0 26px rgba(0, 229, 255, 0.14);
   --theme-glow-accent: 0 0 26px rgba(255, 45, 120, 0.12);
+  --site-header-offset: 5.5rem;
   --z-sticky: 20;
   --z-menu: 30;
 }
@@ -102,6 +103,14 @@ html {
     0 0 24px rgba(0, 229, 255, 0.08);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
+}
+
+#MainContent {
+  padding-top: var(--site-header-offset);
+}
+
+.template-index #MainContent {
+  padding-top: 0;
 }
 
 .container,
