@@ -106,114 +106,341 @@
               {% liquid
                 assign option_name_downcase = option.name | downcase
                 assign is_color_option = false
+                assign is_model_option = false
                 if option_name_downcase == 'color' or option_name_downcase == 'colour'
                   assign is_color_option = true
                 endif
+                if option_name_downcase contains 'model'
+                  assign is_model_option = true
+                endif
               %}
               <fieldset class="main-product__option">
-                <legend class="main-product__option-label{% if is_color_option %} main-product__option-label--color{% endif %}">
+                <legend class="main-product__option-label{% if is_color_option or is_model_option %} main-product__step-label{% endif %}">
                   {% if is_color_option %}
                     {{ forloop.index }}. {{ option.name }}
+                  {% elsif is_model_option %}
+                    {{ forloop.index }}. Choose {{ option.name }}
                   {% else %}
                     {{ option.name }}
                   {% endif %}
                 </legend>
 
-                <div class="main-product__option-values{% if is_color_option %} main-product__option-values--swatches{% endif %}">
-                  {% for value in option.values %}
-                    {% assign option_variant = value.variant %}
+                {% if is_model_option %}
+                  {% liquid
+                    assign selected_model_family = 'ipad'
+                    assign pro_items = ''
+                    assign air_items = ''
+                    assign ipad_items = ''
+                    assign pro_selected_label = ''
+                    assign air_selected_label = ''
+                    assign ipad_selected_label = ''
+                    assign pro_count = 0
+                    assign air_count = 0
+                    assign ipad_count = 0
+                  %}
 
+                  {% for value in option.values %}
+                    {% liquid
+                      assign option_variant = nil
+
+                      for variant in product.variants
+                        assign matches_option = false
+
+                        case option.position
+                          when 1
+                            if variant.option1 == value.name
+                              assign matches_option = true
+                            endif
+                          when 2
+                            if variant.option2 == value.name
+                              assign matches_option = true
+                            endif
+                          when 3
+                            if variant.option3 == value.name
+                              assign matches_option = true
+                            endif
+                        endcase
+
+                        if matches_option
+                          assign matches_other_options = true
+
+                          for product_option in product.options_with_values
+                            if product_option.position != option.position
+                              assign selected_value = product_option.selected_value
+
+                              case product_option.position
+                                when 1
+                                  if variant.option1 != selected_value
+                                    assign matches_other_options = false
+                                    break
+                                  endif
+                                when 2
+                                  if variant.option2 != selected_value
+                                    assign matches_other_options = false
+                                    break
+                                  endif
+                                when 3
+                                  if variant.option3 != selected_value
+                                    assign matches_other_options = false
+                                    break
+                                  endif
+                              endcase
+                            endif
+                          endfor
+
+                          if matches_other_options
+                            assign option_variant = variant
+                            break
+                          elsif option_variant == nil
+                            assign option_variant = variant
+                          endif
+                        endif
+                      endfor
+                    %}
                     {% if option_variant %}
                       {% liquid
-                        assign swatch_image = value.swatch.image
-                        assign swatch_color = value.swatch.color
+                        assign value_name_downcase = value.name | downcase
+                        assign family_key = 'ipad'
+                        assign family_label = 'iPad'
+
+                        if value_name_downcase contains 'ipad pro'
+                          assign family_key = 'pro'
+                          assign family_label = 'iPad Pro'
+                        elsif value_name_downcase contains 'ipad air'
+                          assign family_key = 'air'
+                          assign family_label = 'iPad Air'
+                        endif
                       %}
 
-                      {% if is_color_option %}
-                        {% capture swatch_style %}
-                          {% if swatch_color != blank %}--swatch-color: {{ swatch_color }};{% endif %}
-                          {% if swatch_image != blank %}--swatch-image: url('{{ swatch_image | image_url: width: 128 }}');{% endif %}
-                        {% endcapture %}
-                        {% assign has_native_swatch = false %}
-                        {% if swatch_color != blank or swatch_image != blank %}
-                          {% assign has_native_swatch = true %}
-                        {% endif %}
-
-                        {% if value.available %}
+                      {% capture model_item %}
+                        <li class="main-product__model-item">
                           <a
-                            class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
+                            class="main-product__model-link{% unless option_variant.available %} is-unavailable{% endunless %}"
                             href="{{ product.url }}?variant={{ option_variant.id }}"
-                            aria-label="Choose color: {{ value.name | escape }}"
-                            style="{{ swatch_style | strip }}"
+                            aria-label="Choose {{ option.name | escape }}: {{ value.name | escape }}{% unless option_variant.available %} unavailable{% endunless %}"
                             {% if value.selected %}
                               aria-current="true"
                             {% endif %}
                           >
-                            <span class="main-product__swatch-fill" aria-hidden="true">
-                              {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
+                            <span class="main-product__model-radio" aria-hidden="true">
+                              <span class="main-product__model-radio-dot"></span>
                             </span>
-                            <span class="visually-hidden">
-                              {{ value.name }}
-                              {% if value.selected %} selected{% endif %}
-                            </span>
+                            <span class="main-product__model-name">{{ value.name }}</span>
                           </a>
-                        {% else %}
-                          <span
-                            class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
-                            aria-disabled="true"
-                            aria-label="Choose color: {{ value.name | escape }} unavailable"
-                            style="{{ swatch_style | strip }}"
-                            {% if value.selected %}
-                              aria-current="true"
-                            {% endif %}
-                          >
-                            <span class="main-product__swatch-fill" aria-hidden="true">
-                              {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
-                            </span>
-                            <span class="visually-hidden">{{ value.name }} unavailable</span>
-                          </span>
+                        </li>
+                      {% endcapture %}
+
+                      {% if family_key == 'pro' %}
+                        {% assign pro_items = pro_items | append: model_item %}
+                        {% assign pro_count = pro_count | plus: 1 %}
+                        {% if value.selected %}
+                          {% assign selected_model_family = 'pro' %}
+                          {% assign pro_selected_label = value.name %}
+                        {% endif %}
+                      {% elsif family_key == 'air' %}
+                        {% assign air_items = air_items | append: model_item %}
+                        {% assign air_count = air_count | plus: 1 %}
+                        {% if value.selected %}
+                          {% assign selected_model_family = 'air' %}
+                          {% assign air_selected_label = value.name %}
                         {% endif %}
                       {% else %}
-                        {% if value.available %}
-                          <a
-                            class="main-product__option-value"
-                            href="{{ product.url }}?variant={{ option_variant.id }}"
-                            {% if value.selected %}
-                              aria-current="true"
-                            {% endif %}
-                          >
-                            {{ value.name }}
-                          </a>
-                        {% else %}
-                          <span
-                            class="main-product__option-value"
-                            aria-disabled="true"
-                            {% if value.selected %}
-                              aria-current="true"
-                            {% endif %}
-                          >
-                            {{ value.name }}
-                          </span>
+                        {% assign ipad_items = ipad_items | append: model_item %}
+                        {% assign ipad_count = ipad_count | plus: 1 %}
+                        {% if value.selected %}
+                          {% assign selected_model_family = 'ipad' %}
+                          {% assign ipad_selected_label = value.name %}
                         {% endif %}
                       {% endif %}
                     {% endif %}
                   {% endfor %}
-                </div>
+
+                  <div class="main-product__model-groups">
+                    {% if pro_count > 0 %}
+                      <details class="main-product__model-group panel" {% if selected_model_family == 'pro' %}open{% endif %}>
+                        <summary class="main-product__model-summary">
+                          <span class="main-product__model-summary-media main-product__model-summary-media--pro" aria-hidden="true">
+                            <span class="main-product__device-thumb main-product__device-thumb--back"></span>
+                            <span class="main-product__device-thumb main-product__device-thumb--front"></span>
+                          </span>
+                          <span class="main-product__model-summary-content">
+                            <span class="main-product__model-summary-title">iPad Pro</span>
+                            {% if pro_selected_label != blank %}
+                              <span class="main-product__model-summary-selected">{{ pro_selected_label }}</span>
+                            {% endif %}
+                          </span>
+                          <span class="main-product__model-summary-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="main-product__model-panel">
+                          <ul class="main-product__model-list" role="list">
+                            {{ pro_items }}
+                          </ul>
+                        </div>
+                      </details>
+                    {% endif %}
+
+                    {% if air_count > 0 %}
+                      <details class="main-product__model-group panel" {% if selected_model_family == 'air' %}open{% endif %}>
+                        <summary class="main-product__model-summary">
+                          <span class="main-product__model-summary-media main-product__model-summary-media--air" aria-hidden="true">
+                            <span class="main-product__device-thumb main-product__device-thumb--back"></span>
+                            <span class="main-product__device-thumb main-product__device-thumb--front"></span>
+                          </span>
+                          <span class="main-product__model-summary-content">
+                            <span class="main-product__model-summary-title">iPad Air</span>
+                            {% if air_selected_label != blank %}
+                              <span class="main-product__model-summary-selected">{{ air_selected_label }}</span>
+                            {% endif %}
+                          </span>
+                          <span class="main-product__model-summary-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="main-product__model-panel">
+                          <ul class="main-product__model-list" role="list">
+                            {{ air_items }}
+                          </ul>
+                        </div>
+                      </details>
+                    {% endif %}
+
+                    {% if ipad_count > 0 %}
+                      <details class="main-product__model-group panel" {% if selected_model_family == 'ipad' %}open{% endif %}>
+                        <summary class="main-product__model-summary">
+                          <span class="main-product__model-summary-media main-product__model-summary-media--ipad" aria-hidden="true">
+                            <span class="main-product__device-thumb main-product__device-thumb--back"></span>
+                            <span class="main-product__device-thumb main-product__device-thumb--front"></span>
+                          </span>
+                          <span class="main-product__model-summary-content">
+                            <span class="main-product__model-summary-title">iPad</span>
+                            {% if ipad_selected_label != blank %}
+                              <span class="main-product__model-summary-selected">{{ ipad_selected_label }}</span>
+                            {% endif %}
+                          </span>
+                          <span class="main-product__model-summary-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="main-product__model-panel">
+                          <ul class="main-product__model-list" role="list">
+                            {{ ipad_items }}
+                          </ul>
+                        </div>
+                      </details>
+                    {% endif %}
+                  </div>
+                {% else %}
+                  <div class="main-product__option-values{% if is_color_option %} main-product__option-values--swatches{% endif %}">
+                    {% for value in option.values %}
+                      {% assign option_variant = value.variant %}
+
+                      {% if option_variant %}
+                        {% liquid
+                          assign swatch_image = value.swatch.image
+                          assign swatch_color = value.swatch.color
+                        %}
+
+                        {% if is_color_option %}
+                          {% capture swatch_style %}
+                            {% if swatch_color != blank %}--swatch-color: {{ swatch_color }};{% endif %}
+                            {% if swatch_image != blank %}--swatch-image: url('{{ swatch_image | image_url: width: 128 }}');{% endif %}
+                          {% endcapture %}
+                          {% assign has_native_swatch = false %}
+                          {% if swatch_color != blank or swatch_image != blank %}
+                            {% assign has_native_swatch = true %}
+                          {% endif %}
+
+                          {% if value.available %}
+                            <a
+                              class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
+                              href="{{ product.url }}?variant={{ option_variant.id }}"
+                              aria-label="Choose color: {{ value.name | escape }}"
+                              style="{{ swatch_style | strip }}"
+                              {% if value.selected %}
+                                aria-current="true"
+                              {% endif %}
+                            >
+                              <span class="main-product__swatch-fill" aria-hidden="true">
+                                {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
+                              </span>
+                              <span class="visually-hidden">
+                                {{ value.name }}
+                                {% if value.selected %} selected{% endif %}
+                              </span>
+                            </a>
+                          {% else %}
+                            <span
+                              class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
+                              aria-disabled="true"
+                              aria-label="Choose color: {{ value.name | escape }} unavailable"
+                              style="{{ swatch_style | strip }}"
+                              {% if value.selected %}
+                                aria-current="true"
+                              {% endif %}
+                            >
+                              <span class="main-product__swatch-fill" aria-hidden="true">
+                                {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
+                              </span>
+                              <span class="visually-hidden">{{ value.name }} unavailable</span>
+                            </span>
+                          {% endif %}
+                        {% else %}
+                          {% if value.available %}
+                            <a
+                              class="main-product__option-value"
+                              href="{{ product.url }}?variant={{ option_variant.id }}"
+                              {% if value.selected %}
+                                aria-current="true"
+                              {% endif %}
+                            >
+                              {{ value.name }}
+                            </a>
+                          {% else %}
+                            <span
+                              class="main-product__option-value"
+                              aria-disabled="true"
+                              {% if value.selected %}
+                                aria-current="true"
+                              {% endif %}
+                            >
+                              {{ value.name }}
+                            </span>
+                          {% endif %}
+                        {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </fieldset>
             {% endfor %}
           </div>
         {% endunless %}
 
         <div class="main-product__quantity">
-          <label for="Quantity-{{ section.id }}">{{ 'product.quantity' | t }}</label>
-          <input
-            id="Quantity-{{ section.id }}"
-            type="number"
-            name="quantity"
-            min="1"
-            value="1"
-            inputmode="numeric"
-          >
+          <label class="main-product__quantity-label main-product__step-label" for="Quantity-{{ section.id }}">{{ forloop.index | default: 3 }}. {{ 'product.quantity' | t }}</label>
+          <div class="main-product__quantity-control" data-quantity-control>
+            <button
+              class="main-product__quantity-button"
+              type="button"
+              data-quantity-decrease
+              aria-label="Decrease quantity"
+            >
+              <span aria-hidden="true">-</span>
+            </button>
+            <input
+              id="Quantity-{{ section.id }}"
+              class="main-product__quantity-input"
+              type="number"
+              name="quantity"
+              min="1"
+              value="1"
+              inputmode="numeric"
+            >
+            <button
+              class="main-product__quantity-button"
+              type="button"
+              data-quantity-increase
+              aria-label="Increase quantity"
+            >
+              <span aria-hidden="true">+</span>
+            </button>
+          </div>
         </div>
 
         <button
@@ -261,7 +488,6 @@
     font-weight: 800;
     line-height: 0.96;
     letter-spacing: -0.035em;
-    color: #ff4da6;
   }
 
   .main-product__media-column {
@@ -429,9 +655,9 @@
     font-weight: 600;
   }
 
-  .main-product__option-label--color {
+  .main-product__step-label {
     color: var(--theme-color-secondary);
-    font-size: 0.95rem;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -465,6 +691,223 @@
 
   .main-product__option-value[aria-disabled='true'] {
     opacity: 0.45;
+  }
+
+  .main-product__model-groups {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .main-product__model-group {
+    overflow: hidden;
+    border-radius: 1.45rem;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015)),
+      rgba(7, 18, 34, 0.9);
+    transition:
+      border-color var(--transition-base),
+      box-shadow 220ms ease,
+      background-color var(--transition-base);
+  }
+
+  .main-product__model-group[open] {
+    border-color: rgba(255, 77, 166, 0.56);
+    box-shadow:
+      0 0 0 1px rgba(255, 77, 166, 0.42),
+      0 0 26px rgba(255, 77, 166, 0.12),
+      0 0 40px rgba(110, 200, 255, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .main-product__model-summary {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1rem 1.05rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .main-product__model-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .main-product__model-summary-media {
+    position: relative;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.95rem;
+    overflow: hidden;
+    background: rgba(8, 17, 31, 0.86);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 0 20px rgba(0, 0, 0, 0.24);
+  }
+
+  .main-product__model-summary-media--pro {
+    background:
+      radial-gradient(circle at 75% 28%, rgba(255, 77, 166, 0.34), transparent 42%),
+      linear-gradient(180deg, rgba(31, 11, 38, 0.95), rgba(12, 18, 34, 0.95));
+  }
+
+  .main-product__model-summary-media--air {
+    background:
+      radial-gradient(circle at 78% 24%, rgba(0, 229, 255, 0.28), transparent 42%),
+      linear-gradient(180deg, rgba(8, 20, 39, 0.95), rgba(10, 18, 35, 0.95));
+  }
+
+  .main-product__model-summary-media--ipad {
+    background:
+      radial-gradient(circle at 78% 24%, rgba(155, 0, 255, 0.28), transparent 42%),
+      linear-gradient(180deg, rgba(20, 14, 40, 0.95), rgba(10, 18, 35, 0.95));
+  }
+
+  .main-product__device-thumb {
+    position: absolute;
+    top: 50%;
+    width: 1.55rem;
+    height: 2.35rem;
+    border-radius: 0.38rem;
+    transform: translateY(-50%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 0 14px rgba(0, 0, 0, 0.24);
+  }
+
+  .main-product__device-thumb--back {
+    left: 0.75rem;
+    opacity: 0.5;
+  }
+
+  .main-product__device-thumb--front {
+    left: 1.45rem;
+    background:
+      linear-gradient(135deg, rgba(255, 77, 166, 0.7), rgba(110, 200, 255, 0.16)),
+      linear-gradient(180deg, rgba(19, 30, 52, 0.98), rgba(7, 15, 28, 0.98));
+  }
+
+  .main-product__model-summary-content {
+    display: grid;
+    gap: 0.18rem;
+    min-width: 0;
+  }
+
+  .main-product__model-summary-title {
+    font-family: var(--theme-font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .main-product__model-summary-selected {
+    color: var(--theme-color-text-muted);
+    font-size: 0.86rem;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .main-product__model-summary-chevron {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform var(--transition-base);
+  }
+
+  .main-product__model-group[open] .main-product__model-summary-chevron {
+    transform: rotate(-135deg);
+  }
+
+  .main-product__model-panel {
+    height: auto;
+    overflow: hidden;
+    padding: 0 1rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .main-product__model-list {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.7rem 0 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .main-product__model-item {
+    display: block;
+  }
+
+  .main-product__model-link {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 3.25rem;
+    padding: 0.75rem 0.25rem;
+    color: var(--theme-color-text-muted);
+    text-decoration: none;
+    transition: color var(--transition-base), transform var(--transition-base);
+  }
+
+  .main-product__model-link:hover {
+    color: var(--theme-color-text);
+    transform: translateX(2px);
+  }
+
+  .main-product__model-link[aria-current='true'] {
+    color: var(--theme-color-text);
+  }
+
+  .main-product__model-link.is-unavailable {
+    opacity: 0.4;
+  }
+
+  .main-product__model-radio {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.45rem;
+    height: 1.45rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  }
+
+  .main-product__model-radio-dot {
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 999px;
+    background: transparent;
+    transform: scale(0.5);
+    opacity: 0;
+    transition:
+      opacity var(--transition-base),
+      transform var(--transition-base),
+      background-color var(--transition-base);
+  }
+
+  .main-product__model-link[aria-current='true'] .main-product__model-radio {
+    border-color: rgba(255, 77, 166, 0.95);
+    box-shadow:
+      0 0 0 3px rgba(255, 77, 166, 0.18),
+      0 0 16px rgba(255, 77, 166, 0.18);
+  }
+
+  .main-product__model-link[aria-current='true'] .main-product__model-radio-dot {
+    opacity: 1;
+    transform: scale(1);
+    background: var(--theme-gradient-heading);
+  }
+
+  .main-product__model-name {
+    font-size: 1rem;
+    line-height: 1.45;
   }
 
   .main-product__swatch {
@@ -558,15 +1001,93 @@
 
   .main-product__quantity {
     display: grid;
-    gap: 0.5rem;
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
   }
 
-  .main-product__quantity input {
-    width: 6rem;
-    min-height: 2.75rem;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid rgba(0, 0, 0, 0.16);
+  .main-product__quantity-control {
+    display: grid;
+    grid-template-columns: 2.4rem minmax(2.8rem, 3.2rem) 2.4rem;
+    align-items: center;
+    width: auto;
+    min-height: 2.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.01)),
+      rgba(8, 17, 31, 0.82);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+      0 0 24px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+  }
+
+  .main-product__quantity-button,
+  .main-product__quantity-input {
+    min-height: 2.25rem;
+  }
+
+  .main-product__quantity-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
     background: transparent;
+    color: var(--theme-color-text);
+    cursor: pointer;
+    font-size: 1.45rem;
+    line-height: 1;
+    transition:
+      color var(--transition-base),
+      background-color var(--transition-base);
+  }
+
+  .main-product__quantity-button:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--theme-color-secondary);
+  }
+
+  .main-product__quantity-button:first-child,
+  .main-product__quantity-input {
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .main-product__quantity-input {
+    width: 100%;
+    padding: 0 0.25rem;
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 0;
+    background: transparent;
+    color: var(--theme-color-text);
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  .main-product__quantity-input::-webkit-outer-spin-button,
+  .main-product__quantity-input::-webkit-inner-spin-button {
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .main-product__quantity-input:focus,
+  .main-product__quantity-button:focus-visible {
+    outline: none;
+  }
+
+  .main-product__quantity-control:focus-within {
+    border-color: rgba(0, 229, 255, 0.42);
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.36),
+      0 0 22px rgba(0, 229, 255, 0.1),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.04);
   }
 
   .main-product__submit {
@@ -613,6 +1134,113 @@
 
 {% javascript %}
   (() => {
+    const ACCORDION_DURATION = 260;
+    const animateAccordionPanel = (panel, expand) => {
+      if (!panel) {
+        return;
+      }
+
+      panel.style.transition = 'none';
+
+      if (expand) {
+        panel.hidden = false;
+        panel.style.height = '0px';
+      } else {
+        panel.style.height = `${panel.offsetHeight}px`;
+      }
+
+      panel.offsetHeight;
+      panel.style.transition = `height ${ACCORDION_DURATION}ms ease`;
+
+      requestAnimationFrame(() => {
+        panel.style.height = expand ? `${panel.scrollHeight}px` : '0px';
+      });
+
+      window.setTimeout(() => {
+        panel.style.transition = '';
+        panel.style.height = expand ? 'auto' : '0px';
+        panel.hidden = !expand;
+      }, ACCORDION_DURATION);
+    };
+
+    const closeAccordion = (details) => {
+      const panel = details.querySelector('.main-product__model-panel');
+
+      if (!panel || details.dataset.animating === 'true') {
+        return;
+      }
+
+      details.dataset.animating = 'true';
+      animateAccordionPanel(panel, false);
+
+      window.setTimeout(() => {
+        details.open = false;
+        details.dataset.animating = 'false';
+      }, ACCORDION_DURATION);
+    };
+
+    const openAccordion = (details, allGroups) => {
+      allGroups.forEach((group) => {
+        if (group === details || !group.open) {
+          return;
+        }
+
+        closeAccordion(group);
+      });
+
+      if (details.dataset.animating === 'true') {
+        return;
+      }
+
+      details.dataset.animating = 'true';
+      details.open = true;
+      animateAccordionPanel(details.querySelector('.main-product__model-panel'), true);
+      window.setTimeout(() => {
+        details.dataset.animating = 'false';
+      }, ACCORDION_DURATION);
+    };
+
+    const initModelAccordions = (scope = document) => {
+      const groups = Array.from(scope.querySelectorAll('.main-product__model-group'));
+
+      if (!groups.length) {
+        return;
+      }
+
+      groups.forEach((group) => {
+        if (group.dataset.modelAccordionReady === 'true') {
+          return;
+        }
+
+        const summary = group.querySelector('.main-product__model-summary');
+        const panel = group.querySelector('.main-product__model-panel');
+
+        if (!summary || !panel) {
+          return;
+        }
+
+        if (!group.open) {
+          panel.hidden = true;
+          panel.style.height = '0px';
+        } else {
+          panel.hidden = false;
+          panel.style.height = 'auto';
+        }
+
+        summary.addEventListener('click', (event) => {
+          event.preventDefault();
+
+          if (group.open) {
+            closeAccordion(group);
+          } else {
+            openAccordion(group, groups);
+          }
+        });
+
+        group.dataset.modelAccordionReady = 'true';
+      });
+    };
+
     const initGallery = (gallery) => {
       if (!gallery || gallery.dataset.initialized === 'true') {
         return;
@@ -665,17 +1293,54 @@
       gallery.dataset.initialized = 'true';
     };
 
+    const initQuantityControls = (scope = document) => {
+      scope.querySelectorAll('[data-quantity-control]').forEach((control) => {
+        if (control.dataset.initialized === 'true') {
+          return;
+        }
+
+        const input = control.querySelector('.main-product__quantity-input');
+        const decrease = control.querySelector('[data-quantity-decrease]');
+        const increase = control.querySelector('[data-quantity-increase]');
+
+        if (!input || !decrease || !increase) {
+          return;
+        }
+
+        const updateQuantity = (delta) => {
+          const currentValue = Number.parseInt(input.value, 10);
+          const nextValue = Number.isNaN(currentValue) ? 1 : Math.max(1, currentValue + delta);
+          input.value = String(nextValue);
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+
+        decrease.addEventListener('click', () => updateQuantity(-1));
+        increase.addEventListener('click', () => updateQuantity(1));
+        control.dataset.initialized = 'true';
+      });
+    };
+
     const initAllGalleries = () => {
       document.querySelectorAll('[data-product-gallery]').forEach(initGallery);
     };
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initAllGalleries);
-    } else {
+    const initPageEnhancements = () => {
       initAllGalleries();
+      initModelAccordions();
+      initQuantityControls();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPageEnhancements);
+    } else {
+      initPageEnhancements();
     }
 
-    document.addEventListener('shopify:section:load', initAllGalleries);
+    document.addEventListener('shopify:section:load', (event) => {
+      initAllGalleries();
+      initModelAccordions(event.target);
+      initQuantityControls(event.target);
+    });
   })();
 {% endjavascript %}
 
