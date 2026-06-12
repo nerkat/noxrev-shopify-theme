@@ -29,6 +29,10 @@
 {% endif %}
 
 {% stylesheet %}
+  body:not(.template-index) .announcement-bar {
+    display: none;
+  }
+
   .announcement-bar {
     --announcement-height: 2.7rem;
     position: relative;

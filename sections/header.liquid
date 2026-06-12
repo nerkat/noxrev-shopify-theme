@@ -21,105 +21,111 @@
 
 <header class="header" data-site-header>
   <div class="header__inner container">
-      {% if has_mobile_nav %}
-        <details class="header__mobile hidden-desktop">
-          <summary class="header__mobile-toggle" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </summary>
-          <div class="header__mobile-panel">
-            <nav class="header__mobile-nav" aria-label="Mobile">
-              {% for link in section.settings.menu.links %}
-                <a
-                  class="header__mobile-link{% if link.current or link.child_active %} is-active{% endif %}"
-                  href="{{ link.url }}"
-                  {% if link.current %}aria-current="page"{% endif %}
-                >
-                  {{ link.title }}
-                </a>
-              {% endfor %}
-            </nav>
-
-            {% if has_utility %}
-              {% if utility_link != blank %}
-                <a class="header__mobile-utility" href="{{ utility_link }}">{{ utility_text | escape }}</a>
-              {% else %}
-                <p class="header__mobile-utility">{{ utility_text | escape }}</p>
-              {% endif %}
-            {% endif %}
-
-            {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
-              <a class="button" href="{{ section.settings.cta_link }}">
-                <span class="button__content">
-                  <span>{{ section.settings.cta_label | escape }}</span>
-                  <span class="button__icon" aria-hidden="true">&rarr;</span>
-                </span>
+    {% if has_mobile_nav %}
+      <details class="header__mobile hidden-desktop">
+        <summary class="header__mobile-toggle" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </summary>
+        <div class="header__mobile-panel">
+          <nav class="header__mobile-nav" aria-label="Mobile">
+            {% for link in section.settings.menu.links %}
+              <a
+                class="header__mobile-link{% if link.current or link.child_active %} is-active{% endif %}"
+                href="{{ link.url }}"
+                {% if link.current %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{ link.title }}
               </a>
+            {% endfor %}
+          </nav>
+
+          {% if has_utility %}
+            {% if utility_link != blank %}
+              <a class="header__mobile-utility" href="{{ utility_link }}">{{ utility_text | escape }}</a>
+            {% else %}
+              <p class="header__mobile-utility">{{ utility_text | escape }}</p>
             {% endif %}
-          </div>
-        </details>
-      {% endif %}
-
-      <div class="header__brand">
-        <a class="header__brand-link" href="{{ routes.root_url }}">
-          {% if section.settings.logo != blank %}
-            {{
-              section.settings.logo
-              | image_url: width: 400
-              | image_tag: class: 'header__logo', loading: 'eager', alt: brand_text
-            }}
-          {% else %}
-            <span class="header__brand-text">{{ brand_text | escape }}</span>
           {% endif %}
-        </a>
-      </div>
 
-      {% if has_primary_nav %}
-        <nav class="header__nav hidden-mobile" aria-label="Primary">
-          {% for link in section.settings.menu.links %}
-            <a
-              class="header__nav-link{% if link.current or link.child_active %} is-active{% endif %}"
-              href="{{ link.url }}"
-              {% if link.current %}aria-current="page"{% endif %}
-            >
-              {{ link.title }}
+          {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+            <a class="button" href="{{ section.settings.cta_link }}">
+              <span class="button__content">
+                <span>{{ section.settings.cta_label | escape }}</span>
+                <span class="button__icon" aria-hidden="true">&rarr;</span>
+              </span>
             </a>
-          {% endfor %}
-        </nav>
+          {% endif %}
+        </div>
+      </details>
+    {% endif %}
+
+    <div class="header__brand">
+      <a class="header__brand-link" href="{{ routes.root_url }}">
+        {% if section.settings.logo != blank %}
+          {{
+            section.settings.logo
+            | image_url: width: 400
+            | image_tag: class: 'header__logo', loading: 'eager', alt: brand_text
+          }}
+        {% else %}
+          <span class="header__brand-text">{{ brand_text | escape }}</span>
+        {% endif %}
+      </a>
+    </div>
+
+    {% if has_primary_nav %}
+      <nav class="header__nav hidden-mobile" aria-label="Primary">
+        {% for link in section.settings.menu.links %}
+          <a
+            class="header__nav-link{% if link.current or link.child_active %} is-active{% endif %}"
+            href="{{ link.url }}"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            {{ link.title }}
+          </a>
+        {% endfor %}
+      </nav>
+    {% endif %}
+
+    <div class="header__actions">
+      {% if has_utility %}
+        {% if utility_link != blank %}
+          <a class="header__utility hidden-mobile" href="{{ utility_link }}">{{ utility_text | escape }}</a>
+        {% else %}
+          <p class="header__utility hidden-mobile">{{ utility_text | escape }}</p>
+        {% endif %}
       {% endif %}
 
-      <div class="header__actions">
-        {% if has_utility %}
-          {% if utility_link != blank %}
-            <a class="header__utility hidden-mobile" href="{{ utility_link }}">{{ utility_text | escape }}</a>
-          {% else %}
-            <p class="header__utility hidden-mobile">{{ utility_text | escape }}</p>
-          {% endif %}
-        {% endif %}
+      {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+        <a class="button hidden-mobile" href="{{ section.settings.cta_link }}">
+          <span class="button__content">
+            <span>{{ section.settings.cta_label | escape }}</span>
+            <span class="button__icon" aria-hidden="true">&rarr;</span>
+          </span>
+        </a>
+      {% endif %}
 
-        {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
-          <a class="button hidden-mobile" href="{{ section.settings.cta_link }}">
-            <span class="button__content">
-              <span>{{ section.settings.cta_label | escape }}</span>
-              <span class="button__icon" aria-hidden="true">&rarr;</span>
-            </span>
-          </a>
-        {% endif %}
-
-        {% comment %} {% if shop.customer_accounts_enabled %}
+      {% comment %}
+        {% if shop.customer_accounts_enabled %}
           <shopify-account class="header__account" menu="{{ section.settings.customer_account_menu }}">
             <span class="visually-hidden">Account</span>
             {{ 'icon-account.svg' | inline_asset_content }}
           </shopify-account>
-        {% endif %} {% endcomment %}
+        {% endif %}
+      {% endcomment %}
 
-        <a class="header__cart" href="{{ routes.cart_url }}">
-          <span class="header__cart-icon">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-          <span class="header__cart-label visually-hidden">Cart</span>
-          <span class="header__cart-count" aria-live="polite">{{ cart.item_count }}</span>
-        </a>
-      </div>
+      <a class="header__cart" href="{{ routes.cart_url }}">
+        <span class="header__cart-icon">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+        <span class="header__cart-label visually-hidden">Cart</span>
+        <span class="header__cart-count" aria-live="polite">{{ cart.item_count }}</span>
+      </a>
+    </div>
   </div>
 </header>
 
@@ -133,11 +139,7 @@
     box-shadow: none;
     backdrop-filter: blur(0);
     -webkit-backdrop-filter: blur(0);
-    transition:
-      background-color 220ms ease,
-      border-color 220ms ease,
-      box-shadow 220ms ease,
-      backdrop-filter 220ms ease,
+    transition: background-color 220ms ease, border-color 220ms ease, box-shadow 220ms ease, backdrop-filter 220ms ease,
       -webkit-backdrop-filter 220ms ease;
   }
 
@@ -207,11 +209,8 @@
     border-radius: var(--theme-radius-pill);
     padding: 0.6rem 1rem;
     color: var(--theme-color-text-muted);
-    transition:
-      color var(--transition-base),
-      border-color var(--transition-base),
-      background-color var(--transition-base),
-      box-shadow var(--transition-base);
+    transition: color var(--transition-base), border-color var(--transition-base),
+      background-color var(--transition-base), box-shadow var(--transition-base);
   }
 
   .header__nav-link:hover {
@@ -266,14 +265,10 @@
     border-radius: var(--theme-radius-pill);
     background: rgba(255, 255, 255, 0.04);
     color: var(--theme-color-text);
-    transition:
-      color var(--transition-base),
-      border-color var(--transition-base),
-      box-shadow var(--transition-base);
+    transition: color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   }
 
   .header__cart {
-    gap: 0.35rem;
     padding-inline: 0.7rem;
   }
 
@@ -288,7 +283,7 @@
     min-width: 1rem;
     text-align: center;
     font-size: 0.8rem;
-    font-weight: 700;
+    color: var(--theme-color-secondary);
   }
 
   .header__mobile {
@@ -298,7 +293,7 @@
   .header__mobile-toggle {
     display: inline-grid;
     gap: 0.25rem;
-    place-items: center;
+    place-items: left;
     width: 2.5rem;
     height: 2.5rem;
     border: 1px solid rgba(0, 229, 255, 0.3);
@@ -405,11 +400,12 @@
     .header__mobile {
       position: relative;
       justify-self: start;
+      display: flex;
     }
 
     .header__mobile-toggle {
-      width: 2.4rem;
-      height: 2.4rem;
+      width: fit-content;
+      height: 0.8rem;
       border: 0;
       background: transparent;
       box-shadow: none;
@@ -417,7 +413,7 @@
     }
 
     .header__mobile-toggle span {
-      width: 1.2rem;
+      width: 1rem;
       background: rgba(255, 255, 255, 0.75);
     }
 
@@ -444,7 +440,9 @@
 
   @media (max-width: 749px) {
     .header__cart {
-      padding-inline: 0.7rem;
+      padding-inline: 0.4rem;
+      min-width: 2rem;
+      min-height: 2rem;
     }
   }
 {% endstylesheet %}
