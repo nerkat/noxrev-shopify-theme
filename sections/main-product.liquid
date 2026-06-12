@@ -1112,18 +1112,22 @@
   }
 
   .main-product__quantity {
-    display: grid;
-    grid-template-columns: auto auto;
+    display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.85rem;
+    padding-bottom: 1rem;
+  }
+
+  .main-product__quantity-label.main-product__step-label {
+    padding-top: 1rem;
   }
 
   .main-product__quantity-control {
     display: grid;
     grid-template-columns: 2.4rem minmax(2.8rem, 3.2rem) 2.4rem;
     align-items: center;
-    width: auto;
+    width: fit-content;
     min-height: 2.25rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
