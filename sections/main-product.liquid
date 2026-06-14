@@ -25,14 +25,16 @@
       >
         <div class="main-product__gallery-main">
           <div class="main-product__gallery-frame">
-            {% comment %} <span class="main-product__gallery-zoom" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
-                <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"></circle>
-                <path d="M16 16 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                <path d="M11 8.5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                <path d="M8.5 11h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-              </svg>
-            </span> {% endcomment %}
+            {% comment %}
+              <span class="main-product__gallery-zoom" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                  <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"></circle>
+                  <path d="M16 16 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                  <path d="M11 8.5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                  <path d="M8.5 11h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                </svg>
+              </span>
+            {% endcomment %}
 
             {% if current_preview != blank %}
               <img
@@ -279,92 +281,143 @@
                   {% endif %}
                 {% endfor %}
 
-                <div class="main-product__model-groups">
-                  {% if pro_count > 0 %}
-                    <details
-                      class="main-product__model-group panel"
-                      {% if selected_model_family == 'pro' %}
-                        open
-                      {% endif %}
-                    >
-                      <summary class="main-product__model-summary">
+                <div
+                  class="main-product__model-selector"
+                  data-model-tabs
+                  data-selected-family="{{ selected_model_family }}"
+                >
+                  <div class="main-product__model-tablist" role="tablist" aria-label="Choose iPad model family">
+                    {% if pro_count > 0 %}
+                      <button
+                        class="main-product__model-tab"
+                        type="button"
+                        role="tab"
+                        id="ModelTab-Pro-{{ section.id }}"
+                        aria-selected="false"
+                        aria-controls="ModelPanel-Pro-{{ section.id }}"
+                        data-model-tab="pro"
+                      >
                         <span
-                          class="main-product__model-summary-media main-product__model-summary-media--pro"
+                          class="main-product__model-tab-media main-product__model-tab-media--pro"
                           aria-hidden="true"
                         >
-                          <span class="main-product__device-thumb main-product__device-thumb--back"></span>
-                          <span class="main-product__device-thumb main-product__device-thumb--front"></span>
+                          <img
+                            class="main-product__model-tab-image"
+                            src="{{ 'ipad-tab-graphic.png' | asset_url }}"
+                            alt=""
+                            loading="lazy"
+                            width="320"
+                            height="320"
+                          >
                         </span>
-                        <span class="main-product__model-summary-content">
-                          <span class="main-product__model-summary-title">iPad Pro</span>
+                        <span class="main-product__model-tab-title">iPad Pro</span>
+                      </button>
+                    {% endif %}
+
+                    {% if air_count > 0 %}
+                      <button
+                        class="main-product__model-tab"
+                        type="button"
+                        role="tab"
+                        id="ModelTab-Air-{{ section.id }}"
+                        aria-selected="false"
+                        aria-controls="ModelPanel-Air-{{ section.id }}"
+                        data-model-tab="air"
+                      >
+                        <span
+                          class="main-product__model-tab-media main-product__model-tab-media--air"
+                          aria-hidden="true"
+                        >
+                          <img
+                            class="main-product__model-tab-image"
+                            src="{{ 'ipad-tab-graphic.png' | asset_url }}"
+                            alt=""
+                            loading="lazy"
+                            width="320"
+                            height="320"
+                          >
                         </span>
-                      </summary>
-                      <div class="main-product__model-panel">
-                        <div class="main-product__model-panel-inner">
-                          <ul class="main-product__model-list" role="list">
-                            {{ pro_items }}
-                          </ul>
-                        </div>
+                        <span class="main-product__model-tab-title">iPad Air</span>
+                      </button>
+                    {% endif %}
+
+                    {% if ipad_count > 0 %}
+                      <button
+                        class="main-product__model-tab"
+                        type="button"
+                        role="tab"
+                        id="ModelTab-Ipad-{{ section.id }}"
+                        aria-selected="false"
+                        aria-controls="ModelPanel-Ipad-{{ section.id }}"
+                        data-model-tab="ipad"
+                      >
+                        <span
+                          class="main-product__model-tab-media main-product__model-tab-media--ipad"
+                          aria-hidden="true"
+                        >
+                          <img
+                            class="main-product__model-tab-image"
+                            src="{{ 'ipad-tab-graphic.png' | asset_url }}"
+                            alt=""
+                            loading="lazy"
+                            width="320"
+                            height="320"
+                          >
+                        </span>
+                        <span class="main-product__model-tab-title">iPad</span>
+                      </button>
+                    {% endif %}
+                  </div>
+
+                  {% if pro_count > 0 %}
+                    <div
+                      class="main-product__model-panel panel"
+                      id="ModelPanel-Pro-{{ section.id }}"
+                      role="tabpanel"
+                      aria-labelledby="ModelTab-Pro-{{ section.id }}"
+                      data-model-panel="pro"
+                      hidden
+                    >
+                      <div class="main-product__model-panel-inner">
+                        <ul class="main-product__model-list" role="list">
+                          {{ pro_items }}
+                        </ul>
                       </div>
-                    </details>
+                    </div>
                   {% endif %}
 
                   {% if air_count > 0 %}
-                    <details
-                      class="main-product__model-group panel"
-                      {% if selected_model_family == 'air' %}
-                        open
-                      {% endif %}
+                    <div
+                      class="main-product__model-panel panel"
+                      id="ModelPanel-Air-{{ section.id }}"
+                      role="tabpanel"
+                      aria-labelledby="ModelTab-Air-{{ section.id }}"
+                      data-model-panel="air"
+                      hidden
                     >
-                      <summary class="main-product__model-summary">
-                        <span
-                          class="main-product__model-summary-media main-product__model-summary-media--air"
-                          aria-hidden="true"
-                        >
-                          <span class="main-product__device-thumb main-product__device-thumb--back"></span>
-                          <span class="main-product__device-thumb main-product__device-thumb--front"></span>
-                        </span>
-                        <span class="main-product__model-summary-content">
-                          <span class="main-product__model-summary-title">iPad Air</span>
-                        </span>
-                      </summary>
-                      <div class="main-product__model-panel">
-                        <div class="main-product__model-panel-inner">
-                          <ul class="main-product__model-list" role="list">
-                            {{ air_items }}
-                          </ul>
-                        </div>
+                      <div class="main-product__model-panel-inner">
+                        <ul class="main-product__model-list" role="list">
+                          {{ air_items }}
+                        </ul>
                       </div>
-                    </details>
+                    </div>
                   {% endif %}
 
                   {% if ipad_count > 0 %}
-                    <details
-                      class="main-product__model-group panel"
-                      {% if selected_model_family == 'ipad' %}
-                        open
-                      {% endif %}
+                    <div
+                      class="main-product__model-panel panel"
+                      id="ModelPanel-Ipad-{{ section.id }}"
+                      role="tabpanel"
+                      aria-labelledby="ModelTab-Ipad-{{ section.id }}"
+                      data-model-panel="ipad"
+                      hidden
                     >
-                      <summary class="main-product__model-summary">
-                        <span
-                          class="main-product__model-summary-media main-product__model-summary-media--ipad"
-                          aria-hidden="true"
-                        >
-                          <span class="main-product__device-thumb main-product__device-thumb--back"></span>
-                          <span class="main-product__device-thumb main-product__device-thumb--front"></span>
-                        </span>
-                        <span class="main-product__model-summary-content">
-                          <span class="main-product__model-summary-title">iPad</span>
-                        </span>
-                      </summary>
-                      <div class="main-product__model-panel">
-                        <div class="main-product__model-panel-inner">
-                          <ul class="main-product__model-list" role="list">
-                            {{ ipad_items }}
-                          </ul>
-                        </div>
+                      <div class="main-product__model-panel-inner">
+                        <ul class="main-product__model-list" role="list">
+                          {{ ipad_items }}
+                        </ul>
                       </div>
-                    </details>
+                    </div>
                   {% endif %}
                 </div>
               {% else %}
@@ -522,12 +575,14 @@
     </div>
   </div>
 
-  {% comment %} {% if product.description != blank %}
-    <div class="main-product__details">
-      <h2 class="main-product__details-title">{{ 'product.details' | t }}</h2>
-      <div class="main-product__details-content">{{ product.description }}</div>
-    </div>
-  {% endif %} {% endcomment %}
+  {% comment %}
+    {% if product.description != blank %}
+      <div class="main-product__details">
+        <h2 class="main-product__details-title">{{ 'product.details' | t }}</h2>
+        <div class="main-product__details-content">{{ product.description }}</div>
+      </div>
+    {% endif %}
+  {% endcomment %}
 </div>
 
 {% stylesheet %}
@@ -585,7 +640,7 @@
   .main-product__gallery-image,
   .main-product__gallery-placeholder {
     width: 100%;
-    object-fit: contain;
+    object-fit: cover;
     height: 100%;
   }
 
@@ -643,8 +698,7 @@
     border-radius: 1rem;
     background: rgba(6, 16, 31, 0.82);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-    transition: border-color var(--transition-base), box-shadow var(--transition-base),
-      transform var(--transition-base);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
   }
 
   .main-product__gallery-thumb-media::after {
@@ -789,133 +843,185 @@
     opacity: 0.45;
   }
 
-  .main-product__model-groups {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    min-height: 26rem;
+  .main-product__model-selector {
+    display: grid;
+    gap: 0;
   }
 
-  .main-product__model-group {
+  .main-product__model-tablist {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .main-product__model-tab {
     position: relative;
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
-    flex: 0 0 auto;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1.45rem;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015)), rgba(7, 18, 34, 0.9);
-    transition: border-color 220ms ease-out, background-color 220ms ease-out, flex-grow 220ms ease-out;
+    justify-items: center;
+    align-content: center;
+    gap: 0.75rem;
+    min-height: 9.5rem;
+    margin: 0;
+    padding: 1rem 0.75rem 1.15rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+    border-radius: 1.4rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)), rgba(7, 18, 34, 0.88);
+    color: var(--theme-color-text-muted);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color var(--transition-base), border-color var(--transition-base), transform var(--transition-base),
+      background-color var(--transition-base);
   }
 
-  .main-product__model-group::after {
+  .main-product__model-tab + .main-product__model-tab {
+    margin-left: -1px;
+  }
+
+  .main-product__model-tab::after {
     content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
     opacity: 0;
-    box-shadow: 0 0 0 1px rgba(255, 77, 166, 0.42), 0 0 26px rgba(255, 77, 166, 0.12),
-      0 0 40px rgba(110, 200, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    transition: opacity 220ms ease;
+    box-shadow: 0 0 0 1px rgba(255, 77, 166, 0.44), 0 0 24px rgba(255, 77, 166, 0.12),
+      0 0 34px rgba(110, 200, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: opacity var(--transition-base);
   }
 
-  .main-product__model-group[open] {
-    grid-template-rows: auto minmax(0, 1fr);
-    flex: 1 1 auto;
-    border-color: rgba(255, 77, 166, 0.56);
+  .main-product__model-tab:hover {
+    color: var(--theme-color-text);
   }
 
-  .main-product__model-group[open]::after {
+  .main-product__model-tab[aria-selected='true'] {
+    z-index: 3;
+    border-color: rgba(255, 77, 166, 0.6);
+    border-bottom-color: transparent;
+    background: radial-gradient(circle at 50% 110%, rgba(255, 77, 166, 0.16), transparent 48%),
+      linear-gradient(180deg, rgba(60, 18, 56, 0.86), rgba(12, 18, 34, 0.92));
+    color: #ff85c4;
+  }
+
+  .main-product__model-tab[aria-selected='true']::after {
     opacity: 1;
   }
 
-  .main-product__model-summary {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1rem 1.05rem;
-    cursor: pointer;
-    list-style: none;
-    -webkit-tap-highlight-color: transparent;
+  .main-product__model-tab:focus-visible {
+    outline: none;
   }
 
-  .main-product__model-summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .main-product__model-summary-media {
-    position: relative;
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 0.95rem;
-    overflow: hidden;
-    background: rgba(8, 17, 31, 0.86);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 20px rgba(0, 0, 0, 0.24);
-  }
-
-  .main-product__model-summary-media--pro {
-    background: radial-gradient(circle at 75% 28%, rgba(255, 77, 166, 0.34), transparent 42%),
-      linear-gradient(180deg, rgba(31, 11, 38, 0.95), rgba(12, 18, 34, 0.95));
-  }
-
-  .main-product__model-summary-media--air {
-    background: radial-gradient(circle at 78% 24%, rgba(0, 229, 255, 0.28), transparent 42%),
-      linear-gradient(180deg, rgba(8, 20, 39, 0.95), rgba(10, 18, 35, 0.95));
-  }
-
-  .main-product__model-summary-media--ipad {
-    background: radial-gradient(circle at 78% 24%, rgba(155, 0, 255, 0.28), transparent 42%),
-      linear-gradient(180deg, rgba(20, 14, 40, 0.95), rgba(10, 18, 35, 0.95));
-  }
-
-  .main-product__device-thumb {
+  .main-product__model-tab:focus-visible::before {
+    content: '';
     position: absolute;
-    top: 50%;
-    width: 1.55rem;
-    height: 2.35rem;
-    border-radius: 0.38rem;
-    transform: translateY(-50%);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 14px rgba(0, 0, 0, 0.24);
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 0 2px rgba(110, 200, 255, 0.8);
+    pointer-events: none;
   }
 
-  .main-product__device-thumb--back {
-    left: 0.75rem;
-    opacity: 0.5;
+  .main-product__model-tab-media {
+    position: relative;
+    width: min(100%, 5.25rem);
+    aspect-ratio: 1 / 1;
+    border-radius: 1rem;
+    overflow: hidden;
+    isolation: isolate;
+    background: rgba(8, 17, 31, 0.3);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.18);
   }
 
-  .main-product__device-thumb--front {
-    left: 1.45rem;
-    background: linear-gradient(135deg, rgba(255, 77, 166, 0.7), rgba(110, 200, 255, 0.16)),
-      linear-gradient(180deg, rgba(19, 30, 52, 0.98), rgba(7, 15, 28, 0.98));
+  .main-product__model-tab-media--pro {
+    --model-tab-accent: rgba(255, 77, 166, 0.24);
   }
 
-  .main-product__model-summary-content {
-    display: grid;
-    gap: 0.18rem;
-    min-width: 0;
+  .main-product__model-tab-media--air {
+    --model-tab-accent: rgba(0, 229, 255, 0.22);
   }
 
-  .main-product__model-summary-title {
+  .main-product__model-tab-media--ipad {
+    --model-tab-accent: rgba(155, 0, 255, 0.2);
+  }
+
+  .main-product__model-tab-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 50% 100%,
+      var(--model-tab-accent, rgba(255, 255, 255, 0.08)),
+      transparent 58%
+    );
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .main-product__model-tab-image {
+    position: relative;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0.75rem 1rem rgba(0, 0, 0, 0.18));
+  }
+
+  .main-product__model-tab-title {
     font-family: var(--theme-font-display);
-    font-size: 1.6rem;
-    font-weight: 700;
+    font-size: 0.95rem;
+    font-weight: 600;
     line-height: 1;
     letter-spacing: -0.03em;
   }
 
   .main-product__model-panel {
-    height: 100%;
+    position: relative;
+    margin-top: 0.5rem;
     overflow: hidden;
-    padding: 0 1rem 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    min-height: 0;
+    padding: 1rem 1rem 1rem;
+    border: 1px solid rgba(255, 77, 166, 0.22);
+    border-radius: 1.45rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015)), rgba(7, 18, 34, 0.92);
+    box-shadow: 0 0 28px rgba(255, 77, 166, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    min-height: 14rem;
+  }
+
+  .main-product__model-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: calc((100% - 2px) / 3);
+    height: 1px;
+    background: rgba(7, 18, 34, 0.96);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition-base), transform var(--transition-base);
+  }
+
+  .main-product__model-panel[data-model-panel='pro']::before {
+    left: 1px;
+    transform: translateX(0);
+  }
+
+  .main-product__model-panel[data-model-panel='air']::before {
+    left: calc((100% - 2px) / 3 + 1px);
+    transform: translateX(0);
+  }
+
+  .main-product__model-panel[data-model-panel='ipad']::before {
+    left: calc(((100% - 2px) / 3) * 2 + 1px);
+    transform: translateX(0);
+  }
+
+  .main-product__model-panel.is-active::before {
+    opacity: 1;
   }
 
   .main-product__model-panel-inner {
-    min-height: 100%;
+    min-height: 12rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -923,6 +1029,7 @@
 
   .main-product__model-list {
     display: grid;
+    gap: 0.2rem;
     min-height: 100%;
     align-content: center;
     padding: 0;
@@ -939,6 +1046,8 @@
     grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
     gap: 0.85rem;
+    min-height: 3.6rem;
+    padding: 0.8rem 0.2rem;
     color: var(--theme-color-text-muted);
     text-decoration: none;
     transition: color var(--transition-base), transform var(--transition-base);
@@ -1266,8 +1375,16 @@
       aspect-ratio: 4 / 5;
     }
 
-    .main-product__model-groups {
-      min-height: 22rem;
+    .main-product__model-tab {
+      min-height: 10.5rem;
+    }
+
+    .main-product__model-panel {
+      min-height: 12.5rem;
+    }
+
+    .main-product__model-panel-inner {
+      min-height: 10.5rem;
     }
   }
 {% endstylesheet %}
@@ -1286,38 +1403,103 @@
     const SUBMIT_LOADING_CLASS = 'is-loading';
     let variantRequestController = null;
     let variantRequestSequence = 0;
+    const activeModelFamilies = new Map();
 
-    const initModelAccordions = (scope = document) => {
-      const groups = Array.from(scope.querySelectorAll('.main-product__model-group'));
-
-      if (!groups.length) {
-        return;
-      }
-
-      groups.forEach((group) => {
-        if (group.dataset.modelAccordionReady === 'true') {
+    const initModelTabs = (scope = document) => {
+      scope.querySelectorAll('[data-model-tabs]').forEach((selector) => {
+        if (selector.dataset.modelTabsReady === 'true') {
           return;
         }
 
-        const summary = group.querySelector('.main-product__model-summary');
+        const section = selector.closest('[data-main-product-section]');
+        const productHandle = section?.dataset.productHandle || 'product';
+        const tabs = Array.from(selector.querySelectorAll('[data-model-tab]'));
+        const panels = Array.from(selector.querySelectorAll('[data-model-panel]'));
 
-        if (!summary) {
+        if (!tabs.length || !panels.length) {
           return;
         }
 
-        summary.addEventListener('click', (event) => {
-          event.preventDefault();
+        const setActiveFamily = (family) => {
+          tabs.forEach((tab) => {
+            const isActive = tab.dataset.modelTab === family;
+            tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            tab.setAttribute('tabindex', isActive ? '0' : '-1');
+          });
 
-          if (group.open) {
-            return;
-          }
+          panels.forEach((panel) => {
+            const isActive = panel.dataset.modelPanel === family;
+            panel.hidden = !isActive;
+            panel.classList.toggle('is-active', isActive);
+          });
 
-          groups.forEach((item) => {
-            item.open = item === group;
+          selector.dataset.activeFamily = family || '';
+          activeModelFamilies.set(productHandle, family || '');
+        };
+
+        const clearActiveFamily = () => {
+          tabs.forEach((tab) => {
+            tab.setAttribute('aria-selected', 'false');
+            tab.setAttribute('tabindex', '0');
+          });
+
+          panels.forEach((panel) => {
+            panel.hidden = true;
+            panel.classList.remove('is-active');
+          });
+
+          selector.dataset.activeFamily = '';
+          activeModelFamilies.delete(productHandle);
+        };
+
+        tabs.forEach((tab, index) => {
+          tab.addEventListener('click', () => {
+            if (selector.dataset.activeFamily === tab.dataset.modelTab) {
+              clearActiveFamily();
+              return;
+            }
+
+            setActiveFamily(tab.dataset.modelTab);
+          });
+
+          tab.addEventListener('keydown', (event) => {
+            if (
+              event.key !== 'ArrowRight' &&
+              event.key !== 'ArrowLeft' &&
+              event.key !== 'Home' &&
+              event.key !== 'End'
+            ) {
+              return;
+            }
+
+            event.preventDefault();
+
+            let nextIndex = index;
+
+            if (event.key === 'ArrowRight') {
+              nextIndex = (index + 1) % tabs.length;
+            } else if (event.key === 'ArrowLeft') {
+              nextIndex = (index - 1 + tabs.length) % tabs.length;
+            } else if (event.key === 'Home') {
+              nextIndex = 0;
+            } else if (event.key === 'End') {
+              nextIndex = tabs.length - 1;
+            }
+
+            tabs[nextIndex].focus();
+            setActiveFamily(tabs[nextIndex].dataset.modelTab);
           });
         });
 
-        group.dataset.modelAccordionReady = 'true';
+        const storedFamily = activeModelFamilies.get(productHandle) || '';
+
+        if (storedFamily && tabs.some((tab) => tab.dataset.modelTab === storedFamily)) {
+          setActiveFamily(storedFamily);
+        } else {
+          clearActiveFamily();
+        }
+
+        selector.dataset.modelTabsReady = 'true';
       });
     };
 
@@ -1410,7 +1592,7 @@
 
     const initMainProductBehaviors = (scope = document) => {
       initGalleriesInScope(scope);
-      initModelAccordions(scope);
+      initModelTabs(scope);
       initQuantityControls(scope);
     };
 
