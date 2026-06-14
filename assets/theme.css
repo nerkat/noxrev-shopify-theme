@@ -63,7 +63,7 @@ html {
   min-height: 100svh;
   color: var(--theme-color-text);
   background: var(--theme-gradient-page);
-  background-attachment: fixed;
+  /* background-attachment: fixed; */
 }
 
 .theme::before {
