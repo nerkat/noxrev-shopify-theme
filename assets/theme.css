@@ -57,12 +57,12 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--theme-gradient-page);
 }
 
 .theme {
   min-height: 100svh;
   color: var(--theme-color-text);
-  background: var(--theme-gradient-page);
   /* background-attachment: fixed; */
 }
 
