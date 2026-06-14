@@ -706,7 +706,28 @@
     overflow-y: auto;
     overflow-x: hidden;
     padding: 0.15rem;
-    scrollbar-width: thin;
+    border-radius: 16px;
+  }
+
+  .main-product__gallery-thumbnails-scroll::-webkit-scrollbar {
+    width: 0.42rem;
+  }
+
+  .main-product__gallery-thumbnails-scroll::-webkit-scrollbar-track {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02));
+    border-radius: 999px;
+    -webkit-border-radius: 999px;
+  }
+
+  .main-product__gallery-thumbnails-scroll::-webkit-scrollbar-thumb {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255, 77, 166, 0.78), rgba(110, 200, 255, 0.58));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 10px rgba(255, 77, 166, 0.12);
+  }
+
+  .main-product__gallery-thumbnails-scroll::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(255, 77, 166, 0.86), rgba(110, 200, 255, 0.68));
   }
 
   .main-product__gallery-rail-indicator {
@@ -1491,6 +1512,10 @@
     .main-product__gallery-thumbnails-scroll {
       grid-auto-rows: minmax(3.25rem, 4.75rem);
     }
+
+    .main-product__gallery-thumbnails-scroll::-webkit-scrollbar {
+      width: 0.28rem;
+    }
   }
 {% endstylesheet %}
 
@@ -1546,13 +1571,12 @@
       }
 
       const tolerance = 2;
-      const isVerticalRail = rail.scrollHeight > rail.clientHeight + tolerance || rail.clientWidth <= 96;
       const hasOverflow = rail.scrollHeight - rail.clientHeight > tolerance;
       const isAtTop = rail.scrollTop <= tolerance;
       const isAtBottom = rail.scrollTop + rail.clientHeight >= rail.scrollHeight - tolerance;
 
-      topIndicator.classList.toggle('is-visible', isVerticalRail && hasOverflow && !isAtTop);
-      bottomIndicator.classList.toggle('is-visible', isVerticalRail && hasOverflow && !isAtBottom);
+      topIndicator.classList.toggle('is-visible', hasOverflow && !isAtTop);
+      bottomIndicator.classList.toggle('is-visible', hasOverflow && !isAtBottom);
     };
 
     const initGalleryRailIndicators = (gallery) => {
