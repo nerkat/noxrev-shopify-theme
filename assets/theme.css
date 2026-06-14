@@ -63,6 +63,7 @@ html {
 .theme {
   min-height: 100svh;
   color: var(--theme-color-text);
+  background: transparent;
   /* background-attachment: fixed; */
 }
 
