@@ -12,9 +12,14 @@
     "main": {
       "type": "main-product",
       "settings": {}
+    },
+    "product_content_blocks": {
+      "type": "product-content-blocks",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "product_content_blocks"
   ]
 }

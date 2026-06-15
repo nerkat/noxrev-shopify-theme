@@ -1,0 +1,809 @@
+{% liquid
+  assign compatibility_visual = section.settings.compatibility_image | default: product.featured_media.preview_image
+  assign designed_visual = section.settings.designed_image | default: product.featured_media.preview_image
+%}
+
+<section class="product-content-blocks section" data-section-id="{{ section.id }}">
+  <div class="container product-content-blocks__inner">
+    <div class="product-content-blocks__features">
+      <article class="product-content-blocks__feature-card">
+        <span class="product-content-blocks__feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M12 4a8 8 0 1 1-7.2 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4 4v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7v2.8M12 14.2V17M17 12h-2.8M9.8 12H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <div>
+          <h3 class="product-content-blocks__card-title">360 Degree Rotation</h3>
+          <p class="product-content-blocks__card-copy">Adjust to any angle you need</p>
+        </div>
+      </article>
+      <article class="product-content-blocks__feature-card">
+        <span class="product-content-blocks__feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" focusable="false"><rect x="3.5" y="6.5" width="17" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M7 10h.01M10 10h.01M13 10h.01M16 10h.01M7 13h.01M10 13h.01M13 13h4M7 4.5v-1M12 4.5v-2M17 4.5v-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <div>
+          <h3 class="product-content-blocks__card-title">Backlit Keyboard</h3>
+          <p class="product-content-blocks__card-copy">7 colors, 3 brightness levels</p>
+        </div>
+      </article>
+      <article class="product-content-blocks__feature-card">
+        <span class="product-content-blocks__feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" focusable="false"><rect x="4" y="5" width="13.5" height="13.5" rx="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="18.5" cy="16.5" r="3" stroke="currentColor" stroke-width="1.8"/><path d="m20.7 18.7 1.8 1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <div>
+          <h3 class="product-content-blocks__card-title">Precision Trackpad</h3>
+          <p class="product-content-blocks__card-copy">Multi-touch gestures and shortcuts</p>
+        </div>
+      </article>
+      <article class="product-content-blocks__feature-card">
+        <span class="product-content-blocks__feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="m8 8 4-4 4 4-4 4-4-4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8 16 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
+        </span>
+        <div>
+          <h3 class="product-content-blocks__card-title">Magnetic Attachment</h3>
+          <p class="product-content-blocks__card-copy">Strong magnetic hold, easy to attach</p>
+        </div>
+      </article>
+      <article class="product-content-blocks__feature-card">
+        <span class="product-content-blocks__feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="m12 3 8 8-8 8-8-8 8-8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.5 14.5 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <div>
+          <h3 class="product-content-blocks__card-title">Premium Materials</h3>
+          <p class="product-content-blocks__card-copy">Aluminum alloy and PU leather finish</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="product-content-blocks__grid">
+      <article class="product-content-blocks__card product-content-blocks__card--compatible">
+        <div class="product-content-blocks__card-header">
+          <p class="product-content-blocks__eyebrow">{{ section.settings.compatibility_heading }}</p>
+        </div>
+        <div class="product-content-blocks__split">
+          <div>
+            <ul class="product-content-blocks__checklist" role="list">
+              <li class="product-content-blocks__check-item"><span class="product-content-blocks__check-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>iPad Pro 11-inch (M4)</span></li>
+              <li class="product-content-blocks__check-item"><span class="product-content-blocks__check-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>iPad Pro 11-inch (1st - 4th Gen)</span></li>
+              <li class="product-content-blocks__check-item"><span class="product-content-blocks__check-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>iPad Air 11-inch (M2)</span></li>
+              <li class="product-content-blocks__check-item"><span class="product-content-blocks__check-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>iPad Air 10.9-inch (4th - 5th Gen)</span></li>
+              <li class="product-content-blocks__check-item"><span class="product-content-blocks__check-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>iPad Pro 12.9-inch (3rd - 6th Gen)</span></li>
+              <li class="product-content-blocks__check-item"><span class="product-content-blocks__check-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>iPad Air 13-inch (M2)</span></li>
+            </ul>
+            <p class="product-content-blocks__helper">{{ section.settings.compatibility_helper }}</p>
+          </div>
+          <div class="product-content-blocks__visual-shell product-content-blocks__visual-shell--compatible">
+            {% if compatibility_visual != blank %}
+              {% render 'responsive-image', image: compatibility_visual, alt: section.settings.compatibility_visual_alt, class: 'product-content-blocks__visual-image product-content-blocks__visual-image--device', loading: 'lazy', sizes: '(min-width: 861px) 22vw, 55vw', widths: '240, 360, 520, 720' %}
+            {% endif %}
+            <span class="product-content-blocks__callout">{{ section.settings.compatibility_callout }}</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-content-blocks__card">
+        <div class="product-content-blocks__card-header">
+          <p class="product-content-blocks__eyebrow">{{ section.settings.box_heading }}</p>
+        </div>
+        <div class="product-content-blocks__split">
+          <div>
+            <ul class="product-content-blocks__checklist product-content-blocks__checklist--box" role="list">
+              <li class="product-content-blocks__check-item"><span class="product-content-blocks__box-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M5 4.5h5.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 12V6A1.5 1.5 0 0 1 5 4.5Z" stroke="currentColor" stroke-width="1.5"/><path d="m5.5 4.5 1-1h3l1 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>1x Y2K Rotating Keyboard Case</span></li>
+              <li class="product-content-blocks__check-item"><span class="product-content-blocks__box-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M5 4.5h5.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 12V6A1.5 1.5 0 0 1 5 4.5Z" stroke="currentColor" stroke-width="1.5"/><path d="m5.5 4.5 1-1h3l1 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>1x USB-C Charging Cable</span></li>
+              <li class="product-content-blocks__check-item"><span class="product-content-blocks__box-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M5 4.5h5.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 12V6A1.5 1.5 0 0 1 5 4.5Z" stroke="currentColor" stroke-width="1.5"/><path d="m5.5 4.5 1-1h3l1 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>1x User Manual</span></li>
+            </ul>
+          </div>
+          <div class="product-content-blocks__box-visual" aria-hidden="true">
+            <div class="product-content-blocks__box-lid"></div>
+            <div class="product-content-blocks__box-cable"></div>
+            <div class="product-content-blocks__box-manual"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-content-blocks__card product-content-blocks__card--reviews">
+        <div class="product-content-blocks__card-header">
+          <p class="product-content-blocks__eyebrow">{{ section.settings.reviews_heading }}</p>
+        </div>
+        <div class="product-content-blocks__reviews-summary">
+          <div class="product-content-blocks__rating-stack">
+            <div class="product-content-blocks__rating-value">{{ section.settings.rating_value }}</div>
+            <div>
+              <div class="product-content-blocks__stars" aria-hidden="true">
+                {% for star in (1..5) %}
+                  <svg viewBox="0 0 20 20" fill="currentColor" focusable="false"><path d="m10 2.6 2.25 4.56 5.04.73-3.65 3.56.86 5.03L10 14.12 5.5 16.48l.86-5.03L2.7 7.89l5.04-.73L10 2.6Z"></path></svg>
+                {% endfor %}
+              </div>
+              <p class="product-content-blocks__reviews-copy">{{ section.settings.reviews_subtitle }}</p>
+            </div>
+          </div>
+          <div class="product-content-blocks__ratings">
+            {% assign review_total = section.settings.review_total | plus: 0 %}
+            {% assign review_5 = section.settings.review_5 | plus: 0 %}
+            {% assign review_4 = section.settings.review_4 | plus: 0 %}
+            {% assign review_3 = section.settings.review_3 | plus: 0 %}
+            {% assign review_2 = section.settings.review_2 | plus: 0 %}
+            {% assign review_1 = section.settings.review_1 | plus: 0 %}
+            {% assign p5 = review_5 | times: 100.0 | divided_by: review_total %}
+            {% assign p4 = review_4 | times: 100.0 | divided_by: review_total %}
+            {% assign p3 = review_3 | times: 100.0 | divided_by: review_total %}
+            {% assign p2 = review_2 | times: 100.0 | divided_by: review_total %}
+            {% assign p1 = review_1 | times: 100.0 | divided_by: review_total %}
+            <div class="product-content-blocks__rating-row"><span class="product-content-blocks__rating-label">5 Stars</span><span class="product-content-blocks__rating-bar"><span style="width: {{ p5 }}%;"></span></span><span class="product-content-blocks__rating-count">{{ section.settings.review_5 }}</span></div>
+            <div class="product-content-blocks__rating-row"><span class="product-content-blocks__rating-label">4 Stars</span><span class="product-content-blocks__rating-bar"><span style="width: {{ p4 }}%;"></span></span><span class="product-content-blocks__rating-count">{{ section.settings.review_4 }}</span></div>
+            <div class="product-content-blocks__rating-row"><span class="product-content-blocks__rating-label">3 Stars</span><span class="product-content-blocks__rating-bar"><span style="width: {{ p3 }}%;"></span></span><span class="product-content-blocks__rating-count">{{ section.settings.review_3 }}</span></div>
+            <div class="product-content-blocks__rating-row"><span class="product-content-blocks__rating-label">2 Stars</span><span class="product-content-blocks__rating-bar"><span style="width: {{ p2 }}%;"></span></span><span class="product-content-blocks__rating-count">{{ section.settings.review_2 }}</span></div>
+            <div class="product-content-blocks__rating-row"><span class="product-content-blocks__rating-label">1 Star</span><span class="product-content-blocks__rating-bar"><span style="width: {{ p1 }}%;"></span></span><span class="product-content-blocks__rating-count">{{ section.settings.review_1 }}</span></div>
+          </div>
+        </div>
+        <a class="button button--ghost product-content-blocks__reviews-button" href="{{ section.settings.reviews_link }}">{{ section.settings.reviews_button_label }}</a>
+      </article>
+
+      <article class="product-content-blocks__card product-content-blocks__card--faq">
+        <div class="product-content-blocks__card-header">
+          <p class="product-content-blocks__eyebrow">{{ section.settings.faq_heading }}</p>
+        </div>
+        <div class="product-content-blocks__faq-list">
+          <details class="product-content-blocks__faq-item"><summary><span>Will it work with my iPad model?</span><span class="product-content-blocks__faq-toggle" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none"><path d="m4 7 5 5 5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="product-content-blocks__faq-panel"><div class="product-content-blocks__faq-answer">Choose your exact iPad model above to confirm compatibility before you add to cart.</div></div></details>
+          <details class="product-content-blocks__faq-item"><summary><span>Does the keyboard have backlight?</span><span class="product-content-blocks__faq-toggle" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none"><path d="m4 7 5 5 5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="product-content-blocks__faq-panel"><div class="product-content-blocks__faq-answer">Yes. The keyboard supports multiple backlight colors and brightness levels.</div></div></details>
+          <details class="product-content-blocks__faq-item"><summary><span>How long does the battery last?</span><span class="product-content-blocks__faq-toggle" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none"><path d="m4 7 5 5 5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="product-content-blocks__faq-panel"><div class="product-content-blocks__faq-answer">Battery life varies by usage, but it is designed for daily typing and standby use between charges.</div></div></details>
+          <details class="product-content-blocks__faq-item"><summary><span>Can I rotate the case 360 degrees?</span><span class="product-content-blocks__faq-toggle" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none"><path d="m4 7 5 5 5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><div class="product-content-blocks__faq-panel"><div class="product-content-blocks__faq-answer">Yes. The rotating hinge supports multiple viewing, typing, drawing, and presentation angles.</div></div></details>
+        </div>
+      </article>
+
+      <article class="product-content-blocks__card product-content-blocks__card--designed">
+        <div class="product-content-blocks__designed-copy">
+          <h2 class="product-content-blocks__designed-title">{{ section.settings.designed_heading }}</h2>
+          <div class="product-content-blocks__mode-list" role="list">
+            <div class="product-content-blocks__mode-item" role="listitem"><span class="product-content-blocks__mode-icon" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none"><rect x="2.5" y="4.5" width="13" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8h.01M7.5 8h.01M10 8h.01M12.5 8h.01M5 10.5h4.5M10.5 10.5H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>Type</span></div>
+            <div class="product-content-blocks__mode-item" role="listitem"><span class="product-content-blocks__mode-icon" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none"><path d="m4 12.5 6.8-6.8 2.5 2.5L6.5 15H4v-2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m10.8 5.7 1.2-1.2a1.5 1.5 0 0 1 2.1 2.1l-1.2 1.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>Draw</span></div>
+            <div class="product-content-blocks__mode-item" role="listitem"><span class="product-content-blocks__mode-icon" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none"><rect x="4.5" y="4.5" width="9" height="9" rx="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 6.8V9l1.7 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>Watch</span></div>
+            <div class="product-content-blocks__mode-item" role="listitem"><span class="product-content-blocks__mode-icon" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none"><rect x="2.5" y="4" width="13" height="8.5" rx="1.8" stroke="currentColor" stroke-width="1.5"/><path d="M9 12.5v2.5M6.5 15h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="m7 7 4 2-4 2V7Z" fill="currentColor"/></svg></span><span>Present</span></div>
+          </div>
+        </div>
+        <div class="product-content-blocks__designed-visual">
+          {% if designed_visual != blank %}
+            {% render 'responsive-image', image: designed_visual, alt: section.settings.designed_image_alt, class: 'product-content-blocks__visual-image product-content-blocks__visual-image--hero', loading: 'lazy', sizes: '(min-width: 861px) 38vw, 100vw', widths: '360, 520, 720, 960, 1200' %}
+          {% else %}
+            <div class="product-content-blocks__designed-placeholder" aria-hidden="true"></div>
+          {% endif %}
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-content-blocks {
+    padding: 0 0 4rem;
+  }
+
+  .product-content-blocks__inner {
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .product-content-blocks__features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .product-content-blocks__feature-card,
+  .product-content-blocks__card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.16);
+    border-radius: 1.45rem;
+    background:
+      radial-gradient(circle at top right, rgba(196, 128, 255, 0.15), transparent 34%),
+      radial-gradient(circle at bottom left, rgba(0, 229, 255, 0.08), transparent 28%),
+      linear-gradient(180deg, rgba(21, 24, 55, 0.94), rgba(5, 13, 29, 0.98));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 42px rgba(0, 0, 0, 0.18);
+  }
+
+  .product-content-blocks__feature-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 0.95rem 0.95rem 1rem;
+    min-height: 8.7rem;
+  }
+
+  .product-content-blocks__feature-icon,
+  .product-content-blocks__mode-icon {
+    width: 2.65rem;
+    height: 2.65rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: #aab9ff;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 77, 166, 0.3), rgba(89, 115, 255, 0.12) 52%, rgba(4, 12, 26, 0.9) 100%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 20px rgba(0, 0, 0, 0.18);
+  }
+
+  .product-content-blocks__feature-icon svg,
+  .product-content-blocks__mode-icon svg {
+    width: 1.18rem;
+    height: 1.18rem;
+  }
+
+  .product-content-blocks__card-title,
+  .product-content-blocks__designed-title {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.96;
+  }
+
+  .product-content-blocks__card-copy,
+  .product-content-blocks__helper,
+  .product-content-blocks__reviews-copy,
+  .product-content-blocks__faq-answer {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.92rem;
+    line-height: 1.48;
+  }
+
+  .product-content-blocks__grid {
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .product-content-blocks__card {
+    padding: 1.1rem 1rem 1rem;
+  }
+
+  .product-content-blocks__card-header {
+    margin-bottom: 0.95rem;
+  }
+
+  .product-content-blocks__eyebrow {
+    margin: 0;
+    background: linear-gradient(90deg, #38ddff, #cd83ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .product-content-blocks__feature-card .product-content-blocks__card-title {
+    font-size: 0.98rem;
+    line-height: 1.02;
+    max-width: 8ch;
+  }
+
+  .product-content-blocks__feature-card .product-content-blocks__card-copy {
+    font-size: 0.78rem;
+    line-height: 1.32;
+    max-width: 13ch;
+  }
+
+  .product-content-blocks__split {
+    display: grid;
+    gap: 0.95rem;
+  }
+
+  .product-content-blocks__checklist {
+    display: grid;
+    gap: 0.58rem;
+    padding: 0;
+    margin: 0 0 1rem;
+    list-style: none;
+  }
+
+  .product-content-blocks__check-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: start;
+    color: var(--theme-color-text);
+    font-size: 0.98rem;
+    line-height: 1.34;
+  }
+
+  .product-content-blocks__check-icon,
+  .product-content-blocks__box-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #1ef0df;
+  }
+
+  .product-content-blocks__check-icon svg,
+  .product-content-blocks__box-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-content-blocks__visual-shell {
+    position: relative;
+    min-height: 12.8rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 82% 18%, rgba(0, 229, 255, 0.14), transparent 24%),
+      linear-gradient(180deg, rgba(8, 17, 34, 0.82), rgba(6, 14, 29, 0.94));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  }
+
+  .product-content-blocks__visual-shell--compatible {
+    display: grid;
+    place-items: end center;
+    padding: 0.75rem;
+  }
+
+  .product-content-blocks__visual-image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .product-content-blocks__visual-image--device {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 0.85rem;
+  }
+
+  .product-content-blocks__callout {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.15rem;
+    height: 5.15rem;
+    padding: 0.75rem;
+    border: 1px solid rgba(56, 221, 255, 0.48);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.72rem;
+    line-height: 1.15;
+    text-align: center;
+    background: rgba(7, 16, 30, 0.76);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .product-content-blocks__box-visual {
+    position: relative;
+    min-height: 11.75rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 20%, rgba(255, 123, 211, 0.12), transparent 30%),
+      linear-gradient(180deg, rgba(8, 16, 33, 0.8), rgba(5, 13, 29, 0.96));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  }
+
+  .product-content-blocks__box-lid,
+  .product-content-blocks__box-manual,
+  .product-content-blocks__box-cable {
+    position: absolute;
+    border-radius: 0.85rem;
+  }
+
+  .product-content-blocks__box-lid {
+    top: 1rem;
+    right: 0.95rem;
+    width: 7rem;
+    height: 4.45rem;
+    background: linear-gradient(145deg, rgba(35, 41, 62, 0.98), rgba(10, 12, 20, 0.92));
+    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.28);
+  }
+
+  .product-content-blocks__box-lid::after {
+    content: 'NOXREV';
+    position: absolute;
+    top: 0.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.92);
+    font-family: var(--theme-font-display);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+  }
+
+  .product-content-blocks__box-cable {
+    left: 0.85rem;
+    bottom: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0.28rem solid rgba(18, 24, 38, 0.98);
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  .product-content-blocks__box-manual {
+    left: 3.45rem;
+    bottom: 1rem;
+    width: 3.2rem;
+    height: 2.35rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(224, 229, 242, 0.9));
+    transform: rotate(-12deg);
+  }
+
+  .product-content-blocks__reviews-summary {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .product-content-blocks__rating-stack {
+    display: flex;
+    align-items: end;
+    gap: 0.8rem;
+  }
+
+  .product-content-blocks__rating-value {
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 4.15rem;
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+  }
+
+  .product-content-blocks__stars {
+    color: #ffd24d;
+    display: flex;
+    gap: 0.2rem;
+    align-items: center;
+  }
+
+  .product-content-blocks__stars svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .product-content-blocks__ratings {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .product-content-blocks__rating-row {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+    gap: 0.55rem;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.95rem;
+  }
+
+  .product-content-blocks__rating-bar {
+    display: block;
+    height: 0.55rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .product-content-blocks__rating-bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgba(192, 124, 255, 0.96), rgba(93, 192, 255, 0.96));
+  }
+
+  .product-content-blocks__reviews-button {
+    width: 100%;
+    margin-top: 1rem;
+    justify-content: center;
+    min-height: 3.3rem;
+    border-radius: 999px;
+  }
+
+  .product-content-blocks__faq-list {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .product-content-blocks__faq-item {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    background: rgba(8, 16, 30, 0.58);
+  }
+
+  .product-content-blocks__faq-item summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.95rem 1rem;
+    cursor: pointer;
+    color: var(--theme-color-text);
+    font-size: 0.98rem;
+  }
+
+  .product-content-blocks__faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .product-content-blocks__faq-toggle {
+    width: 1rem;
+    height: 1rem;
+    display: inline-flex;
+    color: rgba(255, 255, 255, 0.72);
+    transition: transform var(--transition-base);
+  }
+
+  .product-content-blocks__faq-item[open] .product-content-blocks__faq-toggle {
+    transform: rotate(180deg);
+  }
+
+  .product-content-blocks__faq-answer {
+    padding: 0 1rem 1rem;
+  }
+
+  .product-content-blocks__faq-panel {
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: height 240ms ease, opacity 180ms ease;
+    will-change: height, opacity;
+  }
+
+  .product-content-blocks__faq-item.is-animating .product-content-blocks__faq-panel,
+  .product-content-blocks__faq-item[open] .product-content-blocks__faq-panel {
+    opacity: 1;
+  }
+
+  .product-content-blocks__card--designed {
+    display: grid;
+    gap: 0.95rem;
+    align-items: end;
+    min-height: 19rem;
+  }
+
+  .product-content-blocks__designed-title {
+    max-width: 10ch;
+    text-transform: uppercase;
+    font-size: 2.15rem;
+  }
+
+  .product-content-blocks__mode-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 1rem;
+  }
+
+  .product-content-blocks__mode-item {
+    display: grid;
+    justify-items: center;
+    gap: 0.45rem;
+    color: var(--theme-color-text);
+    font-size: 0.88rem;
+  }
+
+  .product-content-blocks__mode-icon {
+    width: 2.8rem;
+    height: 2.8rem;
+    background: rgba(10, 18, 32, 0.72);
+  }
+
+  .product-content-blocks__designed-visual {
+    border-radius: 1rem;
+    overflow: hidden;
+    background: radial-gradient(circle at 35% 20%, rgba(255, 77, 166, 0.18), transparent 34%), rgba(5, 14, 29, 0.62);
+  }
+
+  .product-content-blocks__visual-image--hero {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    min-height: 12.2rem;
+  }
+
+  .product-content-blocks__designed-placeholder {
+    min-height: 14rem;
+    background: linear-gradient(135deg, rgba(255, 77, 166, 0.18), rgba(0, 229, 255, 0.14));
+  }
+
+  @media (min-width: 861px) {
+    .product-content-blocks {
+      padding-bottom: 5rem;
+    }
+
+    .product-content-blocks__features {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .product-content-blocks__feature-card {
+      min-height: 11rem;
+      justify-items: center;
+      text-align: center;
+      align-items: center;
+    }
+
+    .product-content-blocks__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .product-content-blocks__card--compatible,
+    .product-content-blocks__card--faq,
+    .product-content-blocks__card:not(.product-content-blocks__card--reviews):not(.product-content-blocks__card--designed):not(.product-content-blocks__card--compatible):not(.product-content-blocks__card--faq) {
+      grid-column: span 4;
+    }
+
+    .product-content-blocks__card--reviews,
+    .product-content-blocks__card--designed {
+      grid-column: span 8;
+    }
+
+    .product-content-blocks__split {
+      grid-template-columns: minmax(0, 1fr) minmax(10rem, 14rem);
+      align-items: end;
+      gap: 1.25rem;
+    }
+
+    .product-content-blocks__reviews-summary {
+      grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .product-content-blocks__card--designed {
+      grid-template-columns: minmax(14rem, 18rem) minmax(0, 1fr);
+      min-height: 23rem;
+    }
+
+    .product-content-blocks__visual-image--hero {
+      min-height: 21rem;
+    }
+
+    .product-content-blocks__feature-card .product-content-blocks__card-title {
+      max-width: none;
+      font-size: 1rem;
+    }
+
+    .product-content-blocks__feature-card .product-content-blocks__card-copy {
+      max-width: 16ch;
+      font-size: 0.86rem;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    const initAnimatedFaqs = (scope = document) => {
+      scope.querySelectorAll('.product-content-blocks__faq-item').forEach((item) => {
+        if (item.dataset.faqAnimated === 'true') {
+          return;
+        }
+
+        const summary = item.querySelector('summary');
+        const panel = item.querySelector('.product-content-blocks__faq-panel');
+
+        if (!summary || !panel) {
+          return;
+        }
+
+        if (item.open) {
+          panel.style.height = 'auto';
+          panel.style.opacity = '1';
+        } else {
+          panel.style.height = '0px';
+          panel.style.opacity = '0';
+        }
+
+        summary.addEventListener('click', (event) => {
+          event.preventDefault();
+
+          if (item.classList.contains('is-animating')) {
+            return;
+          }
+
+          const isOpening = !item.open;
+          item.classList.add('is-animating');
+
+          if (isOpening) {
+            item.open = true;
+            panel.style.height = '0px';
+            panel.style.opacity = '1';
+
+            requestAnimationFrame(() => {
+              panel.style.height = `${panel.scrollHeight}px`;
+            });
+
+            const onOpenEnd = (evt) => {
+              if (evt.propertyName !== 'height') {
+                return;
+              }
+
+              panel.style.height = 'auto';
+              panel.style.opacity = '1';
+              item.classList.remove('is-animating');
+              panel.removeEventListener('transitionend', onOpenEnd);
+            };
+
+            panel.addEventListener('transitionend', onOpenEnd);
+          } else {
+            panel.style.height = `${panel.scrollHeight}px`;
+            panel.style.opacity = '1';
+
+            requestAnimationFrame(() => {
+              panel.style.height = '0px';
+              panel.style.opacity = '0';
+            });
+
+            const onCloseEnd = (evt) => {
+              if (evt.propertyName !== 'height') {
+                return;
+              }
+
+              item.open = false;
+              panel.style.height = '0px';
+              panel.style.opacity = '0';
+              item.classList.remove('is-animating');
+              panel.removeEventListener('transitionend', onCloseEnd);
+            };
+
+            panel.addEventListener('transitionend', onCloseEnd);
+          }
+        });
+
+        item.dataset.faqAnimated = 'true';
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => initAnimatedFaqs());
+    } else {
+      initAnimatedFaqs();
+    }
+
+    document.addEventListener('shopify:section:load', (event) => {
+      initAnimatedFaqs(event.target);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Product Content Blocks",
+  "settings": [
+    { "type": "text", "id": "compatibility_heading", "label": "Compatibility heading", "default": "Compatible With" },
+    { "type": "textarea", "id": "compatibility_helper", "label": "Compatibility helper text", "default": "Not sure about your model? Check the back of your iPad." },
+    { "type": "text", "id": "compatibility_callout", "label": "Compatibility callout text", "default": "Model AXXXX" },
+    { "type": "image_picker", "id": "compatibility_image", "label": "Compatibility image" },
+    { "type": "text", "id": "compatibility_visual_alt", "label": "Compatibility image alt text", "default": "Supported iPad model reference" },
+    { "type": "text", "id": "box_heading", "label": "Box heading", "default": "What's In The Box" },
+    { "type": "text", "id": "reviews_heading", "label": "Reviews heading", "default": "Customer Reviews" },
+    { "type": "text", "id": "rating_value", "label": "Rating value", "default": "4.9" },
+    { "type": "text", "id": "reviews_subtitle", "label": "Reviews subtitle", "default": "Based on 3,672 reviews" },
+    { "type": "text", "id": "review_total", "label": "Review total", "default": "3672" },
+    { "type": "text", "id": "review_5", "label": "5 star count", "default": "3182" },
+    { "type": "text", "id": "review_4", "label": "4 star count", "default": "362" },
+    { "type": "text", "id": "review_3", "label": "3 star count", "default": "74" },
+    { "type": "text", "id": "review_2", "label": "2 star count", "default": "28" },
+    { "type": "text", "id": "review_1", "label": "1 star count", "default": "26" },
+    { "type": "url", "id": "reviews_link", "label": "Reviews button link" },
+    { "type": "text", "id": "reviews_button_label", "label": "Reviews button label", "default": "View All Reviews" },
+    { "type": "text", "id": "faq_heading", "label": "FAQ heading", "default": "Frequently Asked Questions" },
+    { "type": "text", "id": "designed_heading", "label": "Designed section heading", "default": "Designed For Every Mode" },
+    { "type": "image_picker", "id": "designed_image", "label": "Designed section image" },
+    { "type": "text", "id": "designed_image_alt", "label": "Designed image alt text", "default": "Product lifestyle image" }
+  ],
+  "presets": [
+    {
+      "name": "Product Content Blocks"
+    }
+  ]
+}
+{% endschema %}
