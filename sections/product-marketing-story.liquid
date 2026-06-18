@@ -1,0 +1,831 @@
+{% liquid
+  assign mode_chips_count = 0
+  assign detail_cards_count = 0
+  assign unique_modes_count = 0
+  assign typing_icons_count = 0
+  assign precision_icons_count = 0
+  assign strip_items_count = 0
+
+  for block in section.blocks
+    case block.type
+      when 'mode_chip'
+        assign mode_chips_count = mode_chips_count | plus: 1
+      when 'detail_card'
+        assign detail_cards_count = detail_cards_count | plus: 1
+      when 'unique_mode'
+        assign unique_modes_count = unique_modes_count | plus: 1
+      when 'typing_icon'
+        assign typing_icons_count = typing_icons_count | plus: 1
+      when 'precision_icon'
+        assign precision_icons_count = precision_icons_count | plus: 1
+      when 'strip_item'
+        assign strip_items_count = strip_items_count | plus: 1
+    endcase
+  endfor
+
+  assign mode_image = section.settings.mode_image | default: product.featured_media.preview_image
+  assign battery_image = section.settings.battery_image | default: product.featured_media.preview_image
+  assign typing_image = section.settings.typing_image | default: product.featured_media.preview_image
+  assign precision_image = section.settings.precision_image | default: product.featured_media.preview_image
+%}
+
+<section class="product-marketing-story section" data-section-id="{{ section.id }}">
+  <div class="container product-marketing-story__inner">
+    <article class="product-marketing-story__panel product-marketing-story__panel--mode">
+      <div class="product-marketing-story__copy">
+        <p class="product-marketing-story__eyebrow heading-gradient">{{ section.settings.mode_eyebrow }}</p>
+        <h2 class="product-marketing-story__title">{{ section.settings.mode_title }}</h2>
+        <p class="product-marketing-story__text">{{ section.settings.mode_text }}</p>
+
+        {% if mode_chips_count > 0 %}
+          <div class="product-marketing-story__chip-row" role="list">
+            {% for block in section.blocks %}
+              {% if block.type == 'mode_chip' %}
+                <div class="product-marketing-story__chip" role="listitem" {{ block.shopify_attributes }}>
+                  <span class="product-marketing-story__icon" aria-hidden="true">
+                    {% if block.settings.icon_image != blank %}
+                      {{ block.settings.icon_image | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'product-marketing-story__icon-image' }}
+                    {% else %}
+                      {% render 'product-marketing-icon', icon: block.settings.icon %}
+                    {% endif %}
+                  </span>
+                  <span>{{ block.settings.label }}</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="product-marketing-story__media product-marketing-story__media--mode">
+        {% if mode_image != blank %}
+          {% render 'responsive-image',
+            image: mode_image,
+            alt: section.settings.mode_image_alt,
+            class: 'product-marketing-story__image',
+            loading: 'lazy',
+            sizes: '(min-width: 900px) 58vw, 100vw',
+            widths: '420, 640, 860, 1100, 1400'
+          %}
+        {% else %}
+          <div class="product-marketing-story__placeholder" aria-hidden="true"></div>
+        {% endif %}
+      </div>
+    </article>
+
+    <article class="product-marketing-story__panel product-marketing-story__panel--battery">
+      <div class="product-marketing-story__copy">
+        <p class="product-marketing-story__eyebrow heading-gradient">{{ section.settings.battery_eyebrow }}</p>
+        <h2 class="product-marketing-story__title">{{ section.settings.battery_title }}</h2>
+        <p class="product-marketing-story__text">{{ section.settings.battery_text }}</p>
+
+        <div class="product-marketing-story__stats" role="list">
+          <div class="product-marketing-story__stat" role="listitem">
+            <span class="product-marketing-story__stat-icon" aria-hidden="true">{% render 'product-marketing-icon', icon: 'bolt' %}</span>
+            <span><strong>{{ section.settings.fast_charge_value }}</strong>{{ section.settings.fast_charge_label }}</span>
+          </div>
+          <div class="product-marketing-story__stat" role="listitem">
+            <span class="product-marketing-story__stat-icon" aria-hidden="true">{% render 'product-marketing-icon', icon: 'battery' %}</span>
+            <span><strong>{{ section.settings.battery_life_value }}</strong>{{ section.settings.battery_life_label }}</span>
+          </div>
+        </div>
+
+        <div class="product-marketing-story__comparison" aria-label="{{ section.settings.comparison_label }}">
+          <div class="product-marketing-story__comparison-row">
+            <span>{{ section.settings.comparison_primary_label }}</span>
+            <span class="product-marketing-story__bar"><span style="width: {{ section.settings.comparison_primary_percent }}%;"></span></span>
+            <strong>{{ section.settings.comparison_primary_value }}</strong>
+          </div>
+          <div class="product-marketing-story__comparison-row">
+            <span>{{ section.settings.comparison_secondary_label }}</span>
+            <span class="product-marketing-story__bar product-marketing-story__bar--muted"><span style="width: {{ section.settings.comparison_secondary_percent }}%;"></span></span>
+            <strong>{{ section.settings.comparison_secondary_value }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-marketing-story__media product-marketing-story__media--battery">
+        {% if battery_image != blank %}
+          {% render 'responsive-image',
+            image: battery_image,
+            alt: section.settings.battery_image_alt,
+            class: 'product-marketing-story__image',
+            loading: 'lazy',
+            sizes: '(min-width: 900px) 58vw, 100vw',
+            widths: '420, 640, 860, 1100, 1400'
+          %}
+        {% else %}
+          <div class="product-marketing-story__placeholder" aria-hidden="true"></div>
+        {% endif %}
+      </div>
+    </article>
+
+    {% if detail_cards_count > 0 %}
+      <div class="product-marketing-story__detail-grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'detail_card' %}
+            {% assign detail_image = block.settings.image | default: product.featured_media.preview_image %}
+            <article class="product-marketing-story__detail-card" {{ block.shopify_attributes }}>
+              <div class="product-marketing-story__detail-copy">
+                <span class="product-marketing-story__mini-icon" aria-hidden="true">
+                  {% if block.settings.icon_image != blank %}
+                    {{ block.settings.icon_image | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'product-marketing-story__icon-image' }}
+                  {% else %}
+                    {% render 'product-marketing-icon', icon: block.settings.icon %}
+                  {% endif %}
+                </span>
+                <h3 class="heading-gradient">{{ block.settings.title }}</h3>
+                <p>{{ block.settings.text }}</p>
+              </div>
+              <div class="product-marketing-story__detail-media">
+                {% if detail_image != blank %}
+                  {% render 'responsive-image',
+                    image: detail_image,
+                    alt: block.settings.image_alt,
+                    class: 'product-marketing-story__detail-image',
+                    loading: 'lazy',
+                    sizes: '(min-width: 900px) 25vw, 50vw',
+                    widths: '280, 420, 640, 840'
+                  %}
+                {% endif %}
+              </div>
+            </article>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <article class="product-marketing-story__panel product-marketing-story__panel--modes-strip">
+      <div class="product-marketing-story__section-heading">
+        <p class="product-marketing-story__eyebrow heading-gradient">{{ section.settings.unique_modes_heading }}</p>
+        <p>{{ section.settings.unique_modes_subtitle }}</p>
+      </div>
+
+      {% if unique_modes_count > 0 %}
+        <div class="product-marketing-story__modes-scroll" role="list">
+          {% for block in section.blocks %}
+            {% if block.type == 'unique_mode' %}
+              {% assign unique_mode_image = block.settings.image | default: product.featured_media.preview_image %}
+              <div class="product-marketing-story__mode-card" role="listitem" {{ block.shopify_attributes }}>
+                <div class="product-marketing-story__mode-image-shell">
+                  {% if unique_mode_image != blank %}
+                    {% render 'responsive-image',
+                      image: unique_mode_image,
+                      alt: block.settings.image_alt,
+                      class: 'product-marketing-story__mode-image',
+                      loading: 'lazy',
+                      sizes: '120px',
+                      widths: '120, 180, 240'
+                    %}
+                  {% endif %}
+                </div>
+                <span>{{ block.settings.label }}</span>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </article>
+
+    <div class="product-marketing-story__dual-grid">
+      <article class="product-marketing-story__panel product-marketing-story__panel--lower-card">
+        <div class="product-marketing-story__copy">
+          <p class="product-marketing-story__eyebrow heading-gradient">{{ section.settings.typing_eyebrow }}</p>
+          <h2 class="product-marketing-story__title product-marketing-story__title--small">{{ section.settings.typing_title }}</h2>
+          <p class="product-marketing-story__text">{{ section.settings.typing_text }}</p>
+        </div>
+        <div class="product-marketing-story__lower-image">
+          {% if typing_image != blank %}
+            {% render 'responsive-image',
+              image: typing_image,
+              alt: section.settings.typing_image_alt,
+              class: 'product-marketing-story__image',
+              loading: 'lazy',
+              sizes: '(min-width: 900px) 45vw, 100vw',
+              widths: '360, 520, 720, 960'
+            %}
+          {% endif %}
+        </div>
+        {% if typing_icons_count > 0 %}
+          <div class="product-marketing-story__micro-row" role="list">
+            {% for block in section.blocks %}
+              {% if block.type == 'typing_icon' %}
+                <div class="product-marketing-story__micro" role="listitem" {{ block.shopify_attributes }}>
+                  <span aria-hidden="true">{% render 'product-marketing-icon', icon: block.settings.icon %}</span>
+                  <small>{{ block.settings.label }}</small>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </article>
+
+      <article class="product-marketing-story__panel product-marketing-story__panel--lower-card">
+        <div class="product-marketing-story__copy">
+          <p class="product-marketing-story__eyebrow heading-gradient">{{ section.settings.precision_eyebrow }}</p>
+          <h2 class="product-marketing-story__title product-marketing-story__title--small">{{ section.settings.precision_title }}</h2>
+          <p class="product-marketing-story__text">{{ section.settings.precision_text }}</p>
+        </div>
+        <div class="product-marketing-story__lower-image">
+          {% if precision_image != blank %}
+            {% render 'responsive-image',
+              image: precision_image,
+              alt: section.settings.precision_image_alt,
+              class: 'product-marketing-story__image',
+              loading: 'lazy',
+              sizes: '(min-width: 900px) 45vw, 100vw',
+              widths: '360, 520, 720, 960'
+            %}
+          {% endif %}
+        </div>
+        {% if precision_icons_count > 0 %}
+          <div class="product-marketing-story__micro-row" role="list">
+            {% for block in section.blocks %}
+              {% if block.type == 'precision_icon' %}
+                <div class="product-marketing-story__micro" role="listitem" {{ block.shopify_attributes }}>
+                  <span aria-hidden="true">{% render 'product-marketing-icon', icon: block.settings.icon %}</span>
+                  <small>{{ block.settings.label }}</small>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </article>
+    </div>
+
+    {% if strip_items_count > 0 %}
+      <div class="product-marketing-story__icon-strip" role="list">
+        {% for block in section.blocks %}
+          {% if block.type == 'strip_item' %}
+            <article class="product-marketing-story__strip-item" role="listitem" {{ block.shopify_attributes }}>
+              <span class="product-marketing-story__mini-icon" aria-hidden="true">
+                {% if block.settings.icon_image != blank %}
+                  {{ block.settings.icon_image | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'product-marketing-story__icon-image' }}
+                {% else %}
+                  {% render 'product-marketing-icon', icon: block.settings.icon %}
+                {% endif %}
+              </span>
+              <div>
+                <h3>{{ block.settings.title }}</h3>
+                <p>{{ block.settings.subtitle }}</p>
+              </div>
+            </article>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-marketing-story {
+    padding: 0 0 4rem;
+  }
+
+  .product-marketing-story__inner {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .product-marketing-story__panel,
+  .product-marketing-story__detail-card,
+  .product-marketing-story__icon-strip {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.24);
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(circle at top right, rgba(192, 108, 255, 0.12), transparent 30%),
+      radial-gradient(circle at bottom left, rgba(0, 229, 255, 0.1), transparent 28%),
+      linear-gradient(180deg, rgba(5, 13, 26, 0.94), rgba(3, 10, 22, 0.98));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 18px 42px rgba(0, 0, 0, 0.18);
+  }
+
+  .product-marketing-story__panel {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  .product-marketing-story__copy,
+  .product-marketing-story__section-heading {
+    position: relative;
+    z-index: 2;
+  }
+
+  .product-marketing-story__eyebrow {
+    margin: 0 0 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .product-marketing-story__title {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+
+  .product-marketing-story__title--small {
+    font-size: 1.55rem;
+    text-transform: uppercase;
+  }
+
+  .product-marketing-story__text,
+  .product-marketing-story__section-heading p,
+  .product-marketing-story__detail-card p,
+  .product-marketing-story__strip-item p {
+    margin: 0.9rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .product-marketing-story__chip-row,
+  .product-marketing-story__stats,
+  .product-marketing-story__micro-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 1.4rem;
+  }
+
+  .product-marketing-story__chip,
+  .product-marketing-story__micro {
+    display: grid;
+    justify-items: center;
+    gap: 0.45rem;
+    color: var(--theme-color-text);
+    font-size: 0.84rem;
+    text-align: center;
+  }
+
+  .product-marketing-story__icon,
+  .product-marketing-story__mini-icon,
+  .product-marketing-story__stat-icon,
+  .product-marketing-story__micro span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 229, 255, 0.42);
+    border-radius: 999px;
+    color: #27efff;
+    background: rgba(3, 12, 24, 0.64);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  }
+
+  .product-marketing-story__icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .product-marketing-story__mini-icon,
+  .product-marketing-story__stat-icon,
+  .product-marketing-story__micro span {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .product-marketing-story__icon svg,
+  .product-marketing-story__mini-icon svg,
+  .product-marketing-story__stat-icon svg,
+  .product-marketing-story__micro svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .product-marketing-story__icon-image {
+    width: 1.3rem;
+    height: 1.3rem;
+    object-fit: contain;
+  }
+
+  .product-marketing-story__media {
+    min-height: 14rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: radial-gradient(circle at 55% 50%, rgba(0, 229, 255, 0.16), transparent 38%);
+  }
+
+  .product-marketing-story__image,
+  .product-marketing-story__detail-image,
+  .product-marketing-story__mode-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-marketing-story__placeholder {
+    min-height: 14rem;
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.16), rgba(214, 101, 255, 0.1));
+  }
+
+  .product-marketing-story__stat {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.65rem;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.85rem;
+  }
+
+  .product-marketing-story__stat strong {
+    display: block;
+    color: #4cecff;
+    font-size: 1rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .product-marketing-story__comparison {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 1.35rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background: rgba(4, 12, 25, 0.72);
+  }
+
+  .product-marketing-story__comparison-row {
+    display: grid;
+    grid-template-columns: minmax(6.6rem, 1fr) minmax(5rem, 1fr) auto;
+    gap: 0.65rem;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.78rem;
+  }
+
+  .product-marketing-story__comparison-row strong {
+    color: var(--theme-color-text);
+    font-weight: 500;
+  }
+
+  .product-marketing-story__bar {
+    height: 0.42rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.13);
+  }
+
+  .product-marketing-story__bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #1eeadf, #4baaff);
+  }
+
+  .product-marketing-story__bar--muted span {
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .product-marketing-story__detail-grid,
+  .product-marketing-story__dual-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .product-marketing-story__detail-card {
+    display: grid;
+    min-height: 17rem;
+  }
+
+  .product-marketing-story__detail-copy {
+    position: relative;
+    z-index: 2;
+    padding: 1rem;
+  }
+
+  .product-marketing-story__detail-copy h3,
+  .product-marketing-story__strip-item h3 {
+    margin: 0.75rem 0 0;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .product-marketing-story__detail-media {
+    min-height: 10rem;
+  }
+
+  .product-marketing-story__panel--modes-strip {
+    gap: 1rem;
+  }
+
+  .product-marketing-story__modes-scroll {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 7rem;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: thin;
+  }
+
+  .product-marketing-story__mode-card {
+    display: grid;
+    gap: 0.6rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.78rem;
+  }
+
+  .product-marketing-story__mode-image-shell {
+    aspect-ratio: 1.25;
+    overflow: hidden;
+    border-radius: 0.65rem;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .product-marketing-story__panel--lower-card {
+    gap: 1rem;
+  }
+
+  .product-marketing-story__lower-image {
+    min-height: 13rem;
+    overflow: hidden;
+    border-radius: 0.85rem;
+  }
+
+  .product-marketing-story__micro-row {
+    justify-content: flex-start;
+    margin-top: 0;
+  }
+
+  .product-marketing-story__micro {
+    width: 4.2rem;
+    font-size: 0.72rem;
+  }
+
+  .product-marketing-story__icon-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    padding: 1rem;
+  }
+
+  .product-marketing-story__strip-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.7rem;
+    align-items: center;
+  }
+
+  .product-marketing-story__strip-item h3 {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .product-marketing-story__strip-item p {
+    margin-top: 0.2rem;
+    font-size: 0.72rem;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 900px) {
+    .product-marketing-story {
+      padding-bottom: 5rem;
+    }
+
+    .product-marketing-story__inner {
+      gap: 1.25rem;
+    }
+
+    .product-marketing-story__panel--mode,
+    .product-marketing-story__panel--battery {
+      grid-template-columns: minmax(18rem, 0.75fr) minmax(0, 1.5fr);
+      align-items: center;
+      min-height: 26rem;
+      padding: 2rem;
+    }
+
+    .product-marketing-story__title {
+      font-size: 2.1rem;
+    }
+
+    .product-marketing-story__media {
+      min-height: 22rem;
+    }
+
+    .product-marketing-story__detail-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .product-marketing-story__detail-card {
+      min-height: 21rem;
+    }
+
+    .product-marketing-story__modes-scroll {
+      grid-auto-flow: initial;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      overflow: visible;
+    }
+
+    .product-marketing-story__dual-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .product-marketing-story__panel--lower-card {
+      min-height: 20rem;
+    }
+
+    .product-marketing-story__icon-strip {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Marketing Story",
+  "settings": [
+    { "type": "text", "id": "mode_eyebrow", "label": "Mode eyebrow", "default": "Designed For Every Mode" },
+    { "type": "text", "id": "mode_title", "label": "Mode title", "default": "One Case. Every Angle. Endless Possibilities." },
+    { "type": "textarea", "id": "mode_text", "label": "Mode text", "default": "Rotate, flip, and adjust with ease. Whether you're working, creating, or streaming, find the perfect angle for every task." },
+    { "type": "image_picker", "id": "mode_image", "label": "Mode image" },
+    { "type": "text", "id": "mode_image_alt", "label": "Mode image alt text", "default": "Keyboard case shown in multiple modes" },
+    { "type": "text", "id": "battery_eyebrow", "label": "Battery eyebrow", "default": "Power That Keeps Up" },
+    { "type": "text", "id": "battery_title", "label": "Battery title", "default": "2-Hour Charge. 30-Day Power." },
+    { "type": "textarea", "id": "battery_text", "label": "Battery text", "default": "Stay productive longer with ultra-efficient power. Less charging, more creating." },
+    { "type": "image_picker", "id": "battery_image", "label": "Battery image" },
+    { "type": "text", "id": "battery_image_alt", "label": "Battery image alt text", "default": "Keyboard case with glowing power rings" },
+    { "type": "text", "id": "fast_charge_value", "label": "Fast charge value", "default": "2-Hour" },
+    { "type": "text", "id": "fast_charge_label", "label": "Fast charge label", "default": "Fast Charge" },
+    { "type": "text", "id": "battery_life_value", "label": "Battery life value", "default": "30-Day" },
+    { "type": "text", "id": "battery_life_label", "label": "Battery life label", "default": "Battery Life" },
+    { "type": "text", "id": "comparison_label", "label": "Comparison accessible label", "default": "Battery life comparison" },
+    { "type": "text", "id": "comparison_primary_label", "label": "Primary comparison label", "default": "NoxRev Keyboard Case" },
+    { "type": "text", "id": "comparison_primary_value", "label": "Primary comparison value", "default": "30 Days" },
+    { "type": "range", "id": "comparison_primary_percent", "label": "Primary bar percent", "min": 0, "max": 100, "step": 1, "default": 100 },
+    { "type": "text", "id": "comparison_secondary_label", "label": "Secondary comparison label", "default": "Others" },
+    { "type": "text", "id": "comparison_secondary_value", "label": "Secondary comparison value", "default": "7 Days" },
+    { "type": "range", "id": "comparison_secondary_percent", "label": "Secondary bar percent", "min": 0, "max": 100, "step": 1, "default": 24 },
+    { "type": "text", "id": "unique_modes_heading", "label": "Unique modes heading", "default": "7 Unique Modes" },
+    { "type": "text", "id": "unique_modes_subtitle", "label": "Unique modes subtitle", "default": "360 degree swivel. 180 degree flip. Infinite possibilities." },
+    { "type": "text", "id": "typing_eyebrow", "label": "Typing eyebrow", "default": "Next-Gen Typing Experience" },
+    { "type": "text", "id": "typing_title", "label": "Typing title", "default": "Next-Gen Typing Experience" },
+    { "type": "textarea", "id": "typing_text", "label": "Typing text", "default": "Scissor-switch keys, responsive tracking pad, and smart gestures built for speed, accuracy, and comfort." },
+    { "type": "image_picker", "id": "typing_image", "label": "Typing image" },
+    { "type": "text", "id": "typing_image_alt", "label": "Typing image alt text", "default": "Hands typing on keyboard case" },
+    { "type": "text", "id": "precision_eyebrow", "label": "Precision eyebrow", "default": "Stunning Precision And Control" },
+    { "type": "text", "id": "precision_title", "label": "Precision title", "default": "Stunning Precision And Control" },
+    { "type": "textarea", "id": "precision_text", "label": "Precision text", "default": "The precision trackpad supports all the multi-touch gestures you already know." },
+    { "type": "image_picker", "id": "precision_image", "label": "Precision image" },
+    { "type": "text", "id": "precision_image_alt", "label": "Precision image alt text", "default": "Trackpad and keyboard close up" }
+  ],
+  "blocks": [
+    {
+      "type": "mode_chip",
+      "name": "Mode chip",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Type" },
+        { "type": "select", "id": "icon", "label": "Fallback icon", "default": "type", "options": [
+          { "value": "type", "label": "Type" },
+          { "value": "draw", "label": "Draw" },
+          { "value": "watch", "label": "Watch" },
+          { "value": "present", "label": "Present" },
+          { "value": "rotation", "label": "Rotation" },
+          { "value": "keyboard", "label": "Keyboard" },
+          { "value": "trackpad", "label": "Trackpad" },
+          { "value": "magnet", "label": "Magnet" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "bolt", "label": "Bolt" },
+          { "value": "battery", "label": "Battery" },
+          { "value": "tap", "label": "Tap" },
+          { "value": "swipe", "label": "Swipe" },
+          { "value": "zoom", "label": "Zoom" },
+          { "value": "apps", "label": "Apps" }
+        ] },
+        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+      ]
+    },
+    {
+      "type": "detail_card",
+      "name": "Feature detail card",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Secure, Form-Fit Protection" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches." },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Product feature image" },
+        { "type": "select", "id": "icon", "label": "Fallback icon", "default": "shield", "options": [
+          { "value": "type", "label": "Type" },
+          { "value": "draw", "label": "Draw" },
+          { "value": "watch", "label": "Watch" },
+          { "value": "present", "label": "Present" },
+          { "value": "rotation", "label": "Rotation" },
+          { "value": "keyboard", "label": "Keyboard" },
+          { "value": "trackpad", "label": "Trackpad" },
+          { "value": "magnet", "label": "Magnet" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "bolt", "label": "Bolt" },
+          { "value": "battery", "label": "Battery" },
+          { "value": "tap", "label": "Tap" },
+          { "value": "swipe", "label": "Swipe" },
+          { "value": "zoom", "label": "Zoom" },
+          { "value": "apps", "label": "Apps" }
+        ] },
+        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+      ]
+    },
+    {
+      "type": "unique_mode",
+      "name": "Unique mode",
+      "limit": 10,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Laptop Mode" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Product mode image" }
+      ]
+    },
+    {
+      "type": "typing_icon",
+      "name": "Typing feature icon",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Scissor-Switch Keys" },
+        { "type": "select", "id": "icon", "label": "Icon", "default": "keyboard", "options": [
+          { "value": "type", "label": "Type" },
+          { "value": "draw", "label": "Draw" },
+          { "value": "watch", "label": "Watch" },
+          { "value": "present", "label": "Present" },
+          { "value": "rotation", "label": "Rotation" },
+          { "value": "keyboard", "label": "Keyboard" },
+          { "value": "trackpad", "label": "Trackpad" },
+          { "value": "magnet", "label": "Magnet" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "bolt", "label": "Bolt" },
+          { "value": "battery", "label": "Battery" },
+          { "value": "tap", "label": "Tap" },
+          { "value": "swipe", "label": "Swipe" },
+          { "value": "zoom", "label": "Zoom" },
+          { "value": "apps", "label": "Apps" }
+        ] }
+      ]
+    },
+    {
+      "type": "precision_icon",
+      "name": "Precision feature icon",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Tap" },
+        { "type": "select", "id": "icon", "label": "Icon", "default": "tap", "options": [
+          { "value": "type", "label": "Type" },
+          { "value": "draw", "label": "Draw" },
+          { "value": "watch", "label": "Watch" },
+          { "value": "present", "label": "Present" },
+          { "value": "rotation", "label": "Rotation" },
+          { "value": "keyboard", "label": "Keyboard" },
+          { "value": "trackpad", "label": "Trackpad" },
+          { "value": "magnet", "label": "Magnet" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "bolt", "label": "Bolt" },
+          { "value": "battery", "label": "Battery" },
+          { "value": "tap", "label": "Tap" },
+          { "value": "swipe", "label": "Swipe" },
+          { "value": "zoom", "label": "Zoom" },
+          { "value": "apps", "label": "Apps" }
+        ] }
+      ]
+    },
+    {
+      "type": "strip_item",
+      "name": "Bottom feature item",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "360 Degree Rotation" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Smooth and flexible" },
+        { "type": "select", "id": "icon", "label": "Fallback icon", "default": "rotation", "options": [
+          { "value": "type", "label": "Type" },
+          { "value": "draw", "label": "Draw" },
+          { "value": "watch", "label": "Watch" },
+          { "value": "present", "label": "Present" },
+          { "value": "rotation", "label": "Rotation" },
+          { "value": "keyboard", "label": "Keyboard" },
+          { "value": "trackpad", "label": "Trackpad" },
+          { "value": "magnet", "label": "Magnet" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "bolt", "label": "Bolt" },
+          { "value": "battery", "label": "Battery" },
+          { "value": "tap", "label": "Tap" },
+          { "value": "swipe", "label": "Swipe" },
+          { "value": "zoom", "label": "Zoom" },
+          { "value": "apps", "label": "Apps" }
+        ] },
+        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Marketing Story"
+    }
+  ]
+}
+{% endschema %}

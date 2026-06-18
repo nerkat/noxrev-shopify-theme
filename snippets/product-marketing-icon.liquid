@@ -1,0 +1,36 @@
+{% liquid
+  assign icon_name = icon | default: 'type'
+%}
+
+{% case icon_name %}
+  {% when 'draw' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><path d="m5 16.5 9.4-9.4 3.5 3.5-9.4 9.4H5v-3.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m14.4 7.1 1.5-1.5a2 2 0 0 1 2.8 2.8l-1.5 1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  {% when 'watch' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><rect x="6" y="5" width="12" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 8.4V12l2.6 1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  {% when 'present' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><rect x="4" y="5.5" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M12 16.5v3M8.8 19.5h6.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m10 9 5 2.5-5 2.5V9Z" fill="currentColor"/></svg>
+  {% when 'rotation' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><path d="M12 4a8 8 0 1 1-7.2 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4 4v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7v2.8M12 14.2V17M17 12h-2.8M9.8 12H7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  {% when 'keyboard' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><rect x="3.5" y="6.5" width="17" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M7 10h.01M10 10h.01M13 10h.01M16 10h.01M7 13h.01M10 13h.01M13 13h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  {% when 'trackpad' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><rect x="4" y="5" width="13.5" height="13.5" rx="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="18.5" cy="16.5" r="3" stroke="currentColor" stroke-width="1.8"/><path d="m20.7 18.7 1.8 1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  {% when 'magnet' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><path d="m8 8 4-4 4 4-4 4-4-4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8 16 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
+  {% when 'shield' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><path d="M12 3.5 19 6v5.4c0 4.4-2.8 7.2-7 9.1-4.2-1.9-7-4.7-7-9.1V6l7-2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  {% when 'bolt' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><path d="m13 2-8 12h6l-1 8 9-13h-6l1-7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+  {% when 'battery' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><rect x="6" y="3.5" width="11" height="17" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M10 6h3M9 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  {% when 'tap' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><path d="M10 11V5a2 2 0 1 1 4 0v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 10h1a2 2 0 0 1 2 2v2h1a2 2 0 0 1 2 2v1.8A4.2 4.2 0 0 1 15.8 22h-2.4a4 4 0 0 1-3-1.4L7 16.8a1.7 1.7 0 0 1 2.4-2.4l1.1 1.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  {% when 'swipe' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><path d="M7 12h10M13 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 6h3M4 18h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  {% when 'zoom' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><circle cx="10.8" cy="10.8" r="5.8" stroke="currentColor" stroke-width="1.8"/><path d="m15.3 15.3 4.7 4.7M10.8 8.2v5.2M8.2 10.8h5.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  {% when 'apps' %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.4" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.4" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.4" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.4" stroke="currentColor" stroke-width="1.8"/></svg>
+  {% else %}
+    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true"><rect x="3.5" y="6.5" width="17" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M7 10h.01M10 10h.01M13 10h.01M16 10h.01M7 13h.01M10 13h.01M13 13h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+{% endcase %}
