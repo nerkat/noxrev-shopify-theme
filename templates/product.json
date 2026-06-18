@@ -13,8 +13,8 @@
       "type": "main-product",
       "settings": {}
     },
-    "product_marketing_story": {
-      "type": "product-marketing-story",
+    "product_mode_showcase": {
+      "type": "product-mode-showcase",
       "blocks": {
         "mode_type": {
           "type": "mode_chip",
@@ -43,7 +43,23 @@
             "label": "Present",
             "icon": "present"
           }
-        },
+        }
+      },
+      "block_order": [
+        "mode_type",
+        "mode_draw",
+        "mode_watch",
+        "mode_present"
+      ],
+      "settings": {}
+    },
+    "product_battery_showcase": {
+      "type": "product-battery-showcase",
+      "settings": {}
+    },
+    "product_feature_detail_grid": {
+      "type": "product-feature-detail-grid",
+      "blocks": {
         "detail_protection": {
           "type": "detail_card",
           "settings": {
@@ -75,114 +91,166 @@
             "text": "USB-C fast charging for uninterrupted productivity.",
             "icon": "bolt"
           }
-        },
+        }
+      },
+      "block_order": [
+        "detail_protection",
+        "detail_pencil",
+        "detail_mute",
+        "detail_charge"
+      ],
+      "settings": {}
+    },
+    "product_unique_modes_strip": {
+      "type": "product-unique-modes-strip",
+      "blocks": {
         "unique_laptop": {
-          "type": "unique_mode",
+          "type": "mode",
           "settings": {
             "label": "Laptop Mode"
           }
         },
         "unique_stand": {
-          "type": "unique_mode",
+          "type": "mode",
           "settings": {
             "label": "Stand Mode"
           }
         },
         "unique_tent": {
-          "type": "unique_mode",
+          "type": "mode",
           "settings": {
             "label": "Tent Mode"
           }
         },
         "unique_tablet": {
-          "type": "unique_mode",
+          "type": "mode",
           "settings": {
             "label": "Tablet Mode"
           }
         },
         "unique_drawing": {
-          "type": "unique_mode",
+          "type": "mode",
           "settings": {
             "label": "Drawing Mode"
           }
         },
         "unique_viewing": {
-          "type": "unique_mode",
+          "type": "mode",
           "settings": {
             "label": "Viewing Mode"
           }
         },
         "unique_presentation": {
-          "type": "unique_mode",
+          "type": "mode",
           "settings": {
             "label": "Presentation Mode"
           }
-        },
+        }
+      },
+      "block_order": [
+        "unique_laptop",
+        "unique_stand",
+        "unique_tent",
+        "unique_tablet",
+        "unique_drawing",
+        "unique_viewing",
+        "unique_presentation"
+      ],
+      "settings": {}
+    },
+    "product_typing_feature": {
+      "type": "product-typing-feature",
+      "blocks": {
         "typing_keys": {
-          "type": "typing_icon",
+          "type": "feature_icon",
           "settings": {
             "label": "Scissor-Switch Keys",
             "icon": "keyboard"
           }
         },
         "typing_trackpad": {
-          "type": "typing_icon",
+          "type": "feature_icon",
           "settings": {
             "label": "Large Precision Trackpad",
             "icon": "trackpad"
           }
         },
         "typing_gestures": {
-          "type": "typing_icon",
+          "type": "feature_icon",
           "settings": {
             "label": "Multi-Touch Gestures",
             "icon": "tap"
           }
         },
         "typing_backlit": {
-          "type": "typing_icon",
+          "type": "feature_icon",
           "settings": {
             "label": "Backlit Keyboard",
             "icon": "keyboard"
           }
-        },
+        }
+      },
+      "block_order": [
+        "typing_keys",
+        "typing_trackpad",
+        "typing_gestures",
+        "typing_backlit"
+      ],
+      "settings": {}
+    },
+    "product_precision_feature": {
+      "type": "product-precision-feature",
+      "blocks": {
         "precision_tap": {
-          "type": "precision_icon",
+          "type": "feature_icon",
           "settings": {
             "label": "Tap",
             "icon": "tap"
           }
         },
         "precision_swipe": {
-          "type": "precision_icon",
+          "type": "feature_icon",
           "settings": {
             "label": "Swipe",
             "icon": "swipe"
           }
         },
         "precision_scroll": {
-          "type": "precision_icon",
+          "type": "feature_icon",
           "settings": {
             "label": "Scroll",
             "icon": "swipe"
           }
         },
         "precision_zoom": {
-          "type": "precision_icon",
+          "type": "feature_icon",
           "settings": {
             "label": "Zoom",
             "icon": "zoom"
           }
         },
         "precision_apps": {
-          "type": "precision_icon",
+          "type": "feature_icon",
           "settings": {
             "label": "Switch Apps",
             "icon": "apps"
           }
-        },
+        }
+      },
+      "block_order": [
+        "precision_tap",
+        "precision_swipe",
+        "precision_scroll",
+        "precision_zoom",
+        "precision_apps"
+      ],
+      "settings": {}
+    },
+    "product_feature_icon_strip": {
+      "type": "product-feature-icon-strip",
+      "blocks": {
         "strip_rotation": {
-          "type": "strip_item",
+          "type": "feature_item",
           "settings": {
             "title": "360 Degree Rotation",
             "subtitle": "Smooth and flexible",
@@ -190,7 +258,7 @@
           }
         },
         "strip_keyboard": {
-          "type": "strip_item",
+          "type": "feature_item",
           "settings": {
             "title": "Backlit Keyboard",
             "subtitle": "7 colors, 3 brightness levels",
@@ -198,7 +266,7 @@
           }
         },
         "strip_trackpad": {
-          "type": "strip_item",
+          "type": "feature_item",
           "settings": {
             "title": "Precision Trackpad",
             "subtitle": "Multi-touch and gestures",
@@ -206,7 +274,7 @@
           }
         },
         "strip_magnet": {
-          "type": "strip_item",
+          "type": "feature_item",
           "settings": {
             "title": "Magnetic Attachment",
             "subtitle": "Strong hold, easy detach",
@@ -214,7 +282,7 @@
           }
         },
         "strip_materials": {
-          "type": "strip_item",
+          "type": "feature_item",
           "settings": {
             "title": "Premium Materials",
             "subtitle": "Aluminum alloy and PU leather",
@@ -223,30 +291,6 @@
         }
       },
       "block_order": [
-        "mode_type",
-        "mode_draw",
-        "mode_watch",
-        "mode_present",
-        "detail_protection",
-        "detail_pencil",
-        "detail_mute",
-        "detail_charge",
-        "unique_laptop",
-        "unique_stand",
-        "unique_tent",
-        "unique_tablet",
-        "unique_drawing",
-        "unique_viewing",
-        "unique_presentation",
-        "typing_keys",
-        "typing_trackpad",
-        "typing_gestures",
-        "typing_backlit",
-        "precision_tap",
-        "precision_swipe",
-        "precision_scroll",
-        "precision_zoom",
-        "precision_apps",
         "strip_rotation",
         "strip_keyboard",
         "strip_trackpad",
@@ -258,6 +302,12 @@
   },
   "order": [
     "main",
-    "product_marketing_story"
+    "product_mode_showcase",
+    "product_battery_showcase",
+    "product_feature_detail_grid",
+    "product_unique_modes_strip",
+    "product_typing_feature",
+    "product_precision_feature",
+    "product_feature_icon_strip"
   ]
 }

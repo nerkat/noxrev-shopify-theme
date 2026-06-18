@@ -1,0 +1,193 @@
+<section class="product-feature-detail-grid section">
+  <div class="container">
+    <div class="product-feature-detail-grid__grid">
+      {% for block in section.blocks %}
+        {% liquid
+          assign card_image = block.settings.image | default: product.featured_media.preview_image
+        %}
+        <article class="product-feature-detail-grid__card" {{ block.shopify_attributes }}>
+          <div class="product-feature-detail-grid__copy">
+            <span class="product-feature-detail-grid__icon" aria-hidden="true">
+              {% if block.settings.icon_image != blank %}
+                {{ block.settings.icon_image | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'product-feature-detail-grid__icon-image' }}
+              {% else %}
+                {% render 'product-marketing-icon', icon: block.settings.icon %}
+              {% endif %}
+            </span>
+            <div>
+              <h2 class="product-feature-detail-grid__title">{{ block.settings.title }}</h2>
+              <p class="product-feature-detail-grid__text">{{ block.settings.text }}</p>
+            </div>
+          </div>
+
+          <div class="product-feature-detail-grid__media">
+            {% if card_image != blank %}
+              {% render 'responsive-image',
+                image: card_image,
+                alt: block.settings.image_alt,
+                class: 'product-feature-detail-grid__image',
+                loading: 'lazy',
+                sizes: '(min-width: 900px) 25vw, 50vw',
+                widths: '220, 360, 520, 720'
+              %}
+            {% else %}
+              <div class="product-feature-detail-grid__placeholder" aria-hidden="true"></div>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-feature-detail-grid {
+    padding: 0 0 1rem;
+  }
+
+  .product-feature-detail-grid__grid {
+    display: grid;
+    gap: 0.85rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .product-feature-detail-grid__card {
+    position: relative;
+    display: grid;
+    min-height: 14rem;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.22);
+    border-radius: 1rem;
+    background:
+      linear-gradient(180deg, rgba(29, 22, 59, 0.72), rgba(3, 13, 24, 0.92)),
+      rgba(4, 13, 25, 0.94);
+  }
+
+  .product-feature-detail-grid__copy {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 0.65rem;
+    padding: 1rem;
+  }
+
+  .product-feature-detail-grid__icon {
+    display: inline-flex;
+    width: 2.3rem;
+    height: 2.3rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    border-radius: 999px;
+    color: #28efff;
+    background: rgba(10, 18, 36, 0.78);
+  }
+
+  .product-feature-detail-grid__icon svg,
+  .product-feature-detail-grid__icon-image {
+    width: 1.2rem;
+    height: 1.2rem;
+    object-fit: contain;
+  }
+
+  .product-feature-detail-grid__title {
+    margin: 0;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-family: var(--theme-font-display);
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    text-transform: uppercase;
+  }
+
+  .product-feature-detail-grid__text {
+    margin: 0.45rem 0 0;
+    color: rgba(255, 255, 255, 0.77);
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .product-feature-detail-grid__media {
+    min-height: 7rem;
+    align-self: end;
+    overflow: hidden;
+  }
+
+  .product-feature-detail-grid__image,
+  .product-feature-detail-grid__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 7rem;
+    object-fit: cover;
+  }
+
+  .product-feature-detail-grid__placeholder {
+    background: radial-gradient(circle at center, rgba(0, 229, 255, 0.16), transparent 56%);
+  }
+
+  @media (min-width: 900px) {
+    .product-feature-detail-grid__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .product-feature-detail-grid__card {
+      min-height: 18rem;
+    }
+
+    .product-feature-detail-grid__copy {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      padding: 1.35rem;
+    }
+
+    .product-feature-detail-grid__media,
+    .product-feature-detail-grid__image,
+    .product-feature-detail-grid__placeholder {
+      min-height: 11rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Feature Grid",
+  "blocks": [
+    {
+      "type": "detail_card",
+      "name": "Feature card",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Secure, Form-Fit Protection" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches." },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Product feature detail" },
+        { "type": "select", "id": "icon", "label": "Fallback icon", "default": "shield", "options": [
+          { "value": "shield", "label": "Shield" },
+          { "value": "draw", "label": "Pencil" },
+          { "value": "type", "label": "Keyboard" },
+          { "value": "bolt", "label": "Bolt" },
+          { "value": "magnet", "label": "Magnet" },
+          { "value": "trackpad", "label": "Trackpad" }
+        ] },
+        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Feature Grid",
+      "blocks": [
+        { "type": "detail_card", "settings": { "title": "Secure, Form-Fit Protection", "text": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches.", "icon": "shield" } },
+        { "type": "detail_card", "settings": { "title": "Pencil Storage", "text": "Built-in drawer keeps your Apple Pencil safe and always within reach.", "icon": "draw" } },
+        { "type": "detail_card", "settings": { "title": "Mute Button", "text": "Instant mute for quiet focus anytime, anywhere.", "icon": "type" } },
+        { "type": "detail_card", "settings": { "title": "Fast Charging", "text": "USB-C fast charging for uninterrupted productivity.", "icon": "bolt" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

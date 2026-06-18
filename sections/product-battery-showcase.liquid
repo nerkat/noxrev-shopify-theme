@@ -1,0 +1,246 @@
+{% liquid
+  assign showcase_image = section.settings.image | default: product.featured_media.preview_image
+%}
+
+<section class="product-battery-showcase section">
+  <div class="container">
+    <article class="product-battery-showcase__panel">
+      <div class="product-battery-showcase__copy">
+        <p class="product-battery-showcase__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2 class="product-battery-showcase__title">{{ section.settings.title }}</h2>
+        <p class="product-battery-showcase__text">{{ section.settings.text }}</p>
+
+        <div class="product-battery-showcase__stats" role="list">
+          <div class="product-battery-showcase__stat" role="listitem">
+            <span class="product-battery-showcase__icon" aria-hidden="true">{% render 'product-marketing-icon', icon: 'bolt' %}</span>
+            <span><strong>{{ section.settings.fast_charge_value }}</strong>{{ section.settings.fast_charge_label }}</span>
+          </div>
+          <div class="product-battery-showcase__stat" role="listitem">
+            <span class="product-battery-showcase__icon" aria-hidden="true">{% render 'product-marketing-icon', icon: 'battery' %}</span>
+            <span><strong>{{ section.settings.battery_life_value }}</strong>{{ section.settings.battery_life_label }}</span>
+          </div>
+        </div>
+
+        <div class="product-battery-showcase__comparison" aria-label="{{ section.settings.comparison_label }}">
+          <div class="product-battery-showcase__comparison-row">
+            <span>{{ section.settings.primary_label }}</span>
+            <span class="product-battery-showcase__bar"><span style="width: {{ section.settings.primary_percent }}%;"></span></span>
+            <strong>{{ section.settings.primary_value }}</strong>
+          </div>
+          <div class="product-battery-showcase__comparison-row">
+            <span>{{ section.settings.secondary_label }}</span>
+            <span class="product-battery-showcase__bar product-battery-showcase__bar--muted"><span style="width: {{ section.settings.secondary_percent }}%;"></span></span>
+            <strong>{{ section.settings.secondary_value }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-battery-showcase__media">
+        {% if showcase_image != blank %}
+          {% render 'responsive-image',
+            image: showcase_image,
+            alt: section.settings.image_alt,
+            class: 'product-battery-showcase__image',
+            loading: 'lazy',
+            sizes: '(min-width: 900px) 58vw, 100vw',
+            widths: '420, 640, 860, 1100, 1400'
+          %}
+        {% else %}
+          <div class="product-battery-showcase__placeholder" aria-hidden="true"></div>
+        {% endif %}
+      </div>
+    </article>
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-battery-showcase {
+    padding: 0 0 1rem;
+  }
+
+  .product-battery-showcase__panel {
+    display: grid;
+    gap: 1.4rem;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.24);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    background:
+      radial-gradient(circle at 75% 45%, rgba(0, 229, 255, 0.16), transparent 35%),
+      linear-gradient(180deg, rgba(5, 13, 26, 0.94), rgba(3, 10, 22, 0.98));
+  }
+
+  .product-battery-showcase__eyebrow {
+    margin: 0 0 0.8rem;
+    background: linear-gradient(90deg, #22e2ff, #d778ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .product-battery-showcase__title {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+
+  .product-battery-showcase__text {
+    max-width: 28rem;
+    margin: 0.9rem 0 0;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .product-battery-showcase__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.35rem;
+  }
+
+  .product-battery-showcase__stat {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.65rem;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.85rem;
+  }
+
+  .product-battery-showcase__stat strong {
+    display: block;
+    color: #4cecff;
+    font-size: 1rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .product-battery-showcase__icon {
+    display: inline-flex;
+    width: 2.35rem;
+    height: 2.35rem;
+    align-items: center;
+    justify-content: center;
+    color: #27efff;
+  }
+
+  .product-battery-showcase__icon svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .product-battery-showcase__comparison {
+    display: grid;
+    gap: 0.8rem;
+    max-width: 27rem;
+    margin-top: 1.35rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background: rgba(4, 12, 25, 0.72);
+  }
+
+  .product-battery-showcase__comparison-row {
+    display: grid;
+    grid-template-columns: minmax(6.8rem, 1fr) minmax(5rem, 1fr) auto;
+    gap: 0.65rem;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.78rem;
+  }
+
+  .product-battery-showcase__comparison-row strong {
+    color: var(--theme-color-text);
+    font-weight: 500;
+  }
+
+  .product-battery-showcase__bar {
+    height: 0.42rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.13);
+  }
+
+  .product-battery-showcase__bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #1eeadf, #4baaff);
+  }
+
+  .product-battery-showcase__bar--muted span {
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .product-battery-showcase__media {
+    min-height: 14rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: radial-gradient(circle at 55% 50%, rgba(0, 229, 255, 0.16), transparent 38%);
+  }
+
+  .product-battery-showcase__image,
+  .product-battery-showcase__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 14rem;
+    object-fit: cover;
+  }
+
+  .product-battery-showcase__placeholder {
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.16), rgba(214, 101, 255, 0.1));
+  }
+
+  @media (min-width: 900px) {
+    .product-battery-showcase__panel {
+      grid-template-columns: minmax(18rem, 0.7fr) minmax(0, 1.5fr);
+      align-items: center;
+      min-height: 26rem;
+      padding: 2rem;
+    }
+
+    .product-battery-showcase__media,
+    .product-battery-showcase__image,
+    .product-battery-showcase__placeholder {
+      min-height: 22rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Battery Showcase",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Power That Keeps Up" },
+    { "type": "text", "id": "title", "label": "Title", "default": "2-Hour Charge. 30-Day Power." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Stay productive longer with ultra-efficient power. Less charging, more creating." },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Keyboard case with glowing power rings" },
+    { "type": "text", "id": "fast_charge_value", "label": "Fast charge value", "default": "2-Hour" },
+    { "type": "text", "id": "fast_charge_label", "label": "Fast charge label", "default": "Fast Charge" },
+    { "type": "text", "id": "battery_life_value", "label": "Battery life value", "default": "30-Day" },
+    { "type": "text", "id": "battery_life_label", "label": "Battery life label", "default": "Battery Life" },
+    { "type": "text", "id": "comparison_label", "label": "Comparison accessible label", "default": "Battery life comparison" },
+    { "type": "text", "id": "primary_label", "label": "Primary comparison label", "default": "NoxRev Keyboard Case" },
+    { "type": "text", "id": "primary_value", "label": "Primary comparison value", "default": "30 Days" },
+    { "type": "range", "id": "primary_percent", "label": "Primary bar percent", "min": 0, "max": 100, "step": 1, "default": 100 },
+    { "type": "text", "id": "secondary_label", "label": "Secondary comparison label", "default": "Others" },
+    { "type": "text", "id": "secondary_value", "label": "Secondary comparison value", "default": "7 Days" },
+    { "type": "range", "id": "secondary_percent", "label": "Secondary bar percent", "min": 0, "max": 100, "step": 1, "default": 24 }
+  ],
+  "presets": [
+    {
+      "name": "Product Battery Showcase"
+    }
+  ]
+}
+{% endschema %}

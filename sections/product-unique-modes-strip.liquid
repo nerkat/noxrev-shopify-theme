@@ -1,0 +1,165 @@
+<section class="product-unique-modes-strip section">
+  <div class="container">
+    <article class="product-unique-modes-strip__panel">
+      <div class="product-unique-modes-strip__header">
+        <h2 class="product-unique-modes-strip__title">{{ section.settings.title }}</h2>
+        <p class="product-unique-modes-strip__text">{{ section.settings.text }}</p>
+      </div>
+
+      <div class="product-unique-modes-strip__items" role="list">
+        {% for block in section.blocks %}
+          {% liquid
+            assign mode_image = block.settings.image | default: product.featured_media.preview_image
+          %}
+          <div class="product-unique-modes-strip__item" role="listitem" {{ block.shopify_attributes }}>
+            <div class="product-unique-modes-strip__media">
+              {% if mode_image != blank %}
+                {% render 'responsive-image',
+                  image: mode_image,
+                  alt: block.settings.image_alt,
+                  class: 'product-unique-modes-strip__image',
+                  loading: 'lazy',
+                  sizes: '(min-width: 900px) 14vw, 34vw',
+                  widths: '160, 240, 360, 520'
+                %}
+              {% else %}
+                <div class="product-unique-modes-strip__placeholder" aria-hidden="true"></div>
+              {% endif %}
+            </div>
+            <span>{{ block.settings.label }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </article>
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-unique-modes-strip {
+    padding: 0 0 1rem;
+  }
+
+  .product-unique-modes-strip__panel {
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.22);
+    border-radius: 1rem;
+    padding: 1rem;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.09), transparent 44%),
+      rgba(4, 13, 25, 0.94);
+  }
+
+  .product-unique-modes-strip__title {
+    margin: 0;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-family: var(--theme-font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .product-unique-modes-strip__text {
+    margin: 0.35rem 0 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.85rem;
+  }
+
+  .product-unique-modes-strip__items {
+    display: grid;
+    grid-auto-columns: minmax(7.4rem, 1fr);
+    grid-auto-flow: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-width: thin;
+  }
+
+  .product-unique-modes-strip__item {
+    display: grid;
+    gap: 0.45rem;
+    justify-items: center;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.78rem;
+    text-align: center;
+  }
+
+  .product-unique-modes-strip__media {
+    width: 100%;
+    min-height: 4.7rem;
+    overflow: hidden;
+    border-radius: 0.65rem;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .product-unique-modes-strip__image,
+  .product-unique-modes-strip__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 4.7rem;
+    object-fit: cover;
+  }
+
+  .product-unique-modes-strip__placeholder {
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(214, 101, 255, 0.09));
+  }
+
+  @media (min-width: 900px) {
+    .product-unique-modes-strip__panel {
+      padding: 1.35rem;
+    }
+
+    .product-unique-modes-strip__items {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-auto-flow: initial;
+      overflow: visible;
+    }
+
+    .product-unique-modes-strip__media,
+    .product-unique-modes-strip__image,
+    .product-unique-modes-strip__placeholder {
+      min-height: 6rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Modes Strip",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "7 Unique Modes" },
+    { "type": "text", "id": "text", "label": "Text", "default": "360 swivel. 180 flip. Infinite possibilities." }
+  ],
+  "blocks": [
+    {
+      "type": "mode",
+      "name": "Mode",
+      "limit": 12,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Laptop Mode" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Keyboard case mode" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Modes Strip",
+      "blocks": [
+        { "type": "mode", "settings": { "label": "Laptop Mode" } },
+        { "type": "mode", "settings": { "label": "Stand Mode" } },
+        { "type": "mode", "settings": { "label": "Tent Mode" } },
+        { "type": "mode", "settings": { "label": "Tablet Mode" } },
+        { "type": "mode", "settings": { "label": "Drawing Mode" } },
+        { "type": "mode", "settings": { "label": "Viewing Mode" } },
+        { "type": "mode", "settings": { "label": "Presentation Mode" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
