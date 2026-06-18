@@ -139,6 +139,7 @@
           "type": "mode",
           "settings": {
             "label": "Laptop Mode",
+            "image": "shopify://shop_images/edited-photo_1.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -146,6 +147,7 @@
           "type": "mode",
           "settings": {
             "label": "Stand Mode",
+            "image": "shopify://shop_images/edited-photo.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -153,6 +155,7 @@
           "type": "mode",
           "settings": {
             "label": "Tent Mode",
+            "image": "shopify://shop_images/edited-photo_2.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -160,6 +163,7 @@
           "type": "mode",
           "settings": {
             "label": "Tablet Mode",
+            "image": "shopify://shop_images/edited-photo_1_c9887043-19b6-4a56-81a5-6facf2d27317.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -167,6 +171,7 @@
           "type": "mode",
           "settings": {
             "label": "Drawing Mode",
+            "image": "shopify://shop_images/edited-photo_0bba9500-568a-4002-9e71-43b6466a81f4.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -174,6 +179,7 @@
           "type": "mode",
           "settings": {
             "label": "Viewing Mode",
+            "image": "shopify://shop_images/edited-photo_2_3e75043f-3a4a-4c66-9444-ded0faa57b2b.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -181,6 +187,7 @@
           "type": "mode",
           "settings": {
             "label": "Presentation Mode",
+            "image": "shopify://shop_images/edited-photo_1_e992bbb0-8710-4767-8359-e597c3f593ff.png",
             "image_alt": "Keyboard case mode"
           }
         }
