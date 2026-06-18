@@ -1,0 +1,470 @@
+<section class="product-real-life-videos section">
+  <div class="container">
+    <article class="product-real-life-videos__panel" data-real-life-videos>
+      <div class="product-real-life-videos__header">
+        <div class="product-real-life-videos__copy">
+          <p class="product-real-life-videos__eyebrow">{{ section.settings.eyebrow }}</p>
+          <h2 class="product-real-life-videos__title">{{ section.settings.title }}</h2>
+          <p class="product-real-life-videos__text">{{ section.settings.text }}</p>
+        </div>
+
+        {% if section.settings.stat_text != blank %}
+          <div class="product-real-life-videos__stat">
+            <span class="product-real-life-videos__stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                <path d="M16 19v-1.4a3.6 3.6 0 0 0-3.6-3.6H7.6A3.6 3.6 0 0 0 4 17.6V19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M20 19v-1.2a3.2 3.2 0 0 0-2.4-3.1M16 4.2a3 3 0 0 1 0 5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span>{{ section.settings.stat_text }}</span>
+            <span aria-hidden="true">-></span>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="product-real-life-videos__slider-wrap">
+        <div class="product-real-life-videos__slider" data-real-life-videos-slider>
+          {% for block in section.blocks %}
+            {% liquid
+              assign poster_image = block.settings.poster | default: product.featured_media.preview_image
+            %}
+            <article class="product-real-life-videos__card" {{ block.shopify_attributes }}>
+              <div class="product-real-life-videos__media">
+                {% if block.settings.video != blank %}
+                  {{ block.settings.video | video_tag: image_size: '720x', controls: true, muted: true, playsinline: true, preload: 'metadata', class: 'product-real-life-videos__video' }}
+                {% elsif poster_image != blank %}
+                  {% render 'responsive-image',
+                    image: poster_image,
+                    alt: block.settings.poster_alt,
+                    class: 'product-real-life-videos__image',
+                    loading: 'lazy',
+                    sizes: '(min-width: 900px) 18vw, 72vw',
+                    widths: '260, 420, 620, 760'
+                  %}
+                {% else %}
+                  <div class="product-real-life-videos__placeholder" aria-hidden="true"></div>
+                {% endif %}
+
+                {% unless block.settings.video != blank %}
+                  <span class="product-real-life-videos__play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                      <path d="M9 7.5v9l7-4.5-7-4.5Z" fill="currentColor"/>
+                    </svg>
+                  </span>
+                {% endunless %}
+              </div>
+
+              <div class="product-real-life-videos__card-copy">
+                <div>
+                  <h3 class="product-real-life-videos__card-title">{{ block.settings.title }}</h3>
+                  <p class="product-real-life-videos__card-text">{{ block.settings.text }}</p>
+                </div>
+                {% if block.settings.duration != blank %}
+                  <span class="product-real-life-videos__duration">{{ block.settings.duration }}</span>
+                {% endif %}
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        <button class="product-real-life-videos__arrow product-real-life-videos__arrow--prev" type="button" aria-label="Previous videos" data-real-life-videos-prev>
+          <span aria-hidden="true">&lsaquo;</span>
+        </button>
+        <button class="product-real-life-videos__arrow product-real-life-videos__arrow--next" type="button" aria-label="Next videos" data-real-life-videos-next>
+          <span aria-hidden="true">&rsaquo;</span>
+        </button>
+      </div>
+
+      {% if section.settings.cta_label != blank %}
+        <div class="product-real-life-videos__footer">
+          <a class="product-real-life-videos__cta" href="{{ section.settings.cta_url | default: '#' }}">
+            <span>{{ section.settings.cta_label }}</span>
+            <span class="product-real-life-videos__cta-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                <path d="M9 7.5v9l7-4.5-7-4.5Z" fill="currentColor"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+      {% endif %}
+    </article>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const sections = document.querySelectorAll('[data-real-life-videos]');
+
+    sections.forEach((section) => {
+      if (section.dataset.realLifeVideosReady === 'true') return;
+      section.dataset.realLifeVideosReady = 'true';
+
+      const slider = section.querySelector('[data-real-life-videos-slider]');
+      const prev = section.querySelector('[data-real-life-videos-prev]');
+      const next = section.querySelector('[data-real-life-videos-next]');
+      if (!slider || !prev || !next) return;
+
+      const getStep = () => {
+        const card = slider.querySelector('.product-real-life-videos__card');
+        return card ? card.getBoundingClientRect().width + 18 : slider.clientWidth * 0.8;
+      };
+
+      const updateButtons = () => {
+        const maxScroll = slider.scrollWidth - slider.clientWidth;
+        const hasOverflow = maxScroll > 2;
+        prev.hidden = !hasOverflow || slider.scrollLeft <= 2;
+        next.hidden = !hasOverflow || slider.scrollLeft >= maxScroll - 2;
+      };
+
+      prev.addEventListener('click', () => slider.scrollBy({ left: -getStep(), behavior: 'smooth' }));
+      next.addEventListener('click', () => slider.scrollBy({ left: getStep(), behavior: 'smooth' }));
+      slider.addEventListener('scroll', updateButtons, { passive: true });
+      window.addEventListener('resize', updateButtons);
+      updateButtons();
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .product-real-life-videos {
+    padding: 0 0 1.5rem;
+  }
+
+  .product-real-life-videos__panel {
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.24);
+    border-radius: 1.35rem;
+    padding: 1.25rem;
+    background:
+      radial-gradient(circle at 92% 18%, rgba(255, 45, 120, 0.13), transparent 30%),
+      radial-gradient(circle at 0% 70%, rgba(0, 229, 255, 0.12), transparent 34%),
+      linear-gradient(180deg, rgba(7, 14, 30, 0.96), rgba(3, 10, 22, 0.98));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 24px 70px rgba(0, 0, 0, 0.28);
+  }
+
+  .product-real-life-videos__header {
+    display: grid;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .product-real-life-videos__eyebrow {
+    margin: 0 0 0.7rem;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .product-real-life-videos__title {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(2rem, 7vw, 3rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .product-real-life-videos__text {
+    margin: 0.65rem 0 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .product-real-life-videos__stat {
+    display: inline-flex;
+    width: max-content;
+    max-width: 100%;
+    align-items: center;
+    gap: 0.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    padding: 0.55rem 0.8rem;
+    color: #d98dff;
+    background: rgba(255, 255, 255, 0.035);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .product-real-life-videos__stat-icon {
+    color: #23e7ff;
+  }
+
+  .product-real-life-videos__stat-icon svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .product-real-life-videos__slider-wrap {
+    position: relative;
+    margin-top: 1.45rem;
+  }
+
+  .product-real-life-videos__slider {
+    display: grid;
+    grid-auto-columns: minmax(14.8rem, 76%);
+    grid-auto-flow: column;
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 0 0 0.4rem;
+    scroll-padding-inline: 0.1rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  .product-real-life-videos__card {
+    position: relative;
+    min-height: 25rem;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.3);
+    border-radius: 1rem;
+    background: rgba(4, 13, 25, 0.94);
+    scroll-snap-align: start;
+  }
+
+  .product-real-life-videos__card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.04) 48%, rgba(0, 0, 0, 0.78) 100%),
+      radial-gradient(circle at 100% 0%, rgba(255, 45, 120, 0.14), transparent 44%);
+  }
+
+  .product-real-life-videos__media,
+  .product-real-life-videos__video,
+  .product-real-life-videos__image,
+  .product-real-life-videos__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-real-life-videos__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .product-real-life-videos__video,
+  .product-real-life-videos__image {
+    object-fit: cover;
+  }
+
+  .product-real-life-videos__placeholder {
+    background:
+      radial-gradient(circle at 50% 35%, rgba(0, 229, 255, 0.18), transparent 36%),
+      linear-gradient(135deg, rgba(255, 45, 120, 0.12), rgba(3, 10, 22, 0.98));
+  }
+
+  .product-real-life-videos__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    display: inline-flex;
+    width: 3.4rem;
+    height: 3.4rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 999px;
+    color: var(--theme-color-text);
+    background: rgba(0, 0, 0, 0.46);
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .product-real-life-videos__play svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .product-real-life-videos__card-copy {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    gap: 0.75rem;
+    align-items: end;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+
+  .product-real-life-videos__card-title,
+  .product-real-life-videos__card-text {
+    margin: 0;
+  }
+
+  .product-real-life-videos__card-title {
+    color: var(--theme-color-text);
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+
+  .product-real-life-videos__card-text {
+    margin-top: 0.2rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.74rem;
+    line-height: 1.25;
+  }
+
+  .product-real-life-videos__duration {
+    flex: 0 0 auto;
+    border: 1px solid rgba(0, 229, 255, 0.22);
+    border-radius: 0.45rem;
+    padding: 0.28rem 0.38rem;
+    color: #25edff;
+    background: rgba(0, 0, 0, 0.54);
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .product-real-life-videos__arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 3;
+    display: inline-flex;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    color: var(--theme-color-text);
+    background: rgba(4, 11, 24, 0.7);
+    cursor: pointer;
+    transform: translateY(-50%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .product-real-life-videos__arrow[hidden] {
+    display: none;
+  }
+
+  .product-real-life-videos__arrow--prev {
+    left: 0.4rem;
+  }
+
+  .product-real-life-videos__arrow--next {
+    right: 0.4rem;
+  }
+
+  .product-real-life-videos__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.2rem;
+  }
+
+  .product-real-life-videos__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #25edff;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .product-real-life-videos__cta-icon {
+    display: inline-flex;
+    width: 1.7rem;
+    height: 1.7rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 229, 255, 0.28);
+    border-radius: 999px;
+    background: rgba(0, 229, 255, 0.08);
+  }
+
+  .product-real-life-videos__cta-icon svg {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  @media (min-width: 900px) {
+    .product-real-life-videos__panel {
+      padding: 2rem;
+    }
+
+    .product-real-life-videos__header {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+
+    .product-real-life-videos__stat {
+      justify-self: end;
+    }
+
+    .product-real-life-videos__slider {
+      grid-auto-columns: minmax(15rem, 18.5%);
+      gap: 1.1rem;
+      overflow-x: auto;
+    }
+
+    .product-real-life-videos__card {
+      min-height: 26rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Real Life Videos",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Real People. Real Setups." },
+    { "type": "text", "id": "title", "label": "Title", "default": "See It In Real Life" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "5 quick videos showing how people actually use NoxRev." },
+    { "type": "text", "id": "stat_text", "label": "Stat pill text", "default": "100,487+ Happy Users" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "View More Real Setups" },
+    { "type": "url", "id": "cta_url", "label": "CTA link" }
+  ],
+  "blocks": [
+    {
+      "type": "video_card",
+      "name": "Video card",
+      "limit": 12,
+      "settings": [
+        { "type": "video", "id": "video", "label": "Shopify-hosted video" },
+        { "type": "image_picker", "id": "poster", "label": "Poster image" },
+        { "type": "text", "id": "poster_alt", "label": "Poster alt text", "default": "Real customer setup video" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Typing setup" },
+        { "type": "text", "id": "text", "label": "Subtitle", "default": "Backlit keys in action" },
+        { "type": "text", "id": "duration", "label": "Duration", "default": "0:18" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Real Life Videos",
+      "blocks": [
+        { "type": "video_card", "settings": { "title": "Typing setup", "text": "Backlit keys in action", "duration": "0:18" } },
+        { "type": "video_card", "settings": { "title": "Study session", "text": "Notes, docs and more", "duration": "0:24" } },
+        { "type": "video_card", "settings": { "title": "Bluetooth pairing", "text": "Fast and effortless", "duration": "0:15" } },
+        { "type": "video_card", "settings": { "title": "Kitchen workflow", "text": "Recipes, shows, multitask", "duration": "0:20" } },
+        { "type": "video_card", "settings": { "title": "Desk productivity", "text": "From tasks to content", "duration": "0:22" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

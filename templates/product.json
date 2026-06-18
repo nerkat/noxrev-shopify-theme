@@ -358,6 +358,59 @@
         "strip_materials"
       ],
       "settings": {}
+    },
+    "product_real_life_videos": {
+      "type": "product-real-life-videos",
+      "blocks": {
+        "real_life_typing": {
+          "type": "video_card",
+          "settings": {
+            "title": "Typing setup",
+            "text": "Backlit keys in action",
+            "duration": "0:18"
+          }
+        },
+        "real_life_study": {
+          "type": "video_card",
+          "settings": {
+            "title": "Study session",
+            "text": "Notes, docs and more",
+            "duration": "0:24"
+          }
+        },
+        "real_life_pairing": {
+          "type": "video_card",
+          "settings": {
+            "title": "Bluetooth pairing",
+            "text": "Fast and effortless",
+            "duration": "0:15"
+          }
+        },
+        "real_life_kitchen": {
+          "type": "video_card",
+          "settings": {
+            "title": "Kitchen workflow",
+            "text": "Recipes, shows, multitask",
+            "duration": "0:20"
+          }
+        },
+        "real_life_desk": {
+          "type": "video_card",
+          "settings": {
+            "title": "Desk productivity",
+            "text": "From tasks to content",
+            "duration": "0:22"
+          }
+        }
+      },
+      "block_order": [
+        "real_life_typing",
+        "real_life_study",
+        "real_life_pairing",
+        "real_life_kitchen",
+        "real_life_desk"
+      ],
+      "settings": {}
     }
   },
   "order": [
@@ -368,6 +421,7 @@
     "product_unique_modes_strip",
     "product_typing_feature",
     "product_precision_feature",
-    "product_feature_icon_strip"
+    "product_feature_icon_strip",
+    "product_real_life_videos"
   ]
 }
