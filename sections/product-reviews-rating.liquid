@@ -1,0 +1,315 @@
+{% liquid
+  assign review_total = section.settings.review_total | plus: 0
+  assign review_5 = section.settings.review_5 | plus: 0
+  assign review_4 = section.settings.review_4 | plus: 0
+  assign review_3 = section.settings.review_3 | plus: 0
+  assign review_2 = section.settings.review_2 | plus: 0
+  assign review_1 = section.settings.review_1 | plus: 0
+
+  if review_total <= 0
+    assign review_total = review_5 | plus: review_4 | plus: review_3 | plus: review_2 | plus: review_1
+  endif
+
+  assign p5 = 0
+  assign p4 = 0
+  assign p3 = 0
+  assign p2 = 0
+  assign p1 = 0
+
+  if review_total > 0
+    assign p5 = review_5 | times: 100.0 | divided_by: review_total
+    assign p4 = review_4 | times: 100.0 | divided_by: review_total
+    assign p3 = review_3 | times: 100.0 | divided_by: review_total
+    assign p2 = review_2 | times: 100.0 | divided_by: review_total
+    assign p1 = review_1 | times: 100.0 | divided_by: review_total
+  endif
+%}
+
+<section class="product-reviews-rating section">
+  <div class="container">
+    <article class="product-reviews-rating__panel">
+      <div class="product-reviews-rating__header">
+        <p class="product-reviews-rating__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2 class="product-reviews-rating__title">{{ section.settings.title }}</h2>
+      </div>
+
+      <div class="product-reviews-rating__summary">
+        <div class="product-reviews-rating__score">
+          <div class="product-reviews-rating__value">{{ section.settings.rating_value }}</div>
+          <div>
+            <div class="product-reviews-rating__stars" aria-label="{{ section.settings.rating_value }} out of 5 stars">
+              {% for star in (1..5) %}
+                <svg viewBox="0 0 20 20" fill="currentColor" focusable="false" aria-hidden="true">
+                  <path d="m10 2.6 2.25 4.56 5.04.73-3.65 3.56.86 5.03L10 14.12 5.5 16.48l.86-5.03L2.7 7.89l5.04-.73L10 2.6Z"></path>
+                </svg>
+              {% endfor %}
+            </div>
+            <p class="product-reviews-rating__subtitle">{{ section.settings.subtitle }}</p>
+          </div>
+        </div>
+
+        <div class="product-reviews-rating__bars" aria-label="Rating distribution">
+          <div class="product-reviews-rating__row">
+            <span>5 Stars</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p5 }}%;"></span></span>
+            <strong>{{ section.settings.review_5 }}</strong>
+          </div>
+          <div class="product-reviews-rating__row">
+            <span>4 Stars</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p4 }}%;"></span></span>
+            <strong>{{ section.settings.review_4 }}</strong>
+          </div>
+          <div class="product-reviews-rating__row">
+            <span>3 Stars</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p3 }}%;"></span></span>
+            <strong>{{ section.settings.review_3 }}</strong>
+          </div>
+          <div class="product-reviews-rating__row">
+            <span>2 Stars</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p2 }}%;"></span></span>
+            <strong>{{ section.settings.review_2 }}</strong>
+          </div>
+          <div class="product-reviews-rating__row">
+            <span>1 Star</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p1 }}%;"></span></span>
+            <strong>{{ section.settings.review_1 }}</strong>
+          </div>
+        </div>
+      </div>
+
+      {% if section.settings.button_label != blank or section.settings.write_button_label != blank %}
+        <div class="product-reviews-rating__actions">
+          {% if section.settings.write_button_label != blank %}
+            <a class="product-reviews-rating__button product-reviews-rating__button--primary" href="{{ section.settings.write_button_link | default: '#write-review' }}">
+              <span>{{ section.settings.write_button_label }}</span>
+              <span aria-hidden="true">+</span>
+            </a>
+          {% endif %}
+
+          {% if section.settings.button_label != blank %}
+            <a class="product-reviews-rating__button" href="{{ section.settings.button_link | default: '#' }}">
+              <span>{{ section.settings.button_label }}</span>
+              <span aria-hidden="true">&rsaquo;</span>
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </article>
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-reviews-rating {
+    padding: 0 0 1.5rem;
+  }
+
+  .product-reviews-rating__panel {
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.22);
+    border-radius: 1.35rem;
+    padding: 1.25rem;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(0, 229, 255, 0.12), transparent 34%),
+      radial-gradient(circle at 0% 0%, rgba(255, 45, 120, 0.12), transparent 34%),
+      linear-gradient(180deg, rgba(7, 14, 30, 0.96), rgba(3, 10, 22, 0.98));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 24px 70px rgba(0, 0, 0, 0.26);
+  }
+
+  .product-reviews-rating__eyebrow {
+    margin: 0;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .product-reviews-rating__title {
+    margin: 0.65rem 0 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .product-reviews-rating__summary {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.35rem;
+  }
+
+  .product-reviews-rating__score {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .product-reviews-rating__value {
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(4rem, 18vw, 6rem);
+    font-weight: 600;
+    line-height: 0.86;
+    letter-spacing: -0.06em;
+    text-shadow: 0 0 28px rgba(255, 255, 255, 0.1);
+  }
+
+  .product-reviews-rating__stars {
+    display: flex;
+    gap: 0.22rem;
+    align-items: center;
+    color: #ffd24d;
+  }
+
+  .product-reviews-rating__stars svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .product-reviews-rating__subtitle {
+    margin: 0.45rem 0 0;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .product-reviews-rating__bars {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .product-reviews-rating__row {
+    display: grid;
+    grid-template-columns: 4.3rem minmax(0, 1fr) 3.25rem;
+    gap: 0.65rem;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.86rem;
+  }
+
+  .product-reviews-rating__row strong {
+    color: var(--theme-color-text);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .product-reviews-rating__bar {
+    display: block;
+    height: 0.55rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .product-reviews-rating__bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgba(192, 124, 255, 0.96), rgba(93, 192, 255, 0.96));
+    box-shadow: 0 0 16px rgba(93, 192, 255, 0.18);
+  }
+
+  .product-reviews-rating__actions {
+    display: grid;
+    gap: 0.8rem;
+    margin-top: 1.35rem;
+  }
+
+  .product-reviews-rating__button {
+    display: inline-flex;
+    min-height: 3.3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    border: 1px solid rgba(137, 111, 255, 0.38);
+    border-radius: var(--theme-radius-pill);
+    color: var(--theme-color-text);
+    background: rgba(4, 11, 24, 0.52);
+    font-family: var(--theme-font-display);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .product-reviews-rating__button:hover {
+    border-color: rgba(0, 229, 255, 0.44);
+    box-shadow: 0 0 24px rgba(0, 229, 255, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .product-reviews-rating__button--primary {
+    border-color: transparent;
+    color: #02111d;
+    background: linear-gradient(135deg, #00ffb0, #25dfff);
+    box-shadow:
+      0 14px 34px rgba(0, 229, 255, 0.16),
+      0 0 22px rgba(0, 255, 176, 0.12);
+  }
+
+  .product-reviews-rating__button--primary:hover {
+    border-color: transparent;
+    box-shadow:
+      0 18px 40px rgba(0, 229, 255, 0.2),
+      0 0 28px rgba(0, 255, 176, 0.16);
+  }
+
+  @media (min-width: 900px) {
+    .product-reviews-rating__panel {
+      padding: 2rem;
+    }
+
+    .product-reviews-rating__summary {
+      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .product-reviews-rating__score {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: end;
+    }
+
+    .product-reviews-rating__actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Reviews Rating",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Customer Reviews" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Trusted by real customers." },
+    { "type": "text", "id": "rating_value", "label": "Rating value", "default": "4.9" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Based on 3,672 reviews" },
+    { "type": "text", "id": "review_total", "label": "Review total", "default": "3672" },
+    { "type": "text", "id": "review_5", "label": "5 star count", "default": "3182" },
+    { "type": "text", "id": "review_4", "label": "4 star count", "default": "362" },
+    { "type": "text", "id": "review_3", "label": "3 star count", "default": "74" },
+    { "type": "text", "id": "review_2", "label": "2 star count", "default": "28" },
+    { "type": "text", "id": "review_1", "label": "1 star count", "default": "26" },
+    { "type": "text", "id": "write_button_label", "label": "Write review button label", "default": "Write A Review" },
+    { "type": "url", "id": "write_button_link", "label": "Write review button link" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "View All Reviews" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [
+    {
+      "name": "PDP Reviews Rating"
+    }
+  ]
+}
+{% endschema %}

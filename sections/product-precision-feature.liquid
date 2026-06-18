@@ -15,7 +15,11 @@
             <div class="product-precision-feature__icon-item" role="listitem" {{ block.shopify_attributes }}>
               <span class="product-precision-feature__icon" aria-hidden="true">
                 {% if block.settings.icon_image != blank %}
-                  {{ block.settings.icon_image | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'product-precision-feature__icon-image' }}
+                  {{
+                    block.settings.icon_image
+                    | image_url: width: 64
+                    | image_tag: loading: 'lazy', alt: '', class: 'product-precision-feature__icon-image'
+                  }}
                 {% else %}
                   {% render 'product-marketing-icon', icon: block.settings.icon %}
                 {% endif %}
@@ -59,13 +63,18 @@
   }
 
   .product-precision-feature__panel::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background:
-      linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(2, 8, 18, 0.76) 42%, rgba(2, 8, 18, 0.18) 72%, rgba(2, 8, 18, 0) 100%),
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(2, 8, 18, 0.76) 42%,
+        rgba(2, 8, 18, 0.18) 72%,
+        rgba(2, 8, 18, 0) 100%
+      ),
       radial-gradient(circle at 18% 20%, rgba(0, 229, 255, 0.12), transparent 34%);
   }
 
@@ -124,6 +133,7 @@
     font-size: 0.72rem;
     line-height: 1.2;
     text-align: center;
+    width: min-content;
   }
 
   .product-precision-feature__icon {
@@ -180,9 +190,19 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Stunning Precision And Control" },
     { "type": "text", "id": "title", "label": "Title", "default": "Trackpad Gestures That Feel Natural." },
-    { "type": "textarea", "id": "text", "label": "Text", "default": "The precision trackpad supports all the multi-touch gestures you already know." },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "The precision trackpad supports all the multi-touch gestures you already know."
+    },
     { "type": "image_picker", "id": "image", "label": "Image" },
-    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Close-up of precision trackpad and keyboard" }
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Close-up of precision trackpad and keyboard"
+    }
   ],
   "blocks": [
     {
@@ -191,12 +211,18 @@
       "limit": 8,
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "Tap" },
-        { "type": "select", "id": "icon", "label": "Fallback icon", "default": "tap", "options": [
-          { "value": "tap", "label": "Tap" },
-          { "value": "swipe", "label": "Swipe" },
-          { "value": "zoom", "label": "Zoom" },
-          { "value": "apps", "label": "Apps" }
-        ] },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Fallback icon",
+          "default": "tap",
+          "options": [
+            { "value": "tap", "label": "Tap" },
+            { "value": "swipe", "label": "Swipe" },
+            { "value": "zoom", "label": "Zoom" },
+            { "value": "apps", "label": "Apps" }
+          ]
+        },
         { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
       ]
     }

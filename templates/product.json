@@ -411,6 +411,87 @@
         "real_life_desk"
       ],
       "settings": {}
+    },
+    "product_accessory_bundle": {
+      "type": "product-accessory-bundle",
+      "blocks": {
+        "accessory_stylus": {
+          "type": "accessory",
+          "settings": {
+            "title": "NoxRev Precision Stylus",
+            "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
+            "price": "$59.00",
+            "compare_price": "$79.00",
+            "savings_label": "Save 25%",
+            "badge": "Best Add-On",
+            "button_label": "Add",
+            "highlight": true
+          }
+        },
+        "accessory_sleeve": {
+          "type": "accessory",
+          "settings": {
+            "title": "NoxRev Urban Sleeve",
+            "text": "Premium protection. Slim profile. Built for life on the move.",
+            "price": "$49.00",
+            "compare_price": "$69.00",
+            "savings_label": "Save 29%",
+            "badge": "Popular",
+            "button_label": "Add",
+            "highlight": false
+          }
+        },
+        "accessory_cable": {
+          "type": "accessory",
+          "settings": {
+            "title": "NoxRev USB-C Cable",
+            "text": "100W fast charging. 6ft braided. Built to last.",
+            "price": "$24.00",
+            "compare_price": "$34.00",
+            "savings_label": "Save 29%",
+            "badge": "",
+            "button_label": "Add",
+            "highlight": false
+          }
+        },
+        "accessory_mouse": {
+          "type": "accessory",
+          "settings": {
+            "title": "NoxRev Wireless Mouse",
+            "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.",
+            "price": "$39.00",
+            "compare_price": "$59.00",
+            "savings_label": "Save 34%",
+            "badge": "",
+            "button_label": "Add",
+            "highlight": false
+          }
+        }
+      },
+      "block_order": [
+        "accessory_stylus",
+        "accessory_sleeve",
+        "accessory_cable",
+        "accessory_mouse"
+      ],
+      "settings": {}
+    },
+    "product_reviews_rating": {
+      "type": "product-reviews-rating",
+      "settings": {
+        "eyebrow": "Customer Reviews",
+        "title": "Trusted by real customers.",
+        "rating_value": "4.9",
+        "subtitle": "Based on 3,672 reviews",
+        "review_total": "3672",
+        "review_5": "3182",
+        "review_4": "362",
+        "review_3": "74",
+        "review_2": "28",
+        "review_1": "26",
+        "write_button_label": "Write A Review",
+        "button_label": "View All Reviews"
+      }
     }
   },
   "order": [
@@ -422,6 +503,8 @@
     "product_typing_feature",
     "product_precision_feature",
     "product_feature_icon_strip",
-    "product_real_life_videos"
+    "product_real_life_videos",
+    "product_accessory_bundle",
+    "product_reviews_rating"
   ]
 }

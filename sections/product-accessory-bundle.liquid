@@ -1,0 +1,472 @@
+<section class="product-accessory-bundle section">
+  <div class="container">
+    <article class="product-accessory-bundle__panel">
+      <div class="product-accessory-bundle__header">
+        <div>
+          <p class="product-accessory-bundle__eyebrow">{{ section.settings.eyebrow }}</p>
+          <h2 class="product-accessory-bundle__title">{{ section.settings.title }}</h2>
+          <p class="product-accessory-bundle__text">{{ section.settings.text }}</p>
+        </div>
+
+        {% if section.settings.pill_text != blank %}
+          <div class="product-accessory-bundle__pill">
+            <span class="product-accessory-bundle__pill-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                <path d="M20.6 13.2 13.2 20.6a2 2 0 0 1-2.8 0l-7-7A2 2 0 0 1 2.8 12V5a2 2 0 0 1 2-2h7a2 2 0 0 1 1.4.6l7.4 7.4a2 2 0 0 1 0 2.8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="7.8" cy="7.8" r="1.2" fill="currentColor"/>
+              </svg>
+            </span>
+            <strong>{{ section.settings.pill_label }}</strong>
+            <span>{{ section.settings.pill_text }}</span>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="product-accessory-bundle__grid">
+        {% for block in section.blocks %}
+          {% liquid
+            assign accessory_product = block.settings.product
+            assign card_title = block.settings.title
+            assign card_text = block.settings.text
+            assign card_image = block.settings.image
+            assign card_price = block.settings.price
+            assign card_compare_price = block.settings.compare_price
+            assign card_url = block.settings.link
+
+            if accessory_product != blank
+              assign card_title = accessory_product.title
+              assign card_url = accessory_product.url
+              assign card_image = accessory_product.featured_media.preview_image | default: card_image
+              assign card_price = accessory_product.price | money
+              if accessory_product.compare_at_price > accessory_product.price
+                assign card_compare_price = accessory_product.compare_at_price | money
+              endif
+            endif
+
+            if card_image == blank
+              assign card_image = product.featured_media.preview_image
+            endif
+
+            assign savings_percent = blank
+            if accessory_product != blank and accessory_product.compare_at_price > accessory_product.price
+              assign savings_amount = accessory_product.compare_at_price | minus: accessory_product.price
+              assign savings_percent = savings_amount | times: 100 | divided_by: accessory_product.compare_at_price
+            elsif block.settings.savings_label != blank
+              assign savings_percent = block.settings.savings_label
+            endif
+          %}
+
+          <article class="product-accessory-bundle__card{% if block.settings.highlight %} is-highlighted{% endif %}" {{ block.shopify_attributes }}>
+            <div class="product-accessory-bundle__select" aria-hidden="true">
+              {% if block.settings.highlight %}
+                <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                  <path d="m6 12 4 4 8-8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              {% endif %}
+            </div>
+
+            {% if block.settings.badge != blank %}
+              <span class="product-accessory-bundle__badge">{{ block.settings.badge }}</span>
+            {% endif %}
+
+            {% if card_url != blank %}
+              <a class="product-accessory-bundle__link" href="{{ card_url }}" aria-label="{{ card_title | escape }}"></a>
+            {% endif %}
+
+            <div class="product-accessory-bundle__media">
+              {% if card_image != blank %}
+                {% render 'responsive-image',
+                  image: card_image,
+                  alt: block.settings.image_alt,
+                  class: 'product-accessory-bundle__image',
+                  loading: 'lazy',
+                  sizes: '(min-width: 900px) 24vw, 78vw',
+                  widths: '320, 520, 720, 900'
+                %}
+              {% else %}
+                <div class="product-accessory-bundle__placeholder" aria-hidden="true"></div>
+              {% endif %}
+            </div>
+
+            <div class="product-accessory-bundle__content">
+              <h3 class="product-accessory-bundle__card-title">{{ card_title }}</h3>
+              <p class="product-accessory-bundle__card-text">{{ card_text }}</p>
+
+              <div class="product-accessory-bundle__price-row">
+                {% if card_price != blank %}
+                  <span class="product-accessory-bundle__price">{{ card_price }}</span>
+                {% endif %}
+                {% if card_compare_price != blank %}
+                  <s class="product-accessory-bundle__compare">{{ card_compare_price }}</s>
+                {% endif %}
+                {% if savings_percent != blank %}
+                  <span class="product-accessory-bundle__save">
+                    {% if accessory_product != blank %}
+                      Save {{ savings_percent }}%
+                    {% else %}
+                      {{ savings_percent }}
+                    {% endif %}
+                  </span>
+                {% endif %}
+              </div>
+
+              <span class="product-accessory-bundle__button">
+                <span aria-hidden="true">+</span>
+                <span>{{ block.settings.button_label }}</span>
+              </span>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </article>
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-accessory-bundle {
+    padding: 0 0 1.5rem;
+  }
+
+  .product-accessory-bundle__panel {
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.2);
+    border-radius: 1.35rem;
+    padding: 1.25rem;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(0, 229, 255, 0.14), transparent 34%),
+      radial-gradient(circle at 0% 5%, rgba(155, 0, 255, 0.12), transparent 34%),
+      linear-gradient(180deg, rgba(7, 14, 30, 0.96), rgba(3, 10, 22, 0.98));
+  }
+
+  .product-accessory-bundle__header {
+    display: grid;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .product-accessory-bundle__eyebrow {
+    margin: 0 0 0.7rem;
+    background: linear-gradient(90deg, #d96dff, #24e5ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .product-accessory-bundle__title {
+    max-width: 48rem;
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .product-accessory-bundle__text {
+    max-width: 38rem;
+    margin: 0.8rem 0 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .product-accessory-bundle__pill {
+    display: inline-flex;
+    width: max-content;
+    max-width: 100%;
+    align-items: center;
+    gap: 0.7rem;
+    border: 1px solid rgba(217, 109, 255, 0.32);
+    border-radius: 999px;
+    padding: 0.7rem 1rem;
+    color: rgba(255, 255, 255, 0.76);
+    background: linear-gradient(90deg, rgba(12, 24, 44, 0.82), rgba(255, 45, 120, 0.16));
+    font-size: 0.84rem;
+  }
+
+  .product-accessory-bundle__pill strong {
+    background: linear-gradient(90deg, #2eefff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .product-accessory-bundle__pill-icon {
+    color: #22e7ff;
+  }
+
+  .product-accessory-bundle__pill-icon svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .product-accessory-bundle__grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .product-accessory-bundle__card {
+    position: relative;
+    display: grid;
+    min-height: 31rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 1rem;
+    background: rgba(4, 13, 25, 0.94);
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .product-accessory-bundle__card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(2, 8, 18, 0.12) 0%, rgba(2, 8, 18, 0.02) 42%, rgba(2, 8, 18, 0.88) 100%),
+      radial-gradient(circle at 50% 50%, rgba(155, 0, 255, 0.16), transparent 42%);
+  }
+
+  .product-accessory-bundle__card.is-highlighted {
+    border-color: rgba(255, 76, 218, 0.82);
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.34),
+      0 0 34px rgba(255, 45, 180, 0.22);
+  }
+
+  .product-accessory-bundle__link {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+  }
+
+  .product-accessory-bundle__select,
+  .product-accessory-bundle__badge,
+  .product-accessory-bundle__content {
+    position: relative;
+    z-index: 3;
+  }
+
+  .product-accessory-bundle__select {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: inline-flex;
+    width: 2.1rem;
+    height: 2.1rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 0.35rem;
+    color: #02111d;
+    background: rgba(2, 10, 20, 0.58);
+  }
+
+  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__select {
+    border-color: rgba(0, 255, 213, 0.6);
+    background: linear-gradient(135deg, #00ffb0, #25dfff);
+  }
+
+  .product-accessory-bundle__select svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .product-accessory-bundle__badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border: 1px solid rgba(217, 109, 255, 0.34);
+    border-radius: 0.35rem;
+    padding: 0.42rem 0.6rem;
+    color: #ff7adf;
+    background: rgba(255, 45, 120, 0.13);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .product-accessory-bundle__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .product-accessory-bundle__image,
+  .product-accessory-bundle__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-accessory-bundle__placeholder {
+    background:
+      radial-gradient(circle at 50% 42%, rgba(0, 229, 255, 0.16), transparent 36%),
+      linear-gradient(135deg, rgba(255, 45, 120, 0.11), rgba(3, 10, 22, 0.98));
+  }
+
+  .product-accessory-bundle__content {
+    align-self: end;
+    padding: 1.25rem;
+  }
+
+  .product-accessory-bundle__card-title {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-size: 1.12rem;
+    font-weight: 800;
+    line-height: 1.16;
+  }
+
+  .product-accessory-bundle__card-text {
+    min-height: 3.3em;
+    margin: 0.45rem 0 0;
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .product-accessory-bundle__price-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .product-accessory-bundle__price {
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .product-accessory-bundle__compare {
+    color: rgba(255, 255, 255, 0.36);
+    font-size: 0.9rem;
+  }
+
+  .product-accessory-bundle__save {
+    border-radius: 0.35rem;
+    padding: 0.34rem 0.55rem;
+    color: #ff8de3;
+    background: rgba(255, 45, 120, 0.18);
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .product-accessory-bundle__button {
+    position: relative;
+    z-index: 5;
+    display: inline-flex;
+    width: 100%;
+    min-height: 3.25rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 0.9rem;
+    color: var(--theme-color-text);
+    background: rgba(4, 11, 24, 0.5);
+    font-family: var(--theme-font-display);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__button {
+    border-color: transparent;
+    color: #02111d;
+    background: linear-gradient(135deg, #00ffb0, #25dfff);
+    box-shadow: 0 0 28px rgba(0, 229, 255, 0.18);
+  }
+
+  @media (min-width: 760px) {
+    .product-accessory-bundle__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .product-accessory-bundle__panel {
+      padding: 2rem;
+    }
+
+    .product-accessory-bundle__header {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+
+    .product-accessory-bundle__pill {
+      justify-self: end;
+    }
+
+    .product-accessory-bundle__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Accessory Bundle",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Complete Your Setup" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Bundle with accessories and save more." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Level up your setup with hand-picked accessories built to protect, power, and perform anywhere." },
+    { "type": "text", "id": "pill_label", "label": "Pill label", "default": "Bundle & Save" },
+    { "type": "text", "id": "pill_text", "label": "Pill text", "default": "Save up to 20% when you bundle." }
+  ],
+  "blocks": [
+    {
+      "type": "accessory",
+      "name": "Accessory",
+      "limit": 8,
+      "settings": [
+        { "type": "product", "id": "product", "label": "Accessory product" },
+        { "type": "image_picker", "id": "image", "label": "Fallback image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Accessory product" },
+        { "type": "text", "id": "title", "label": "Fallback title", "default": "NoxRev Precision Stylus" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Tilt sensitivity. Palm rejection. Pixel-perfect control." },
+        { "type": "text", "id": "price", "label": "Fallback price", "default": "$59.00" },
+        { "type": "text", "id": "compare_price", "label": "Fallback compare-at price", "default": "$79.00" },
+        { "type": "text", "id": "savings_label", "label": "Fallback savings label", "default": "Save 25%" },
+        { "type": "url", "id": "link", "label": "Fallback link" },
+        { "type": "text", "id": "badge", "label": "Badge", "default": "Best Add-On" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Add" },
+        { "type": "checkbox", "id": "highlight", "label": "Highlight card", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Accessory Bundle",
+      "blocks": [
+        { "type": "accessory", "settings": { "title": "NoxRev Precision Stylus", "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.", "price": "$59.00", "compare_price": "$79.00", "savings_label": "Save 25%", "badge": "Best Add-On", "highlight": true } },
+        { "type": "accessory", "settings": { "title": "NoxRev Urban Sleeve", "text": "Premium protection. Slim profile. Built for life on the move.", "price": "$49.00", "compare_price": "$69.00", "savings_label": "Save 29%", "badge": "Popular" } },
+        { "type": "accessory", "settings": { "title": "NoxRev USB-C Cable", "text": "100W fast charging. 6ft braided. Built to last.", "price": "$24.00", "compare_price": "$34.00", "savings_label": "Save 29%", "badge": "" } },
+        { "type": "accessory", "settings": { "title": "NoxRev Wireless Mouse", "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.", "price": "$39.00", "compare_price": "$59.00", "savings_label": "Save 34%", "badge": "" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
