@@ -88,6 +88,7 @@
           "settings": {
             "title": "Secure, Form-Fit Protection",
             "text": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches.",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_25_07_PM.png",
             "image_alt": "Product feature detail",
             "icon": "shield"
           }
@@ -97,6 +98,7 @@
           "settings": {
             "title": "Pencil Storage",
             "text": "Built-in drawer keeps your Apple Pencil safe and always within reach.",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_27_42_PM.png",
             "image_alt": "Product feature detail",
             "icon": "draw"
           }
