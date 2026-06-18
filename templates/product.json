@@ -365,6 +365,7 @@
         "real_life_typing": {
           "type": "video_card",
           "settings": {
+            "poster_alt": "Real customer setup video",
             "title": "Typing setup",
             "text": "Backlit keys in action",
             "duration": "0:18"
@@ -373,6 +374,7 @@
         "real_life_study": {
           "type": "video_card",
           "settings": {
+            "poster_alt": "Real customer setup video",
             "title": "Study session",
             "text": "Notes, docs and more",
             "duration": "0:24"
@@ -381,6 +383,7 @@
         "real_life_pairing": {
           "type": "video_card",
           "settings": {
+            "poster_alt": "Real customer setup video",
             "title": "Bluetooth pairing",
             "text": "Fast and effortless",
             "duration": "0:15"
@@ -389,14 +392,34 @@
         "real_life_kitchen": {
           "type": "video_card",
           "settings": {
+            "poster_alt": "Real customer setup video",
             "title": "Kitchen workflow",
             "text": "Recipes, shows, multitask",
             "duration": "0:20"
           }
         },
+        "video_card_fe4A7V": {
+          "type": "video_card",
+          "settings": {
+            "poster_alt": "Real customer setup video",
+            "title": "Typing setup",
+            "text": "Backlit keys in action",
+            "duration": "0:18"
+          }
+        },
+        "video_card_JCahVH": {
+          "type": "video_card",
+          "settings": {
+            "poster_alt": "Real customer setup video",
+            "title": "Typing setup",
+            "text": "Backlit keys in action",
+            "duration": "0:18"
+          }
+        },
         "real_life_desk": {
           "type": "video_card",
           "settings": {
+            "poster_alt": "Real customer setup video",
             "title": "Desk productivity",
             "text": "From tasks to content",
             "duration": "0:22"
@@ -408,6 +431,8 @@
         "real_life_study",
         "real_life_pairing",
         "real_life_kitchen",
+        "video_card_fe4A7V",
+        "video_card_JCahVH",
         "real_life_desk"
       ],
       "settings": {}
