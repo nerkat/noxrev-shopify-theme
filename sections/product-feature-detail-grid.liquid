@@ -53,19 +53,27 @@
 
   .product-feature-detail-grid__card {
     position: relative;
-    display: grid;
     min-height: 14rem;
     overflow: hidden;
     border: 1px solid rgba(56, 221, 255, 0.22);
     border-radius: 1rem;
+    background: rgba(4, 13, 25, 0.94);
+  }
+
+  .product-feature-detail-grid__card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
     background:
-      linear-gradient(180deg, rgba(29, 22, 59, 0.72), rgba(3, 13, 24, 0.92)),
-      rgba(4, 13, 25, 0.94);
+      linear-gradient(180deg, rgba(0, 0, 0, 0.88) 0%, rgba(2, 8, 18, 0.64) 38%, rgba(2, 8, 18, 0.1) 72%, rgba(2, 8, 18, 0) 100%),
+      radial-gradient(circle at 14% 4%, rgba(214, 101, 255, 0.18), transparent 36%);
   }
 
   .product-feature-detail-grid__copy {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     display: grid;
     gap: 0.65rem;
     padding: 1rem;
@@ -92,7 +100,7 @@
 
   .product-feature-detail-grid__title {
     margin: 0;
-    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    background: linear-gradient(9deg, #24e5ff, #d96dff);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -112,8 +120,8 @@
   }
 
   .product-feature-detail-grid__media {
-    min-height: 7rem;
-    align-self: end;
+    position: absolute;
+    inset: 0;
     overflow: hidden;
   }
 
@@ -122,7 +130,6 @@
     display: block;
     width: 100%;
     height: 100%;
-    min-height: 7rem;
     object-fit: cover;
   }
 
@@ -145,10 +152,10 @@
       padding: 1.35rem;
     }
 
-    .product-feature-detail-grid__media,
-    .product-feature-detail-grid__image,
-    .product-feature-detail-grid__placeholder {
-      min-height: 11rem;
+    .product-feature-detail-grid__card::after {
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.88) 0%, rgba(2, 8, 18, 0.62) 34%, rgba(2, 8, 18, 0.08) 68%, rgba(2, 8, 18, 0) 100%),
+        radial-gradient(circle at 13% 5%, rgba(214, 101, 255, 0.18), transparent 34%);
     }
   }
 {% endstylesheet %}
