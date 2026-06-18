@@ -220,7 +220,12 @@
     padding: 0 0 0.4rem;
     scroll-padding-inline: 0.1rem;
     scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .product-real-life-videos__slider::-webkit-scrollbar {
+    display: none;
   }
 
   .product-real-life-videos__card {
