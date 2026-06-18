@@ -435,7 +435,14 @@
         "video_card_JCahVH",
         "real_life_desk"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "Real People. Real Setups.",
+        "title": "See It In Real Life",
+        "text": "5 quick videos showing how people actually use NoxRev.",
+        "stat_text": "100,487+ Happy Users",
+        "cta_label": "View More Real Setups",
+        "cta_url": ""
+      }
     },
     "product_accessory_bundle": {
       "type": "product-accessory-bundle",
@@ -443,11 +450,15 @@
         "accessory_stylus": {
           "type": "accessory",
           "settings": {
+            "product": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_11_46_PM.png",
+            "image_alt": "Accessory product",
             "title": "NoxRev Precision Stylus",
             "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
             "price": "$59.00",
             "compare_price": "$79.00",
             "savings_label": "Save 25%",
+            "link": "",
             "badge": "Best Add-On",
             "button_label": "Add",
             "highlight": true
@@ -456,11 +467,15 @@
         "accessory_sleeve": {
           "type": "accessory",
           "settings": {
+            "product": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_13_18_PM.png",
+            "image_alt": "Accessory product",
             "title": "NoxRev Urban Sleeve",
             "text": "Premium protection. Slim profile. Built for life on the move.",
             "price": "$49.00",
             "compare_price": "$69.00",
             "savings_label": "Save 29%",
+            "link": "",
             "badge": "Popular",
             "button_label": "Add",
             "highlight": false
@@ -469,11 +484,15 @@
         "accessory_cable": {
           "type": "accessory",
           "settings": {
+            "product": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_15_39_PM.png",
+            "image_alt": "Accessory product",
             "title": "NoxRev USB-C Cable",
             "text": "100W fast charging. 6ft braided. Built to last.",
             "price": "$24.00",
             "compare_price": "$34.00",
             "savings_label": "Save 29%",
+            "link": "",
             "badge": "",
             "button_label": "Add",
             "highlight": false
@@ -482,11 +501,15 @@
         "accessory_mouse": {
           "type": "accessory",
           "settings": {
+            "product": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_38_01_PM.png",
+            "image_alt": "Accessory product",
             "title": "NoxRev Wireless Mouse",
             "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.",
             "price": "$39.00",
             "compare_price": "$59.00",
             "savings_label": "Save 34%",
+            "link": "",
             "badge": "",
             "button_label": "Add",
             "highlight": false
@@ -499,7 +522,13 @@
         "accessory_cable",
         "accessory_mouse"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "Complete Your Setup",
+        "title": "Bundle with accessories and save more.",
+        "text": "Level up your setup with hand-picked accessories built to protect, power, and perform anywhere.",
+        "pill_label": "Bundle & Save",
+        "pill_text": "Save up to 20% when you bundle."
+      }
     },
     "product_reviews_rating": {
       "type": "product-reviews-rating",
@@ -515,7 +544,9 @@
         "review_2": "28",
         "review_1": "26",
         "write_button_label": "Write A Review",
-        "button_label": "View All Reviews"
+        "write_button_link": "",
+        "button_label": "View All Reviews",
+        "button_link": ""
       }
     }
   },
