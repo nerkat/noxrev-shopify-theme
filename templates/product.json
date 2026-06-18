@@ -51,11 +51,33 @@
         "mode_watch",
         "mode_present"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "Designed For Every Mode",
+        "title": "One Case. Every Angle. Endless Possibilities.",
+        "text": "Rotate, flip, and adjust with ease. Whether you're working, creating, or streaming, find the perfect angle for every task.",
+        "image": "shopify://shop_images/7_Unique_Modes_2.png",
+        "image_alt": "Keyboard case shown in multiple modes"
+      }
     },
     "product_battery_showcase": {
       "type": "product-battery-showcase",
-      "settings": {}
+      "settings": {
+        "eyebrow": "Power That Keeps Up",
+        "title": "2-Hour Charge. 30-Day Power.",
+        "text": "Stay productive longer with ultra-efficient power. Less charging, more creating.",
+        "image_alt": "Keyboard case with glowing power rings",
+        "fast_charge_value": "2-Hour",
+        "fast_charge_label": "Fast Charge",
+        "battery_life_value": "30-Day",
+        "battery_life_label": "Battery Life",
+        "comparison_label": "Battery life comparison",
+        "primary_label": "NoxRev Keyboard Case",
+        "primary_value": "30 Days",
+        "primary_percent": 100,
+        "secondary_label": "Others",
+        "secondary_value": "7 Days",
+        "secondary_percent": 24
+      }
     },
     "product_feature_detail_grid": {
       "type": "product-feature-detail-grid",
@@ -65,6 +87,7 @@
           "settings": {
             "title": "Secure, Form-Fit Protection",
             "text": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches.",
+            "image_alt": "Product feature detail",
             "icon": "shield"
           }
         },
@@ -73,6 +96,7 @@
           "settings": {
             "title": "Pencil Storage",
             "text": "Built-in drawer keeps your Apple Pencil safe and always within reach.",
+            "image_alt": "Product feature detail",
             "icon": "draw"
           }
         },
@@ -81,6 +105,7 @@
           "settings": {
             "title": "Mute Button",
             "text": "Instant mute for quiet focus anytime, anywhere.",
+            "image_alt": "Product feature detail",
             "icon": "type"
           }
         },
@@ -89,6 +114,7 @@
           "settings": {
             "title": "Fast Charging",
             "text": "USB-C fast charging for uninterrupted productivity.",
+            "image_alt": "Product feature detail",
             "icon": "bolt"
           }
         }
@@ -107,43 +133,50 @@
         "unique_laptop": {
           "type": "mode",
           "settings": {
-            "label": "Laptop Mode"
+            "label": "Laptop Mode",
+            "image_alt": "Keyboard case mode"
           }
         },
         "unique_stand": {
           "type": "mode",
           "settings": {
-            "label": "Stand Mode"
+            "label": "Stand Mode",
+            "image_alt": "Keyboard case mode"
           }
         },
         "unique_tent": {
           "type": "mode",
           "settings": {
-            "label": "Tent Mode"
+            "label": "Tent Mode",
+            "image_alt": "Keyboard case mode"
           }
         },
         "unique_tablet": {
           "type": "mode",
           "settings": {
-            "label": "Tablet Mode"
+            "label": "Tablet Mode",
+            "image_alt": "Keyboard case mode"
           }
         },
         "unique_drawing": {
           "type": "mode",
           "settings": {
-            "label": "Drawing Mode"
+            "label": "Drawing Mode",
+            "image_alt": "Keyboard case mode"
           }
         },
         "unique_viewing": {
           "type": "mode",
           "settings": {
-            "label": "Viewing Mode"
+            "label": "Viewing Mode",
+            "image_alt": "Keyboard case mode"
           }
         },
         "unique_presentation": {
           "type": "mode",
           "settings": {
-            "label": "Presentation Mode"
+            "label": "Presentation Mode",
+            "image_alt": "Keyboard case mode"
           }
         }
       },
@@ -156,7 +189,10 @@
         "unique_viewing",
         "unique_presentation"
       ],
-      "settings": {}
+      "settings": {
+        "title": "7 Unique Modes",
+        "text": "360 swivel. 180 flip. Infinite possibilities."
+      }
     },
     "product_typing_feature": {
       "type": "product-typing-feature",
@@ -196,7 +232,12 @@
         "typing_gestures",
         "typing_backlit"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "Next-Gen Typing Experience",
+        "title": "Built For Speed, Accuracy, And Comfort.",
+        "text": "Scissor-switch keys, responsive tracking pad, and smart gestures built for speed, accuracy, and comfort.",
+        "image_alt": "Hands typing on keyboard case"
+      }
     },
     "product_precision_feature": {
       "type": "product-precision-feature",
@@ -244,7 +285,12 @@
         "precision_zoom",
         "precision_apps"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "Stunning Precision And Control",
+        "title": "Trackpad Gestures That Feel Natural.",
+        "text": "The precision trackpad supports all the multi-touch gestures you already know.",
+        "image_alt": "Close-up of precision trackpad and keyboard"
+      }
     },
     "product_feature_icon_strip": {
       "type": "product-feature-icon-strip",
