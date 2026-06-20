@@ -209,6 +209,7 @@
   .product-real-life-videos__slider-wrap {
     position: relative;
     margin-top: 1.45rem;
+    margin-inline: calc(var(--page-margin) * -1);
   }
 
   .product-real-life-videos__slider {
@@ -217,8 +218,8 @@
     grid-auto-flow: column;
     gap: 1rem;
     overflow-x: auto;
-    padding: 0 0 0.4rem;
-    scroll-padding-inline: 0.1rem;
+    padding: 0 var(--page-margin) 0.4rem;
+    scroll-padding-inline: var(--page-margin);
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -410,6 +411,10 @@
   @media (min-width: 900px) {
     .product-real-life-videos__panel {
       padding: 2rem;
+    }
+
+    .product-real-life-videos__slider-wrap {
+      margin-inline: 0;
     }
 
     .product-real-life-videos__header {

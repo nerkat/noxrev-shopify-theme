@@ -564,6 +564,23 @@ html {
     padding-inline: 1rem;
   }
 
+  .product-feature-detail-grid__card:nth-child(1) {
+    border-radius: 0 8px 8px 0 !important;
+  }
+
+  .product-feature-detail-grid__card:nth-child(2) {
+    border-radius: 8px 0 0 8px !important;
+  }
+
+  .product-feature-detail-grid__card:nth-child(3) {
+    border-radius: 0 8px 8px 0 !important;
+  }
+
+  .product-feature-detail-grid__card:nth-child(4) {
+    border-radius: 8px 0 0 8px !important;
+  }
+
+
   .grid--2,
   .grid--3,
   .grid--4 {

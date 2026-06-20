@@ -287,6 +287,7 @@
   .product-accessory-bundle__slider-wrap {
     position: relative;
     margin-top: 1.5rem;
+    margin-inline: calc(var(--page-margin) * -1);
   }
 
   .product-accessory-bundle__grid {
@@ -295,8 +296,8 @@
     grid-auto-flow: column;
     gap: 1rem;
     overflow-x: auto;
-    padding: 0 0 0.4rem;
-    scroll-padding-inline: 0.1rem;
+    padding: 0 var(--page-margin) 0.4rem;
+    scroll-padding-inline: var(--page-margin);
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -525,6 +526,10 @@
   }
 
   @media (min-width: 760px) {
+    .product-accessory-bundle__slider-wrap {
+      margin-inline: 0;
+    }
+
     .product-accessory-bundle__grid {
       grid-auto-flow: initial;
       grid-auto-columns: initial;

@@ -74,8 +74,10 @@
     grid-auto-flow: column;
     gap: 0.8rem;
     margin-top: 1rem;
+    margin-inline: calc((var(--page-margin) + 1rem) * -1);
     overflow-x: auto;
-    padding-bottom: 0.25rem;
+    padding: 0 var(--page-margin) 0.25rem;
+    scroll-padding-inline: var(--page-margin);
     scrollbar-width: thin;
   }
 
@@ -116,7 +118,9 @@
     .product-unique-modes-strip__items {
       grid-template-columns: repeat(7, minmax(0, 1fr));
       grid-auto-flow: initial;
+      margin-inline: 0;
       overflow: visible;
+      padding: 0;
     }
 
     .product-unique-modes-strip__media,
