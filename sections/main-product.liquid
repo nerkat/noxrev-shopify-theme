@@ -324,7 +324,7 @@
                         >
                           <img
                             class="main-product__model-tab-image"
-                            src="{{ 'ipad-tab-graphic.png' | asset_url }}"
+                            src="{{ 'ipad-pro-space-black.png' | asset_url }}"
                             alt=""
                             loading="lazy"
                             width="320"
@@ -351,7 +351,7 @@
                         >
                           <img
                             class="main-product__model-tab-image"
-                            src="{{ 'ipad-tab-graphic.png' | asset_url }}"
+                            src="{{ 'ipad-air-style-fill.png' | asset_url }}"
                             alt=""
                             loading="lazy"
                             width="320"
@@ -378,7 +378,7 @@
                         >
                           <img
                             class="main-product__model-tab-image"
-                            src="{{ 'ipad-tab-graphic.png' | asset_url }}"
+                            src="{{ 'ipad-purple.png' | asset_url }}"
                             alt=""
                             loading="lazy"
                             width="320"
@@ -1039,8 +1039,6 @@
     border-radius: 1rem;
     overflow: hidden;
     isolation: isolate;
-    background: rgba(8, 17, 31, 0.3);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.18);
     margin-right: clamp(-1.9rem, -6vw, -1.5rem);
     margin-left: 0;
     margin-top: -2rem;
@@ -1059,20 +1057,6 @@
 
   .main-product__model-tab-media--ipad {
     --model-tab-accent: rgba(155, 0, 255, 0.2);
-  }
-
-  .main-product__model-tab-media::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      circle at 50% 100%,
-      var(--model-tab-accent, rgba(255, 255, 255, 0.08)),
-      transparent 58%
-    );
-    mix-blend-mode: screen;
-    pointer-events: none;
-    z-index: 1;
   }
 
   .main-product__model-tab-image {
