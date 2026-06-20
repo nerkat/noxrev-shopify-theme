@@ -1850,7 +1850,7 @@
         const nextFragment = nextSection.querySelector(selector);
 
         if (currentFragment && nextFragment) {
-          currentFragment.replaceWith(nextFragment);
+          currentFragment.replaceWith(nextFragment.cloneNode(true));
         }
       });
     };
