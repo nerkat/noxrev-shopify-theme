@@ -1050,8 +1050,29 @@
     margin-left: 0;
     margin-top: -2rem;
     margin-bottom: -1.9rem;
-    flex: 0.5;
     z-index: 1;
+  }
+
+  .main-product__model-tab {
+    &:nth-child(1) {
+      .main-product__model-tab-media {
+        flex: 0.55;
+      }
+    }
+    &:nth-child(2) {
+      .main-product__model-tab-media {
+        flex: 0.5;
+      }
+    }
+    &:nth-child(3) {
+      .main-product__model-tab-media {
+        flex: 0.45;
+      }
+    }
+    }
+    &:nth-child(3) {
+      flex: 0.45;
+    }
   }
 
   .main-product__model-tab-media::after {
