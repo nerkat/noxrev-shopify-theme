@@ -535,6 +535,35 @@ html {
     padding-block: var(--spacing-xl);
   }
 
+  .template-product #MainContent>.shopify-section:not(:first-child) .container {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .template-product #MainContent>.shopify-section:not(:first-child) :is(.product-mode-showcase__panel,
+    .product-battery-showcase__panel,
+    .product-unique-modes-strip__panel,
+    .product-real-life-videos__panel,
+    .product-accessory-bundle__panel,
+    .product-reviews-rating__panel) {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .template-product #MainContent>.shopify-section:not(:first-child) :is(.product-feature-detail-grid__card,
+    .product-typing-feature__panel,
+    .product-precision-feature__panel,
+    .product-feature-icon-strip__panel) {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .product-feature-icon-strip__panel {
+    padding-inline: 1rem;
+  }
+
   .grid--2,
   .grid--3,
   .grid--4 {
@@ -546,27 +575,24 @@ html {
   .template-product #MainContent {
     display: grid;
     grid-template-columns:
-      minmax(var(--page-margin), 1fr)
-      minmax(0, calc((var(--page-width) - var(--product-section-pair-gap)) / 2))
-      minmax(0, calc((var(--page-width) - var(--product-section-pair-gap)) / 2))
-      minmax(var(--page-margin), 1fr);
+      minmax(var(--page-margin), 1fr) minmax(0, calc((var(--page-width) - var(--product-section-pair-gap)) / 2)) minmax(0, calc((var(--page-width) - var(--product-section-pair-gap)) / 2)) minmax(var(--page-margin), 1fr);
     column-gap: var(--product-section-pair-gap);
   }
 
-  .template-product #MainContent > .shopify-section {
+  .template-product #MainContent>.shopify-section {
     grid-column: 1 / -1;
   }
 
-  .template-product #MainContent > [id$="__product_typing_feature"] {
+  .template-product #MainContent>[id$="__product_typing_feature"] {
     grid-column: 2;
   }
 
-  .template-product #MainContent > [id$="__product_precision_feature"] {
+  .template-product #MainContent>[id$="__product_precision_feature"] {
     grid-column: 3;
   }
 
-  .template-product #MainContent > [id$="__product_typing_feature"] .container,
-  .template-product #MainContent > [id$="__product_precision_feature"] .container {
+  .template-product #MainContent>[id$="__product_typing_feature"] .container,
+  .template-product #MainContent>[id$="__product_precision_feature"] .container {
     width: 100%;
     margin-inline: 0;
   }
