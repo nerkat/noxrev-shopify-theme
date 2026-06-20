@@ -533,7 +533,9 @@
                   endif
                 %}
                 <div class="main-product__price-row">
-                  <p class="main-product__price heading-gradient">{% render 'price', amount: current_variant.price %}</p>
+                  <p class="main-product__price heading-gradient">
+                    {% render 'price', amount: current_variant.price %}
+                  </p>
 
                   {% if has_compare_price %}
                     <p class="main-product__price-compare">{% render 'price', amount: compare_at_price %}</p>
@@ -1516,7 +1518,6 @@
     .main-product__gallery-placeholder {
       aspect-ratio: 4 / 5;
     }
-
   }
 
   @media (max-width: 860px) {
@@ -1526,6 +1527,9 @@
 
     .main-product__model-tab-title {
       font-size: 0.8rem;
+    }
+    .main-product__model-tab-media {
+      flex: 0.8;
     }
     .main-product__gallery {
       grid-template-columns: minmax(0, 1fr) 3.5rem;
