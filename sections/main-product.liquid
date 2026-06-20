@@ -317,6 +317,7 @@
                         aria-controls="ModelPanel-Pro-{{ section.id }}"
                         data-model-tab="pro"
                       >
+                        <span class="main-product__model-tab-title">iPad Pro</span>
                         <span
                           class="main-product__model-tab-media main-product__model-tab-media--pro"
                           aria-hidden="true"
@@ -330,7 +331,6 @@
                             height="320"
                           >
                         </span>
-                        <span class="main-product__model-tab-title">iPad Pro</span>
                       </button>
                     {% endif %}
 
@@ -344,6 +344,7 @@
                         aria-controls="ModelPanel-Air-{{ section.id }}"
                         data-model-tab="air"
                       >
+                        <span class="main-product__model-tab-title">iPad Air</span>
                         <span
                           class="main-product__model-tab-media main-product__model-tab-media--air"
                           aria-hidden="true"
@@ -357,7 +358,6 @@
                             height="320"
                           >
                         </span>
-                        <span class="main-product__model-tab-title">iPad Air</span>
                       </button>
                     {% endif %}
 
@@ -371,6 +371,7 @@
                         aria-controls="ModelPanel-Ipad-{{ section.id }}"
                         data-model-tab="ipad"
                       >
+                        <span class="main-product__model-tab-title">iPad</span>
                         <span
                           class="main-product__model-tab-media main-product__model-tab-media--ipad"
                           aria-hidden="true"
@@ -384,7 +385,6 @@
                             height="320"
                           >
                         </span>
-                        <span class="main-product__model-tab-title">iPad</span>
                       </button>
                     {% endif %}
                   </div>
@@ -964,19 +964,20 @@
     z-index: 2;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.5rem;
+    gap: 1rem;
+    padding-right: 1.3rem;
   }
 
   .main-product__model-tab {
     position: relative;
-    display: grid;
-    justify-items: center;
-    align-content: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 0.7rem;
     margin: 0.5rem 0;
-    padding: 1.1rem 0 0.8rem;
+    padding: 1.1rem 0.8rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1.4rem;
+    border-radius: 6px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)), rgba(7, 18, 34, 0.88);
     color: var(--theme-color-text-muted);
     cursor: pointer;
@@ -1040,6 +1041,12 @@
     isolation: isolate;
     background: rgba(8, 17, 31, 0.3);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.18);
+    margin-right: clamp(-1.9rem, -6vw, -1.5rem);
+    margin-left: 0;
+    margin-top: -2rem;
+    margin-bottom: -1.9rem;
+    flex: 1;
+    z-index: 1;
   }
 
   .main-product__model-tab-media--pro {
@@ -1084,6 +1091,10 @@
     font-weight: 600;
     line-height: 1;
     letter-spacing: -0.03em;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   .main-product__model-panel {
@@ -1367,7 +1378,7 @@
     width: fit-content;
     min-height: 2.25rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 999px;
+    border-radius: 7px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.01)), rgba(8, 17, 31, 0.82);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 24px rgba(0, 0, 0, 0.18);
     overflow: hidden;
@@ -1485,20 +1496,19 @@
       aspect-ratio: 4 / 5;
     }
 
-    .main-product__model-tab {
-      min-height: 10.5rem;
-    }
-
-    .main-product__model-panel {
-      min-height: 12.5rem;
-    }
-
     .main-product__model-panel-inner {
       min-height: 10.5rem;
     }
   }
 
   @media (max-width: 860px) {
+    .main-product__model-tab {
+      padding: 0.8rem 0.6rem;
+    }
+
+    .main-product__model-tab-title {
+      font-size: 0.8rem;
+    }
     .main-product__gallery {
       grid-template-columns: minmax(0, 1fr) 3.5rem;
       gap: 0.5rem;

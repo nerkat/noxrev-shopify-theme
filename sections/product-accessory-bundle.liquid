@@ -22,105 +22,181 @@
         {% endif %}
       </div>
 
-      <div class="product-accessory-bundle__grid">
-        {% for block in section.blocks %}
-          {% liquid
-            assign accessory_product = block.settings.product
-            assign card_title = block.settings.title
-            assign card_text = block.settings.text
-            assign card_image = block.settings.image
-            assign card_price = block.settings.price
-            assign card_compare_price = block.settings.compare_price
-            assign card_url = block.settings.link
+      <div class="product-accessory-bundle__slider-wrap" data-accessory-bundle>
+        <div class="product-accessory-bundle__grid" data-accessory-bundle-slider>
+          {% for block in section.blocks %}
+            {% liquid
+              assign accessory_product = block.settings.product
+              assign card_title = block.settings.title
+              assign card_text = block.settings.text
+              assign card_image = block.settings.image
+              assign card_price = block.settings.price
+              assign card_compare_price = block.settings.compare_price
+              assign card_url = block.settings.link
 
-            if accessory_product != blank
-              assign card_title = accessory_product.title
-              assign card_url = accessory_product.url
-              assign card_image = accessory_product.featured_media.preview_image | default: card_image
-              assign card_price = accessory_product.price | money
-              if accessory_product.compare_at_price > accessory_product.price
-                assign card_compare_price = accessory_product.compare_at_price | money
+              if accessory_product != blank
+                assign card_title = accessory_product.title
+                assign card_url = accessory_product.url
+                assign card_image = accessory_product.featured_media.preview_image | default: card_image
+                assign card_price = accessory_product.price | money
+                if accessory_product.compare_at_price > accessory_product.price
+                  assign card_compare_price = accessory_product.compare_at_price | money
+                endif
               endif
-            endif
 
-            if card_image == blank
-              assign card_image = product.featured_media.preview_image
-            endif
+              if card_image == blank
+                assign card_image = product.featured_media.preview_image
+              endif
 
-            assign savings_percent = blank
-            if accessory_product != blank and accessory_product.compare_at_price > accessory_product.price
-              assign savings_amount = accessory_product.compare_at_price | minus: accessory_product.price
-              assign savings_percent = savings_amount | times: 100 | divided_by: accessory_product.compare_at_price
-            elsif block.settings.savings_label != blank
-              assign savings_percent = block.settings.savings_label
-            endif
-          %}
+              assign savings_percent = blank
+              if accessory_product != blank and accessory_product.compare_at_price > accessory_product.price
+                assign savings_amount = accessory_product.compare_at_price | minus: accessory_product.price
+                assign savings_percent = savings_amount | times: 100 | divided_by: accessory_product.compare_at_price
+              elsif block.settings.savings_label != blank
+                assign savings_percent = block.settings.savings_label
+              endif
+            %}
 
-          <article class="product-accessory-bundle__card{% if block.settings.highlight %} is-highlighted{% endif %}" {{ block.shopify_attributes }}>
-            <div class="product-accessory-bundle__select" aria-hidden="true">
-              {% if block.settings.highlight %}
-                <svg viewBox="0 0 24 24" fill="none" focusable="false">
-                  <path d="m6 12 4 4 8-8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              {% endif %}
-            </div>
-
-            {% if block.settings.badge != blank %}
-              <span class="product-accessory-bundle__badge">{{ block.settings.badge }}</span>
-            {% endif %}
-
-            {% if card_url != blank %}
-              <a class="product-accessory-bundle__link" href="{{ card_url }}" aria-label="{{ card_title | escape }}"></a>
-            {% endif %}
-
-            <div class="product-accessory-bundle__media">
-              {% if card_image != blank %}
-                {% render 'responsive-image',
-                  image: card_image,
-                  alt: block.settings.image_alt,
-                  class: 'product-accessory-bundle__image',
-                  loading: 'lazy',
-                  sizes: '(min-width: 900px) 24vw, 78vw',
-                  widths: '320, 520, 720, 900'
-                %}
-              {% else %}
-                <div class="product-accessory-bundle__placeholder" aria-hidden="true"></div>
-              {% endif %}
-            </div>
-
-            <div class="product-accessory-bundle__content">
-              <h3 class="product-accessory-bundle__card-title">{{ card_title }}</h3>
-              <p class="product-accessory-bundle__card-text">{{ card_text }}</p>
-
-              <div class="product-accessory-bundle__price-row">
-                {% if card_price != blank %}
-                  <span class="product-accessory-bundle__price">{{ card_price }}</span>
-                {% endif %}
-                {% if card_compare_price != blank %}
-                  <s class="product-accessory-bundle__compare">{{ card_compare_price }}</s>
-                {% endif %}
-                {% if savings_percent != blank %}
-                  <span class="product-accessory-bundle__save">
-                    {% if accessory_product != blank %}
-                      Save {{ savings_percent }}%
-                    {% else %}
-                      {{ savings_percent }}
-                    {% endif %}
-                  </span>
+            <article class="product-accessory-bundle__card{% if block.settings.highlight %} is-highlighted{% endif %}" {{ block.shopify_attributes }}>
+              <div class="product-accessory-bundle__select" aria-hidden="true">
+                {% if block.settings.highlight %}
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                    <path d="m6 12 4 4 8-8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 {% endif %}
               </div>
 
-              <span class="product-accessory-bundle__button">
-                <span aria-hidden="true">+</span>
-                <span>{{ block.settings.button_label }}</span>
-              </span>
-            </div>
-          </article>
-        {% endfor %}
+              {% if block.settings.badge != blank %}
+                <span class="product-accessory-bundle__badge">{{ block.settings.badge }}</span>
+              {% endif %}
+
+              {% if card_url != blank %}
+                <a class="product-accessory-bundle__link" href="{{ card_url }}" aria-label="{{ card_title | escape }}"></a>
+              {% endif %}
+
+              <div class="product-accessory-bundle__media">
+                {% if card_image != blank %}
+                  {% render 'responsive-image',
+                    image: card_image,
+                    alt: block.settings.image_alt,
+                    class: 'product-accessory-bundle__image',
+                    loading: 'lazy',
+                    sizes: '(min-width: 900px) 24vw, 78vw',
+                    widths: '320, 520, 720, 900'
+                  %}
+                {% else %}
+                  <div class="product-accessory-bundle__placeholder" aria-hidden="true"></div>
+                {% endif %}
+              </div>
+
+              <div class="product-accessory-bundle__content">
+                <h3 class="product-accessory-bundle__card-title">{{ card_title }}</h3>
+                <p class="product-accessory-bundle__card-text">{{ card_text }}</p>
+
+                <div class="product-accessory-bundle__price-row">
+                  {% if card_price != blank %}
+                    <span class="product-accessory-bundle__price">{{ card_price }}</span>
+                  {% endif %}
+                  {% if card_compare_price != blank %}
+                    <s class="product-accessory-bundle__compare">{{ card_compare_price }}</s>
+                  {% endif %}
+                  {% if savings_percent != blank %}
+                    <span class="product-accessory-bundle__save">
+                      {% if accessory_product != blank %}
+                        Save {{ savings_percent }}%
+                      {% else %}
+                        {{ savings_percent }}
+                      {% endif %}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <span class="product-accessory-bundle__button">
+                  <span aria-hidden="true">+</span>
+                  <span>{{ block.settings.button_label }}</span>
+                </span>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        <button class="product-accessory-bundle__arrow product-accessory-bundle__arrow--prev" type="button" aria-label="Previous accessories" data-accessory-bundle-prev>
+          <span aria-hidden="true">&lsaquo;</span>
+        </button>
+        <button class="product-accessory-bundle__arrow product-accessory-bundle__arrow--next" type="button" aria-label="Next accessories" data-accessory-bundle-next>
+          <span aria-hidden="true">&rsaquo;</span>
+        </button>
       </div>
     </article>
   </div>
 </section>
+
+<script>
+  (() => {
+    const initAccessoryBundleSliders = (root = document) => {
+      const bundles = root.querySelectorAll('[data-accessory-bundle]');
+
+      bundles.forEach((bundle) => {
+        if (bundle.dataset.accessoryBundleReady === 'true') return;
+        bundle.dataset.accessoryBundleReady = 'true';
+
+        const slider = bundle.querySelector('[data-accessory-bundle-slider]');
+        const prev = bundle.querySelector('[data-accessory-bundle-prev]');
+        const next = bundle.querySelector('[data-accessory-bundle-next]');
+        if (!slider || !prev || !next) return;
+
+        const isDesktopGrid = () => window.matchMedia('(min-width: 760px)').matches;
+
+        const getStep = () => {
+          const card = slider.querySelector('.product-accessory-bundle__card');
+          return card ? card.getBoundingClientRect().width + 16 : slider.clientWidth * 0.82;
+        };
+
+        const updateButtons = () => {
+          if (isDesktopGrid()) {
+            prev.hidden = true;
+            next.hidden = true;
+            return;
+          }
+
+          const maxScroll = slider.scrollWidth - slider.clientWidth;
+          const hasOverflow = maxScroll > 2;
+          prev.hidden = !hasOverflow || slider.scrollLeft <= 2;
+          next.hidden = !hasOverflow || slider.scrollLeft >= maxScroll - 2;
+        };
+
+        const scrollByDirection = (direction) => {
+          const maxScroll = slider.scrollWidth - slider.clientWidth;
+          const target = Math.max(0, Math.min(maxScroll, slider.scrollLeft + (getStep() * direction)));
+          slider.scrollTo({ left: target, behavior: 'smooth' });
+          window.setTimeout(updateButtons, 260);
+        };
+
+        prev.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          scrollByDirection(-1);
+        });
+
+        next.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          scrollByDirection(1);
+        });
+
+        slider.addEventListener('scroll', updateButtons, { passive: true });
+        window.addEventListener('resize', updateButtons);
+        updateButtons();
+      });
+    };
+
+    initAccessoryBundleSliders();
+
+    document.addEventListener('shopify:section:load', (event) => {
+      initAccessoryBundleSliders(event.target);
+    });
+  })();
+</script>
 
 {% stylesheet %}
   .product-accessory-bundle {
@@ -177,7 +253,6 @@
 
   .product-accessory-bundle__pill {
     display: inline-flex;
-    width: max-content;
     max-width: 100%;
     align-items: center;
     gap: 0.7rem;
@@ -209,10 +284,26 @@
     height: 1.15rem;
   }
 
+  .product-accessory-bundle__slider-wrap {
+    position: relative;
+    margin-top: 1.5rem;
+  }
+
   .product-accessory-bundle__grid {
     display: grid;
+    grid-auto-columns: minmax(15.5rem, 82%);
+    grid-auto-flow: column;
     gap: 1rem;
-    margin-top: 1.5rem;
+    overflow-x: auto;
+    padding: 0 0 0.4rem;
+    scroll-padding-inline: 0.1rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .product-accessory-bundle__grid::-webkit-scrollbar {
+    display: none;
   }
 
   .product-accessory-bundle__card {
@@ -227,6 +318,7 @@
       border-color 180ms ease,
       box-shadow 180ms ease,
       transform 180ms ease;
+    scroll-snap-align: start;
   }
 
   .product-accessory-bundle__card::after {
@@ -400,9 +492,50 @@
     box-shadow: 0 0 28px rgba(0, 229, 255, 0.18);
   }
 
+  .product-accessory-bundle__arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 20;
+    display: inline-flex;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    color: var(--theme-color-text);
+    background: rgba(4, 11, 24, 0.72);
+    cursor: pointer;
+    pointer-events: auto;
+    transform: translateY(-50%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .product-accessory-bundle__arrow[hidden] {
+    display: none;
+  }
+
+  .product-accessory-bundle__arrow--prev {
+    left: 0.4rem;
+  }
+
+  .product-accessory-bundle__arrow--next {
+    right: 0.4rem;
+  }
+
   @media (min-width: 760px) {
     .product-accessory-bundle__grid {
+      grid-auto-flow: initial;
+      grid-auto-columns: initial;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      overflow: visible;
+      padding: 0;
+      scroll-snap-type: none;
+    }
+
+    .product-accessory-bundle__arrow {
+      display: none;
     }
   }
 
