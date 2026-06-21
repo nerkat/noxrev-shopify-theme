@@ -1,0 +1,35 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "find-ipad-model-hero",
+      "settings": {}
+    },
+    "model_grid": {
+      "type": "ipad-model-fit-grid",
+      "settings": {}
+    },
+    "help_cards": {
+      "type": "ipad-model-help-cards",
+      "settings": {}
+    },
+    "trust_strip": {
+      "type": "ipad-model-trust-strip",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "model_grid",
+    "help_cards",
+    "trust_strip"
+  ]
+}

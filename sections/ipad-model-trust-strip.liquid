@@ -1,0 +1,142 @@
+<section class="ipad-model-trust section">
+  <div class="container">
+    <div class="ipad-model-trust__items" role="list">
+      {% for block in section.blocks %}
+        {% if block.type == 'trust_item' %}
+          <div class="ipad-model-trust__item" role="listitem" {{ block.shopify_attributes }}>
+            <span class="ipad-model-trust__icon" aria-hidden="true">
+              {% if block.settings.icon_image != blank %}
+                {{ block.settings.icon_image | image_url: width: 72 | image_tag: loading: 'lazy', alt: '', class: 'ipad-model-trust__icon-image' }}
+              {% else %}
+                {% render 'product-marketing-icon', icon: block.settings.icon %}
+              {% endif %}
+            </span>
+            <span>
+              <strong>{{ block.settings.title }}</strong>
+              <small>{{ block.settings.text }}</small>
+            </span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .ipad-model-trust {
+    padding: 1rem 0 2rem;
+  }
+
+  .ipad-model-trust__items {
+    display: grid;
+    gap: 0.85rem;
+    border-top: 1px solid rgba(56, 221, 255, 0.18);
+    padding-top: 1rem;
+  }
+
+  .ipad-model-trust__item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.74);
+  }
+
+  .ipad-model-trust__icon {
+    display: inline-flex;
+    width: 2.8rem;
+    height: 2.8rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 229, 255, 0.34);
+    border-radius: 999px;
+    color: #27efff;
+    background: rgba(3, 12, 24, 0.72);
+  }
+
+  .ipad-model-trust__icon svg,
+  .ipad-model-trust__icon-image {
+    width: 1.35rem;
+    height: 1.35rem;
+    object-fit: contain;
+  }
+
+  .ipad-model-trust__item strong,
+  .ipad-model-trust__item small {
+    display: block;
+  }
+
+  .ipad-model-trust__item strong {
+    color: var(--theme-color-text);
+    font-size: 0.96rem;
+    line-height: 1.18;
+  }
+
+  .ipad-model-trust__item small {
+    margin-top: 0.2rem;
+    font-size: 0.78rem;
+    line-height: 1.32;
+  }
+
+  @media (min-width: 720px) {
+    .ipad-model-trust__items {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .ipad-model-trust__items {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .ipad-model-trust__item {
+      padding-right: 0.9rem;
+      border-right: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .ipad-model-trust__item:last-child {
+      border-right: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "iPad Model Trust Strip",
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust item",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Exact Model Matching" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Tailored fit for every iPad." },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Fallback icon",
+          "default": "shield",
+          "options": [
+            { "value": "shield", "label": "Shield" },
+            { "value": "apps", "label": "Apps" },
+            { "value": "magnet", "label": "Magnet" },
+            { "value": "trackpad", "label": "Trackpad" }
+          ]
+        },
+        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "iPad Model Trust Strip",
+      "blocks": [
+        { "type": "trust_item", "settings": { "title": "Exact Model Matching", "text": "Tailored fit for every iPad.", "icon": "apps" } },
+        { "type": "trust_item", "settings": { "title": "Full Function Access", "text": "Ports, cameras and buttons stay fully accessible.", "icon": "trackpad" } },
+        { "type": "trust_item", "settings": { "title": "Secure & Protected", "text": "Built-in protection for everyday use.", "icon": "shield" } },
+        { "type": "trust_item", "settings": { "title": "Premium Materials", "text": "Crafted for durability and premium feel.", "icon": "magnet" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

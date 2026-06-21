@@ -1,0 +1,179 @@
+<section class="ipad-model-help section">
+  <div class="container">
+    <div class="ipad-model-help__header">
+      <p class="ipad-model-help__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2>{{ section.settings.title }}</h2>
+    </div>
+
+    <div class="ipad-model-help__cards" role="list">
+      {% for block in section.blocks %}
+        {% if block.type == 'help_card' %}
+          <article class="ipad-model-help__card" role="listitem" {{ block.shopify_attributes }}>
+            <span class="ipad-model-help__icon" aria-hidden="true">
+              {% if block.settings.icon_image != blank %}
+                {{ block.settings.icon_image | image_url: width: 72 | image_tag: loading: 'lazy', alt: '', class: 'ipad-model-help__icon-image' }}
+              {% else %}
+                {% render 'product-marketing-icon', icon: block.settings.icon %}
+              {% endif %}
+            </span>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+            {% if block.settings.cta_label != blank %}
+              <a href="{{ block.settings.link | default: '#' }}">
+                {{ block.settings.cta_label }}
+                <span aria-hidden="true">-&gt;</span>
+              </a>
+            {% endif %}
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .ipad-model-help {
+    padding: 1rem 0;
+  }
+
+  .ipad-model-help__header {
+    margin-bottom: 1rem;
+  }
+
+  .ipad-model-help__eyebrow {
+    margin: 0 0 0.55rem;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ipad-model-help__header h2 {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(1.9rem, 7vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+
+  .ipad-model-help__cards {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .ipad-model-help__card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.2);
+    border-radius: 1.1rem;
+    padding: 1rem;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.12), transparent 36%),
+      radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%),
+      rgba(4, 13, 25, 0.92);
+  }
+
+  .ipad-model-help__icon {
+    display: inline-flex;
+    width: 2.85rem;
+    height: 2.85rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 229, 255, 0.36);
+    border-radius: 999px;
+    color: #27efff;
+    background: rgba(3, 12, 24, 0.72);
+  }
+
+  .ipad-model-help__icon svg,
+  .ipad-model-help__icon-image {
+    width: 1.35rem;
+    height: 1.35rem;
+    object-fit: contain;
+  }
+
+  .ipad-model-help__card h3 {
+    margin: 0.9rem 0 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 1.25rem;
+    line-height: 1.1;
+  }
+
+  .ipad-model-help__card p {
+    margin: 0.55rem 0 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  .ipad-model-help__card a {
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+    margin-top: 1rem;
+    color: #24e5ff;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 760px) {
+    .ipad-model-help__cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "iPad Model Help Cards",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Need Help?" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Still not sure? Here's how to check." }
+  ],
+  "blocks": [
+    {
+      "type": "help_card",
+      "name": "Help card",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Still not sure?" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "We're here to help you find the right model in seconds." },
+        { "type": "text", "id": "cta_label", "label": "CTA label", "default": "View Help Guide" },
+        { "type": "url", "id": "link", "label": "Link" },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Fallback icon",
+          "default": "zoom",
+          "options": [
+            { "value": "zoom", "label": "Search" },
+            { "value": "apps", "label": "Apps" },
+            { "value": "watch", "label": "Watch" }
+          ]
+        },
+        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "iPad Model Help Cards",
+      "blocks": [
+        { "type": "help_card", "settings": { "title": "Still not sure?", "text": "We're here to help you find the right model in seconds.", "cta_label": "View Help Guide", "icon": "zoom" } },
+        { "type": "help_card", "settings": { "title": "Check Settings", "text": "Settings > General > About. Look for Model Name.", "cta_label": "Open Settings Guide", "icon": "apps" } },
+        { "type": "help_card", "settings": { "title": "Compare screen size", "text": "Match your iPad's screen size with the options above.", "cta_label": "View Size Comparison", "icon": "watch" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
