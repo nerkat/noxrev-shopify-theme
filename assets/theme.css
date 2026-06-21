@@ -530,7 +530,7 @@ html {
   }
 }
 
-@media (max-width: 749px) {
+@media (max-width: 861px) {
   .section {
     padding-block: var(--spacing-xl);
   }
