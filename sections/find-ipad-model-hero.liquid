@@ -44,7 +44,19 @@
 
       <a class="find-model-hero__video" href="{{ section.settings.video_link | default: '#' }}" aria-label="{{ section.settings.video_title | escape }}">
         <div class="find-model-hero__video-media">
-          {% if section.settings.video_image != blank %}
+          {% if section.settings.video != blank %}
+            {{
+              section.settings.video
+              | video_tag:
+                class: 'find-model-hero__video-element',
+                image_size: '1100x',
+                autoplay: true,
+                loop: true,
+                muted: true,
+                controls: false,
+                playsinline: true
+            }}
+          {% elsif section.settings.video_image != blank %}
             {% render 'responsive-image',
               image: section.settings.video_image,
               alt: section.settings.video_image_alt,
@@ -56,9 +68,11 @@
           {% else %}
             <div class="find-model-hero__video-placeholder" aria-hidden="true"></div>
           {% endif %}
-          <span class="find-model-hero__play" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="m9 7 8 5-8 5V7Z" fill="currentColor"/></svg>
-          </span>
+          {% unless section.settings.video != blank %}
+            <span class="find-model-hero__play" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="m9 7 8 5-8 5V7Z" fill="currentColor"/></svg>
+            </span>
+          {% endunless %}
         </div>
 
         <div class="find-model-hero__video-copy">
@@ -215,12 +229,17 @@
     overflow: hidden;
   }
 
+  .find-model-hero__video-element,
   .find-model-hero__video-image,
   .find-model-hero__video-placeholder {
     width: 100%;
     height: 100%;
     min-height: 15rem;
     object-fit: cover;
+  }
+
+  .find-model-hero__video-element {
+    display: block;
   }
 
   .find-model-hero__video-placeholder {
@@ -333,6 +352,7 @@
     { "type": "url", "id": "cta_link", "label": "CTA link" },
     { "type": "text", "id": "video_eyebrow", "label": "Video eyebrow", "default": "Quick Guide" },
     { "type": "text", "id": "video_title", "label": "Video title", "default": "How to identify your iPad in 30 seconds" },
+    { "type": "video", "id": "video", "label": "Shopify-hosted video" },
     { "type": "image_picker", "id": "video_image", "label": "Video thumbnail image" },
     { "type": "text", "id": "video_image_alt", "label": "Video image alt text", "default": "iPad model identification guide" },
     { "type": "url", "id": "video_link", "label": "Video or guide link" }
