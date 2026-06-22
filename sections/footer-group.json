@@ -15,8 +15,15 @@
       "type": "footer",
       "settings": {
         "brand_text": "NOXREV",
+        "text": "Use the footer for store information, support details, and policy links.",
         "primary_menu": "footer",
-        "text": "Use the footer for store information, support details, and policy links."
+        "secondary_menu": "",
+        "contact_email": "",
+        "contact_phone": "",
+        "contact_info": "",
+        "social_instagram": "",
+        "social_facebook": "",
+        "social_tiktok": ""
       }
     }
   },
