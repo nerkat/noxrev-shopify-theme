@@ -1,0 +1,817 @@
+<aside
+  class="cart-drawer"
+  data-cart-drawer
+  data-section-id="{{ section.id }}"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="CartDrawerTitle"
+  aria-hidden="true"
+>
+  <button class="cart-drawer__overlay" type="button" data-cart-drawer-close aria-label="Close cart drawer"></button>
+
+  <div class="cart-drawer__panel" data-cart-drawer-panel tabindex="-1">
+    <header class="cart-drawer__header">
+      <div>
+        <p class="cart-drawer__eyebrow">Added setup</p>
+        <h2 id="CartDrawerTitle" class="cart-drawer__title">Your Cart</h2>
+      </div>
+
+      <div class="cart-drawer__header-actions">
+        <span class="cart-drawer__count" data-cart-drawer-count>{{ cart.item_count }} item{% unless cart.item_count == 1 %}s{% endunless %}</span>
+        <button class="cart-drawer__close" type="button" data-cart-drawer-close aria-label="Close cart drawer">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+            <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="cart-drawer__error" data-cart-drawer-error role="status" aria-live="polite" hidden></div>
+
+    <div class="cart-drawer__body" data-cart-drawer-body aria-live="polite">
+      {% if cart.item_count == 0 %}
+        <div class="cart-drawer__empty">
+          <p class="cart-drawer__empty-eyebrow">Nothing here yet</p>
+          <h3>Your cart is empty</h3>
+          <p>Find your perfect iPad fit and build your setup.</p>
+          <div class="cart-drawer__empty-actions">
+            <a class="button button--primary" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+            <a class="cart-drawer__text-link" href="/pages/find-your-ipad-model">Find Your iPad Model</a>
+          </div>
+        </div>
+      {% else %}
+        <div class="cart-drawer__items" data-cart-drawer-items>
+          {% for item in cart.items %}
+            <article class="cart-drawer__item" data-cart-drawer-line-item data-line="{{ forloop.index }}">
+              <a class="cart-drawer__item-media" href="{{ item.url }}" aria-label="{{ item.product.title | escape }}">
+                {% if item.image %}
+                  {% render 'responsive-image',
+                    image: item.image,
+                    alt: item.product.title,
+                    class: 'cart-drawer__image',
+                    loading: 'lazy',
+                    sizes: '96px',
+                    widths: '96, 144, 192'
+                  %}
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'cart-drawer__image cart-drawer__image--placeholder' }}
+                {% endif %}
+              </a>
+
+              <div class="cart-drawer__item-content">
+                <div class="cart-drawer__item-heading">
+                  <h3 class="cart-drawer__item-title">
+                    <a href="{{ item.url }}">{{ item.product.title }}</a>
+                  </h3>
+
+                  <p class="cart-drawer__item-price">
+                    {% if item.original_price != item.final_price %}
+                      <s>{% render 'price', amount: item.original_price %}</s>
+                    {% endif %}
+                    <span>{% render 'price', amount: item.final_price %}</span>
+                  </p>
+                </div>
+
+                {% unless item.product.has_only_default_variant %}
+                  <p class="cart-drawer__variant-title">{{ item.variant.title }}</p>
+                  {% if item.options_with_values != blank %}
+                    <ul class="cart-drawer__options" role="list">
+                      {% for option in item.options_with_values %}
+                        <li>{{ option.name }}: {{ option.value }}</li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                {% endunless %}
+
+                {% if item.line_level_discount_allocations.size > 0 %}
+                  <ul class="cart-drawer__discounts" role="list">
+                    {% for discount in item.line_level_discount_allocations %}
+                      <li>{{ discount.discount_application.title }} (-{% render 'price', amount: discount.amount %})</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+
+                <div class="cart-drawer__item-actions">
+                  <div class="cart-drawer__quantity" aria-label="Quantity for {{ item.product.title | escape }}">
+                    <button
+                      class="cart-drawer__quantity-button"
+                      type="button"
+                      data-cart-drawer-change
+                      data-line="{{ forloop.index }}"
+                      data-quantity="{{ item.quantity | minus: 1 }}"
+                      aria-label="Decrease quantity for {{ item.product.title | escape }}"
+                    >
+                      -
+                    </button>
+                    <span class="cart-drawer__quantity-value" aria-live="polite">{{ item.quantity }}</span>
+                    <button
+                      class="cart-drawer__quantity-button"
+                      type="button"
+                      data-cart-drawer-change
+                      data-line="{{ forloop.index }}"
+                      data-quantity="{{ item.quantity | plus: 1 }}"
+                      aria-label="Increase quantity for {{ item.product.title | escape }}"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  <button
+                    class="cart-drawer__remove"
+                    type="button"
+                    data-cart-drawer-remove
+                    data-line="{{ forloop.index }}"
+                    aria-label="Remove {{ item.product.title | escape }} from cart"
+                  >
+                    Remove
+                  </button>
+
+                  <p class="cart-drawer__line-total">
+                    <span>Line total</span>
+                    <strong>{% render 'price', amount: item.final_line_price %}</strong>
+                  </p>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <footer class="cart-drawer__summary" data-cart-drawer-summary>
+      {% if cart.item_count > 0 %}
+        <div class="cart-drawer__summary-row">
+          <span>Subtotal</span>
+          <strong>{% render 'price', amount: cart.items_subtotal_price %}</strong>
+        </div>
+
+        {% if cart.cart_level_discount_applications.size > 0 %}
+          <div class="cart-drawer__summary-discounts">
+            {% for discount in cart.cart_level_discount_applications %}
+              <div class="cart-drawer__summary-row">
+                <span>{{ discount.title }}</span>
+                <strong>-{% render 'price', amount: discount.total_allocated_amount %}</strong>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <p class="cart-drawer__note">Taxes, shipping, and discounts are calculated at checkout.</p>
+
+        <a class="button button--primary cart-drawer__checkout" href="/checkout" data-cart-drawer-checkout>
+          Checkout
+        </a>
+        <a class="cart-drawer__view-cart" href="{{ routes.cart_url }}">View cart</a>
+      {% endif %}
+
+      <button class="cart-drawer__continue" type="button" data-cart-drawer-close>Continue shopping</button>
+    </footer>
+  </div>
+</aside>
+
+{% stylesheet %}
+  .cart-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    pointer-events: none;
+  }
+
+  .cart-drawer[aria-hidden='false'] {
+    pointer-events: auto;
+  }
+
+  .cart-drawer__overlay {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    padding: 0;
+    background: rgba(0, 4, 12, 0.68);
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity var(--transition-base);
+  }
+
+  .cart-drawer[aria-hidden='false'] .cart-drawer__overlay {
+    opacity: 1;
+  }
+
+  .cart-drawer__panel {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    width: min(calc(100vw - 1.5rem), 29rem);
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.24);
+    border-radius: 1.35rem;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(0, 229, 255, 0.12), transparent 34%),
+      radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.12), transparent 36%),
+      rgba(4, 13, 25, 0.96);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 80px rgba(0, 0, 0, 0.48);
+    transform: translateX(calc(100% + 1.5rem));
+    transition: transform 280ms ease;
+  }
+
+  .cart-drawer[aria-hidden='false'] .cart-drawer__panel {
+    transform: translateX(0);
+  }
+
+  .cart-drawer__header,
+  .cart-drawer__summary {
+    padding: 1rem;
+  }
+
+  .cart-drawer__header {
+    display: flex;
+    gap: 1rem;
+    align-items: start;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .cart-drawer__eyebrow,
+  .cart-drawer__empty-eyebrow {
+    margin: 0 0 0.35rem;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .cart-drawer__title {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+
+  .cart-drawer__header-actions {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+  }
+
+  .cart-drawer__count {
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cart-drawer__close {
+    display: inline-grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    color: var(--theme-color-text);
+    background: rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+  }
+
+  .cart-drawer__close svg {
+    width: 1.05rem;
+  }
+
+  .cart-drawer__error {
+    margin: 0.85rem 1rem 0;
+    border: 1px solid rgba(255, 77, 166, 0.38);
+    border-radius: 0.9rem;
+    padding: 0.75rem 0.85rem;
+    color: #ffd3e8;
+    background: rgba(255, 77, 166, 0.08);
+    font-size: 0.85rem;
+  }
+
+  .cart-drawer__body {
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+
+  .cart-drawer__items {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .cart-drawer__item,
+  .cart-drawer__empty {
+    border: 1px solid rgba(56, 221, 255, 0.16);
+    border-radius: 1rem;
+    background: rgba(2, 9, 20, 0.62);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .cart-drawer__item {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .cart-drawer__item-media {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.8rem;
+    background: rgba(3, 10, 22, 0.72);
+    aspect-ratio: 1/1;
+  }
+
+  .cart-drawer__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 6.4rem;
+    object-fit: cover;
+  }
+
+  .cart-drawer__item-content {
+    display: grid;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+
+  .cart-drawer__item-heading {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .cart-drawer__item-title {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 1rem;
+    line-height: 1.15;
+  }
+
+  .cart-drawer__item-title a,
+  .cart-drawer__view-cart,
+  .cart-drawer__text-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .cart-drawer__item-price {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    color: var(--theme-color-text);
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .cart-drawer__item-price s {
+    color: rgba(255, 255, 255, 0.38);
+  }
+
+  .cart-drawer__variant-title,
+  .cart-drawer__options,
+  .cart-drawer__discounts,
+  .cart-drawer__note {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  .cart-drawer__options,
+  .cart-drawer__discounts {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cart-drawer__discounts {
+    color: #25edff;
+  }
+
+  .cart-drawer__item-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cart-drawer__quantity {
+    display: grid;
+    grid-template-columns: 2.1rem 2.7rem 2.1rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background: rgba(3, 10, 22, 0.74);
+  }
+
+  .cart-drawer__quantity-button,
+  .cart-drawer__quantity-value {
+    display: inline-flex;
+    min-height: 2.1rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--theme-color-text);
+  }
+
+  .cart-drawer__quantity-button {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1.2rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cart-drawer__quantity-value {
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    font-weight: 800;
+  }
+
+  .cart-drawer__remove,
+  .cart-drawer__continue {
+    border: 0;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.62);
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .cart-drawer__line-total {
+    width: 100%;
+    margin: 0;
+    color: var(--theme-color-text);
+    text-align: right;
+  }
+
+  .cart-drawer__line-total span {
+    display: block;
+    color: rgba(255, 255, 255, 0.52);
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .cart-drawer__summary {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(2, 9, 20, 0.68);
+  }
+
+  .cart-drawer__summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: rgba(255, 255, 255, 0.76);
+    font-weight: 800;
+  }
+
+  .cart-drawer__summary-row strong {
+    color: var(--theme-color-text);
+  }
+
+  .cart-drawer__note {
+    margin: 0.75rem 0 1rem;
+  }
+
+  .cart-drawer__checkout,
+  .cart-drawer__view-cart {
+    width: 100%;
+  }
+
+  .cart-drawer__view-cart,
+  .cart-drawer__continue,
+  .cart-drawer__text-link {
+    display: inline-flex;
+    justify-content: center;
+    margin-top: 0.75rem;
+    color: #25edff;
+  }
+
+  .cart-drawer__empty {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .cart-drawer__empty h3,
+  .cart-drawer__empty p {
+    margin: 0;
+  }
+
+  .cart-drawer__empty h3 {
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .cart-drawer.is-updating {
+    cursor: progress;
+  }
+
+  .cart-drawer.is-updating [data-cart-drawer-change],
+  .cart-drawer.is-updating [data-cart-drawer-remove],
+  .cart-drawer.is-updating [data-cart-drawer-checkout] {
+    opacity: 0.58;
+    pointer-events: none;
+  }
+
+  body.cart-drawer-open {
+    overflow: hidden;
+  }
+
+  @media (max-width: 520px) {
+    .cart-drawer__panel {
+      inset: 0;
+      width: 100%;
+      border-radius: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    if (window.__noxrevCartDrawerReady) {
+      return;
+    }
+
+    window.__noxrevCartDrawerReady = true;
+
+    let drawerController = null;
+    let drawerRequestSequence = 0;
+    let lastFocusedElement = null;
+
+    const rootPath = () => window.Shopify?.routes?.root || '/';
+    const getDrawer = () => document.querySelector('[data-cart-drawer]');
+    const getPanel = () => getDrawer()?.querySelector('[data-cart-drawer-panel]');
+
+    const updateHeaderCartCount = (itemCount) => {
+      document.querySelectorAll('.header__cart-count').forEach((count) => {
+        count.textContent = String(itemCount);
+      });
+    };
+
+    const setDrawerBusy = (isBusy) => {
+      const drawer = getDrawer();
+
+      if (!drawer) return;
+
+      drawer.classList.toggle('is-updating', isBusy);
+      drawer.setAttribute('aria-busy', isBusy ? 'true' : 'false');
+      drawer.querySelectorAll('[data-cart-drawer-change], [data-cart-drawer-remove], [data-cart-drawer-checkout]').forEach((control) => {
+        control.toggleAttribute('disabled', isBusy);
+      });
+    };
+
+    const showDrawerError = (message) => {
+      const error = getDrawer()?.querySelector('[data-cart-drawer-error]');
+
+      if (!error) return;
+
+      error.textContent = message;
+      error.hidden = false;
+    };
+
+    const clearDrawerError = () => {
+      const error = getDrawer()?.querySelector('[data-cart-drawer-error]');
+
+      if (!error) return;
+
+      error.textContent = '';
+      error.hidden = true;
+    };
+
+    const replaceDrawer = (html) => {
+      const parsed = new DOMParser().parseFromString(html, 'text/html');
+      const nextDrawer = parsed.querySelector('[data-cart-drawer]');
+      const currentDrawer = getDrawer();
+
+      if (!nextDrawer || !currentDrawer) {
+        return false;
+      }
+
+      const wasOpen = currentDrawer.getAttribute('aria-hidden') === 'false';
+      currentDrawer.replaceWith(nextDrawer);
+
+      if (wasOpen) {
+        nextDrawer.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('cart-drawer-open');
+      }
+
+      return true;
+    };
+
+    const openDrawer = () => {
+      const drawer = getDrawer();
+      const panel = getPanel();
+
+      if (!drawer || !panel) return;
+
+      lastFocusedElement = document.activeElement;
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('cart-drawer-open');
+      window.requestAnimationFrame(() => panel.focus({ preventScroll: true }));
+    };
+
+    const closeDrawer = () => {
+      const drawer = getDrawer();
+
+      if (!drawer) return;
+
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('cart-drawer-open');
+
+      if (lastFocusedElement?.isConnected) {
+        lastFocusedElement.focus({ preventScroll: true });
+      }
+    };
+
+    const getSectionId = () => getDrawer()?.dataset.sectionId || 'cart-drawer';
+
+    const requestCartChange = async ({ line, quantity }) => {
+      const requestId = ++drawerRequestSequence;
+
+      if (drawerController) {
+        drawerController.abort();
+      }
+
+      drawerController = new AbortController();
+      clearDrawerError();
+      setDrawerBusy(true);
+
+      try {
+        const response = await fetch(`${rootPath()}cart/change.js`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            line: Number(line),
+            quantity: Math.max(0, Number(quantity)),
+            sections: [getSectionId()],
+            sections_url: window.location.pathname,
+          }),
+          signal: drawerController.signal,
+        });
+
+        const cart = await response.json();
+
+        if (!response.ok) {
+          throw new Error(cart.description || cart.message || 'Unable to update cart.');
+        }
+
+        if (requestId !== drawerRequestSequence) return;
+
+        const sectionHtml = cart.sections?.[getSectionId()];
+
+        if (!sectionHtml || !replaceDrawer(sectionHtml)) {
+          throw new Error('Unable to refresh cart drawer.');
+        }
+
+        updateHeaderCartCount(cart.item_count || 0);
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+
+        if (requestId === drawerRequestSequence) {
+          showDrawerError(error.message || 'Unable to update cart. Please try again.');
+        }
+      } finally {
+        if (requestId === drawerRequestSequence) {
+          drawerController = null;
+          setDrawerBusy(false);
+        }
+      }
+    };
+
+    const refreshDrawer = async () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set('section_id', getSectionId());
+
+      const response = await fetch(url.toString(), {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to refresh cart drawer.');
+      }
+
+      return replaceDrawer(await response.text());
+    };
+
+    const handleProductAdd = async (form) => {
+      const submitButton = form.querySelector('[type="submit"]');
+      const originalText = submitButton?.textContent;
+      const originalDisabled = submitButton?.disabled;
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.classList.add('is-loading');
+        submitButton.textContent = 'Adding...';
+      }
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch(`${rootPath()}cart/add.js`, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.description || result.message || 'Unable to add item to cart.');
+        }
+
+        await refreshDrawer();
+        const cartResponse = await fetch(`${rootPath()}cart.js`, { headers: { Accept: 'application/json' } });
+        const cart = await cartResponse.json();
+        updateHeaderCartCount(cart.item_count || 0);
+        openDrawer();
+      } catch (error) {
+        showDrawerError(error.message || 'Unable to add item to cart. Please try again.');
+        openDrawer();
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = originalDisabled;
+          submitButton.classList.remove('is-loading');
+          submitButton.textContent = originalText;
+        }
+      }
+    };
+
+    document.addEventListener('submit', (event) => {
+      const form = event.target.closest('form[action*="/cart/add"]');
+
+      if (!form || !form.querySelector('[name="id"]')) {
+        return;
+      }
+
+      event.preventDefault();
+      handleProductAdd(form);
+    });
+
+    document.addEventListener('click', (event) => {
+      const headerCartTrigger = event.target.closest('.header__cart');
+      const closeTrigger = event.target.closest('[data-cart-drawer-close]');
+      const removeTrigger = event.target.closest('[data-cart-drawer-remove]');
+      const changeTrigger = event.target.closest('[data-cart-drawer-change]');
+
+      if (headerCartTrigger) {
+        event.preventDefault();
+        openDrawer();
+        return;
+      }
+
+      if (closeTrigger) {
+        event.preventDefault();
+        closeDrawer();
+        return;
+      }
+
+      if (removeTrigger) {
+        event.preventDefault();
+        requestCartChange({ line: removeTrigger.dataset.line, quantity: 0 });
+        return;
+      }
+
+      if (changeTrigger) {
+        event.preventDefault();
+        requestCartChange({ line: changeTrigger.dataset.line, quantity: changeTrigger.dataset.quantity });
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && getDrawer()?.getAttribute('aria-hidden') === 'false') {
+        closeDrawer();
+      }
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
