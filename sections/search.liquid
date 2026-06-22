@@ -1,111 +1,244 @@
 {% comment %}
-  This section is used in the search template to render search results for
-  products, articles, and pages.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/search
+  Search page section. Liquid remains the source of truth for all result markup;
+  JavaScript only fetches this section again and swaps the rendered HTML.
 {% endcomment %}
 
-<section class="container section search">
-  <div class="search__header">
-    <h1 class="search__title">{{ 'search.title' | t }}</h1>
+<section
+  class="container section search"
+  data-search-section
+  data-section-id="{{ section.id }}"
+  aria-busy="false"
+>
+  <div class="search__panel">
+    <div class="search__header" data-search-header>
+      {% if section.settings.eyebrow != blank %}
+        <p class="search__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
 
-    <form class="search__form" action="{{ routes.search_url }}" method="get" role="search">
+      <h1 class="search__title">{{ section.settings.title }}</h1>
+
+      {% if section.settings.subtitle != blank %}
+        <p class="search__subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <form class="search__form" action="{{ routes.search_url }}" method="get" role="search" data-search-form>
       <label class="visually-hidden" for="Search-In-Section-{{ section.id }}">{{ 'search.title' | t }}</label>
-      <input
-        id="Search-In-Section-{{ section.id }}"
-        class="field"
-        type="search"
-        size="50"
-        name="q"
-        value="{{ search.terms | escape }}"
-        placeholder="{{ 'search.placeholder' | t }}"
-      >
-      <button class="button" type="submit">{{ 'search.submit' | t }}</button>
+      <div class="search__field-wrap">
+        <input
+          id="Search-In-Section-{{ section.id }}"
+          class="search__field"
+          type="search"
+          size="50"
+          name="q"
+          value="{{ search.terms | escape }}"
+          placeholder="{{ section.settings.placeholder | escape }}"
+          autocomplete="off"
+          data-search-input
+        >
+      </div>
+      <button class="button search__submit" type="submit">{{ section.settings.submit_label }}</button>
     </form>
-  </div>
 
-  {% if search.performed %}
-    {% if search.results_count == 0 %}
-      <p class="search__empty">{{ 'search.no_results_html' | t: terms: search.terms }}</p>
-    {% else %}
-      <p class="search__summary">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
+    <p class="search__error" data-search-error role="status" aria-live="polite" hidden>
+      Search could not update. Please try again.
+    </p>
 
-      {% paginate search.results by 20 %}
-        <div class="search__results grid grid--4">
-          {% for result in search.results %}
-            {% if result.object_type == 'product' %}
-              {% render 'product-card', product: result %}
-            {% else %}
-              {% assign featured_image = result.featured_image | default: result.image %}
-              <article class="search-result card">
-                <a class="search-result__link" href="{{ result.url }}">
-                  <div class="search-result__media card__media">
-                    {% render 'responsive-image',
-                      image: featured_image,
-                      alt: result.title,
-                      class: 'search-result__image',
-                      loading: 'lazy',
-                      sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
-                      widths: '240, 360, 540, 720'
-                    %}
-                  </div>
-
-                  <div class="search-result__content card__content">
-                    <p class="search-result__type">{{ result.object_type | capitalize }}</p>
-                    <h2 class="search-result__title">{{ result.title | escape }}</h2>
-
-                    {% if result.price %}
-                      <p class="search-result__price">{% render 'price', amount: result.price, show_currency: true %}</p>
-                    {% endif %}
-                  </div>
-                </a>
-              </article>
-            {% endif %}
-          {% endfor %}
-        </div>
-
-        {% if paginate.pages > 1 %}
-          <div class="search__pagination">
-            {{ paginate | default_pagination }}
-          </div>
+    <div class="search__status" data-search-status aria-live="polite">
+      {% if search.performed %}
+        {% if search.results_count == 0 %}
+          <p class="search__summary">No results for “{{ search.terms | escape }}”</p>
+        {% else %}
+          <p class="search__summary">{{ search.results_count }} result{% unless search.results_count == 1 %}s{% endunless %} for “{{ search.terms | escape }}”</p>
         {% endif %}
-      {% endpaginate %}
-    {% endif %}
-  {% endif %}
+      {% else %}
+        <p class="search__summary">Start typing to search the store.</p>
+      {% endif %}
+    </div>
+
+    <div class="search__results-region" data-search-results aria-live="polite">
+      {% if search.performed %}
+        {% if search.results_count == 0 %}
+          <div class="search__empty">
+            <h2>No results found</h2>
+            <p>Try another search term or browse our products.</p>
+            <a class="button button--secondary" href="{{ routes.collections_url }}/all">Browse products</a>
+          </div>
+        {% else %}
+          {% paginate search.results by 20 %}
+            <div class="search__results grid grid--4">
+              {% for result in search.results %}
+                {% if result.object_type == 'product' %}
+                  {% render 'product-card', product: result %}
+                {% else %}
+                  {% assign featured_image = result.featured_image | default: result.image %}
+                  <article class="search-result card panel link-surface">
+                    <a class="search-result__link" href="{{ result.url }}">
+                      <div class="search-result__media card__media">
+                        {% if featured_image %}
+                          {% render 'responsive-image',
+                            image: featured_image,
+                            alt: result.title,
+                            class: 'search-result__image',
+                            loading: 'lazy',
+                            sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
+                            widths: '240, 360, 540, 720'
+                          %}
+                        {% else %}
+                          <div class="search-result__placeholder" aria-hidden="true">{{ result.object_type | slice: 0 | upcase }}</div>
+                        {% endif %}
+                      </div>
+
+                      <div class="search-result__content card__content">
+                        <p class="search-result__type">{{ result.object_type | capitalize }}</p>
+                        <h2 class="search-result__title">{{ result.title | escape }}</h2>
+
+                        {% if result.price %}
+                          <p class="search-result__price">{% render 'price', amount: result.price, show_currency: true %}</p>
+                        {% endif %}
+                      </div>
+                    </a>
+                  </article>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            {% if paginate.pages > 1 %}
+              <div class="search__pagination">
+                {{ paginate | default_pagination }}
+              </div>
+            {% endif %}
+          {% endpaginate %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
 </section>
 
 {% stylesheet %}
   .search {
+    width: 100%;
+    padding-block: 2rem 3.5rem;
+  }
+
+  .search__panel {
+    position: relative;
     display: grid;
-    gap: 1.5rem;
+    gap: 1.4rem;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.22);
+    border-radius: 1.35rem;
+    padding: 1.1rem;
+    background:
+      radial-gradient(circle at 8% 0%, rgba(0, 229, 255, 0.12), transparent 34%),
+      radial-gradient(circle at 100% 0%, rgba(255, 77, 166, 0.1), transparent 30%),
+      rgba(4, 13, 25, 0.94);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 60px rgba(0, 0, 0, 0.2);
   }
 
   .search__header {
     display: grid;
-    gap: 1rem;
+    gap: 0.75rem;
+    max-width: 46rem;
+  }
+
+  .search__eyebrow {
+    margin: 0;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
   .search__title {
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(2.55rem, 10vw, 5rem);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+  }
+
+  .search__subtitle {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 1.05rem;
+    line-height: 1.6;
   }
 
   .search__form {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: 1fr;
     gap: 0.75rem;
-    max-width: 40rem;
+    max-width: 48rem;
+  }
+
+  .search__field-wrap {
+    position: relative;
+  }
+
+  .search__field {
+    width: 100%;
+    min-height: 3.35rem;
+    border: 1px solid rgba(56, 221, 255, 0.24);
+    border-radius: 999px;
+    padding: 0.9rem 1.15rem;
+    color: var(--theme-color-text);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+      rgba(2, 9, 20, 0.82);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    font: inherit;
+    outline: none;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
+  }
+
+  .search__field:focus {
+    border-color: rgba(37, 237, 255, 0.72);
+    box-shadow: 0 0 0 3px rgba(37, 237, 255, 0.12), 0 0 30px rgba(37, 237, 255, 0.08);
+  }
+
+  .search__submit {
+    min-height: 3.35rem;
+  }
+
+  .search__status {
+    min-height: 1.4rem;
   }
 
   .search__summary,
-  .search__empty,
+  .search__error,
   .search-result__type,
   .search-result__price {
-    color: var(--color-muted);
+    margin: 0;
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .search__error {
+    color: #ff7ac0;
+  }
+
+  .search__results-region {
+    transition: opacity 160ms ease;
+  }
+
+  .search[aria-busy='true'] .search__results-region,
+  .search[aria-busy='true'] .search__status {
+    opacity: 0.58;
+  }
+
+  .search__results {
+    align-items: stretch;
   }
 
   .search-result__link {
     display: grid;
-    gap: 1rem;
+    height: 100%;
     color: inherit;
     text-decoration: none;
   }
@@ -114,32 +247,278 @@
     aspect-ratio: 4 / 5;
   }
 
-  .search-result__image {
+  .search-result__image,
+  .search-result__placeholder {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
+  .search-result__placeholder {
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 50% 20%, rgba(37, 237, 255, 0.2), transparent 35%),
+      rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.72);
+    font-family: var(--theme-font-display);
+    font-size: 3rem;
+    font-weight: 800;
+  }
+
   .search-result__title {
     margin: 0;
+    color: var(--theme-color-text);
     font-size: 1rem;
     line-height: 1.35;
+  }
+
+  .search__empty {
+    display: grid;
+    justify-items: start;
+    gap: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    background: rgba(2, 9, 20, 0.55);
+  }
+
+  .search__empty h2,
+  .search__empty p {
+    margin: 0;
+  }
+
+  .search__empty h2 {
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    letter-spacing: -0.03em;
+  }
+
+  .search__empty p {
+    color: rgba(255, 255, 255, 0.68);
   }
 
   .search__pagination {
     margin-top: 2rem;
   }
 
-  @media (max-width: 749px) {
+  @media (min-width: 750px) {
     .search__form {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+  }
+
+  @media (min-width: 860px) {
+    .search {
+      padding-block: 3rem 4.5rem;
+    }
+
+    .search__panel {
+      padding: 1.75rem;
     }
   }
 {% endstylesheet %}
 
+{% javascript %}
+  (() => {
+    const root = document.querySelector('[data-search-section]');
+
+    if (!root) {
+      return;
+    }
+
+    const sectionId = root.dataset.sectionId;
+    let abortController = null;
+    let requestId = 0;
+    let debounceTimer = null;
+
+    const getParts = () => ({
+      form: root.querySelector('[data-search-form]'),
+      input: root.querySelector('[data-search-input]'),
+      status: root.querySelector('[data-search-status]'),
+      results: root.querySelector('[data-search-results]'),
+      error: root.querySelector('[data-search-error]')
+    });
+
+    const setError = (message) => {
+      const { error } = getParts();
+
+      if (!error) {
+        return;
+      }
+
+      error.textContent = message;
+      error.hidden = false;
+    };
+
+    const clearError = () => {
+      const { error } = getParts();
+
+      if (error) {
+        error.hidden = true;
+      }
+    };
+
+    const buildUrl = (query, sourceUrl = root.querySelector('[data-search-form]').action) => {
+      const url = new URL(sourceUrl, window.location.origin);
+      const normalizedQuery = query.trim();
+
+      if (normalizedQuery) {
+        url.searchParams.set('q', normalizedQuery);
+      } else {
+        url.searchParams.delete('q');
+      }
+
+      url.searchParams.set('section_id', sectionId);
+      return url;
+    };
+
+    const replaceSearchContent = (html) => {
+      const parsed = new DOMParser().parseFromString(html, 'text/html');
+      const nextRoot = parsed.querySelector('[data-search-section]');
+      const nextStatus = nextRoot ? nextRoot.querySelector('[data-search-status]') : null;
+      const nextResults = nextRoot ? nextRoot.querySelector('[data-search-results]') : null;
+      const { status, results } = getParts();
+
+      if (!nextRoot || !nextStatus || !nextResults || !status || !results) {
+        throw new Error('Search section response was incomplete.');
+      }
+
+      status.replaceWith(nextStatus);
+      results.replaceWith(nextResults);
+    };
+
+    const updateUrl = (query, mode) => {
+      const url = new URL(window.location.href);
+      const normalizedQuery = query.trim();
+
+      if (normalizedQuery) {
+        url.searchParams.set('q', normalizedQuery);
+      } else {
+        url.searchParams.delete('q');
+      }
+
+      if (mode === 'push') {
+        history.pushState({}, '', url.toString());
+      } else {
+        history.replaceState({}, '', url.toString());
+      }
+    };
+
+    const runSearch = async (query, mode = 'replace', sourceUrl) => {
+      const currentRequestId = ++requestId;
+
+      if (abortController) {
+        abortController.abort();
+      }
+
+      abortController = new AbortController();
+      clearError();
+      root.setAttribute('aria-busy', 'true');
+
+      try {
+        const response = await fetch(buildUrl(query, sourceUrl).toString(), {
+          signal: abortController.signal,
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        if (!response.ok) {
+          throw new Error('Search request failed.');
+        }
+
+        const html = await response.text();
+
+        if (currentRequestId !== requestId) {
+          return;
+        }
+
+        replaceSearchContent(html);
+        updateUrl(query, mode);
+      } catch (error) {
+        if (error.name === 'AbortError' || currentRequestId !== requestId) {
+          return;
+        }
+
+        setError('Search could not update. Please try again.');
+      } finally {
+        if (currentRequestId === requestId) {
+          root.setAttribute('aria-busy', 'false');
+        }
+      }
+    };
+
+    root.addEventListener('submit', (event) => {
+      const form = event.target.closest('[data-search-form]');
+
+      if (!form) {
+        return;
+      }
+
+      event.preventDefault();
+      clearTimeout(debounceTimer);
+      runSearch(new FormData(form).get('q') || '', 'push');
+    });
+
+    root.addEventListener('input', (event) => {
+      const input = event.target.closest('[data-search-input]');
+
+      if (!input) {
+        return;
+      }
+
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => runSearch(input.value, 'replace'), 300);
+    });
+
+    root.addEventListener('click', (event) => {
+      const link = event.target.closest('.search__pagination a');
+
+      if (!link) {
+        return;
+      }
+
+      event.preventDefault();
+      const url = new URL(link.href, window.location.origin);
+      runSearch(url.searchParams.get('q') || '', 'push', url.toString());
+    });
+  })();
+{% endjavascript %}
+
 {% schema %}
 {
   "name": "t:general.search",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "SEARCH NOXREV"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Find what you need"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Search products, accessories, and support pages."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Search placeholder",
+      "default": "Search NoxRev"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit label",
+      "default": "Search"
+    }
+  ]
 }
 {% endschema %}
