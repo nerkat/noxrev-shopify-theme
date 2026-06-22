@@ -1,0 +1,414 @@
+<section class="contact-page section">
+  <div class="container">
+    <div class="contact-page__intro">
+      {% if section.settings.eyebrow != blank %}
+        <p class="contact-page__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+
+      <h1 class="contact-page__title">{{ section.settings.title }}</h1>
+
+      {% if section.settings.intro != blank %}
+        <p class="contact-page__text">{{ section.settings.intro }}</p>
+      {% endif %}
+    </div>
+
+    <div class="contact-page__grid">
+      <div class="contact-page__card contact-page__card--form">
+        {% form 'contact', class: 'contact-page__form' %}
+          {% if form.posted_successfully? %}
+            <div class="contact-page__message contact-page__message--success" tabindex="-1" autofocus>
+              <strong>Message sent.</strong>
+              <span>Thanks for reaching out. We'll get back to you soon.</span>
+            </div>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="contact-page__message contact-page__message--error" tabindex="-1" autofocus>
+              <strong>Please check the form.</strong>
+              <span>{{ form.errors | default_errors }}</span>
+            </div>
+          {% endif %}
+
+          <div class="contact-page__field">
+            <label for="ContactFormName">Name</label>
+            <input
+              id="ContactFormName"
+              type="text"
+              name="contact[name]"
+              autocomplete="name"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+              placeholder="Your name"
+            >
+          </div>
+
+          <div class="contact-page__field">
+            <label for="ContactFormEmail">Email</label>
+            <input
+              id="ContactFormEmail"
+              type="email"
+              name="contact[email]"
+              autocomplete="email"
+              autocorrect="off"
+              autocapitalize="off"
+              value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+              aria-required="true"
+              required
+              placeholder="you@example.com"
+            >
+          </div>
+
+          {% if section.settings.show_subject %}
+            <div class="contact-page__field">
+              <label for="ContactFormSubject">Subject</label>
+              <input
+                id="ContactFormSubject"
+                type="text"
+                name="contact[subject]"
+                value="{% if form.subject %}{{ form.subject }}{% endif %}"
+                placeholder="Compatibility, order, shipping..."
+              >
+            </div>
+          {% endif %}
+
+          <div class="contact-page__field">
+            <label for="ContactFormMessage">Message</label>
+            <textarea
+              id="ContactFormMessage"
+              name="contact[body]"
+              rows="7"
+              aria-required="true"
+              required
+              placeholder="Tell us how we can help."
+            >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+          </div>
+
+          <button class="button button--primary contact-page__submit" type="submit">
+            {{ section.settings.submit_label }}
+          </button>
+        {% endform %}
+      </div>
+
+      <aside class="contact-page__card contact-page__card--support" aria-labelledby="ContactSupportTitle">
+        <span class="contact-page__support-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" focusable="false">
+            <path d="M12 3.5 19 6v5.2c0 4.4-2.8 7.2-7 9.2-4.2-2-7-4.8-7-9.2V6l7-2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+
+        <h2 id="ContactSupportTitle">{{ section.settings.support_title }}</h2>
+        <p>{{ section.settings.support_text }}</p>
+
+        <dl class="contact-page__support-list">
+          {% if section.settings.support_email != blank %}
+            <div>
+              <dt>Support email</dt>
+              <dd>
+                <a href="mailto:{{ section.settings.support_email | escape }}">{{ section.settings.support_email }}</a>
+              </dd>
+            </div>
+          {% endif %}
+
+          {% if section.settings.response_time != blank %}
+            <div>
+              <dt>Response time</dt>
+              <dd>{{ section.settings.response_time }}</dd>
+            </div>
+          {% endif %}
+        </dl>
+
+        {% if section.settings.guide_label != blank %}
+          <a class="contact-page__guide-link" href="{{ section.settings.guide_link | default: '#' }}">
+            {{ section.settings.guide_label }}
+            <span aria-hidden="true">-&gt;</span>
+          </a>
+        {% endif %}
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .contact-page {
+    padding: 2rem 0 3rem;
+  }
+
+  .contact-page__intro {
+    max-width: 52rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .contact-page__eyebrow {
+    margin: 0 0 0.7rem;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .contact-page__title {
+    max-width: 11ch;
+    margin: 0;
+    background: linear-gradient(100deg, #ff4da6 8%, #c98bff 48%, #6ec8ff 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ff4da6;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--theme-font-display);
+    font-size: clamp(3rem, 13vw, 5.8rem);
+    font-weight: 800;
+    line-height: 0.94;
+    letter-spacing: -0.055em;
+  }
+
+  .contact-page__text {
+    max-width: 42rem;
+    margin: 1rem 0 0;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .contact-page__grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .contact-page__card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.22);
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.11), transparent 34%),
+      radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%),
+      rgba(4, 13, 25, 0.94);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 54px rgba(0, 0, 0, 0.2);
+  }
+
+  .contact-page__card--form {
+    padding: 1rem;
+  }
+
+  .contact-page__form {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .contact-page__field {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .contact-page__field label {
+    color: #25edff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .contact-page__field input,
+  .contact-page__field textarea {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 0.85rem;
+    padding: 0.9rem 1rem;
+    color: var(--theme-color-text);
+    background: rgba(3, 10, 22, 0.72);
+    font: inherit;
+    line-height: 1.45;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base);
+  }
+
+  .contact-page__field textarea {
+    resize: vertical;
+    min-height: 11rem;
+  }
+
+  .contact-page__field input::placeholder,
+  .contact-page__field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.38);
+  }
+
+  .contact-page__field input:focus,
+  .contact-page__field textarea:focus {
+    outline: none;
+    border-color: rgba(0, 229, 255, 0.58);
+    background: rgba(3, 10, 22, 0.88);
+    box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.3), 0 0 28px rgba(0, 229, 255, 0.1);
+  }
+
+  .contact-page__submit {
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+
+  .contact-page__message {
+    display: grid;
+    gap: 0.2rem;
+    border-radius: 0.9rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .contact-page__message--success {
+    border: 1px solid rgba(0, 245, 200, 0.34);
+    color: #baffef;
+    background: rgba(0, 245, 200, 0.08);
+  }
+
+  .contact-page__message--error {
+    border: 1px solid rgba(255, 77, 166, 0.38);
+    color: #ffd3e8;
+    background: rgba(255, 77, 166, 0.08);
+  }
+
+  .contact-page__message ul {
+    margin: 0.35rem 0 0;
+    padding-left: 1.1rem;
+  }
+
+  .contact-page__card--support {
+    align-self: start;
+    padding: 1.1rem;
+  }
+
+  .contact-page__support-icon {
+    display: inline-flex;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 229, 255, 0.36);
+    border-radius: 999px;
+    color: #27efff;
+    background: rgba(3, 12, 24, 0.72);
+  }
+
+  .contact-page__support-icon svg {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+
+  .contact-page__card--support h2 {
+    margin: 1rem 0 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: 1.65rem;
+    line-height: 1.05;
+  }
+
+  .contact-page__card--support p {
+    margin: 0.7rem 0 0;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.55;
+  }
+
+  .contact-page__support-list {
+    display: grid;
+    gap: 0.8rem;
+    margin: 1.1rem 0 0;
+  }
+
+  .contact-page__support-list div {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.8rem;
+  }
+
+  .contact-page__support-list dt {
+    color: #25edff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .contact-page__support-list dd {
+    margin: 0.25rem 0 0;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .contact-page__support-list a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .contact-page__support-list a:hover {
+    color: #25edff;
+  }
+
+  .contact-page__guide-link {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    margin-top: 1.15rem;
+    color: #25edff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 860px) {
+    .contact-page {
+      padding: 3rem 0 4rem;
+    }
+
+    .contact-page__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.48fr);
+      align-items: start;
+    }
+
+    .contact-page__card--form {
+      padding: 1.35rem;
+    }
+
+    .contact-page__card--support {
+      padding: 1.35rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact page",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "CONTACT NOXREV" },
+    { "type": "text", "id": "title", "label": "Title", "default": "How can we help?" },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro text",
+      "default": "Questions about compatibility, orders, shipping, or support? Send us a message and we'll get back to you."
+    },
+    { "type": "checkbox", "id": "show_subject", "label": "Show subject field", "default": true },
+    { "type": "text", "id": "submit_label", "label": "Submit button label", "default": "Send Message" },
+    { "type": "text", "id": "support_title", "label": "Support card title", "default": "Need help choosing your iPad model?" },
+    {
+      "type": "textarea",
+      "id": "support_text",
+      "label": "Support card text",
+      "default": "If you're not sure which model you have, include a photo of your iPad model number or tell us what appears under Settings > General > About."
+    },
+    { "type": "text", "id": "support_email", "label": "Support email", "default": "support@noxrev.com" },
+    { "type": "text", "id": "response_time", "label": "Response time", "default": "Usually replies within 24-48 hours" },
+    { "type": "text", "id": "guide_label", "label": "Guide link label", "default": "Find Your iPad Model" },
+    { "type": "url", "id": "guide_link", "label": "Guide link" }
+  ],
+  "presets": [
+    {
+      "name": "Contact page"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
