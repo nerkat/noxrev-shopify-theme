@@ -96,7 +96,7 @@
         </nav>
       {% endif %}
 
-      {% if shop.privacy_policy or shop.refund_policy or shop.shipping_policy or shop.terms_of_service %}
+      {% comment %} {% if shop.privacy_policy or shop.refund_policy or shop.shipping_policy or shop.terms_of_service %}
         <div class="footer__policies">
           <h2 class="footer__heading">Policies</h2>
           {% if shop.privacy_policy != blank %}
@@ -112,7 +112,7 @@
             <a class="footer__link" href="{{ shop.terms_of_service.url }}">Terms of service</a>
           {% endif %}
         </div>
-      {% endif %}
+      {% endif %} {% endcomment %}
 
       <p class="footer__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
     </div>

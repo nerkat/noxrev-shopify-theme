@@ -1,0 +1,232 @@
+{% # theme-check-disable UndefinedObject %}
+<div class="page-width main-policy">
+  <article class="main-policy__content{% if section.settings.card_style %} main-policy__content--card{% endif %}">
+    <header class="main-policy__header">
+      {% if section.settings.show_eyebrow and section.settings.eyebrow != blank %}
+        <p class="main-policy__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+
+      <h1 class="main-policy__title">{{ policy.title }}</h1>
+
+      {% if section.settings.intro != blank %}
+        <p class="main-policy__intro">{{ section.settings.intro | escape }}</p>
+      {% endif %}
+    </header>
+
+    <div class="main-policy__body">
+      {{ policy.body }}
+    </div>
+  </article>
+</div>
+{% # theme-check-enable UndefinedObject %}
+
+{% stylesheet %}
+  .page-width.main-policy {
+    width: 100%;
+    padding: 2rem 0 3.5rem;
+  }
+
+  .main-policy__content {
+    display: grid;
+    gap: 1.25rem;
+    width: min(100%, var(--main-policy-width, 54rem));
+    margin-inline: auto;
+  }
+
+  .main-policy__content--card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.22);
+    border-radius: 1.25rem;
+    padding: 1.1rem;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.1), transparent 34%),
+      radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%),
+      rgba(4, 13, 25, 0.94);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 54px rgba(0, 0, 0, 0.18);
+  }
+
+  .main-policy__header {
+    max-width: 44rem;
+  }
+
+  .main-policy__eyebrow {
+    margin: 0 0 0.7rem;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .main-policy__title {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(2.5rem, 10vw, 4.8rem);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+  }
+
+  .main-policy__intro {
+    margin: 1rem 0 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .main-policy__body {
+    max-width: 46rem;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 0.98rem;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+  }
+
+  .main-policy__body > * + * {
+    margin-top: 1rem;
+  }
+
+  .main-policy__body h1,
+  .main-policy__body h2,
+  .main-policy__body h3,
+  .main-policy__body h4 {
+    margin: 1.65rem 0 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+
+  .main-policy__body h2 {
+    font-size: clamp(1.55rem, 4vw, 2.15rem);
+  }
+
+  .main-policy__body h3 {
+    font-size: clamp(1.25rem, 3vw, 1.55rem);
+  }
+
+  .main-policy__body h4 {
+    font-size: 1.05rem;
+  }
+
+  .main-policy__body p,
+  .main-policy__body ul,
+  .main-policy__body ol,
+  .main-policy__body blockquote,
+  .main-policy__body table {
+    margin-bottom: 0;
+  }
+
+  .main-policy__body ul,
+  .main-policy__body ol {
+    display: grid;
+    gap: 0.45rem;
+    padding-left: 1.3rem;
+  }
+
+  .main-policy__body li + li {
+    margin-top: 0;
+  }
+
+  .main-policy__body a {
+    color: #25edff;
+    text-decoration-color: rgba(37, 237, 255, 0.36);
+    text-underline-offset: 0.18em;
+    transition: color var(--transition-base), text-decoration-color var(--transition-base);
+  }
+
+  .main-policy__body a:hover {
+    color: #ff7ac0;
+    text-decoration-color: rgba(255, 122, 192, 0.52);
+  }
+
+  .main-policy__body strong {
+    color: var(--theme-color-text);
+  }
+
+  .main-policy__body blockquote {
+    border-left: 2px solid rgba(37, 237, 255, 0.62);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1rem;
+    color: rgba(255, 255, 255, 0.82);
+    background: rgba(3, 10, 22, 0.52);
+  }
+
+  .main-policy__body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 1rem;
+  }
+
+  .main-policy__body table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.9rem;
+  }
+
+  .main-policy__body th,
+  .main-policy__body td {
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+    vertical-align: top;
+    white-space: normal;
+  }
+
+  .main-policy__body th {
+    color: var(--theme-color-text);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  @media (min-width: 860px) {
+    .page-width.main-policy {
+      padding: 3rem 0 4.5rem;
+    }
+
+    .main-policy__content--card {
+      padding: 1.75rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Policy page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_eyebrow",
+      "label": "Show eyebrow",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "NOXREV POLICY"
+    },
+    {
+      "type": "text",
+      "id": "intro",
+      "label": "Intro"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_style",
+      "label": "Show glass card",
+      "default": true
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
