@@ -1,15 +1,21 @@
 <div class="page-width main-page">
-  <div class="main-page__content">
-    <h1 class="main-page__title">{{ page.title }}</h1>
+  <article class="main-page__content{% if section.settings.card_style %} main-page__content--card{% endif %}">
+    <header class="main-page__header">
+      {% if section.settings.show_eyebrow and section.settings.eyebrow != blank %}
+        <p class="main-page__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
 
-    {% if section.settings.intro != blank %}
-      <p class="main-page__intro">{{ section.settings.intro | escape }}</p>
-    {% endif %}
+      <h1 class="main-page__title">{{ page.title }}</h1>
 
-    {% if page.content != blank %}
-      <div class="main-page__body">{{ page.content }}</div>
-    {% else %}
-      <div class="main-page__body">
+      {% if section.settings.intro != blank %}
+        <p class="main-page__intro">{{ section.settings.intro | escape }}</p>
+      {% endif %}
+    </header>
+
+    <div class="main-page__body">
+      {% if page.content != blank %}
+        {{ page.content }}
+      {% else %}
         <p>{{ 'page.placeholder_intro' | t }}</p>
         <p>{{ 'page.placeholder_paragraph_1' | t }}</p>
         <p>{{ 'page.placeholder_paragraph_2' | t }}</p>
@@ -19,46 +25,185 @@
           <li>{{ 'page.placeholder_list_3' | t }}</li>
         </ul>
         <p>{{ 'page.placeholder_cta' | t }}</p>
-      </div>
-    {% endif %}
-  </div>
+      {% endif %}
+    </div>
+  </article>
 </div>
 
 {% stylesheet %}
   .page-width.main-page {
     width: 100%;
-    padding: 2rem 0 3rem;
+    padding: 2rem 0 3.5rem;
   }
 
   .main-page__content {
-    max-width: 48rem;
     display: grid;
-    gap: 1rem;
+    gap: 1.25rem;
+    width: min(100%, var(--main-page-width, 54rem));
+    margin-inline: auto;
+  }
+
+  .main-page__content--card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.22);
+    border-radius: 1.25rem;
+    padding: 1.1rem;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.1), transparent 34%),
+      radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%),
+      rgba(4, 13, 25, 0.94);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 54px rgba(0, 0, 0, 0.18);
+  }
+
+  .main-page__header {
+    max-width: 44rem;
+  }
+
+  .main-page__eyebrow {
+    margin: 0 0 0.7rem;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
   .main-page__title {
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(2.5rem, 10vw, 4.8rem);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
   }
 
   .main-page__intro {
+    margin: 1rem 0 0;
+    color: rgba(255, 255, 255, 0.72);
     font-size: 1.05rem;
     line-height: 1.6;
   }
 
   .main-page__body {
-    line-height: 1.7;
+    max-width: 46rem;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 0.98rem;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
   }
 
   .main-page__body > * + * {
     margin-top: 1rem;
   }
 
-  .main-page__body ul {
-    padding-left: 1.25rem;
+  .main-page__body h1,
+  .main-page__body h2,
+  .main-page__body h3,
+  .main-page__body h4 {
+    margin: 1.65rem 0 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+
+  .main-page__body h2 {
+    font-size: clamp(1.55rem, 4vw, 2.15rem);
+  }
+
+  .main-page__body h3 {
+    font-size: clamp(1.25rem, 3vw, 1.55rem);
+  }
+
+  .main-page__body h4 {
+    font-size: 1.05rem;
+  }
+
+  .main-page__body p,
+  .main-page__body ul,
+  .main-page__body ol,
+  .main-page__body blockquote,
+  .main-page__body table {
+    margin-bottom: 0;
+  }
+
+  .main-page__body ul,
+  .main-page__body ol {
+    display: grid;
+    gap: 0.45rem;
+    padding-left: 1.3rem;
   }
 
   .main-page__body li + li {
-    margin-top: 0.35rem;
+    margin-top: 0;
+  }
+
+  .main-page__body a {
+    color: #25edff;
+    text-decoration-color: rgba(37, 237, 255, 0.36);
+    text-underline-offset: 0.18em;
+    transition: color var(--transition-base), text-decoration-color var(--transition-base);
+  }
+
+  .main-page__body a:hover {
+    color: #ff7ac0;
+    text-decoration-color: rgba(255, 122, 192, 0.52);
+  }
+
+  .main-page__body strong {
+    color: var(--theme-color-text);
+  }
+
+  .main-page__body blockquote {
+    border-left: 2px solid rgba(37, 237, 255, 0.62);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1rem;
+    color: rgba(255, 255, 255, 0.82);
+    background: rgba(3, 10, 22, 0.52);
+  }
+
+  .main-page__body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 1rem;
+  }
+
+  .main-page__body table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.9rem;
+  }
+
+  .main-page__body th,
+  .main-page__body td {
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+    vertical-align: top;
+    white-space: normal;
+  }
+
+  .main-page__body th {
+    color: var(--theme-color-text);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  @media (min-width: 860px) {
+    .page-width.main-page {
+      padding: 3rem 0 4.5rem;
+    }
+
+    .main-page__content--card {
+      padding: 1.75rem;
+    }
   }
 {% endstylesheet %}
 
@@ -67,9 +212,27 @@
   "name": "t:general.page",
   "settings": [
     {
+      "type": "checkbox",
+      "id": "show_eyebrow",
+      "label": "Show eyebrow",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "NOXREV POLICY"
+    },
+    {
       "type": "text",
       "id": "intro",
       "label": "Intro"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_style",
+      "label": "Show glass card",
+      "default": true
     }
   ],
   "disabled_on": {
