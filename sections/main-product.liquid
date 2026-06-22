@@ -352,8 +352,9 @@
                         type="button"
                         role="tab"
                         id="ModelTab-Ipad-{{ section.id }}"
-                        aria-selected="false"
+                        aria-selected="true"
                         aria-controls="ModelPanel-Ipad-{{ section.id }}"
+                        tabindex="0"
                         data-model-tab="ipad"
                       >
                         <span class="main-product__model-tab-title">iPad/Mini</span>
@@ -410,12 +411,11 @@
 
                   {% if ipad_count > 0 %}
                     <div
-                      class="main-product__model-panel panel"
+                      class="main-product__model-panel panel is-active"
                       id="ModelPanel-Ipad-{{ section.id }}"
                       role="tabpanel"
                       aria-labelledby="ModelTab-Ipad-{{ section.id }}"
                       data-model-panel="ipad"
-                      hidden
                     >
                       <div class="main-product__model-panel-inner">
                         <ul class="main-product__model-list" role="list">

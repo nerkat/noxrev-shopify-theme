@@ -100,9 +100,12 @@
         });
 
         const storedFamily = activeModelFamilies.get(productHandle) || '';
+        const desktopDefaultFamily = window.matchMedia('(min-width: 861px)').matches ? 'ipad' : '';
 
         if (storedFamily && tabs.some((tab) => tab.dataset.modelTab === storedFamily)) {
           setActiveFamily(storedFamily);
+        } else if (desktopDefaultFamily && tabs.some((tab) => tab.dataset.modelTab === desktopDefaultFamily)) {
+          setActiveFamily(desktopDefaultFamily);
         } else {
           clearActiveFamily();
         }
