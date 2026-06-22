@@ -105,6 +105,11 @@
       visibility: visible;
     }
 
+    .main-product__gallery.is-initializing .main-product__gallery-nav,
+    .main-product__gallery.is-initializing .main-product__gallery-dot {
+      transition: none;
+    }
+
     .main-product__gallery-nav::before {
       content: '';
       position: absolute;

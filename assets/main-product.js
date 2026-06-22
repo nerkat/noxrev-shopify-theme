@@ -116,6 +116,8 @@
         return;
       }
 
+      gallery.classList.add('is-initializing');
+
       const track = gallery.querySelector('[data-gallery-track]');
       const slides = Array.from(gallery.querySelectorAll('[data-gallery-slide]'));
       const dots = Array.from(gallery.querySelectorAll('[data-gallery-dot]'));
@@ -132,6 +134,22 @@
       if (activeIndex < 0) {
         activeIndex = 0;
       }
+
+      const jumpToSlide = (index) => {
+        const previousScrollBehavior = track.style.scrollBehavior;
+
+        track.style.scrollBehavior = 'auto';
+        track.scrollLeft = slides[index].offsetLeft;
+        track.style.scrollBehavior = previousScrollBehavior;
+      };
+
+      const getSlideIndexByMediaId = (mediaId) => {
+        if (!mediaId) {
+          return -1;
+        }
+
+        return slides.findIndex((slide) => slide.dataset.mediaId === String(mediaId));
+      };
 
       const setActiveSlide = (index, shouldScroll = false) => {
         activeIndex = Math.max(0, Math.min(index, slides.length - 1));
@@ -166,6 +184,73 @@
         }
       };
 
+      const goToMediaId = (mediaId, behavior = 'smooth') => {
+        const nextIndex = getSlideIndexByMediaId(mediaId);
+
+        if (nextIndex < 0) {
+          return false;
+        }
+
+        setActiveSlide(nextIndex);
+
+        if (behavior === 'instant') {
+          jumpToSlide(nextIndex);
+        } else {
+          track.scrollTo({
+            left: slides[nextIndex].offsetLeft,
+            behavior,
+          });
+        }
+
+        return true;
+      };
+
+      const waitForMediaId = (mediaId, timeout = 520) =>
+        new Promise((resolve) => {
+          const nextIndex = getSlideIndexByMediaId(mediaId);
+
+          if (nextIndex < 0) {
+            resolve(false);
+            return;
+          }
+
+          const targetLeft = slides[nextIndex].offsetLeft;
+          const isSettled = () => Math.abs(track.scrollLeft - targetLeft) <= 2;
+
+          if (isSettled()) {
+            resolve(true);
+            return;
+          }
+
+          let frameId = 0;
+          const startedAt = window.performance.now();
+
+          const check = () => {
+            if (isSettled()) {
+              resolve(true);
+              return;
+            }
+
+            if (window.performance.now() - startedAt >= timeout) {
+              resolve(false);
+              return;
+            }
+
+            frameId = window.requestAnimationFrame(check);
+          };
+
+          frameId = window.requestAnimationFrame(check);
+
+          track.addEventListener(
+            'pointerdown',
+            () => {
+              window.cancelAnimationFrame(frameId);
+              resolve(false);
+            },
+            { once: true }
+          );
+        });
+
       const updateActiveSlideFromScroll = () => {
         const nextIndex = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
 
@@ -190,8 +275,17 @@
       track.addEventListener('scroll', updateActiveSlideFromScroll, { passive: true });
 
       setActiveSlide(activeIndex);
-      track.scrollLeft = slides[activeIndex].offsetLeft;
+      jumpToSlide(activeIndex);
+      gallery.noxrevGallery = {
+        goToMediaId,
+        waitForMediaId,
+        getActiveMediaId: () => slides[activeIndex]?.dataset.mediaId || '',
+      };
       gallery.dataset.initialized = 'true';
+
+      requestAnimationFrame(() => {
+        gallery.classList.remove('is-initializing');
+      });
     };
 
     const initQuantityControls = (scope = document) => {
@@ -235,7 +329,37 @@
       initQuantityControls(scope);
     };
 
-    const replaceVariantFragments = (currentSection, nextSection) => {
+    const getCurrentGallery = (section) => section?.querySelector('[data-product-gallery]');
+
+    const moveGalleryToVariantMedia = (section, mediaId, behavior = 'smooth') => {
+      const gallery = getCurrentGallery(section);
+
+      if (!gallery) {
+        return false;
+      }
+
+      if (gallery.noxrevGallery?.goToMediaId(mediaId, behavior)) {
+        return true;
+      }
+
+      const targetSlide = gallery.querySelector(`[data-gallery-slide][data-media-id="${mediaId}"]`);
+      const slides = Array.from(gallery.querySelectorAll('[data-gallery-slide]'));
+      const index = slides.indexOf(targetSlide);
+
+      if (index < 0) {
+        return false;
+      }
+
+      targetSlide.scrollIntoView({
+        behavior,
+        block: 'nearest',
+        inline: 'start',
+      });
+
+      return true;
+    };
+
+    const replaceVariantFragments = (currentSection, nextSection, preferredMediaId = '') => {
       FRAGMENT_SELECTORS.forEach((selector) => {
         const currentFragment = currentSection.querySelector(selector);
         const nextFragment = nextSection.querySelector(selector);
@@ -244,6 +368,12 @@
           currentFragment.replaceWith(nextFragment.cloneNode(true));
         }
       });
+
+      if (preferredMediaId) {
+        const nextGallery = getCurrentGallery(currentSection);
+        initGallery(nextGallery);
+        moveGalleryToVariantMedia(currentSection, preferredMediaId, 'instant');
+      }
     };
 
     const clearPendingVariantState = (section) => {
@@ -347,8 +477,10 @@
 
       const url = new URL(trigger.href, window.location.origin);
       url.searchParams.set('section_id', sectionId);
+      const preferredMediaId = trigger.dataset.variantMediaId || '';
 
       applyPendingVariantState(trigger);
+      moveGalleryToVariantMedia(currentSection, preferredMediaId, 'smooth');
       currentSection.setAttribute('aria-busy', 'true');
       const submitLoadingState = setTemporarySubmitLoadingState(currentSection);
 
@@ -378,7 +510,15 @@
           throw new Error('Updated product section markup was not found in the response');
         }
 
-        replaceVariantFragments(currentSection, nextSection);
+        if (preferredMediaId) {
+          await getCurrentGallery(currentSection)?.noxrevGallery?.waitForMediaId(preferredMediaId);
+
+          if (requestId !== variantRequestSequence) {
+            return;
+          }
+        }
+
+        replaceVariantFragments(currentSection, nextSection, preferredMediaId);
         initMainProductBehaviors(currentSection);
         history.replaceState({}, '', trigger.href);
         restoreVariantFocus(currentSection, trigger);

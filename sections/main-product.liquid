@@ -245,6 +245,9 @@
                           href="{{ option_url }}"
                           data-variant-link
                           data-variant-id="{{ option_variant.id }}"
+                          {% if option_variant.featured_media %}
+                            data-variant-media-id="{{ option_variant.featured_media.id }}"
+                          {% endif %}
                           aria-label="Choose {{ option.name | escape }}: {{ value.name | escape }}{% unless option_variant.available %} unavailable{% endunless %}"
                           {% if value.selected %}
                             aria-current="true"
@@ -456,6 +459,9 @@
                             href="{{ option_url }}"
                             data-variant-link
                             data-variant-id="{{ option_variant.id }}"
+                            {% if option_variant.featured_media %}
+                              data-variant-media-id="{{ option_variant.featured_media.id }}"
+                            {% endif %}
                             aria-label="Choose color: {{ value.name | escape }}"
                             style="{{ swatch_style | strip }}"
                             {% if value.selected %}
