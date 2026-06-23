@@ -161,6 +161,7 @@
           "settings": {
             "title": "Secure, Form-Fit Protection",
             "text": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches.",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_25_07_PM.png",
             "image_alt": "Product feature detail",
             "icon": "shield"
           }
@@ -170,6 +171,7 @@
           "settings": {
             "title": "Pencil Storage",
             "text": "Built-in drawer keeps your Apple Pencil safe and always within reach.",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_27_42_PM.png",
             "image_alt": "Product feature detail",
             "icon": "draw"
           }
@@ -179,6 +181,7 @@
           "settings": {
             "title": "Mute Button",
             "text": "Instant mute for quiet focus anytime, anywhere.",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_29_58_PM.png",
             "image_alt": "Product feature detail",
             "icon": "type"
           }
@@ -188,6 +191,7 @@
           "settings": {
             "title": "Fast Charging",
             "text": "USB-C fast charging for uninterrupted productivity.",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_31_27_PM.png",
             "image_alt": "Product feature detail",
             "icon": "bolt"
           }
