@@ -19,7 +19,6 @@
         "real_life_typing": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/1.mp4",
             "poster_alt": "Real customer setup video",
             "title": "Typing setup",
             "text": "Backlit keys in action",
@@ -29,7 +28,6 @@
         "real_life_study": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/2.mp4",
             "poster_alt": "Real customer setup video",
             "title": "Study session",
             "text": "Notes, docs and more",
@@ -39,7 +37,6 @@
         "real_life_pairing": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/3.mp4",
             "poster_alt": "Real customer setup video",
             "title": "Bluetooth pairing",
             "text": "Fast and effortless",
@@ -49,7 +46,6 @@
         "real_life_kitchen": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/4.mp4",
             "poster_alt": "Real customer setup video",
             "title": "Kitchen workflow",
             "text": "Recipes, shows, multitask",
@@ -59,7 +55,6 @@
         "video_card_fe4A7V": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/5.mp4",
             "poster_alt": "Real customer setup video",
             "title": "Typing setup",
             "text": "Backlit keys in action",
@@ -69,7 +64,6 @@
         "video_card_JCahVH": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/6.mp4",
             "poster_alt": "Real customer setup video",
             "title": "Typing setup",
             "text": "Backlit keys in action",
