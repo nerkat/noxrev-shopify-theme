@@ -130,7 +130,6 @@
         "eyebrow": "Designed For Every Mode",
         "title": "One Case. Every Angle. Endless Possibilities.",
         "text": "Rotate, flip, and adjust with ease. Whether you're working, creating, or streaming, find the perfect angle for every task.",
-        "image": "shopify://shop_images/7_Unique_Modes_2.png",
         "image_alt": "Keyboard case shown in multiple modes"
       }
     },
@@ -140,7 +139,6 @@
         "eyebrow": "Power That Keeps Up",
         "title": "2-Hour Charge. 30-Day Power.",
         "text": "Stay productive longer with ultra-efficient power. Less charging, more creating.",
-        "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_18_19_PM.png",
         "image_alt": "Keyboard case with glowing power rings",
         "fast_charge_value": "2-Hour",
         "fast_charge_label": "Fast Charge",
@@ -163,7 +161,6 @@
           "settings": {
             "title": "Secure, Form-Fit Protection",
             "text": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches.",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_25_07_PM.png",
             "image_alt": "Product feature detail",
             "icon": "shield"
           }
@@ -173,7 +170,6 @@
           "settings": {
             "title": "Pencil Storage",
             "text": "Built-in drawer keeps your Apple Pencil safe and always within reach.",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_27_42_PM.png",
             "image_alt": "Product feature detail",
             "icon": "draw"
           }
@@ -183,7 +179,6 @@
           "settings": {
             "title": "Mute Button",
             "text": "Instant mute for quiet focus anytime, anywhere.",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_29_58_PM.png",
             "image_alt": "Product feature detail",
             "icon": "type"
           }
@@ -193,7 +188,6 @@
           "settings": {
             "title": "Fast Charging",
             "text": "USB-C fast charging for uninterrupted productivity.",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_31_27_PM.png",
             "image_alt": "Product feature detail",
             "icon": "bolt"
           }
@@ -214,7 +208,6 @@
           "type": "mode",
           "settings": {
             "label": "Laptop Mode",
-            "image": "shopify://shop_images/edited-photo_1.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -222,7 +215,6 @@
           "type": "mode",
           "settings": {
             "label": "Stand Mode",
-            "image": "shopify://shop_images/edited-photo.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -230,7 +222,6 @@
           "type": "mode",
           "settings": {
             "label": "Tent Mode",
-            "image": "shopify://shop_images/edited-photo_2.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -238,7 +229,6 @@
           "type": "mode",
           "settings": {
             "label": "Tablet Mode",
-            "image": "shopify://shop_images/edited-photo_1_c9887043-19b6-4a56-81a5-6facf2d27317.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -246,7 +236,6 @@
           "type": "mode",
           "settings": {
             "label": "Drawing Mode",
-            "image": "shopify://shop_images/edited-photo_0bba9500-568a-4002-9e71-43b6466a81f4.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -254,7 +243,6 @@
           "type": "mode",
           "settings": {
             "label": "Viewing Mode",
-            "image": "shopify://shop_images/edited-photo_2_3e75043f-3a4a-4c66-9444-ded0faa57b2b.png",
             "image_alt": "Keyboard case mode"
           }
         },
@@ -262,7 +250,6 @@
           "type": "mode",
           "settings": {
             "label": "Presentation Mode",
-            "image": "shopify://shop_images/edited-photo_1_e992bbb0-8710-4767-8359-e597c3f593ff.png",
             "image_alt": "Keyboard case mode"
           }
         }
@@ -323,7 +310,6 @@
         "eyebrow": "Next-Gen Typing Experience",
         "title": "Built For Speed, Accuracy, And Comfort.",
         "text": "Scissor-switch keys, responsive tracking pad, and smart gestures built for speed, accuracy, and comfort.",
-        "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_12_51_PM.png",
         "image_alt": "Hands typing on keyboard case"
       }
     },
@@ -377,7 +363,6 @@
         "eyebrow": "Stunning Precision And Control",
         "title": "Trackpad Gestures That Feel Natural.",
         "text": "The precision trackpad supports all the multi-touch gestures you already know.",
-        "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_35_28_PM.png",
         "image_alt": "Close-up of precision trackpad and keyboard"
       }
     },
