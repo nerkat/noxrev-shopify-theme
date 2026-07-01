@@ -36,8 +36,8 @@
 -%}
 
 <footer class="footer">
-  <div class="section footer__inner container">
-    <div class="footer__shell">
+  <div class="section footer__inner">
+    <div class="footer__shell container">
       <div class="footer__top">
         <div class="footer__brand">
           <a class="footer__brand-link" href="{{ routes.root_url }}" aria-label="{{ brand_text | escape }}">
@@ -194,12 +194,6 @@
     display: grid;
     gap: clamp(1.25rem, 2.5vw, 2rem);
     padding: clamp(1.2rem, 2.6vw, 2rem);
-    border: 1px solid rgba(0, 229, 255, 0.14);
-    border-radius: clamp(1rem, 2vw, 1.4rem);
-    background:
-      linear-gradient(135deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.014)),
-      rgba(4, 13, 27, 0.72);
-    box-shadow: 0 1.6rem 4rem rgba(0, 0, 0, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
   .footer__top {
