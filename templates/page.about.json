@@ -35,7 +35,9 @@
         },
         "image_3": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_10_16_39_AM.png"
+          }
         }
       },
       "block_order": [
