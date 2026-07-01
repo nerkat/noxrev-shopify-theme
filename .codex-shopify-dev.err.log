@@ -55,3 +55,20 @@
 • 12:10:29  Synced » update sections/faq-page.liquid
 • 12:10:30  Synced » update templates/page.faq.json
 • 12:10:30 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795724874 
+• 12:33:56 Request »    GET 200 /pages/faq 
+• 12:34:05 Request »    GET 200 /pages/faq 
+• 12:34:05  Synced » update templates/page.faq.json
+• 12:34:05 Request »    GET 200 /pages/faq 
+• 12:37:27 Request »    GET 200 /pages/faq 
+• 12:37:27  Synced » update sections/faq-page.liquid
+• 12:38:22  Synced » update templates/page.faq.json
+• 12:38:22 Request »    GET 401 /pages/faq 
+• 12:40:42  Synced » update assets/main-product.css
+• 12:40:43  Synced » update assets/main-product.css
+• 12:40:55  Synced » update assets/main-product.css
+• 12:40:57  Synced » update assets/main-product.css
+• 12:41:12  Synced » update assets/main-product.css
+• 12:41:13  Synced » update assets/main-product.css
+• 12:41:15  Synced » update assets/main-product.css
+• 12:41:16  Synced » update assets/main-product.css
+• 12:41:18  Synced » update assets/main-product.css

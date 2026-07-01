@@ -1,107 +1,309 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "faq": {
       "type": "faq-page",
       "blocks": {
-        "compatibility_model": {
+        "faq_001": {
           "type": "faq",
           "settings": {
             "category": "Compatibility",
             "question": "How do I know which iPad model I have?",
-            "answer": "<p>Open Settings &gt; General &gt; About and check the model name. You can also compare your iPad with our model guide.</p>"
+            "answer": "<p>Open Settings &gt; General &gt; About and look for Model Name. If you are still unsure, compare your device size and model details with our Find Your iPad Model guide before ordering.</p>"
           }
         },
-        "compatibility_wrong": {
+        "faq_002": {
           "type": "faq",
           "settings": {
             "category": "Compatibility",
-            "question": "What happens if I choose the wrong model?",
-            "answer": "<p>Contact us as soon as possible. We will help confirm the correct fit before your order ships whenever we can.</p>"
+            "question": "Which iPad generations are supported?",
+            "answer": "<p>Supported generations depend on the exact NoxRev case version and product listing. Always match your iPad model name, screen size, and generation before checkout.</p>"
           }
         },
-        "shipping_time": {
+        "faq_003": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility",
+            "question": "What if I order the wrong model?",
+            "answer": "<p>Contact support as soon as possible with your order number and iPad model. If the order has not shipped, we can usually help update it; after shipping, return or exchange options may vary by region and policy.</p>"
+          }
+        },
+        "faq_004": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility",
+            "question": "Can I change my model after ordering?",
+            "answer": "<p>Model changes are usually possible only before fulfillment begins. Send us your order number and the correct iPad model, and our team will confirm what can be adjusted.</p>"
+          }
+        },
+        "faq_005": {
           "type": "faq",
           "settings": {
             "category": "Shipping",
             "question": "How long does shipping take?",
-            "answer": "<p>Shipping times vary by destination. You will receive tracking details once your order is on the way.</p>"
+            "answer": "<p>Shipping time depends on your destination, selected shipping method, and local carrier conditions. Most orders receive tracking after fulfillment, and estimated delivery times may vary by region.</p>"
           }
         },
-        "shipping_international": {
+        "faq_006": {
           "type": "faq",
           "settings": {
             "category": "Shipping",
             "question": "Do you ship internationally?",
-            "answer": "<p>Yes, international shipping may be available depending on your location and checkout options.</p>"
+            "answer": "<p>International shipping may be available depending on your location and checkout options. Availability, delivery speed, and carrier services can vary by country or region.</p>"
           }
         },
-        "returns_order": {
+        "faq_007": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping",
+            "question": "How do I track my order?",
+            "answer": "<p>Once your order ships, tracking details are typically sent by email. If tracking has not updated yet, allow the carrier some time to scan the package into their system.</p>"
+          }
+        },
+        "faq_008": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping",
+            "question": "Are customs duties included?",
+            "answer": "<p>Customs duties, import taxes, and local fees vary by country and may not be included at checkout. Your local customs office or carrier may contact you if additional payment is required.</p>"
+          }
+        },
+        "faq_009": {
+          "type": "faq",
+          "settings": {
+            "category": "Orders",
+            "question": "Can I cancel my order?",
+            "answer": "<p>Orders can usually be canceled only before fulfillment begins. Contact support quickly with your order number, and we will confirm whether cancellation is still possible.</p>"
+          }
+        },
+        "faq_010": {
+          "type": "faq",
+          "settings": {
+            "category": "Orders",
+            "question": "Can I change my shipping address?",
+            "answer": "<p>Address changes are usually possible only before the order ships. Please send the corrected address and order number as soon as possible so our team can review it.</p>"
+          }
+        },
+        "faq_011": {
+          "type": "faq",
+          "settings": {
+            "category": "Orders",
+            "question": "Why didn't I receive an order confirmation?",
+            "answer": "<p>Order confirmations are sent to the email entered at checkout. Check your spam folder first, then contact support with your name and order details if you still cannot find it.</p>"
+          }
+        },
+        "faq_012": {
           "type": "faq",
           "settings": {
             "category": "Returns",
-            "question": "Can I return my order?",
-            "answer": "<p>Returns are accepted according to our return policy. Items should be unused and returned with original packaging when required.</p>"
+            "question": "What is your return policy?",
+            "answer": "<p>Return eligibility depends on the item condition, order timing, and destination. Please review the current return policy before starting a return, as terms may vary by region.</p>"
           }
         },
-        "returns_damaged": {
+        "faq_013": {
           "type": "faq",
           "settings": {
             "category": "Returns",
-            "question": "What if my item arrives damaged?",
-            "answer": "<p>Please contact support with your order number and photos of the damage so we can help resolve it quickly.</p>"
+            "question": "How do I start a return?",
+            "answer": "<p>Contact support with your order number, reason for return, and photos if helpful. Our team will review the request and share the next steps if the order is eligible.</p>"
           }
         },
-        "product_pencil": {
+        "faq_014": {
+          "type": "faq",
+          "settings": {
+            "category": "Returns",
+            "question": "When will I receive my refund?",
+            "answer": "<p>Refund timing depends on return inspection and your payment provider. Once approved, refunds usually appear after the payment processor completes its standard handling time.</p>"
+          }
+        },
+        "faq_015": {
+          "type": "faq",
+          "settings": {
+            "category": "Warranty",
+            "question": "Does the keyboard include a warranty?",
+            "answer": "<p>NoxRev products may include warranty coverage depending on the item and purchase region. Check the current warranty terms on the site or contact support for confirmation.</p>"
+          }
+        },
+        "faq_016": {
+          "type": "faq",
+          "settings": {
+            "category": "Warranty",
+            "question": "What does the warranty cover?",
+            "answer": "<p>Warranty coverage typically applies to eligible manufacturing defects under normal use. It usually does not cover accidental damage, misuse, unauthorized repairs, or normal wear and tear.</p>"
+          }
+        },
+        "faq_017": {
+          "type": "faq",
+          "settings": {
+            "category": "Warranty",
+            "question": "How do I make a warranty claim?",
+            "answer": "<p>Contact support with your order number, a clear description of the issue, and photos or video if possible. Our team will review the claim against the current warranty terms.</p>"
+          }
+        },
+        "faq_018": {
           "type": "faq",
           "settings": {
             "category": "Product",
-            "question": "Does the keyboard case support Apple Pencil?",
-            "answer": "<p>Many NoxRev keyboard cases are designed with Apple Pencil storage or compatibility. Check the product details for your exact model.</p>"
+            "question": "Does it support Apple Pencil charging?",
+            "answer": "<p>Apple Pencil charging support depends on the case model and iPad compatibility. Check the product details for your exact fit, especially if wireless charging is important to your workflow.</p>"
           }
         },
-        "product_charge": {
+        "faq_019": {
           "type": "faq",
           "settings": {
             "category": "Product",
-            "question": "Does it need charging?",
-            "answer": "<p>Yes, keyboard cases with Bluetooth or backlit keys need charging. Battery life depends on usage and lighting settings.</p>"
+            "question": "Does the case protect the iPad?",
+            "answer": "<p>The case is designed to add everyday protection against common bumps and scratches. Protection level can vary by model and does not make the iPad indestructible.</p>"
+          }
+        },
+        "faq_020": {
+          "type": "faq",
+          "settings": {
+            "category": "Product",
+            "question": "Can I use it without the keyboard?",
+            "answer": "<p>Some configurations may allow flexible use modes, while others are designed as an integrated keyboard case. Review the product images and mode details for the exact version you are buying.</p>"
+          }
+        },
+        "faq_021": {
+          "type": "faq",
+          "settings": {
+            "category": "Product",
+            "question": "Does it auto wake and sleep the iPad?",
+            "answer": "<p>Auto wake and sleep support can depend on the iPad model and case design. If supported, it should work similarly to other magnetic iPad accessories when aligned correctly.</p>"
+          }
+        },
+        "faq_022": {
+          "type": "faq",
+          "settings": {
+            "category": "Battery",
+            "question": "How long does the battery last?",
+            "answer": "<p>Battery life depends on typing time, backlight brightness, standby behavior, and usage habits. Under typical use, most users should expect longer battery life when backlighting is used sparingly.</p>"
+          }
+        },
+        "faq_023": {
+          "type": "faq",
+          "settings": {
+            "category": "Battery",
+            "question": "How long does charging take?",
+            "answer": "<p>Charging time varies by charger, cable, and remaining battery level. A standard USB-C charger usually works well, but exact charging speed may vary.</p>"
+          }
+        },
+        "faq_024": {
+          "type": "faq",
+          "settings": {
+            "category": "Battery",
+            "question": "Which USB-C charger should I use?",
+            "answer": "<p>Use a reputable USB-C charger and cable that meet normal safety standards. Avoid damaged cables or unknown adapters, and follow any charging guidance included with the product.</p>"
+          }
+        },
+        "faq_025": {
+          "type": "faq",
+          "settings": {
+            "category": "Keyboard",
+            "question": "Is the keyboard backlit?",
+            "answer": "<p>Many NoxRev keyboard cases include backlit keys, but exact lighting features can vary by model. Check the product details to confirm color modes and brightness controls.</p>"
+          }
+        },
+        "faq_026": {
+          "type": "faq",
+          "settings": {
+            "category": "Keyboard",
+            "question": "Can I change the brightness?",
+            "answer": "<p>Backlit models typically include brightness adjustment shortcuts. Available levels and controls may vary by keyboard version.</p>"
+          }
+        },
+        "faq_027": {
+          "type": "faq",
+          "settings": {
+            "category": "Keyboard",
+            "question": "Is it comfortable for long typing sessions?",
+            "answer": "<p>The keyboard is designed for everyday writing, studying, and productivity. Comfort is personal, but the layout is intended to feel stable and practical for longer sessions.</p>"
+          }
+        },
+        "faq_028": {
+          "type": "faq",
+          "settings": {
+            "category": "Trackpad",
+            "question": "Does it support multi-touch gestures?",
+            "answer": "<p>Trackpad models are designed to support common iPadOS gestures where available. Gesture behavior may depend on your iPadOS version and accessibility settings.</p>"
+          }
+        },
+        "faq_029": {
+          "type": "faq",
+          "settings": {
+            "category": "Trackpad",
+            "question": "Does it work with iPadOS gestures?",
+            "answer": "<p>Yes, compatible trackpad models usually work with standard iPadOS pointer and gesture features. Keeping iPadOS updated can help ensure the best compatibility.</p>"
+          }
+        },
+        "faq_030": {
+          "type": "faq",
+          "settings": {
+            "category": "Trackpad",
+            "question": "Can I disable tap-to-click?",
+            "answer": "<p>Tap-to-click behavior is usually controlled through iPadOS trackpad settings when supported. Availability may vary depending on the keyboard case and iPadOS version.</p>"
+          }
+        },
+        "faq_031": {
+          "type": "faq",
+          "settings": {
+            "category": "Support",
+            "question": "How quickly do you reply?",
+            "answer": "<p>Our support team usually replies within 24–48 hours. Response times may be longer during weekends, holidays, or high-volume periods.</p>"
+          }
+        },
+        "faq_032": {
+          "type": "faq",
+          "settings": {
+            "category": "Support",
+            "question": "Can I contact support before ordering?",
+            "answer": "<p>Yes. If you are unsure about compatibility, shipping, or product details, contact us before ordering and include your iPad model information.</p>"
+          }
+        },
+        "faq_033": {
+          "type": "faq",
+          "settings": {
+            "category": "Support",
+            "question": "Can I send photos if I'm unsure about compatibility?",
+            "answer": "<p>Yes, photos can help us confirm your iPad model and fit. Include clear images of the model information from Settings or the back of your iPad if available.</p>"
           }
         }
       },
       "block_order": [
-        "compatibility_model",
-        "compatibility_wrong",
-        "shipping_time",
-        "shipping_international",
-        "returns_order",
-        "returns_damaged",
-        "product_pencil",
-        "product_charge"
+        "faq_001",
+        "faq_002",
+        "faq_003",
+        "faq_004",
+        "faq_005",
+        "faq_006",
+        "faq_007",
+        "faq_008",
+        "faq_009",
+        "faq_010",
+        "faq_011",
+        "faq_012",
+        "faq_013",
+        "faq_014",
+        "faq_015",
+        "faq_016",
+        "faq_017",
+        "faq_018",
+        "faq_019",
+        "faq_020",
+        "faq_021",
+        "faq_022",
+        "faq_023",
+        "faq_024",
+        "faq_025",
+        "faq_026",
+        "faq_027",
+        "faq_028",
+        "faq_029",
+        "faq_030",
+        "faq_031",
+        "faq_032",
+        "faq_033"
       ],
-      "settings": {
-        "eyebrow": "FAQ",
-        "title": "Everything you need to know.",
-        "intro": "Find answers about compatibility, shipping, returns, warranty, and product support.",
-        "hero_image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_12_32_54_PM.png",
-        "hero_cta_label": "Contact Us",
-        "hero_cta_link": "",
-        "search_placeholder": "Search FAQ...",
-        "no_results_text": "No matching questions found.",
-        "support_eyebrow": "SUPPORT",
-        "support_title": "Still have a question?",
-        "support_text": "Our support team usually replies within 24–48 hours.",
-        "support_cta_label": "Contact Us",
-        "support_cta_link": ""
-      }
+      "settings": {}
     }
   },
   "order": [

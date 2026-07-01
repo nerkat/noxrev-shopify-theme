@@ -461,7 +461,7 @@
 
     .main-product__model-tab-title {
       font-family: var(--theme-font-display);
-      font-size: 0.95rem;
+      font-size: 1.2rem;
       font-weight: 600;
       line-height: 1;
       letter-spacing: -0.03em;
@@ -897,6 +897,10 @@
     }
 
     @media (max-width: 860px) {
+      .main-product__model-tab-title {
+        font-size: 0.95rem;
+      }
+
       .main-product__model-selector:not([data-model-tabs-ready='true']) .main-product__model-panel {
         display: none;
       }
