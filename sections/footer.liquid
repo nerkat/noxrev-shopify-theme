@@ -29,92 +29,148 @@
   if section.settings.social_tiktok != blank
     assign has_social_links = true
   endif
+
+  if section.settings.social_youtube != blank
+    assign has_social_links = true
+  endif
 -%}
 
 <footer class="footer">
-  <div class="section footer__inner container">
-    <div class="footer__brand">
-      <a class="footer__brand-link" href="{{ routes.root_url }}">
-        {% if section.settings.logo != blank %}
-          {{
-            section.settings.logo
-            | image_url: width: 400
-            | image_tag: class: 'footer__logo', loading: 'lazy', alt: brand_text
-          }}
-        {% else %}
-          <span class="footer__brand-text">{{ brand_text | escape }}</span>
-        {% endif %}
-      </a>
+  <div class="section footer__inner">
+    <div class="footer__shell container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a class="footer__brand-link" href="{{ routes.root_url }}" aria-label="{{ brand_text | escape }}">
+            {% if section.settings.logo != blank %}
+              {{
+                section.settings.logo
+                | image_url: width: 400
+                | image_tag: class: 'footer__logo', loading: 'lazy', alt: brand_text
+              }}
+            {% else %}
+              <span class="footer__brand-text">{{ brand_text | escape }}</span>
+            {% endif %}
+          </a>
 
-      {% if section.settings.text != blank %}
-        <p class="footer__text">{{ section.settings.text | escape }}</p>
-      {% endif %}
+          {% if section.settings.text != blank %}
+            <p class="footer__text">{{ section.settings.text | escape }}</p>
+          {% endif %}
 
-      <div class="footer__contact">
-        {% if section.settings.contact_email != blank %}
-          <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
-        {% endif %}
-        {% if section.settings.contact_phone != blank %}
-          <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a>
-        {% endif %}
-        {% if section.settings.contact_info != blank %}
-          <p>{{ section.settings.contact_info | escape }}</p>
-        {% endif %}
+          <div class="footer__contact">
+            {% if section.settings.contact_email != blank %}
+              <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
+            {% endif %}
+            {% if section.settings.contact_phone != blank %}
+              <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a>
+            {% endif %}
+            {% if section.settings.contact_info != blank %}
+              <p>{{ section.settings.contact_info | escape }}</p>
+            {% endif %}
+          </div>
+
+          {% if section.settings.show_social_links and has_social_links %}
+            <div class="footer__social" aria-label="Social links">
+              {% if section.settings.social_tiktok != blank %}
+                <a class="footer__social-link" href="{{ section.settings.social_tiktok }}" aria-label="TikTok">
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                    <path d="M14 4v9.1a4.2 4.2 0 1 1-3.2-4.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M14 4c.5 2.6 2.1 4.2 4.8 4.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+                  </svg>
+                </a>
+              {% endif %}
+              {% if section.settings.social_instagram != blank %}
+                <a class="footer__social-link" href="{{ section.settings.social_instagram }}" aria-label="Instagram">
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                    <rect x="5" y="5" width="14" height="14" rx="4" stroke="currentColor" stroke-width="1.7"></rect>
+                    <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.7"></circle>
+                    <path d="M16.3 7.8h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+                  </svg>
+                </a>
+              {% endif %}
+              {% if section.settings.social_facebook != blank %}
+                <a class="footer__social-link" href="{{ section.settings.social_facebook }}" aria-label="Facebook">
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                    <path d="M14 8.6h2.3V5.2A10 10 0 0 0 13.1 5c-3.1 0-5 1.8-5 5.2v2.2H5v3.8h3.1V22h3.8v-5.8h3.1l.5-3.8h-3.6v-1.8c0-1.1.3-2 2.1-2Z" stroke="currentColor" stroke-width="1.45" stroke-linejoin="round"></path>
+                  </svg>
+                </a>
+              {% endif %}
+              {% if section.settings.social_youtube != blank %}
+                <a class="footer__social-link" href="{{ section.settings.social_youtube }}" aria-label="YouTube">
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                    <path d="M21 12s0-3.2-.4-4.4c-.2-.7-.8-1.3-1.5-1.5C17.8 5.8 12 5.8 12 5.8s-5.8 0-7.1.3c-.7.2-1.3.8-1.5 1.5C3 8.8 3 12 3 12s0 3.2.4 4.4c.2.7.8 1.3 1.5 1.5 1.3.3 7.1.3 7.1.3s5.8 0 7.1-.3c.7-.2 1.3-.8 1.5-1.5.4-1.2.4-4.4.4-4.4Z" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"></path>
+                    <path d="m10.4 9.4 4.2 2.6-4.2 2.6V9.4Z" fill="currentColor"></path>
+                  </svg>
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="footer__navs">
+          {% if has_primary_menu %}
+            <nav class="footer__menu" aria-label="Footer primary">
+              <h2 class="footer__heading">Browse</h2>
+              {% for link in section.settings.primary_menu.links %}
+                <a class="footer__link" href="{{ link.url }}">{{ link.title }}</a>
+              {% endfor %}
+            </nav>
+          {% endif %}
+
+          {% if has_secondary_menu %}
+            <nav class="footer__menu" aria-label="Footer secondary">
+              <h2 class="footer__heading">Help</h2>
+              {% for link in section.settings.secondary_menu.links %}
+                <a class="footer__link" href="{{ link.url }}">{{ link.title }}</a>
+              {% endfor %}
+            </nav>
+          {% endif %}
+        </div>
       </div>
 
-      {% if has_social_links %}
-        <div class="footer__social footer__social--brand">
-          {% if section.settings.social_instagram != blank %}
-            <a class="footer__social-link" href="{{ section.settings.social_instagram }}">Instagram</a>
-          {% endif %}
-          {% if section.settings.social_facebook != blank %}
-            <a class="footer__social-link" href="{{ section.settings.social_facebook }}">Facebook</a>
-          {% endif %}
-          {% if section.settings.social_tiktok != blank %}
-            <a class="footer__social-link" href="{{ section.settings.social_tiktok }}">TikTok</a>
-          {% endif %}
+      {% if section.settings.show_trust_row %}
+        <div class="footer__trust" aria-label="Store benefits">
+          <div class="footer__trust-item">
+            <span class="footer__trust-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                <path d="M12 3 5 6v5.5c0 4.1 2.8 7.7 7 9 4.2-1.3 7-4.9 7-9V6l-7-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+                <path d="m9.2 12.2 1.8 1.8 3.9-4.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+            <span>Secure Checkout</span>
+          </div>
+          <div class="footer__trust-item">
+            <span class="footer__trust-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                <path d="M4 7h10v9H4zM14 10h3l3 3v3h-6v-6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+                <path d="M7 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM17 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" stroke="currentColor" stroke-width="1.6"></path>
+              </svg>
+            </span>
+            <span>Fast Shipping</span>
+          </div>
+          <div class="footer__trust-item">
+            <span class="footer__trust-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                <path d="M6 8h9.5a4.5 4.5 0 1 1 0 9H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+                <path d="m8 5-3 3 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+            <span>30-Day Returns</span>
+          </div>
         </div>
       {% endif %}
-    </div>
 
-    {% if has_primary_menu %}
-      <nav class="footer__menu" aria-label="Footer primary">
-        <h2 class="footer__heading">Browse</h2>
-        {% for link in section.settings.primary_menu.links %}
-          <a class="footer__link" href="{{ link.url }}">{{ link.title }}</a>
-        {% endfor %}
-      </nav>
-    {% endif %}
-
-    <div class="footer__meta">
-      {% if has_secondary_menu %}
-        <nav class="footer__menu" aria-label="Footer secondary">
-          <h2 class="footer__heading">Help</h2>
-          {% for link in section.settings.secondary_menu.links %}
-            <a class="footer__link" href="{{ link.url }}">{{ link.title }}</a>
-          {% endfor %}
-        </nav>
-      {% endif %}
-
-      {% comment %} {% if shop.privacy_policy or shop.refund_policy or shop.shipping_policy or shop.terms_of_service %}
-        <div class="footer__policies">
-          <h2 class="footer__heading">Policies</h2>
-          {% if shop.privacy_policy != blank %}
-            <a class="footer__link" href="{{ shop.privacy_policy.url }}">Privacy policy</a>
-          {% endif %}
-          {% if shop.refund_policy != blank %}
-            <a class="footer__link" href="{{ shop.refund_policy.url }}">Refund policy</a>
-          {% endif %}
-          {% if shop.shipping_policy != blank %}
-            <a class="footer__link" href="{{ shop.shipping_policy.url }}">Shipping policy</a>
-          {% endif %}
-          {% if shop.terms_of_service != blank %}
-            <a class="footer__link" href="{{ shop.terms_of_service.url }}">Terms of service</a>
+      <div class="footer__bottom">
+        <div class="footer__payments" aria-label="Accepted payment methods">
+          {% if shop.enabled_payment_types.size > 0 %}
+            {% for type in shop.enabled_payment_types %}
+              {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
+            {% endfor %}
+          {% elsif section.settings.payment_text != blank %}
+            <p class="footer__payment-text">{{ section.settings.payment_text | escape }}</p>
           {% endif %}
         </div>
-      {% endif %} {% endcomment %}
-
-      <p class="footer__copyright">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
+        <p class="footer__copyright">{{ section.settings.copyright_text | escape }}</p>
+      </div>
     </div>
   </div>
 </footer>
@@ -122,20 +178,33 @@
 {% stylesheet %}
   .footer {
     display: grid;
-    border-top: 1px solid var(--theme-color-border);
-    background: linear-gradient(180deg, rgba(2, 8, 20, 0.74), rgba(2, 8, 20, 0.96));
+    border-top: 1px solid rgba(0, 229, 255, 0.14);
+    background:
+      radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.12), transparent 34rem),
+      radial-gradient(circle at 88% 0%, rgba(255, 77, 166, 0.1), transparent 30rem),
+      linear-gradient(180deg, rgba(2, 8, 20, 0.76), rgba(2, 8, 20, 0.98));
   }
 
   .footer__inner {
+    padding-top: clamp(2.4rem, 5vw, 4.5rem);
+    padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .footer__shell {
     display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr) minmax(0, 1fr);
-    gap: clamp(2rem, 4vw, 4rem);
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+    padding: clamp(1.2rem, 2.6vw, 2rem);
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    gap: clamp(1.75rem, 4vw, 4rem);
+    align-items: start;
   }
 
   .footer__brand,
   .footer__menu,
-  .footer__meta,
-  .footer__policies,
   .footer__social,
   .footer__contact {
     display: grid;
@@ -143,10 +212,19 @@
   }
 
   .footer__brand-link,
-  .footer__link {
+  .footer__link,
+  .footer__contact a {
     color: inherit;
     text-decoration: none;
-    transition: color var(--transition-base);
+    transition: color var(--transition-base), text-shadow var(--transition-base);
+  }
+
+  .footer__brand-link:focus-visible,
+  .footer__link:focus-visible,
+  .footer__contact a:focus-visible,
+  .footer__social-link:focus-visible {
+    outline: 2px solid rgba(0, 229, 255, 0.72);
+    outline-offset: 4px;
   }
 
   .footer__link:hover,
@@ -154,23 +232,26 @@
   .footer__contact a:hover,
   .footer__social-link:hover {
     color: var(--theme-color-secondary);
+    text-shadow: 0 0 14px rgba(0, 229, 255, 0.18);
   }
 
   .footer__brand {
-    max-width: 28rem;
+    max-width: 30rem;
   }
 
   .footer__brand-text {
     font-family: var(--theme-font-display);
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-size: clamp(1.35rem, 2vw, 2rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    color: var(--theme-color-text);
+    text-shadow: 0 0 22px rgba(0, 229, 255, 0.16);
   }
 
   .footer__logo {
     display: block;
-    max-width: 180px;
+    max-width: 190px;
     width: auto;
     height: auto;
   }
@@ -179,6 +260,7 @@
   .footer__contact p {
     color: var(--theme-color-text-muted);
     line-height: 1.6;
+    margin: 0;
   }
 
   .footer__contact,
@@ -189,11 +271,17 @@
 
   .footer__heading {
     margin: 0;
-    color: var(--theme-color-text-soft);
+    color: var(--theme-color-secondary);
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.22em;
     text-transform: uppercase;
+  }
+
+  .footer__navs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.5rem, 4vw, 3rem);
   }
 
   .footer__menu,
@@ -206,32 +294,146 @@
     font-size: 0.95rem;
   }
 
-  .footer__social--brand {
+  .footer__social {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: 0.65rem;
+    margin-top: 0.25rem;
   }
 
   .footer__social-link {
-    border: 1px solid var(--theme-color-border);
-    border-radius: var(--theme-radius-pill);
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--theme-color-text-muted);
-    padding: 0.35rem 0.7rem;
-    font-size: 0.78rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.65rem;
+    height: 2.65rem;
+    border: 1px solid rgba(0, 229, 255, 0.24);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
+    color: var(--theme-color-secondary);
     text-decoration: none;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base),
+      transform var(--transition-base);
   }
 
-  .footer__copyright {
-    margin-top: 0.5rem;
+  .footer__social-link svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .footer__social-link:hover,
+  .footer__social-link:focus-visible {
+    border-color: rgba(0, 229, 255, 0.68);
+    color: var(--theme-color-accent);
+    box-shadow: 0 0 24px rgba(0, 229, 255, 0.18), 0 0 18px rgba(255, 77, 166, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px) scale(1.05);
+  }
+
+  .footer__trust {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    background: rgba(2, 8, 20, 0.38);
+    overflow: hidden;
+  }
+
+  .footer__trust-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    min-height: 3.35rem;
+    padding: 0.75rem 1rem;
+    color: var(--theme-color-text-muted);
+    font-size: 0.86rem;
+    font-weight: 600;
+    transition: color var(--transition-base), background-color var(--transition-base);
+  }
+
+  .footer__trust-item:hover {
+    color: var(--theme-color-text);
+    background: rgba(255, 255, 255, 0.018);
+  }
+
+  .footer__trust-item + .footer__trust-item {
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer__trust-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.76rem;
+    height: 1.76rem;
+    color: var(--theme-color-primary);
+    transition: color var(--transition-base), filter var(--transition-base), transform var(--transition-base);
+  }
+
+  .footer__trust-icon svg {
+    width: 1.52rem;
+    height: 1.52rem;
+  }
+
+  .footer__trust-item:hover .footer__trust-icon {
+    color: var(--theme-color-secondary);
+    filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.2));
+    transform: translateY(-1px);
+  }
+
+  .footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--theme-color-text-soft);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
+  }
+
+  .footer__payments {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.38rem;
+  }
+
+  .footer__payment-icon {
+    width: 2.35rem;
+    height: auto;
+    padding: 0.18rem 0.28rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.35rem;
+    background: rgba(255, 255, 255, 0.055);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .footer__payment-text,
+  .footer__copyright {
+    margin: 0;
   }
 
   @media (max-width: 860px) {
-    .footer__inner {
+    .footer__top,
+    .footer__navs,
+    .footer__trust {
       grid-template-columns: 1fr;
+    }
+
+    .footer__trust-item {
+      justify-content: flex-start;
+    }
+
+    .footer__trust-item + .footer__trust-item {
+      border-left: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .footer__bottom {
+      flex-direction: column;
     }
   }
 {% endstylesheet %}
@@ -255,7 +457,7 @@
       "type": "textarea",
       "id": "text",
       "label": "Description",
-      "default": "Use this footer area for store information, support details, and policy links."
+      "default": "Premium keyboard cases and accessories engineered to unlock the full potential of your iPad."
     },
     {
       "type": "link_list",
@@ -283,6 +485,17 @@
       "label": "Contact details"
     },
     {
+      "type": "checkbox",
+      "id": "show_social_links",
+      "label": "Show social links",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok",
+      "label": "TikTok URL"
+    },
+    {
       "type": "url",
       "id": "social_instagram",
       "label": "Instagram URL"
@@ -294,8 +507,26 @@
     },
     {
       "type": "url",
-      "id": "social_tiktok",
-      "label": "TikTok URL"
+      "id": "social_youtube",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_row",
+      "label": "Show trust row",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "payment_text",
+      "label": "Payment text",
+      "default": "Secure payments powered by Shopify"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright text",
+      "default": "© 2026 NoxRev. All rights reserved."
     }
   ]
 }
