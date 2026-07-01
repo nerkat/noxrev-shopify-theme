@@ -571,8 +571,18 @@ html {
 
 @media (max-width: 861px) {
   #MainContent {
-  padding-top: calc(var(--site-header-offset) / 2);
-}
+    padding-top: calc(var(--site-header-offset) / 2);
+  }
+
+  .template-product #MainContent {
+    padding-top: 0;
+
+    .page-width.main-product {
+      padding-top: 0;
+
+    }
+  }
+
   .section {
     padding-block: var(--spacing-xl);
   }
