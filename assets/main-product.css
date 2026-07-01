@@ -898,7 +898,7 @@
 
     @media (max-width: 860px) {
       .main-product__model-tab-title {
-        font-size: 0.95rem;
+        font-size: 0.75rem;
       }
 
       .main-product__model-selector:not([data-model-tabs-ready='true']) .main-product__model-panel {
