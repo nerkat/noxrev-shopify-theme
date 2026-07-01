@@ -17,6 +17,10 @@
       letter-spacing: -0.035em;
     }
 
+    .main-product__title--desktop {
+      display: none;
+    }
+
     .main-product__media-column {
       display: grid;
       gap: 1rem;
@@ -867,8 +871,12 @@
         gap: 1rem;
       }
 
-      .main-product__title {
-        grid-column: 1 / -1;
+      .main-product__title--mobile {
+        display: none;
+      }
+
+      .main-product__title--desktop {
+        display: block;
         font-size: clamp(2.4rem, 4.6vw, 4.2rem);
       }
 

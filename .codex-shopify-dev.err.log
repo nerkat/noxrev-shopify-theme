@@ -124,3 +124,7 @@
 • 13:54:49 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795823178 
 • 13:57:17 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794840138 
 • 13:57:17  Synced » update assets/main-product.js
+• 14:02:26 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794840138 
+• 14:02:27  Synced » update templates/product.json
+• 14:06:28  Synced » update sections/main-product.liquid
+• 14:08:15  Synced » update assets/main-product.css
