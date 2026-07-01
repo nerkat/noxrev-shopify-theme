@@ -21,8 +21,6 @@
   data-product-handle="{{ product.handle }}"
 >
   <div class="main-product__main">
-    <h1 class="main-product__title main-product__title--mobile heading-gradient">{{ product.title }}</h1>
-
     <div class="main-product__media-column" data-product-gallery-region>
       <div
         class="main-product__gallery"
@@ -123,7 +121,7 @@
     </div>
 
     <div class="main-product__content">
-      <h1 class="main-product__title main-product__title--desktop heading-gradient">{{ product.title }}</h1>
+      <h1 class="main-product__title heading-gradient">{{ product.title }}</h1>
 
       {% comment %}
         {% if excerpt != blank %}

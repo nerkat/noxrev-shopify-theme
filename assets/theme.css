@@ -54,7 +54,7 @@
   --scrollbar-track: rgba(2, 8, 18, 0.78);
   --scrollbar-thumb: rgba(37, 237, 255, 0.52);
   --scrollbar-thumb-hover: rgba(255, 77, 166, 0.66);
-  --site-header-offset: 2rem;
+  --site-header-offset: 3.5rem;
   --z-sticky: 20;
   --z-menu: 30;
 }
@@ -570,6 +570,9 @@ html {
 }
 
 @media (max-width: 861px) {
+  #MainContent {
+  padding-top: calc(var(--site-header-offset) / 1.5);
+}
   .section {
     padding-block: var(--spacing-xl);
   }
