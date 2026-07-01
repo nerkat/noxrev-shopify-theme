@@ -282,6 +282,7 @@
         "unique_viewing",
         "unique_presentation"
       ],
+      "disabled": true,
       "settings": {
         "title": "7 Unique Modes",
         "text": "360 swivel. 180 flip. Infinite possibilities."
