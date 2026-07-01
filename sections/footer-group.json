@@ -14,6 +14,7 @@
     "footer": {
       "type": "footer",
       "settings": {
+        "logo": "shopify://shop_images/WhatsApp_Image_2026-05-20_at_14.07.27_1_1_8ff4ac2a-e587-40d2-aa1c-6aa80805c166.png",
         "brand_text": "NOXREV",
         "text": "Premium keyboard cases and accessories engineered to unlock the full potential of your iPad.",
         "primary_menu": "footer",
@@ -21,9 +22,14 @@
         "contact_email": "contact@noxrev.com",
         "contact_phone": "+4893720484",
         "contact_info": "",
+        "show_social_links": true,
+        "social_tiktok": "https://tiktok.com",
         "social_instagram": "https://instgram.com",
         "social_facebook": "https://face.com",
-        "social_tiktok": "https://tiktok.com"
+        "social_youtube": "",
+        "show_trust_row": true,
+        "payment_text": "Secure payments powered by Shopify",
+        "copyright_text": "© 2026 NoxRev. All rights reserved."
       }
     }
   },
