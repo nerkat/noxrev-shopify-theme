@@ -181,12 +181,9 @@
   .contact-page__card {
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(56, 221, 255, 0.22);
     border-radius: 1.25rem;
-    background:
-      radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.11), transparent 34%),
-      radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%),
-      rgba(4, 13, 25, 0.94);
+    background: radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.11), transparent 34%),
+      radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%), rgba(4, 13, 25, 0.94);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 54px rgba(0, 0, 0, 0.2);
   }
 
@@ -215,14 +212,15 @@
   .contact-page__field input,
   .contact-page__field textarea {
     width: 100%;
-    border: 1px solid rgba(255, 255, 255, 0.11);
+    border: none;
     border-radius: 0.85rem;
     padding: 0.9rem 1rem;
     color: var(--theme-color-text);
     background: rgba(3, 10, 22, 0.72);
     font: inherit;
     line-height: 1.45;
-    transition: border-color var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base),
+      background-color var(--transition-base);
   }
 
   .contact-page__field textarea {
@@ -390,7 +388,12 @@
     },
     { "type": "checkbox", "id": "show_subject", "label": "Show subject field", "default": true },
     { "type": "text", "id": "submit_label", "label": "Submit button label", "default": "Send Message" },
-    { "type": "text", "id": "support_title", "label": "Support card title", "default": "Need help choosing your iPad model?" },
+    {
+      "type": "text",
+      "id": "support_title",
+      "label": "Support card title",
+      "default": "Need help choosing your iPad model?"
+    },
     {
       "type": "textarea",
       "id": "support_text",
@@ -398,7 +401,12 @@
       "default": "If you're not sure which model you have, include a photo of your iPad model number or tell us what appears under Settings > General > About."
     },
     { "type": "text", "id": "support_email", "label": "Support email", "default": "support@noxrev.com" },
-    { "type": "text", "id": "response_time", "label": "Response time", "default": "Usually replies within 24-48 hours" },
+    {
+      "type": "text",
+      "id": "response_time",
+      "label": "Response time",
+      "default": "Usually replies within 24-48 hours"
+    },
     { "type": "text", "id": "guide_label", "label": "Guide link label", "default": "Find Your iPad Model" },
     { "type": "url", "id": "guide_link", "label": "Guide link" }
   ],

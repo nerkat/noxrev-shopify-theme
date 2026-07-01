@@ -60,7 +60,6 @@
 .about-noxrev__media-card {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(56, 221, 255, 0.22);
   border-radius: 1.25rem;
   background:
     radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.11), transparent 34%),
@@ -124,7 +123,6 @@
 .about-noxrev__pillar,
 .about-noxrev__stat,
 .about-noxrev__timeline-item {
-  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 1rem;
   padding: 1rem;
   background: rgba(3, 10, 22, 0.56);
