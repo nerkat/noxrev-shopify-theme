@@ -29,7 +29,9 @@
         },
         "image_2": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_10_14_59_AM_89dcc84b-9428-4919-882f-3417deeee044.png"
+          }
         },
         "image_3": {
           "type": "image",
