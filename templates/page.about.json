@@ -23,7 +23,9 @@
       "blocks": {
         "image_1": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_10_13_16_AM.png"
+          }
         },
         "image_2": {
           "type": "image",
