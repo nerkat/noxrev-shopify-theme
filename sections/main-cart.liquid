@@ -50,8 +50,15 @@
                     <a href="{{ item.url }}">{{ item.product.title }}</a>
                   </h2>
 
+                  <div class="main-cart__item-price">
+                    {% if item.original_price != item.final_price %}
+                      <s>{% render 'price', amount: item.original_price %}</s>
+                    {% endif %}
+                    <span>{% render 'price', amount: item.final_price %}</span>
+                  </div>
+
                   {% unless item.product.has_only_default_variant %}
-                    <p class="main-cart__variant-title">{{ item.variant.title }}</p>
+                    {% comment %} <p class="main-cart__variant-title">{{ item.variant.title }}</p> {% endcomment %}
 
                     {% if item.options_with_values != blank %}
                       <ul class="main-cart__options" role="list">
@@ -67,12 +74,6 @@
                   {% endif %}
                 </div>
 
-                <div class="main-cart__item-price">
-                  {% if item.original_price != item.final_price %}
-                    <s>{% render 'price', amount: item.original_price %}</s>
-                  {% endif %}
-                  <span>{% render 'price', amount: item.final_price %}</span>
-                </div>
               </div>
 
               {% if item.line_level_discount_allocations.size > 0 %}
@@ -115,7 +116,10 @@
                   data-line="{{ forloop.index }}"
                   aria-label="Remove {{ item.product.title | escape }} from cart"
                 >
-                  Remove
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                    <path d="M4 7h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+                    <path d="M10 11v6M14 11v6M6.5 7l.8 13h9.4l.8-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
                 </a>
 
                 <p class="main-cart__line-total">
@@ -237,10 +241,11 @@
   }
 
   .main-cart__item {
+    position: relative;
     display: grid;
     grid-template-columns: 6.5rem minmax(0, 1fr);
     gap: 0.9rem;
-    padding: 0.85rem;
+    padding: 0.85rem 3.45rem 0.85rem 0.85rem;
   }
 
   .main-cart__item-media {
@@ -306,19 +311,30 @@
     flex-wrap: wrap;
     gap: 0.45rem;
     align-items: baseline;
-    color: var(--theme-color-text);
-    font-size: 1rem;
-    font-weight: 800;
+    color: #ff4da6;
+    font-family: var(--theme-font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .main-cart__item-price span {
+    background: var(--theme-gradient-heading);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ff4da6;
+    -webkit-text-fill-color: transparent;
   }
 
   .main-cart__item-price s {
     color: rgba(255, 255, 255, 0.38);
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.38);
     font-weight: 500;
   }
 
   .main-cart__item-actions {
     display: flex;
-    flex-wrap: wrap;
     gap: 0.75rem;
     align-items: center;
     justify-content: space-between;
@@ -363,16 +379,33 @@
   }
 
   .main-cart__remove {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
     color: rgba(255, 255, 255, 0.62);
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transition: color var(--transition-base);
+    background: rgba(255, 255, 255, 0.035);
+    transition: border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base),
+      transform var(--transition-base);
   }
 
-  .main-cart__remove:hover {
+  .main-cart__remove svg {
+    width: 1.08rem;
+    height: 1.08rem;
+  }
+
+  .main-cart__remove:hover,
+  .main-cart__remove:focus-visible {
+    border-color: rgba(255, 77, 166, 0.58);
     color: #ff6db1;
+    box-shadow: 0 0 18px rgba(255, 77, 166, 0.12);
+    transform: translateY(-1px);
   }
 
   .main-cart__line-total {
@@ -391,7 +424,15 @@
   }
 
   .main-cart__line-total strong {
-    color: var(--theme-color-text);
+    background: var(--theme-gradient-heading);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ff4da6;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--theme-font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
   }
 
   .main-cart__summary-card,
@@ -410,12 +451,25 @@
   }
 
   .main-cart__summary-row strong {
-    color: var(--theme-color-text);
+    background: var(--theme-gradient-heading);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ff4da6;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--theme-font-display);
+    font-size: 1.32rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
   }
 
   .main-cart__summary-row--total {
     color: var(--theme-color-text);
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+  }
+
+  .main-cart__summary-row--total strong {
+    font-size: 1.5rem;
   }
 
   .main-cart__note {

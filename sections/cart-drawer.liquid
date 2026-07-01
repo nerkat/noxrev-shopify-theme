@@ -73,7 +73,7 @@
                 </div>
 
                 {% unless item.product.has_only_default_variant %}
-                  <p class="cart-drawer__variant-title">{{ item.variant.title }}</p>
+                  {% comment %} <p class="cart-drawer__variant-title">{{ item.variant.title }}</p> {% endcomment %}
                   {% if item.options_with_values != blank %}
                     <ul class="cart-drawer__options" role="list">
                       {% for option in item.options_with_values %}
@@ -123,7 +123,10 @@
                     data-line="{{ forloop.index }}"
                     aria-label="Remove {{ item.product.title | escape }} from cart"
                   >
-                    Remove
+                    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                      <path d="M4 7h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+                      <path d="M10 11v6M14 11v6M6.5 7l.8 13h9.4l.8-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
                   </button>
 
                   <p class="cart-drawer__line-total">
@@ -198,21 +201,22 @@
 
   .cart-drawer__panel {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    bottom: 0.75rem;
+    top: 0;
+    right: 0;
+    bottom: 0;
     display: grid;
     grid-template-rows: auto auto minmax(0, 1fr) auto;
-    width: min(calc(100vw - 1.5rem), 29rem);
+    width: min(100vw, 29rem);
     overflow: hidden;
-    border: 1px solid rgba(56, 221, 255, 0.24);
-    border-radius: 1.35rem;
+    border: 0;
+    border-left: 1px solid rgba(56, 221, 255, 0.22);
+    border-radius: 1.35rem 0 0 1.35rem;
     background:
       radial-gradient(circle at 0% 0%, rgba(0, 229, 255, 0.12), transparent 34%),
       radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.12), transparent 36%),
       rgba(4, 13, 25, 0.96);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 80px rgba(0, 0, 0, 0.48);
-    transform: translateX(calc(100% + 1.5rem));
+    transform: translateX(100%);
     transition: transform 280ms ease;
   }
 
@@ -314,6 +318,7 @@
   }
 
   .cart-drawer__item {
+    position: relative;
     display: grid;
     grid-template-columns: 5.5rem minmax(0, 1fr);
     gap: 0.75rem;
@@ -367,13 +372,26 @@
     flex-wrap: wrap;
     gap: 0.4rem;
     margin: 0;
-    color: var(--theme-color-text);
-    font-size: 0.9rem;
-    font-weight: 800;
+    color: #ff4da6;
+    font-family: var(--theme-font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .cart-drawer__item-price span {
+    background: var(--theme-gradient-heading);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ff4da6;
+    -webkit-text-fill-color: transparent;
   }
 
   .cart-drawer__item-price s {
     color: rgba(255, 255, 255, 0.38);
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.38);
+    font-weight: 500;
   }
 
   .cart-drawer__variant-title,
@@ -400,7 +418,6 @@
 
   .cart-drawer__item-actions {
     display: flex;
-    flex-wrap: wrap;
     gap: 0.65rem;
     align-items: center;
     justify-content: space-between;
@@ -452,8 +469,37 @@
     text-transform: uppercase;
   }
 
+  .cart-drawer__remove {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.62);
+    background: rgba(255, 255, 255, 0.035);
+    transition: border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base),
+      transform var(--transition-base);
+  }
+
+  .cart-drawer__remove svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .cart-drawer__remove:hover,
+  .cart-drawer__remove:focus-visible {
+    border-color: rgba(255, 77, 166, 0.58);
+    color: #ff6db1;
+    box-shadow: 0 0 18px rgba(255, 77, 166, 0.12);
+    transform: translateY(-1px);
+  }
+
   .cart-drawer__line-total {
-    width: 100%;
     margin: 0;
     color: var(--theme-color-text);
     text-align: right;
@@ -466,6 +512,18 @@
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+  }
+
+  .cart-drawer__line-total strong {
+    background: var(--theme-gradient-heading);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ff4da6;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--theme-font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
   }
 
   .cart-drawer__summary {
@@ -482,7 +540,16 @@
   }
 
   .cart-drawer__summary-row strong {
-    color: var(--theme-color-text);
+    background: var(--theme-gradient-heading);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ff4da6;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--theme-font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
   }
 
   .cart-drawer__note {
@@ -541,6 +608,7 @@
       inset: 0;
       width: 100%;
       border-radius: 0;
+      border-left: 0;
     }
   }
 {% endstylesheet %}
