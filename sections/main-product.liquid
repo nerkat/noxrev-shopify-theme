@@ -150,13 +150,9 @@
 
               {% if is_model_option %}
                 {% liquid
-                  assign selected_model_family = 'ipad'
                   assign pro_items = ''
                   assign air_items = ''
                   assign ipad_items = ''
-                  assign pro_selected_label = ''
-                  assign air_selected_label = ''
-                  assign ipad_selected_label = ''
                   assign pro_count = 0
                   assign air_count = 0
                   assign ipad_count = 0
@@ -264,24 +260,12 @@
                     {% if family_key == 'pro' %}
                       {% assign pro_items = pro_items | append: model_item %}
                       {% assign pro_count = pro_count | plus: 1 %}
-                      {% if value.selected %}
-                        {% assign selected_model_family = 'pro' %}
-                        {% assign pro_selected_label = value.name %}
-                      {% endif %}
                     {% elsif family_key == 'air' %}
                       {% assign air_items = air_items | append: model_item %}
                       {% assign air_count = air_count | plus: 1 %}
-                      {% if value.selected %}
-                        {% assign selected_model_family = 'air' %}
-                        {% assign air_selected_label = value.name %}
-                      {% endif %}
                     {% else %}
                       {% assign ipad_items = ipad_items | append: model_item %}
                       {% assign ipad_count = ipad_count | plus: 1 %}
-                      {% if value.selected %}
-                        {% assign selected_model_family = 'ipad' %}
-                        {% assign ipad_selected_label = value.name %}
-                      {% endif %}
                     {% endif %}
                   {% endif %}
                 {% endfor %}
@@ -289,7 +273,6 @@
                 <div
                   class="main-product__model-selector"
                   data-model-tabs
-                  data-selected-family="{{ selected_model_family }}"
                 >
                   <div class="main-product__model-tablist" role="tablist" aria-label="Choose iPad model family">
                     {% if pro_count > 0 %}
@@ -352,9 +335,8 @@
                         type="button"
                         role="tab"
                         id="ModelTab-Ipad-{{ section.id }}"
-                        aria-selected="true"
+                        aria-selected="false"
                         aria-controls="ModelPanel-Ipad-{{ section.id }}"
-                        tabindex="0"
                         data-model-tab="ipad"
                       >
                         <span class="main-product__model-tab-title">iPad/Mini</span>
@@ -411,11 +393,12 @@
 
                   {% if ipad_count > 0 %}
                     <div
-                      class="main-product__model-panel panel is-active"
+                      class="main-product__model-panel panel"
                       id="ModelPanel-Ipad-{{ section.id }}"
                       role="tabpanel"
                       aria-labelledby="ModelTab-Ipad-{{ section.id }}"
                       data-model-panel="ipad"
+                      hidden
                     >
                       <div class="main-product__model-panel-inner">
                         <ul class="main-product__model-list" role="list">

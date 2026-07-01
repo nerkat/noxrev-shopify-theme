@@ -11,11 +11,12 @@
     const SUBMIT_LOADING_CLASS = 'is-loading';
     let variantRequestController = null;
     let variantRequestSequence = 0;
+    const initializedModelTabs = new WeakSet();
     const activeModelFamilies = new Map();
 
     const initModelTabs = (scope = document) => {
       scope.querySelectorAll('[data-model-tabs]').forEach((selector) => {
-        if (selector.dataset.modelTabsReady === 'true') {
+        if (initializedModelTabs.has(selector)) {
           return;
         }
 
@@ -100,17 +101,14 @@
         });
 
         const storedFamily = activeModelFamilies.get(productHandle) || '';
-        const desktopDefaultFamily = window.matchMedia('(min-width: 861px)').matches ? 'ipad' : '';
 
         if (storedFamily && tabs.some((tab) => tab.dataset.modelTab === storedFamily)) {
           setActiveFamily(storedFamily);
-        } else if (desktopDefaultFamily && tabs.some((tab) => tab.dataset.modelTab === desktopDefaultFamily)) {
-          setActiveFamily(desktopDefaultFamily);
         } else {
           clearActiveFamily();
         }
 
-        selector.dataset.modelTabsReady = 'true';
+        initializedModelTabs.add(selector);
       });
     };
 
