@@ -21,9 +21,9 @@
         "contact_email": "",
         "contact_phone": "",
         "contact_info": "",
-        "social_instagram": "",
-        "social_facebook": "",
-        "social_tiktok": ""
+        "social_instagram": "https://instgram.com",
+        "social_facebook": "https://face.com",
+        "social_tiktok": "https://tiktok.com"
       }
     }
   },
