@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "faq": {
@@ -78,8 +87,24 @@
         "product_pencil",
         "product_charge"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "FAQ",
+        "title": "Everything you need to know.",
+        "intro": "Find answers about compatibility, shipping, returns, warranty, and product support.",
+        "hero_image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_12_32_54_PM.png",
+        "hero_cta_label": "Contact Us",
+        "hero_cta_link": "",
+        "search_placeholder": "Search FAQ...",
+        "no_results_text": "No matching questions found.",
+        "support_eyebrow": "SUPPORT",
+        "support_title": "Still have a question?",
+        "support_text": "Our support team usually replies within 24–48 hours.",
+        "support_cta_label": "Contact Us",
+        "support_cta_link": ""
+      }
     }
   },
-  "order": ["faq"]
+  "order": [
+    "faq"
+  ]
 }
