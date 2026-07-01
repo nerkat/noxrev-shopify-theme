@@ -896,6 +896,16 @@
     }
 
     @media (max-width: 860px) {
+      .main-product__media-column {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+      }
+
+      .main-product__gallery-frame {
+        border-radius: 0;
+      }
+
       .main-product__model-tab-title {
         font-size: 0.75rem;
       }
