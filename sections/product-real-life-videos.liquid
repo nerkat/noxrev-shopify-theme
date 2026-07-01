@@ -31,16 +31,29 @@
           <article class="product-real-life-videos__card" {{ block.shopify_attributes }}>
             <div class="product-real-life-videos__media">
               {% if block.settings.video != blank %}
-                {{
-                  block.settings.video
-                  | video_tag:
-                    image_size: '720x',
-                    controls: true,
-                    muted: true,
-                    playsinline: true,
-                    preload: 'metadata',
-                    class: 'product-real-life-videos__video'
-                }}
+                <div class="product-real-life-videos__video-shell" data-real-life-video-shell>
+                  {{
+                    block.settings.video
+                    | video_tag:
+                      image_size: '720x',
+                      controls: false,
+                      muted: true,
+                      playsinline: true,
+                      preload: 'metadata',
+                      class: 'product-real-life-videos__video'
+                  }}
+                  <button
+                    class="product-real-life-videos__play product-real-life-videos__play--video"
+                    type="button"
+                    aria-label="Play video"
+                    aria-pressed="false"
+                    data-real-life-video-toggle
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                      <path d="M9 7.5v9l7-4.5-7-4.5Z" fill="currentColor"/>
+                    </svg>
+                  </button>
+                </div>
               {% elsif poster_image != blank %}
                 {% render 'responsive-image',
                   image: poster_image,
@@ -53,14 +66,6 @@
               {% else %}
                 <div class="product-real-life-videos__placeholder" aria-hidden="true"></div>
               {% endif %}
-
-              {% unless block.settings.video != blank %}
-                <span class="product-real-life-videos__play" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" focusable="false">
-                    <path d="M9 7.5v9l7-4.5-7-4.5Z" fill="currentColor"/>
-                  </svg>
-                </span>
-              {% endunless %}
             </div>
 
             <div class="product-real-life-videos__card-copy">
@@ -121,6 +126,39 @@
       const prev = section.querySelector('[data-real-life-videos-prev]');
       const next = section.querySelector('[data-real-life-videos-next]');
       if (!slider || !prev || !next) return;
+
+      const videoShells = section.querySelectorAll('[data-real-life-video-shell]');
+      videoShells.forEach((shell) => {
+        const video = shell.querySelector('video');
+        const toggle = shell.querySelector('[data-real-life-video-toggle]');
+        if (!video || !toggle) return;
+
+        const updateState = () => {
+          const isPlaying = !video.paused && !video.ended;
+          toggle.classList.toggle('is-hidden', isPlaying);
+          toggle.setAttribute('aria-label', isPlaying ? 'Pause video' : 'Play video');
+          toggle.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+        };
+
+        const togglePlayback = () => {
+          if (video.paused || video.ended) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        };
+
+        toggle.addEventListener('click', (event) => {
+          event.preventDefault();
+          togglePlayback();
+        });
+
+        video.addEventListener('click', togglePlayback);
+        video.addEventListener('play', updateState);
+        video.addEventListener('pause', updateState);
+        video.addEventListener('ended', updateState);
+        updateState();
+      });
 
       const getStep = () => {
         const card = slider.querySelector('.product-real-life-videos__card');
@@ -257,6 +295,7 @@
   }
 
   .product-real-life-videos__media,
+  .product-real-life-videos__video-shell,
   .product-real-life-videos__video,
   .product-real-life-videos__image,
   .product-real-life-videos__placeholder {
@@ -266,6 +305,11 @@
   }
 
   .product-real-life-videos__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .product-real-life-videos__video-shell {
     position: absolute;
     inset: 0;
   }
@@ -302,6 +346,17 @@
   .product-real-life-videos__play svg {
     width: 1.4rem;
     height: 1.4rem;
+  }
+
+  .product-real-life-videos__play--video {
+    cursor: pointer;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .product-real-life-videos__play--video.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.92);
   }
 
   .product-real-life-videos__card-copy {
