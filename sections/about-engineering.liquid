@@ -1,0 +1,35 @@
+{{ 'about-noxrev.css' | asset_url | stylesheet_tag }}
+
+<section class="about-noxrev about-noxrev--tight">
+  <div class="container">
+    <div class="about-noxrev__grid about-noxrev__grid--split">
+      <div class="about-noxrev__card">
+        {% if section.settings.eyebrow != blank %}
+          <p class="about-noxrev__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+        <h2 class="about-noxrev__heading">{{ section.settings.heading }}</h2>
+        <p class="about-noxrev__copy">{{ section.settings.copy }}</p>
+      </div>
+      <div class="about-noxrev__media-card">
+        {% if section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'about-noxrev__image', loading: 'lazy' }}
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag: 'about-noxrev__placeholder' }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About engineering",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "ENGINEERING" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Engineered, not decorated." },
+    { "type": "textarea", "id": "copy", "label": "Copy", "default": "From the hinge to the keyboard feel, every part of NoxRev is designed to make your iPad more capable without making your setup more complicated." },
+    { "type": "image_picker", "id": "image", "label": "Image" }
+  ],
+  "presets": [{ "name": "About engineering" }]
+}
+{% endschema %}

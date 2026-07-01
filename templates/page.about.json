@@ -1,0 +1,81 @@
+{
+  "sections": {
+    "hero": {
+      "type": "about-hero",
+      "settings": {}
+    },
+    "story": {
+      "type": "about-story",
+      "blocks": {
+        "image_1": { "type": "image", "settings": {} },
+        "image_2": { "type": "image", "settings": {} },
+        "image_3": { "type": "image", "settings": {} }
+      },
+      "block_order": ["image_1", "image_2", "image_3"],
+      "settings": {}
+    },
+    "pillars": {
+      "type": "about-pillars",
+      "blocks": {
+        "precision": {
+          "type": "pillar",
+          "settings": {
+            "title": "Precision",
+            "text": "Every detail exists for a reason."
+          }
+        },
+        "versatility": {
+          "type": "pillar",
+          "settings": {
+            "title": "Versatility",
+            "text": "One keyboard. Multiple ways to work, create, and relax."
+          }
+        },
+        "materials": {
+          "type": "pillar",
+          "settings": {
+            "title": "Premium Materials",
+            "text": "Built to feel solid, look sharp, and last."
+          }
+        }
+      },
+      "block_order": ["precision", "versatility", "materials"],
+      "settings": {}
+    },
+    "engineering": {
+      "type": "about-engineering",
+      "settings": {}
+    },
+    "timeline": {
+      "type": "about-timeline",
+      "blocks": {
+        "idea": { "type": "step", "settings": { "title": "Idea" } },
+        "prototype": { "type": "step", "settings": { "title": "Prototype" } },
+        "testing": { "type": "step", "settings": { "title": "Testing" } },
+        "launch": { "type": "step", "settings": { "title": "Launch" } }
+      },
+      "block_order": ["idea", "prototype", "testing", "launch"],
+      "settings": {}
+    },
+    "stats": {
+      "type": "about-stats",
+      "blocks": {
+        "users": { "type": "stat", "settings": { "value": "100,487+", "label": "Happy users" } },
+        "modes": { "type": "stat", "settings": { "value": "7", "label": "Viewing modes" } },
+        "battery": { "type": "stat", "settings": { "value": "30 Days", "label": "Battery life" } },
+        "rotation": { "type": "stat", "settings": { "value": "360°", "label": "Rotation" } }
+      },
+      "block_order": ["users", "modes", "battery", "rotation"],
+      "settings": {}
+    },
+    "quote": {
+      "type": "about-quote",
+      "settings": {}
+    },
+    "cta": {
+      "type": "about-cta",
+      "settings": {}
+    }
+  },
+  "order": ["hero", "story", "pillars", "engineering", "timeline", "stats", "quote", "cta"]
+}

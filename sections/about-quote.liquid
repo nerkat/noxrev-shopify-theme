@@ -1,0 +1,21 @@
+{{ 'about-noxrev.css' | asset_url | stylesheet_tag }}
+
+<section class="about-noxrev about-noxrev--tight">
+  <div class="container">
+    <div class="about-noxrev__card about-noxrev__quote">
+      <blockquote>“{{ section.settings.quote }}”</blockquote>
+      <cite>{{ section.settings.attribution }}</cite>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About quote",
+  "settings": [
+    { "type": "text", "id": "quote", "label": "Quote", "default": "Great products disappear into your workflow." },
+    { "type": "text", "id": "attribution", "label": "Attribution", "default": "NoxRev Design Team" }
+  ],
+  "presets": [{ "name": "About quote" }]
+}
+{% endschema %}

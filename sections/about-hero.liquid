@@ -1,0 +1,38 @@
+{{ 'about-noxrev.css' | asset_url | stylesheet_tag }}
+
+<section class="about-noxrev about-noxrev--hero">
+  <div class="container">
+    <div class="about-noxrev__grid about-noxrev__grid--split">
+      <div class="about-noxrev__card">
+        {% if section.settings.eyebrow != blank %}
+          <p class="about-noxrev__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+        <h1 class="about-noxrev__title">{{ section.settings.title }}</h1>
+        {% if section.settings.intro != blank %}
+          <p class="about-noxrev__text">{{ section.settings.intro }}</p>
+        {% endif %}
+      </div>
+
+      <div class="about-noxrev__media-card">
+        {% if section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 1400 | image_tag: class: 'about-noxrev__image', loading: 'eager', sizes: '(min-width: 860px) 52vw, 100vw' }}
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'about-noxrev__placeholder' }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "ABOUT NOXREV" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Designed to unlock the full potential of your iPad." },
+    { "type": "textarea", "id": "intro", "label": "Intro copy", "default": "We believe the iPad deserves accessories that are as versatile as the device itself. NoxRev creates premium keyboard cases engineered for work, creativity, and everyday life." },
+    { "type": "image_picker", "id": "image", "label": "Hero image" }
+  ],
+  "presets": [{ "name": "About hero" }]
+}
+{% endschema %}

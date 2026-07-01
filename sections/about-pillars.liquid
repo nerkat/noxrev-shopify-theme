@@ -1,0 +1,59 @@
+{{ 'about-noxrev.css' | asset_url | stylesheet_tag }}
+
+<section class="about-noxrev about-noxrev--tight">
+  <div class="container">
+    <div class="about-noxrev__card">
+      {% if section.settings.eyebrow != blank %}
+        <p class="about-noxrev__eyebrow">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      <h2 class="about-noxrev__heading">{{ section.settings.heading }}</h2>
+
+      <div class="about-noxrev__pillars">
+        {% for block in section.blocks %}
+          <article class="about-noxrev__pillar" {{ block.shopify_attributes }}>
+            <span class="about-noxrev__icon" aria-hidden="true">
+              {% if block.settings.icon != blank %}
+                {{ block.settings.icon | image_url: width: 96 | image_tag: loading: 'lazy' }}
+              {% else %}
+                <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M12 3 20 8v8l-8 5-8-5V8l8-5Z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              {% endif %}
+            </span>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About pillars",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WHY WE BUILT IT" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Designed around what matters." }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pillar",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Precision" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Every detail exists for a reason." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About pillars",
+      "blocks": [
+        { "type": "pillar", "settings": { "title": "Precision", "text": "Every detail exists for a reason." } },
+        { "type": "pillar", "settings": { "title": "Versatility", "text": "One keyboard. Multiple ways to work, create, and relax." } },
+        { "type": "pillar", "settings": { "title": "Premium Materials", "text": "Built to feel solid, look sharp, and last." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

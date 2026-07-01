@@ -1,0 +1,50 @@
+{{ 'about-noxrev.css' | asset_url | stylesheet_tag }}
+
+<section class="about-noxrev about-noxrev--tight">
+  <div class="container">
+    <div class="about-noxrev__card">
+      <p class="about-noxrev__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 class="about-noxrev__heading">{{ section.settings.heading }}</h2>
+      <div class="about-noxrev__timeline">
+        {% for block in section.blocks %}
+          <article class="about-noxrev__timeline-item" {{ block.shopify_attributes }}>
+            <p class="about-noxrev__kicker">{{ forloop.index | prepend: '0' }}</p>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About timeline",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "PROCESS" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "From idea to everyday tool." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Timeline item",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Idea" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "A focused problem becomes a sharper product direction." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About timeline",
+      "blocks": [
+        { "type": "step", "settings": { "title": "Idea" } },
+        { "type": "step", "settings": { "title": "Prototype" } },
+        { "type": "step", "settings": { "title": "Testing" } },
+        { "type": "step", "settings": { "title": "Launch" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

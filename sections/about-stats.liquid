@@ -1,0 +1,42 @@
+{{ 'about-noxrev.css' | asset_url | stylesheet_tag }}
+
+<section class="about-noxrev about-noxrev--tight">
+  <div class="container">
+    <div class="about-noxrev__stats">
+      {% for block in section.blocks %}
+        <div class="about-noxrev__stat" {{ block.shopify_attributes }}>
+          <strong>{{ block.settings.value }}</strong>
+          <span>{{ block.settings.label }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About stats",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "100,487+" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Happy users" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About stats",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "100,487+", "label": "Happy users" } },
+        { "type": "stat", "settings": { "value": "7", "label": "Viewing modes" } },
+        { "type": "stat", "settings": { "value": "30 Days", "label": "Battery life" } },
+        { "type": "stat", "settings": { "value": "360°", "label": "Rotation" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

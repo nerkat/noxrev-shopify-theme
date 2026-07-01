@@ -1,0 +1,49 @@
+{{ 'about-noxrev.css' | asset_url | stylesheet_tag }}
+
+<section class="about-noxrev about-noxrev--tight">
+  <div class="container">
+    <div class="about-noxrev__grid about-noxrev__grid--split about-noxrev__grid--reverse">
+      <div class="about-noxrev__card">
+        {% if section.settings.eyebrow != blank %}
+          <p class="about-noxrev__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+        <h2 class="about-noxrev__heading">{{ section.settings.heading }}</h2>
+        {% if section.settings.copy != blank %}
+          <p class="about-noxrev__copy">{{ section.settings.copy }}</p>
+        {% endif %}
+      </div>
+
+      <div class="about-noxrev__collage">
+        {% for block in section.blocks %}
+          <div class="about-noxrev__media-card about-noxrev__collage-item" {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              {{ block.settings.image | image_url: width: 900 | image_tag: class: 'about-noxrev__image', loading: 'lazy' }}
+            {% else %}
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'about-noxrev__placeholder' }}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About story",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "BRAND PHILOSOPHY" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Built for the way people actually use iPad." },
+    { "type": "textarea", "id": "copy", "label": "Copy", "default": "Whether you're writing, designing, studying, travelling, or presenting — your keyboard shouldn't get in the way." }
+  ],
+  "blocks": [
+    { "type": "image", "name": "Collage image", "settings": [{ "type": "image_picker", "id": "image", "label": "Image" }] }
+  ],
+  "presets": [
+    {
+      "name": "About story",
+      "blocks": [{ "type": "image" }, { "type": "image" }, { "type": "image" }]
+    }
+  ]
+}
+{% endschema %}
