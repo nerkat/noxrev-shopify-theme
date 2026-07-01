@@ -1,0 +1,478 @@
+<section class="faq-page section" data-faq-page>
+  <div class="container">
+    <div class="faq-page__hero">
+      <div class="faq-page__hero-content">
+        {% if section.settings.eyebrow != blank %}
+          <p class="faq-page__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+
+        <h1 class="faq-page__title">{{ section.settings.title }}</h1>
+
+        {% if section.settings.intro != blank %}
+          <p class="faq-page__text">{{ section.settings.intro }}</p>
+        {% endif %}
+
+        {% if section.settings.hero_cta_label != blank %}
+          <a class="button button--primary faq-page__hero-cta" href="{{ section.settings.hero_cta_link | default: '/pages/contact' }}">
+            {{ section.settings.hero_cta_label }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="faq-page__hero-media">
+        {% if section.settings.hero_image != blank %}
+          {{
+            section.settings.hero_image
+            | image_url: width: 1200
+            | image_tag: class: 'faq-page__image', loading: 'eager', sizes: '(min-width: 860px) 46vw, 100vw'
+          }}
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'faq-page__placeholder' }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="faq-page__search-card">
+      <label class="faq-page__search-label" for="FaqSearch-{{ section.id }}">Search FAQ</label>
+      <div class="faq-page__search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"></circle>
+          <path d="m16 16 4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+        </svg>
+        <input
+          id="FaqSearch-{{ section.id }}"
+          class="faq-page__search-input"
+          type="search"
+          placeholder="{{ section.settings.search_placeholder | escape }}"
+          data-faq-search
+        >
+      </div>
+      <p class="faq-page__no-results" data-faq-no-results hidden>{{ section.settings.no_results_text }}</p>
+    </div>
+
+    {% assign rendered_categories = '' %}
+    <div class="faq-page__groups" data-faq-groups>
+      {% for block in section.blocks %}
+        {% liquid
+          assign category = block.settings.category | default: 'General'
+          assign category_handle = category | handle
+          assign category_token = '|' | append: category_handle | append: '|'
+        %}
+
+        {% unless rendered_categories contains category_token %}
+          {% assign rendered_categories = rendered_categories | append: category_token %}
+
+          <section class="faq-page__group" data-faq-group data-category="{{ category | escape }}">
+            <h2 class="faq-page__category">{{ category }}</h2>
+
+            <div class="faq-page__items">
+              {% for item_block in section.blocks %}
+                {% liquid
+                  assign item_category = item_block.settings.category | default: 'General'
+                  assign item_category_handle = item_category | handle
+                %}
+
+                {% if item_category_handle == category_handle %}
+                  <article
+                    class="faq-page__item"
+                    data-faq-item
+                    data-faq-text="{{ item_block.settings.category | append: ' ' | append: item_block.settings.question | append: ' ' | append: item_block.settings.answer | strip_html | downcase | escape }}"
+                    {{ item_block.shopify_attributes }}
+                  >
+                    <button
+                      class="faq-page__question"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="FaqAnswer-{{ section.id }}-{{ item_block.id }}"
+                      data-faq-toggle
+                    >
+                      <span>{{ item_block.settings.question }}</span>
+                      <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                        <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </button>
+                    <div
+                      id="FaqAnswer-{{ section.id }}-{{ item_block.id }}"
+                      class="faq-page__answer"
+                      data-faq-answer
+                      hidden
+                    >
+                      <div class="faq-page__answer-inner">
+                        {{ item_block.settings.answer }}
+                      </div>
+                    </div>
+                  </article>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </section>
+        {% endunless %}
+      {% endfor %}
+    </div>
+
+    <div class="faq-page__support">
+      <div>
+        <p class="faq-page__eyebrow">{{ section.settings.support_eyebrow }}</p>
+        <h2>{{ section.settings.support_title }}</h2>
+        <p>{{ section.settings.support_text }}</p>
+      </div>
+
+      {% if section.settings.support_cta_label != blank %}
+        <a class="button button--primary" href="{{ section.settings.support_cta_link | default: '/pages/contact' }}">
+          {{ section.settings.support_cta_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .faq-page {
+    padding: 2rem 0 3rem;
+  }
+
+  .faq-page__hero {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .faq-page__hero-content,
+  .faq-page__hero-media,
+  .faq-page__search-card,
+  .faq-page__group,
+  .faq-page__support {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(56, 221, 255, 0.22);
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.11), transparent 34%),
+      radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%),
+      rgba(4, 13, 25, 0.94);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 54px rgba(0, 0, 0, 0.2);
+  }
+
+  .faq-page__hero-content,
+  .faq-page__search-card,
+  .faq-page__group,
+  .faq-page__support {
+    padding: clamp(1rem, 3vw, 1.5rem);
+  }
+
+  .faq-page__eyebrow,
+  .faq-page__category,
+  .faq-page__search-label {
+    margin: 0 0 0.7rem;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .faq-page__title {
+    max-width: 11ch;
+    margin: 0;
+    background: linear-gradient(100deg, #ff4da6 8%, #c98bff 48%, #6ec8ff 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ff4da6;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--theme-font-display);
+    font-size: clamp(3rem, 13vw, 5.8rem);
+    font-weight: 800;
+    line-height: 0.94;
+    letter-spacing: -0.055em;
+  }
+
+  .faq-page__text,
+  .faq-page__support p {
+    max-width: 42rem;
+    margin: 1rem 0 0;
+    color: rgba(255, 255, 255, 0.74);
+    line-height: 1.6;
+  }
+
+  .faq-page__hero-cta {
+    margin-top: 1.25rem;
+  }
+
+  .faq-page__hero-media {
+    min-height: clamp(16rem, 52vw, 34rem);
+  }
+
+  .faq-page__image,
+  .faq-page__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .faq-page__placeholder {
+    min-height: 18rem;
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.12), rgba(255, 77, 166, 0.1));
+  }
+
+  .faq-page__hero-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at center, transparent 46%, rgba(2, 8, 20, 0.42));
+  }
+
+  .faq-page__search-card {
+    margin-bottom: 1rem;
+  }
+
+  .faq-page__search-label {
+    display: block;
+  }
+
+  .faq-page__search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 999px;
+    padding: 0 1rem;
+    background: rgba(3, 10, 22, 0.72);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .faq-page__search-wrap:focus-within {
+    border-color: rgba(0, 229, 255, 0.58);
+    box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.3), 0 0 28px rgba(0, 229, 255, 0.1);
+  }
+
+  .faq-page__search-wrap svg {
+    width: 1.1rem;
+    color: var(--theme-color-secondary);
+  }
+
+  .faq-page__search-input {
+    width: 100%;
+    min-height: 3rem;
+    border: 0;
+    color: var(--theme-color-text);
+    background: transparent;
+    font: inherit;
+  }
+
+  .faq-page__search-input:focus {
+    outline: none;
+  }
+
+  .faq-page__no-results {
+    margin: 0.8rem 0 0;
+    color: #ffd3e8;
+  }
+
+  .faq-page__groups {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .faq-page__items {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .faq-page__item {
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 0.95rem;
+    background: rgba(3, 10, 22, 0.56);
+  }
+
+  .faq-page__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    border: 0;
+    padding: 0.95rem 1rem;
+    color: var(--theme-color-text);
+    background: transparent;
+    font: inherit;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .faq-page__question svg {
+    width: 1.1rem;
+    flex: 0 0 auto;
+    color: var(--theme-color-secondary);
+    transition: transform var(--transition-base);
+  }
+
+  .faq-page__question[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+
+  .faq-page__question:focus-visible {
+    outline: 2px solid rgba(0, 229, 255, 0.72);
+    outline-offset: 3px;
+  }
+
+  .faq-page__answer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 240ms ease;
+  }
+
+  .faq-page__answer:not([hidden]) {
+    grid-template-rows: 1fr;
+  }
+
+  .faq-page__answer-inner {
+    overflow: hidden;
+    padding: 0 1rem;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.6;
+  }
+
+  .faq-page__answer:not([hidden]) .faq-page__answer-inner {
+    padding-bottom: 1rem;
+  }
+
+  .faq-page__answer-inner p {
+    margin-top: 0;
+  }
+
+  .faq-page__support {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .faq-page__support h2 {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(2rem, 7vw, 3.8rem);
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+
+  @media (min-width: 860px) {
+    .faq-page {
+      padding: 3rem 0 4rem;
+    }
+
+    .faq-page__hero {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      align-items: stretch;
+    }
+
+    .faq-page__support {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    const roots = document.querySelectorAll('[data-faq-page]');
+
+    roots.forEach((root) => {
+      const search = root.querySelector('[data-faq-search]');
+      const noResults = root.querySelector('[data-faq-no-results]');
+
+      root.addEventListener('click', (event) => {
+        const toggle = event.target.closest('[data-faq-toggle]');
+        if (!toggle || !root.contains(toggle)) return;
+
+        const item = toggle.closest('[data-faq-item]');
+        const group = toggle.closest('[data-faq-group]');
+        const answer = item?.querySelector('[data-faq-answer]');
+        const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+        group?.querySelectorAll('[data-faq-toggle][aria-expanded="true"]').forEach((openToggle) => {
+          if (openToggle === toggle) return;
+          openToggle.setAttribute('aria-expanded', 'false');
+          const openAnswer = openToggle.closest('[data-faq-item]')?.querySelector('[data-faq-answer]');
+          if (openAnswer) openAnswer.hidden = true;
+        });
+
+        toggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        if (answer) answer.hidden = isOpen;
+      });
+
+      search?.addEventListener('input', () => {
+        const query = search.value.trim().toLowerCase();
+        let visibleItems = 0;
+
+        root.querySelectorAll('[data-faq-item]').forEach((item) => {
+          const matches = !query || item.dataset.faqText.includes(query);
+          item.hidden = !matches;
+
+          if (matches) visibleItems += 1;
+        });
+
+        root.querySelectorAll('[data-faq-group]').forEach((group) => {
+          const hasVisibleItem = Array.from(group.querySelectorAll('[data-faq-item]')).some((item) => !item.hidden);
+          group.hidden = !hasVisibleItem;
+        });
+
+        if (noResults) {
+          noResults.hidden = visibleItems > 0;
+        }
+      });
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "FAQ page",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Hero eyebrow", "default": "FAQ" },
+    { "type": "text", "id": "title", "label": "Hero title", "default": "Everything you need to know." },
+    { "type": "textarea", "id": "intro", "label": "Hero paragraph", "default": "Find answers about compatibility, shipping, returns, warranty, and product support." },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "text", "id": "hero_cta_label", "label": "Hero CTA label", "default": "Contact Us" },
+    { "type": "url", "id": "hero_cta_link", "label": "Hero CTA link" },
+    { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search FAQ..." },
+    { "type": "text", "id": "no_results_text", "label": "No results text", "default": "No matching questions found." },
+    { "type": "text", "id": "support_eyebrow", "label": "Support eyebrow", "default": "SUPPORT" },
+    { "type": "text", "id": "support_title", "label": "Support title", "default": "Still have a question?" },
+    { "type": "textarea", "id": "support_text", "label": "Support text", "default": "Our support team usually replies within 24–48 hours." },
+    { "type": "text", "id": "support_cta_label", "label": "Support CTA label", "default": "Contact Us" },
+    { "type": "url", "id": "support_cta_link", "label": "Support CTA link" }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ item",
+      "settings": [
+        { "type": "text", "id": "category", "label": "Category", "default": "Compatibility" },
+        { "type": "text", "id": "question", "label": "Question", "default": "How do I know which iPad model I have?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Open Settings &gt; General &gt; About and check the model name. You can also use our Find Your iPad Model guide.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ page",
+      "blocks": [
+        { "type": "faq", "settings": { "category": "Compatibility", "question": "How do I know which iPad model I have?", "answer": "<p>Open Settings &gt; General &gt; About and check the model name. You can also compare your iPad with our model guide.</p>" } },
+        { "type": "faq", "settings": { "category": "Compatibility", "question": "What happens if I choose the wrong model?", "answer": "<p>Contact us as soon as possible. We will help confirm the correct fit before your order ships whenever we can.</p>" } },
+        { "type": "faq", "settings": { "category": "Shipping", "question": "How long does shipping take?", "answer": "<p>Shipping times vary by destination. You will receive tracking details once your order is on the way.</p>" } },
+        { "type": "faq", "settings": { "category": "Shipping", "question": "Do you ship internationally?", "answer": "<p>Yes, international shipping may be available depending on your location and checkout options.</p>" } },
+        { "type": "faq", "settings": { "category": "Returns", "question": "Can I return my order?", "answer": "<p>Returns are accepted according to our return policy. Items should be unused and returned with original packaging when required.</p>" } },
+        { "type": "faq", "settings": { "category": "Returns", "question": "What if my item arrives damaged?", "answer": "<p>Please contact support with your order number and photos of the damage so we can help resolve it quickly.</p>" } },
+        { "type": "faq", "settings": { "category": "Product", "question": "Does the keyboard case support Apple Pencil?", "answer": "<p>Many NoxRev keyboard cases are designed with Apple Pencil storage or compatibility. Check the product details for your exact model.</p>" } },
+        { "type": "faq", "settings": { "category": "Product", "question": "Does it need charging?", "answer": "<p>Yes, keyboard cases with Bluetooth or backlit keys need charging. Battery life depends on usage and lighting settings.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

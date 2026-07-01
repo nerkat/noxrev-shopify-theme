@@ -207,7 +207,7 @@
 
     .main-product__price {
       margin: 0;
-      font-size: clamp(1.6rem, 4.9vw, 1.75rem);
+      font-size: clamp(1.6rem, 4.9vw, 2.2rem);
       font-weight: 500;
       line-height: 1;
       letter-spacing: -0.03em;
@@ -393,19 +393,19 @@
     .main-product__model-tab {
       &:nth-child(1) {
         .main-product__model-tab-media {
-          flex: 0.55;
+          flex: 0.75;
         }
       }
 
       &:nth-child(2) {
         .main-product__model-tab-media {
-          flex: 0.5;
+          flex: 0.7;
         }
       }
 
       &:nth-child(3) {
         .main-product__model-tab-media {
-          flex: 0.45;
+          flex: 0.65;
         }
       }
     }
@@ -620,7 +620,6 @@
       position: relative;
       flex: 1;
       aspect-ratio: 1;
-      max-width: 4rem;
       padding: 0;
       border: 0;
       border-radius: 5px;

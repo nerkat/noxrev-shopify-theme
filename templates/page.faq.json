@@ -1,0 +1,85 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq-page",
+      "blocks": {
+        "compatibility_model": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility",
+            "question": "How do I know which iPad model I have?",
+            "answer": "<p>Open Settings &gt; General &gt; About and check the model name. You can also compare your iPad with our model guide.</p>"
+          }
+        },
+        "compatibility_wrong": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility",
+            "question": "What happens if I choose the wrong model?",
+            "answer": "<p>Contact us as soon as possible. We will help confirm the correct fit before your order ships whenever we can.</p>"
+          }
+        },
+        "shipping_time": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping",
+            "question": "How long does shipping take?",
+            "answer": "<p>Shipping times vary by destination. You will receive tracking details once your order is on the way.</p>"
+          }
+        },
+        "shipping_international": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping",
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes, international shipping may be available depending on your location and checkout options.</p>"
+          }
+        },
+        "returns_order": {
+          "type": "faq",
+          "settings": {
+            "category": "Returns",
+            "question": "Can I return my order?",
+            "answer": "<p>Returns are accepted according to our return policy. Items should be unused and returned with original packaging when required.</p>"
+          }
+        },
+        "returns_damaged": {
+          "type": "faq",
+          "settings": {
+            "category": "Returns",
+            "question": "What if my item arrives damaged?",
+            "answer": "<p>Please contact support with your order number and photos of the damage so we can help resolve it quickly.</p>"
+          }
+        },
+        "product_pencil": {
+          "type": "faq",
+          "settings": {
+            "category": "Product",
+            "question": "Does the keyboard case support Apple Pencil?",
+            "answer": "<p>Many NoxRev keyboard cases are designed with Apple Pencil storage or compatibility. Check the product details for your exact model.</p>"
+          }
+        },
+        "product_charge": {
+          "type": "faq",
+          "settings": {
+            "category": "Product",
+            "question": "Does it need charging?",
+            "answer": "<p>Yes, keyboard cases with Bluetooth or backlit keys need charging. Battery life depends on usage and lighting settings.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "compatibility_model",
+        "compatibility_wrong",
+        "shipping_time",
+        "shipping_international",
+        "returns_order",
+        "returns_damaged",
+        "product_pencil",
+        "product_charge"
+      ],
+      "settings": {}
+    }
+  },
+  "order": ["faq"]
+}
