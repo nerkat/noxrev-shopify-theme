@@ -1,18 +1,49 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "about-hero",
-      "settings": {}
+      "settings": {
+        "eyebrow": "ABOUT NOXREV",
+        "title": "Designed to unlock the full potential of your iPad.",
+        "intro": "We believe the iPad deserves accessories that are as versatile as the device itself. NoxRev creates premium keyboard cases engineered for work, creativity, and everyday life.",
+        "image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_10_04_03_AM.png"
+      }
     },
     "story": {
       "type": "about-story",
       "blocks": {
-        "image_1": { "type": "image", "settings": {} },
-        "image_2": { "type": "image", "settings": {} },
-        "image_3": { "type": "image", "settings": {} }
+        "image_1": {
+          "type": "image",
+          "settings": {}
+        },
+        "image_2": {
+          "type": "image",
+          "settings": {}
+        },
+        "image_3": {
+          "type": "image",
+          "settings": {}
+        }
       },
-      "block_order": ["image_1", "image_2", "image_3"],
-      "settings": {}
+      "block_order": [
+        "image_1",
+        "image_2",
+        "image_3"
+      ],
+      "settings": {
+        "eyebrow": "BRAND PHILOSOPHY",
+        "heading": "Built for the way people actually use iPad.",
+        "copy": "Whether you're writing, designing, studying, travelling, or presenting — your keyboard shouldn't get in the way."
+      }
     },
     "pillars": {
       "type": "about-pillars",
@@ -39,43 +70,133 @@
           }
         }
       },
-      "block_order": ["precision", "versatility", "materials"],
-      "settings": {}
+      "block_order": [
+        "precision",
+        "versatility",
+        "materials"
+      ],
+      "settings": {
+        "eyebrow": "WHY WE BUILT IT",
+        "heading": "Designed around what matters."
+      }
     },
     "engineering": {
       "type": "about-engineering",
-      "settings": {}
+      "settings": {
+        "eyebrow": "ENGINEERING",
+        "heading": "Engineered, not decorated.",
+        "copy": "From the hinge to the keyboard feel, every part of NoxRev is designed to make your iPad more capable without making your setup more complicated."
+      }
     },
     "timeline": {
       "type": "about-timeline",
       "blocks": {
-        "idea": { "type": "step", "settings": { "title": "Idea" } },
-        "prototype": { "type": "step", "settings": { "title": "Prototype" } },
-        "testing": { "type": "step", "settings": { "title": "Testing" } },
-        "launch": { "type": "step", "settings": { "title": "Launch" } }
+        "idea": {
+          "type": "step",
+          "settings": {
+            "title": "Idea",
+            "text": "A focused problem becomes a sharper product direction."
+          }
+        },
+        "prototype": {
+          "type": "step",
+          "settings": {
+            "title": "Prototype",
+            "text": "A focused problem becomes a sharper product direction."
+          }
+        },
+        "testing": {
+          "type": "step",
+          "settings": {
+            "title": "Testing",
+            "text": "A focused problem becomes a sharper product direction."
+          }
+        },
+        "launch": {
+          "type": "step",
+          "settings": {
+            "title": "Launch",
+            "text": "A focused problem becomes a sharper product direction."
+          }
+        }
       },
-      "block_order": ["idea", "prototype", "testing", "launch"],
-      "settings": {}
+      "block_order": [
+        "idea",
+        "prototype",
+        "testing",
+        "launch"
+      ],
+      "settings": {
+        "eyebrow": "PROCESS",
+        "heading": "From idea to everyday tool."
+      }
     },
     "stats": {
       "type": "about-stats",
       "blocks": {
-        "users": { "type": "stat", "settings": { "value": "100,487+", "label": "Happy users" } },
-        "modes": { "type": "stat", "settings": { "value": "7", "label": "Viewing modes" } },
-        "battery": { "type": "stat", "settings": { "value": "30 Days", "label": "Battery life" } },
-        "rotation": { "type": "stat", "settings": { "value": "360°", "label": "Rotation" } }
+        "users": {
+          "type": "stat",
+          "settings": {
+            "value": "100,487+",
+            "label": "Happy users"
+          }
+        },
+        "modes": {
+          "type": "stat",
+          "settings": {
+            "value": "7",
+            "label": "Viewing modes"
+          }
+        },
+        "battery": {
+          "type": "stat",
+          "settings": {
+            "value": "30 Days",
+            "label": "Battery life"
+          }
+        },
+        "rotation": {
+          "type": "stat",
+          "settings": {
+            "value": "360°",
+            "label": "Rotation"
+          }
+        }
       },
-      "block_order": ["users", "modes", "battery", "rotation"],
+      "block_order": [
+        "users",
+        "modes",
+        "battery",
+        "rotation"
+      ],
       "settings": {}
     },
     "quote": {
       "type": "about-quote",
-      "settings": {}
+      "settings": {
+        "quote": "Great products disappear into your workflow.",
+        "attribution": "NoxRev Design Team"
+      }
     },
     "cta": {
       "type": "about-cta",
-      "settings": {}
+      "settings": {
+        "heading": "Ready to upgrade your iPad?",
+        "primary_label": "Shop NoxRev TXP1",
+        "primary_link": "",
+        "secondary_label": "Find Your iPad Model",
+        "secondary_link": ""
+      }
     }
   },
-  "order": ["hero", "story", "pillars", "engineering", "timeline", "stats", "quote", "cta"]
+  "order": [
+    "hero",
+    "story",
+    "pillars",
+    "engineering",
+    "timeline",
+    "stats",
+    "quote",
+    "cta"
+  ]
 }
