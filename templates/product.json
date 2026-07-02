@@ -30,7 +30,7 @@
             "link": "",
             "badge": "Best Add-On",
             "button_label": "Add",
-            "highlight": true
+            "highlight": false
           }
         },
         "accessory_mouse": {

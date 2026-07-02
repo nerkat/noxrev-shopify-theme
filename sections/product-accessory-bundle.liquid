@@ -67,7 +67,16 @@
               endif
             %}
 
-            <article class="product-accessory-bundle__card{% if block.settings.highlight %} is-highlighted{% endif %}{% unless can_add_accessory %} is-unavailable{% endunless %}" {{ block.shopify_attributes }}>
+            <article
+              class="product-accessory-bundle__card{% unless can_add_accessory %} is-unavailable{% endunless %}"
+              {% if accessory_variant != blank %}
+                data-accessory-card
+                data-variant-id="{{ accessory_variant.id }}"
+              {% endif %}
+              data-add-label="{{ block.settings.button_label | escape }}"
+              data-added-label="Added"
+              {{ block.shopify_attributes }}
+            >
               {% if accessory_product != blank and accessory_variant != blank %}
                 <form class="product-accessory-bundle__form" method="post" action="{{ routes.cart_add_url }}" data-accessory-bundle-form>
                   <input type="hidden" name="id" value="{{ accessory_variant.id }}">
@@ -76,6 +85,7 @@
                     class="product-accessory-bundle__select"
                     type="submit"
                     data-cart-compact-submit
+                    data-accessory-toggle
                     {% unless can_add_accessory %}
                       disabled
                     {% endunless %}
@@ -152,8 +162,8 @@
                         disabled
                       {% endunless %}
                     >
-                      <span aria-hidden="true">+</span>
-                      <span>
+                      <span aria-hidden="true" data-accessory-button-icon>+</span>
+                      <span data-accessory-button-text>
                         {% if can_add_accessory %}
                           {{ block.settings.button_label }}
                         {% else %}
@@ -248,15 +258,196 @@
     if (!window.__noxrevAccessoryBundleSubmitReady) {
       window.__noxrevAccessoryBundleSubmitReady = true;
 
+      const rootPath = () => window.Shopify?.routes?.root || '/';
+
+      const updateHeaderCartCount = (count) => {
+        document.querySelectorAll('.header__cart-count').forEach((element) => {
+          element.textContent = count;
+        });
+      };
+
+      const getDrawerSectionId = () => document.querySelector('[data-cart-drawer]')?.dataset.sectionId || 'cart-drawer';
+
+      const replaceCartDrawer = (html) => {
+        const currentDrawer = document.querySelector('[data-cart-drawer]');
+        if (!currentDrawer || !html) return;
+
+        const parsed = new DOMParser().parseFromString(html, 'text/html');
+        const nextDrawer = parsed.querySelector('[data-cart-drawer]');
+        if (nextDrawer) {
+          currentDrawer.replaceWith(nextDrawer);
+        }
+      };
+
+      const refreshCartDrawer = async (sectionHtml) => {
+        if (sectionHtml) {
+          replaceCartDrawer(sectionHtml);
+          return;
+        }
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('section_id', getDrawerSectionId());
+        const response = await fetch(url.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+        if (response.ok) {
+          replaceCartDrawer(await response.text());
+        }
+      };
+
+      const setCardAddedState = (card, isAdded) => {
+        const button = card.querySelector('.product-accessory-bundle__button');
+        const buttonText = card.querySelector('[data-accessory-button-text]');
+        const buttonIcon = card.querySelector('[data-accessory-button-icon]');
+        const toggle = card.querySelector('[data-accessory-toggle]');
+        const label = card.dataset.addLabel || 'Add';
+        const addedLabel = card.dataset.addedLabel || 'Added';
+
+        card.classList.toggle('is-added', isAdded);
+        card.toggleAttribute('data-accessory-added', isAdded);
+
+        if (button) {
+          button.disabled = isAdded || card.classList.contains('is-unavailable');
+        }
+
+        if (buttonText) {
+          buttonText.textContent = isAdded ? addedLabel : label;
+        }
+
+        if (buttonIcon) {
+          buttonIcon.textContent = isAdded ? '✓' : '+';
+        }
+
+        if (toggle) {
+          const title = card.querySelector('.product-accessory-bundle__card-title')?.textContent?.trim() || 'accessory';
+          toggle.setAttribute('aria-label', isAdded ? `Remove ${title} from cart` : `Add ${title} to cart`);
+        }
+      };
+
+      const syncBundleCards = (cart) => {
+        const variantIds = new Set((cart.items || []).map((item) => String(item.variant_id)));
+        document.querySelectorAll('[data-accessory-card]').forEach((card) => {
+          setCardAddedState(card, variantIds.has(String(card.dataset.variantId)));
+        });
+      };
+
+      const setCardBusy = (card, isBusy) => {
+        card.classList.toggle('is-loading', isBusy);
+        card.querySelectorAll('button').forEach((button) => {
+          if (!card.hasAttribute('data-accessory-added')) {
+            button.disabled = isBusy || card.classList.contains('is-unavailable');
+          } else if (!button.matches('[data-accessory-toggle]')) {
+            button.disabled = true;
+          } else {
+            button.disabled = isBusy;
+          }
+        });
+      };
+
+      const fetchCart = async () => {
+        const response = await fetch(`${rootPath()}cart.js`, { headers: { Accept: 'application/json' } });
+        if (!response.ok) throw new Error('Unable to refresh cart.');
+        return response.json();
+      };
+
+      const addAccessory = async (form, card) => {
+        setCardBusy(card, true);
+
+        try {
+          const response = await fetch(`${rootPath()}cart/add.js`, {
+            method: 'POST',
+            headers: { Accept: 'application/json' },
+            body: new FormData(form),
+          });
+
+          const result = await response.json();
+          if (!response.ok) {
+            throw new Error(result.description || result.message || 'Unable to add item to cart.');
+          }
+
+          await refreshCartDrawer();
+          const cart = await fetchCart();
+          updateHeaderCartCount(cart.item_count || 0);
+          syncBundleCards(cart);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setCardBusy(card, false);
+        }
+      };
+
+      const removeAccessory = async (card) => {
+        const variantId = card.dataset.variantId;
+        if (!variantId) return;
+
+        setCardBusy(card, true);
+
+        try {
+          const currentCart = await fetchCart();
+          const matchingItem = (currentCart.items || []).find((item) => String(item.variant_id) === String(variantId));
+
+          if (!matchingItem?.key) {
+            syncBundleCards(currentCart);
+            return;
+          }
+
+          const response = await fetch(`${rootPath()}cart/change.js`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              id: matchingItem.key,
+              quantity: 0,
+              sections: [getDrawerSectionId()],
+              sections_url: window.location.pathname,
+            }),
+          });
+
+          const cart = await response.json();
+          if (!response.ok) {
+            throw new Error(cart.description || cart.message || 'Unable to remove item from cart.');
+          }
+
+          await refreshCartDrawer(cart.sections?.[getDrawerSectionId()]);
+          updateHeaderCartCount(cart.item_count || 0);
+          syncBundleCards(cart);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setCardBusy(card, false);
+        }
+      };
+
       document.addEventListener('submit', (event) => {
         const form = event.target.closest('[data-accessory-bundle-form]');
         if (!form) return;
 
-        const card = form.closest('.product-accessory-bundle__card');
+        const card = form.closest('[data-accessory-card]');
         if (!card) return;
 
-        card.classList.add('is-added');
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        if (card.hasAttribute('data-accessory-added')) return;
+
+        addAccessory(form, card);
       }, true);
+
+      document.addEventListener('click', (event) => {
+        const toggle = event.target.closest('[data-accessory-toggle]');
+        if (!toggle) return;
+
+        const card = toggle.closest('[data-accessory-card]');
+        if (!card || !card.hasAttribute('data-accessory-added')) return;
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        removeAccessory(card);
+      }, true);
+
+      fetchCart()
+        .then(syncBundleCards)
+        .catch(() => {});
     }
 
     document.addEventListener('shopify:section:load', (event) => {
@@ -399,13 +590,6 @@
       radial-gradient(circle at 50% 50%, rgba(155, 0, 255, 0.16), transparent 42%);
   }
 
-  .product-accessory-bundle__card.is-highlighted {
-    border-color: rgba(255, 76, 218, 0.82);
-    box-shadow:
-      0 0 0 1px rgba(0, 229, 255, 0.34),
-      0 0 34px rgba(255, 45, 180, 0.22);
-  }
-
   .product-accessory-bundle__card.is-added {
     border-color: rgba(255, 76, 218, 0.9);
     box-shadow:
@@ -441,7 +625,6 @@
       transform 180ms ease;
   }
 
-  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__select,
   .product-accessory-bundle__card.is-added .product-accessory-bundle__select {
     border-color: rgba(0, 255, 213, 0.6);
     background: linear-gradient(135deg, #00ffb0, #25dfff);
@@ -455,7 +638,6 @@
     transition: opacity 180ms ease;
   }
 
-  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__select svg,
   .product-accessory-bundle__card.is-added .product-accessory-bundle__select svg {
     opacity: 1;
   }
@@ -589,7 +771,6 @@
       opacity 180ms ease;
   }
 
-  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__button,
   .product-accessory-bundle__card.is-added .product-accessory-bundle__button {
     border-color: transparent;
     color: #02111d;
@@ -610,6 +791,10 @@
     cursor: not-allowed;
     opacity: 0.58;
     transform: none;
+  }
+
+  .product-accessory-bundle__card.is-added .product-accessory-bundle__button[disabled] {
+    opacity: 1;
   }
 
   .product-accessory-bundle__form {
@@ -722,7 +907,7 @@
     {
       "name": "PDP Accessory Bundle",
       "blocks": [
-        { "type": "accessory", "settings": { "title": "NoxRev Precision Stylus", "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.", "price": "$59.00", "compare_price": "$79.00", "savings_label": "Save 25%", "badge": "Best Add-On", "highlight": true } },
+        { "type": "accessory", "settings": { "title": "NoxRev Precision Stylus", "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.", "price": "$59.00", "compare_price": "$79.00", "savings_label": "Save 25%", "badge": "Best Add-On", "highlight": false } },
         { "type": "accessory", "settings": { "title": "NoxRev Urban Sleeve", "text": "Premium protection. Slim profile. Built for life on the move.", "price": "$49.00", "compare_price": "$69.00", "savings_label": "Save 29%", "badge": "Popular" } },
         { "type": "accessory", "settings": { "title": "NoxRev USB-C Cable", "text": "100W fast charging. 6ft braided. Built to last.", "price": "$24.00", "compare_price": "$34.00", "savings_label": "Save 29%", "badge": "" } },
         { "type": "accessory", "settings": { "title": "NoxRev Wireless Mouse", "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.", "price": "$39.00", "compare_price": "$59.00", "savings_label": "Save 34%", "badge": "" } }
