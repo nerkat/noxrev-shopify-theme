@@ -27,20 +27,30 @@
           {% for block in section.blocks %}
             {% liquid
               assign accessory_product = block.settings.product
+              assign accessory_variant = blank
               assign card_title = block.settings.title
               assign card_text = block.settings.text
               assign card_image = block.settings.image
               assign card_price = block.settings.price
               assign card_compare_price = block.settings.compare_price
               assign card_url = block.settings.link
+              assign can_add_accessory = false
 
               if accessory_product != blank
+                assign accessory_variant = accessory_product.selected_or_first_available_variant
                 assign card_title = accessory_product.title
                 assign card_url = accessory_product.url
-                assign card_image = accessory_product.featured_media.preview_image | default: card_image
-                assign card_price = accessory_product.price | money
-                if accessory_product.compare_at_price > accessory_product.price
-                  assign card_compare_price = accessory_product.compare_at_price | money
+                if card_image == blank
+                  assign card_image = accessory_product.featured_media.preview_image
+                endif
+                if accessory_variant != blank
+                  assign card_price = accessory_variant.price | money
+                  if accessory_variant.compare_at_price > accessory_variant.price
+                    assign card_compare_price = accessory_variant.compare_at_price | money
+                  endif
+                  if accessory_variant.available
+                    assign can_add_accessory = true
+                  endif
                 endif
               endif
 
@@ -57,28 +67,42 @@
               endif
             %}
 
-            <article class="product-accessory-bundle__card{% if block.settings.highlight %} is-highlighted{% endif %}" {{ block.shopify_attributes }}>
-              <div class="product-accessory-bundle__select" aria-hidden="true">
-                {% if block.settings.highlight %}
+            <article class="product-accessory-bundle__card{% if block.settings.highlight %} is-highlighted{% endif %}{% unless can_add_accessory %} is-unavailable{% endunless %}" {{ block.shopify_attributes }}>
+              {% if accessory_product != blank and accessory_variant != blank %}
+                <form class="product-accessory-bundle__form" method="post" action="{{ routes.cart_add_url }}" data-accessory-bundle-form>
+                  <input type="hidden" name="id" value="{{ accessory_variant.id }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button
+                    class="product-accessory-bundle__select"
+                    type="submit"
+                    data-cart-compact-submit
+                    {% unless can_add_accessory %}
+                      disabled
+                    {% endunless %}
+                    aria-label="Add {{ card_title | escape }} to cart"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+                      <path d="m6 12 4 4 8-8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </form>
+              {% else %}
+                <div class="product-accessory-bundle__select" aria-hidden="true">
                   <svg viewBox="0 0 24 24" fill="none" focusable="false">
                     <path d="m6 12 4 4 8-8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                {% endif %}
-              </div>
+                </div>
+              {% endif %}
 
               {% if block.settings.badge != blank %}
                 <span class="product-accessory-bundle__badge">{{ block.settings.badge }}</span>
-              {% endif %}
-
-              {% if card_url != blank %}
-                <a class="product-accessory-bundle__link" href="{{ card_url }}" aria-label="{{ card_title | escape }}"></a>
               {% endif %}
 
               <div class="product-accessory-bundle__media">
                 {% if card_image != blank %}
                   {% render 'responsive-image',
                     image: card_image,
-                    alt: block.settings.image_alt,
+                    alt: block.settings.image_alt | default: card_title,
                     class: 'product-accessory-bundle__image',
                     loading: 'lazy',
                     sizes: '(min-width: 900px) 24vw, 78vw',
@@ -90,7 +114,13 @@
               </div>
 
               <div class="product-accessory-bundle__content">
-                <h3 class="product-accessory-bundle__card-title">{{ card_title }}</h3>
+                <h3 class="product-accessory-bundle__card-title">
+                  {% if card_url != blank %}
+                    <a href="{{ card_url }}">{{ card_title }}</a>
+                  {% else %}
+                    {{ card_title }}
+                  {% endif %}
+                </h3>
                 <p class="product-accessory-bundle__card-text">{{ card_text }}</p>
 
                 <div class="product-accessory-bundle__price-row">
@@ -111,10 +141,33 @@
                   {% endif %}
                 </div>
 
-                <span class="product-accessory-bundle__button">
-                  <span aria-hidden="true">+</span>
-                  <span>{{ block.settings.button_label }}</span>
-                </span>
+                {% if accessory_product != blank and accessory_variant != blank %}
+                  <form class="product-accessory-bundle__form" method="post" action="{{ routes.cart_add_url }}" data-accessory-bundle-form>
+                    <input type="hidden" name="id" value="{{ accessory_variant.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button
+                      class="product-accessory-bundle__button"
+                      type="submit"
+                      {% unless can_add_accessory %}
+                        disabled
+                      {% endunless %}
+                    >
+                      <span aria-hidden="true">+</span>
+                      <span>
+                        {% if can_add_accessory %}
+                          {{ block.settings.button_label }}
+                        {% else %}
+                          Sold out
+                        {% endif %}
+                      </span>
+                    </button>
+                  </form>
+                {% else %}
+                  <span class="product-accessory-bundle__button product-accessory-bundle__button--disabled">
+                    <span aria-hidden="true">+</span>
+                    <span>Select product</span>
+                  </span>
+                {% endif %}
               </div>
             </article>
           {% endfor %}
@@ -191,6 +244,20 @@
     };
 
     initAccessoryBundleSliders();
+
+    if (!window.__noxrevAccessoryBundleSubmitReady) {
+      window.__noxrevAccessoryBundleSubmitReady = true;
+
+      document.addEventListener('submit', (event) => {
+        const form = event.target.closest('[data-accessory-bundle-form]');
+        if (!form) return;
+
+        const card = form.closest('.product-accessory-bundle__card');
+        if (!card) return;
+
+        card.classList.add('is-added');
+      }, true);
+    }
 
     document.addEventListener('shopify:section:load', (event) => {
       initAccessoryBundleSliders(event.target);
@@ -311,6 +378,7 @@
     display: grid;
     min-height: 31rem;
     overflow: hidden;
+    border: 1px solid rgba(0, 229, 255, 0.18);
     border-radius: 1rem;
     background: rgba(4, 13, 25, 0.94);
     transition:
@@ -338,10 +406,11 @@
       0 0 34px rgba(255, 45, 180, 0.22);
   }
 
-  .product-accessory-bundle__link {
-    position: absolute;
-    inset: 0;
-    z-index: 4;
+  .product-accessory-bundle__card.is-added {
+    border-color: rgba(255, 76, 218, 0.9);
+    box-shadow:
+      0 0 0 1px rgba(0, 229, 255, 0.4),
+      0 0 34px rgba(255, 45, 180, 0.26);
   }
 
   .product-accessory-bundle__select,
@@ -364,16 +433,31 @@
     border-radius: 0.35rem;
     color: #02111d;
     background: rgba(2, 10, 20, 0.58);
+    cursor: pointer;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
   }
 
-  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__select {
+  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__select,
+  .product-accessory-bundle__card.is-added .product-accessory-bundle__select {
     border-color: rgba(0, 255, 213, 0.6);
     background: linear-gradient(135deg, #00ffb0, #25dfff);
+    box-shadow: 0 0 18px rgba(0, 229, 255, 0.28);
   }
 
   .product-accessory-bundle__select svg {
     width: 1.25rem;
     height: 1.25rem;
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__select svg,
+  .product-accessory-bundle__card.is-added .product-accessory-bundle__select svg {
+    opacity: 1;
   }
 
   .product-accessory-bundle__badge {
@@ -421,6 +505,17 @@
     font-size: 1.12rem;
     font-weight: 800;
     line-height: 1.16;
+  }
+
+  .product-accessory-bundle__card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+
+  .product-accessory-bundle__card-title a:hover,
+  .product-accessory-bundle__card-title a:focus-visible {
+    color: #24e5ff;
   }
 
   .product-accessory-bundle__card-text {
@@ -482,13 +577,43 @@
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+    appearance: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      box-shadow 180ms ease,
+      color 180ms ease,
+      transform 180ms ease,
+      opacity 180ms ease;
   }
 
-  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__button {
+  .product-accessory-bundle__card.is-highlighted .product-accessory-bundle__button,
+  .product-accessory-bundle__card.is-added .product-accessory-bundle__button {
     border-color: transparent;
     color: #02111d;
     background: linear-gradient(135deg, #00ffb0, #25dfff);
     box-shadow: 0 0 28px rgba(0, 229, 255, 0.18);
+  }
+
+  .product-accessory-bundle__button:hover,
+  .product-accessory-bundle__button:focus-visible,
+  .product-accessory-bundle__select:hover,
+  .product-accessory-bundle__select:focus-visible {
+    transform: translateY(-1px);
+  }
+
+  .product-accessory-bundle__button[disabled],
+  .product-accessory-bundle__button--disabled,
+  .product-accessory-bundle__select[disabled] {
+    cursor: not-allowed;
+    opacity: 0.58;
+    transform: none;
+  }
+
+  .product-accessory-bundle__form {
+    margin: 0;
   }
 
   .product-accessory-bundle__arrow {
@@ -579,7 +704,7 @@
       "limit": 8,
       "settings": [
         { "type": "product", "id": "product", "label": "Accessory product" },
-        { "type": "image_picker", "id": "image", "label": "Fallback image" },
+        { "type": "image_picker", "id": "image", "label": "Image override" },
         { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Accessory product" },
         { "type": "text", "id": "title", "label": "Fallback title", "default": "NoxRev Precision Stylus" },
         { "type": "textarea", "id": "text", "label": "Description", "default": "Tilt sensitivity. Palm rejection. Pixel-perfect control." },

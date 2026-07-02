@@ -785,11 +785,14 @@
       const submitButton = form.querySelector('[type="submit"]');
       const originalText = submitButton?.textContent;
       const originalDisabled = submitButton?.disabled;
+      const shouldSwapSubmitText = !submitButton?.hasAttribute('data-cart-compact-submit');
 
       if (submitButton) {
         submitButton.disabled = true;
         submitButton.classList.add('is-loading');
-        submitButton.textContent = 'Adding...';
+        if (shouldSwapSubmitText) {
+          submitButton.textContent = 'Adding...';
+        }
       }
 
       try {
@@ -818,7 +821,9 @@
         if (submitButton) {
           submitButton.disabled = originalDisabled;
           submitButton.classList.remove('is-loading');
-          submitButton.textContent = originalText;
+          if (shouldSwapSubmitText) {
+            submitButton.textContent = originalText;
+          }
         }
       }
     };

@@ -14,6 +14,30 @@
     const initializedModelTabs = new WeakSet();
     const activeModelFamilies = new Map();
 
+    const applyModelFamilyState = (selector, family) => {
+      if (!selector) {
+        return;
+      }
+
+      const tabs = Array.from(selector.querySelectorAll('[data-model-tab]'));
+      const panels = Array.from(selector.querySelectorAll('[data-model-panel]'));
+      const shouldOpen = family && tabs.some((tab) => tab.dataset.modelTab === family);
+
+      tabs.forEach((tab) => {
+        const isActive = shouldOpen && tab.dataset.modelTab === family;
+        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        tab.setAttribute('tabindex', shouldOpen ? (isActive ? '0' : '-1') : '0');
+      });
+
+      panels.forEach((panel) => {
+        const isActive = shouldOpen && panel.dataset.modelPanel === family;
+        panel.hidden = !isActive;
+        panel.classList.toggle('is-active', isActive);
+      });
+
+      selector.dataset.activeFamily = shouldOpen ? family : '';
+    };
+
     const initModelTabs = (scope = document) => {
       scope.querySelectorAll('[data-model-tabs]').forEach((selector) => {
         if (initializedModelTabs.has(selector)) {
@@ -30,34 +54,12 @@
         }
 
         const setActiveFamily = (family) => {
-          tabs.forEach((tab) => {
-            const isActive = tab.dataset.modelTab === family;
-            tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
-            tab.setAttribute('tabindex', isActive ? '0' : '-1');
-          });
-
-          panels.forEach((panel) => {
-            const isActive = panel.dataset.modelPanel === family;
-            panel.hidden = !isActive;
-            panel.classList.toggle('is-active', isActive);
-          });
-
-          selector.dataset.activeFamily = family || '';
+          applyModelFamilyState(selector, family);
           activeModelFamilies.set(productHandle, family || '');
         };
 
         const clearActiveFamily = () => {
-          tabs.forEach((tab) => {
-            tab.setAttribute('aria-selected', 'false');
-            tab.setAttribute('tabindex', '0');
-          });
-
-          panels.forEach((panel) => {
-            panel.hidden = true;
-            panel.classList.remove('is-active');
-          });
-
-          selector.dataset.activeFamily = '';
+          applyModelFamilyState(selector, '');
           activeModelFamilies.delete(productHandle);
         };
 
@@ -366,7 +368,15 @@
         const nextFragment = nextSection.querySelector(selector);
 
         if (currentFragment && nextFragment) {
-          currentFragment.replaceWith(nextFragment.cloneNode(true));
+          const nextFragmentClone = nextFragment.cloneNode(true);
+
+          if (selector === '[data-product-options-region]') {
+            const productHandle = currentSection.dataset.productHandle || 'product';
+            const storedFamily = activeModelFamilies.get(productHandle) || '';
+            applyModelFamilyState(nextFragmentClone.querySelector('[data-model-tabs]'), storedFamily);
+          }
+
+          currentFragment.replaceWith(nextFragmentClone);
         }
       });
 
