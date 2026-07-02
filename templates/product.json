@@ -33,6 +33,23 @@
             "highlight": true
           }
         },
+        "accessory_mouse": {
+          "type": "accessory",
+          "settings": {
+            "product": "txp1-mouse",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_38_01_PM.png",
+            "image_alt": "Accessory product",
+            "title": "NoxRev Wireless Mouse",
+            "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.",
+            "price": "$39.00",
+            "compare_price": "$59.00",
+            "savings_label": "Save 34%",
+            "link": "",
+            "badge": "",
+            "button_label": "Add",
+            "highlight": false
+          }
+        },
         "accessory_sleeve": {
           "type": "accessory",
           "settings": {
@@ -66,30 +83,13 @@
             "button_label": "Add",
             "highlight": false
           }
-        },
-        "accessory_mouse": {
-          "type": "accessory",
-          "settings": {
-            "product": "txp1-mouse",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_38_01_PM.png",
-            "image_alt": "Accessory product",
-            "title": "NoxRev Wireless Mouse",
-            "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.",
-            "price": "$39.00",
-            "compare_price": "$59.00",
-            "savings_label": "Save 34%",
-            "link": "",
-            "badge": "",
-            "button_label": "Add",
-            "highlight": false
-          }
         }
       },
       "block_order": [
         "accessory_stylus",
+        "accessory_mouse",
         "accessory_sleeve",
-        "accessory_cable",
-        "accessory_mouse"
+        "accessory_cable"
       ],
       "settings": {
         "eyebrow": "Complete Your Setup",
