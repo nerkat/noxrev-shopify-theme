@@ -447,7 +447,7 @@
         "accessory_stylus": {
           "type": "accessory",
           "settings": {
-            "product": "",
+            "product": "txp1-pencil",
             "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_11_46_PM.png",
             "image_alt": "Accessory product",
             "title": "NoxRev Precision Stylus",
