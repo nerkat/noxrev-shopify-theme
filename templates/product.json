@@ -498,7 +498,7 @@
         "accessory_mouse": {
           "type": "accessory",
           "settings": {
-            "product": "",
+            "product": "txp1-mouse",
             "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_38_01_PM.png",
             "image_alt": "Accessory product",
             "title": "NoxRev Wireless Mouse",
