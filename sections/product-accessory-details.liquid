@@ -1,0 +1,259 @@
+{% liquid
+  assign hero_image = section.settings.image | default: product.featured_media.preview_image
+%}
+
+<section class="product-accessory-details section">
+  <div class="container">
+    <article class="product-accessory-details__panel">
+      <div class="product-accessory-details__copy">
+        {% if section.settings.eyebrow != blank %}
+          <p class="product-accessory-details__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+
+        {% if section.settings.title != blank %}
+          <h2 class="product-accessory-details__title">{{ section.settings.title }}</h2>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <div class="product-accessory-details__text">{{ section.settings.text }}</div>
+        {% endif %}
+      </div>
+
+      <div class="product-accessory-details__media">
+        {% if hero_image != blank %}
+          {% render 'responsive-image',
+            image: hero_image,
+            alt: section.settings.image_alt | default: product.title,
+            class: 'product-accessory-details__image',
+            loading: 'lazy',
+            sizes: '(min-width: 900px) 45vw, 100vw',
+            widths: '420, 640, 860, 1100, 1400'
+          %}
+        {% else %}
+          <div class="product-accessory-details__placeholder" aria-hidden="true"></div>
+        {% endif %}
+      </div>
+    </article>
+
+    {% if section.blocks.size > 0 %}
+      <div class="product-accessory-details__grid">
+        {% for block in section.blocks %}
+          <article class="product-accessory-details__card" {{ block.shopify_attributes }}>
+            <span class="product-accessory-details__icon" aria-hidden="true">
+              {% case block.settings.icon %}
+                {% when 'shield' %}
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M12 3 19 6v5.2c0 4.2-2.7 7.8-7 9.8-4.3-2-7-5.6-7-9.8V6l7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {% when 'bolt' %}
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="m13 2-8 12h6l-1 8 9-13h-6l0-7Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                {% when 'spark' %}
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M12 3l1.4 5.2L19 10l-5.6 1.8L12 17l-1.4-5.2L5 10l5.6-1.8L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M19 15v4M21 17h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                {% else %}
+                  <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              {% endcase %}
+            </span>
+
+            <div>
+              <h3>{{ block.settings.title }}</h3>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .product-accessory-details {
+    padding: 0 0 1.5rem;
+  }
+
+  .product-accessory-details__panel,
+  .product-accessory-details__card {
+    border: 1px solid rgba(0, 229, 255, 0.18);
+    background:
+      radial-gradient(circle at 100% 0%, rgba(0, 229, 255, 0.12), transparent 32%),
+      radial-gradient(circle at 0% 0%, rgba(255, 45, 180, 0.1), transparent 30%),
+      linear-gradient(180deg, rgba(7, 14, 30, 0.96), rgba(3, 10, 22, 0.98));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 70px rgba(0, 0, 0, 0.22);
+  }
+
+  .product-accessory-details__panel {
+    display: grid;
+    gap: 1.5rem;
+    overflow: hidden;
+    border-radius: 1.35rem;
+    padding: 1.25rem;
+  }
+
+  .product-accessory-details__eyebrow {
+    margin: 0 0 0.7rem;
+    background: linear-gradient(90deg, #24e5ff, #d96dff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .product-accessory-details__title {
+    max-width: 48rem;
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(2rem, 7vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+
+  .product-accessory-details__text {
+    max-width: 40rem;
+    margin-top: 0.85rem;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .product-accessory-details__media {
+    min-height: 18rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: rgba(2, 8, 18, 0.7);
+  }
+
+  .product-accessory-details__image,
+  .product-accessory-details__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    object-fit: cover;
+  }
+
+  .product-accessory-details__placeholder {
+    background:
+      radial-gradient(circle at 50% 45%, rgba(0, 229, 255, 0.18), transparent 34%),
+      linear-gradient(135deg, rgba(255, 45, 180, 0.12), rgba(2, 8, 18, 0.95));
+  }
+
+  .product-accessory-details__grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .product-accessory-details__card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.9rem;
+    align-items: start;
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .product-accessory-details__icon {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 229, 255, 0.28);
+    border-radius: 999px;
+    color: #24e5ff;
+    background: rgba(2, 12, 24, 0.74);
+  }
+
+  .product-accessory-details__icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .product-accessory-details__card h3 {
+    margin: 0;
+    color: var(--theme-color-text);
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .product-accessory-details__card p {
+    margin: 0.35rem 0 0;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  @media (min-width: 760px) {
+    .product-accessory-details__panel {
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .product-accessory-details__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 749px) {
+    .product-accessory-details .container {
+      padding-inline: 0;
+    }
+
+    .product-accessory-details__panel,
+    .product-accessory-details__card {
+      border-right: 0;
+      border-left: 0;
+      border-radius: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP Accessory Details",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Designed For Your Setup" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Small upgrades. Big daily difference." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Accessory products get a lighter PDP story than the main keyboard case, while keeping the same premium NoxRev visual system." },
+    { "type": "image_picker", "id": "image", "label": "Feature image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "NoxRev accessory product" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "spark",
+          "options": [
+            { "value": "spark", "label": "Spark" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "bolt", "label": "Bolt" },
+            { "value": "lines", "label": "Lines" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Built for daily use" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "A focused benefit card for accessory products." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP Accessory Details",
+      "blocks": [
+        { "type": "feature", "settings": { "icon": "spark", "title": "Premium finish", "text": "Clean materials and details designed to sit naturally beside your iPad setup." } },
+        { "type": "feature", "settings": { "icon": "shield", "title": "Everyday ready", "text": "Made for the small moments that matter: commuting, working, studying, and creating." } },
+        { "type": "feature", "settings": { "icon": "bolt", "title": "Simple compatibility", "text": "Keep the page focused, editable, and easy to adapt for each accessory." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

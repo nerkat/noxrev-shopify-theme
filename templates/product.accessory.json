@@ -1,0 +1,82 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {}
+    },
+    "accessory_details": {
+      "type": "product-accessory-details",
+      "blocks": {
+        "feature_finish": {
+          "type": "feature",
+          "settings": {
+            "icon": "spark",
+            "title": "Premium finish",
+            "text": "Clean materials and details designed to sit naturally beside your iPad setup."
+          }
+        },
+        "feature_ready": {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "title": "Everyday ready",
+            "text": "Made for the small moments that matter: commuting, working, studying, and creating."
+          }
+        },
+        "feature_simple": {
+          "type": "feature",
+          "settings": {
+            "icon": "bolt",
+            "title": "Setup-friendly",
+            "text": "A focused accessory PDP that keeps the buying path clear without the keyboard-case story sections."
+          }
+        }
+      },
+      "block_order": [
+        "feature_finish",
+        "feature_ready",
+        "feature_simple"
+      ],
+      "settings": {
+        "eyebrow": "Designed For Your Setup",
+        "title": "Small upgrades. Big daily difference.",
+        "text": "Accessory products get a lighter PDP story than the main keyboard case, while keeping the same premium NoxRev visual system.",
+        "image": "",
+        "image_alt": "NoxRev accessory product"
+      }
+    },
+    "product_reviews_rating": {
+      "type": "product-reviews-rating",
+      "settings": {
+        "eyebrow": "Customer Reviews",
+        "title": "Trusted by real customers.",
+        "rating_value": "4.9",
+        "subtitle": "Based on 3,672 reviews",
+        "review_total": "3672",
+        "review_5": "3182",
+        "review_4": "362",
+        "review_3": "74",
+        "review_2": "28",
+        "review_1": "26",
+        "write_button_label": "Write A Review",
+        "write_button_link": "",
+        "button_label": "View All Reviews",
+        "button_link": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "accessory_details",
+    "product_reviews_rating"
+  ]
+}
