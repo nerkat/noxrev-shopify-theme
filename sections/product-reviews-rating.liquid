@@ -2,6 +2,11 @@
   assign rating_value = section.settings.rating_value
   assign rating_count = product.metafields.reviews.rating_count.value | default: blank
   assign judge_me_widget = product.metafields.judgeme.widget
+  assign has_legacy_judgeme_widget = false
+
+  if judge_me_widget.size > 20
+    assign has_legacy_judgeme_widget = true
+  endif
 
   if product.metafields.reviews.rating.value != blank
     assign rating_value = product.metafields.reviews.rating.value.rating | round: 1
@@ -95,14 +100,14 @@
       {% if section.settings.button_label != blank or section.settings.write_button_label != blank %}
         <div class="product-reviews-rating__actions">
           {% if section.settings.write_button_label != blank %}
-            <a class="product-reviews-rating__button product-reviews-rating__button--primary" href="{{ section.settings.write_button_link | default: '#judgeme_product_reviews' }}" data-judgeme-write-review>
+            <a class="product-reviews-rating__button product-reviews-rating__button--primary" href="{{ section.settings.write_button_link | default: '#judgeme_reviews_panel' }}" data-judgeme-write-review>
               <span>{{ section.settings.write_button_label }}</span>
               <span aria-hidden="true">+</span>
             </a>
           {% endif %}
 
           {% if section.settings.button_label != blank %}
-            <a class="product-reviews-rating__button" href="{{ section.settings.button_link | default: '#judgeme_product_reviews' }}" data-judgeme-view-reviews aria-controls="judgeme_product_reviews" aria-expanded="false">
+            <a class="product-reviews-rating__button" href="{{ section.settings.button_link | default: '#judgeme_reviews_panel' }}" data-judgeme-view-reviews aria-controls="judgeme_reviews_panel" aria-expanded="false">
               <span>{{ section.settings.button_label }}</span>
               <span aria-hidden="true">&rsaquo;</span>
             </a>
@@ -110,7 +115,7 @@
         </div>
       {% endif %}
 
-      <div id="judgeme_product_reviews" class="product-reviews-rating__judgeme" data-judgeme-reviews-panel aria-hidden="true">
+      <div id="judgeme_reviews_panel" class="product-reviews-rating__judgeme" data-judgeme-reviews-panel aria-hidden="true">
         <div class="product-reviews-rating__judgeme-header">
           <div>
             <p class="product-reviews-rating__judgeme-eyebrow">All Reviews</p>
@@ -120,10 +125,32 @@
         </div>
 
         <div class="product-reviews-rating__judgeme-body" data-judgeme-panel-body>
-          {% if judge_me_widget != blank %}
-            {{ judge_me_widget }}
-          {% else %}
-            <div class="jdgm-widget jdgm-review-widget" data-product-title="{{ product.title | escape }}" data-id="{{ product.id }}"></div>
+          <div style="clear: both;"></div>
+          <div
+            id="judgeme_product_reviews"
+            class="jdgm-widget jdgm-review-widget"
+            data-product-title="{{ product.title | escape }}"
+            data-id="{{ product.id }}"
+            data-product-id="{{ product.id }}"
+            data-widget="review"
+            data-auto-install="false"
+            data-shop-reviews-count="{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}"
+            data-entry-point="review_widget.js"
+            data-entry-key="review-widget/main.js"
+          >
+            {% if has_legacy_judgeme_widget %}
+              <div class="jdgm-legacy-widget-content" style="display: none;">
+                {{ judge_me_widget }}
+              </div>
+            {% endif %}
+          </div>
+
+          {% if product.metafields.judgeme.review_widget_data %}
+            <script>
+              jdgm.data ||= {};
+              jdgm.data.reviewWidget ||= {};
+              jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }};
+            </script>
           {% endif %}
         </div>
       </div>
@@ -138,7 +165,7 @@
     const viewReviewsTrigger = section?.querySelector('[data-judgeme-view-reviews]');
     const closeReviewsTrigger = section?.querySelector('[data-judgeme-close-reviews]');
     const customRows = Array.from(section?.querySelectorAll('[data-rating-row]') || []);
-    const widget = section?.querySelector('#judgeme_product_reviews');
+    const widget = section?.querySelector('[data-judgeme-reviews-panel]');
     const panelBody = section?.querySelector('[data-judgeme-panel-body]');
 
     const parseCount = (text) => {
