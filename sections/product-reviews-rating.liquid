@@ -1,4 +1,12 @@
 {% liquid
+  assign rating_value = section.settings.rating_value
+  assign rating_count = product.metafields.reviews.rating_count.value | default: blank
+  assign judge_me_widget = product.metafields.judgeme.widget
+
+  if product.metafields.reviews.rating.value != blank
+    assign rating_value = product.metafields.reviews.rating.value.rating | round: 1
+  endif
+
   assign review_total = section.settings.review_total | plus: 0
   assign review_5 = section.settings.review_5 | plus: 0
   assign review_4 = section.settings.review_4 | plus: 0
@@ -23,6 +31,13 @@
     assign p2 = review_2 | times: 100.0 | divided_by: review_total
     assign p1 = review_1 | times: 100.0 | divided_by: review_total
   endif
+
+  assign review_total_label = rating_count | default: review_total
+  assign subtitle = section.settings.subtitle
+
+  if rating_count != blank
+    assign subtitle = 'Based on ' | append: review_total_label | append: ' reviews'
+  endif
 %}
 
 <section class="product-reviews-rating section">
@@ -35,16 +50,16 @@
 
       <div class="product-reviews-rating__summary">
         <div class="product-reviews-rating__score">
-          <div class="product-reviews-rating__value">{{ section.settings.rating_value }}</div>
+          <div class="product-reviews-rating__value">{{ rating_value }}</div>
           <div>
-            <div class="product-reviews-rating__stars" aria-label="{{ section.settings.rating_value }} out of 5 stars">
+            <div class="product-reviews-rating__stars" aria-label="{{ rating_value }} out of 5 stars">
               {% for star in (1..5) %}
                 <svg viewBox="0 0 20 20" fill="currentColor" focusable="false" aria-hidden="true">
                   <path d="m10 2.6 2.25 4.56 5.04.73-3.65 3.56.86 5.03L10 14.12 5.5 16.48l.86-5.03L2.7 7.89l5.04-.73L10 2.6Z"></path>
                 </svg>
               {% endfor %}
             </div>
-            <p class="product-reviews-rating__subtitle">{{ section.settings.subtitle }}</p>
+            <p class="product-reviews-rating__subtitle">{{ subtitle }}</p>
           </div>
         </div>
 
@@ -52,27 +67,27 @@
           <div class="product-reviews-rating__row">
             <span>5 Stars</span>
             <span class="product-reviews-rating__bar"><span style="width: {{ p5 }}%;"></span></span>
-            <strong>{{ section.settings.review_5 }}</strong>
+            <strong>{{ review_5 }}</strong>
           </div>
           <div class="product-reviews-rating__row">
             <span>4 Stars</span>
             <span class="product-reviews-rating__bar"><span style="width: {{ p4 }}%;"></span></span>
-            <strong>{{ section.settings.review_4 }}</strong>
+            <strong>{{ review_4 }}</strong>
           </div>
           <div class="product-reviews-rating__row">
             <span>3 Stars</span>
             <span class="product-reviews-rating__bar"><span style="width: {{ p3 }}%;"></span></span>
-            <strong>{{ section.settings.review_3 }}</strong>
+            <strong>{{ review_3 }}</strong>
           </div>
           <div class="product-reviews-rating__row">
             <span>2 Stars</span>
             <span class="product-reviews-rating__bar"><span style="width: {{ p2 }}%;"></span></span>
-            <strong>{{ section.settings.review_2 }}</strong>
+            <strong>{{ review_2 }}</strong>
           </div>
           <div class="product-reviews-rating__row">
             <span>1 Star</span>
             <span class="product-reviews-rating__bar"><span style="width: {{ p1 }}%;"></span></span>
-            <strong>{{ section.settings.review_1 }}</strong>
+            <strong>{{ review_1 }}</strong>
           </div>
         </div>
       </div>
@@ -80,7 +95,7 @@
       {% if section.settings.button_label != blank or section.settings.write_button_label != blank %}
         <div class="product-reviews-rating__actions">
           {% if section.settings.write_button_label != blank %}
-            <a class="product-reviews-rating__button product-reviews-rating__button--primary" href="{{ section.settings.write_button_link | default: '#write-review' }}">
+            <a class="product-reviews-rating__button product-reviews-rating__button--primary" href="{{ section.settings.write_button_link | default: '#judgeme_product_reviews' }}">
               <span>{{ section.settings.write_button_label }}</span>
               <span aria-hidden="true">+</span>
             </a>
@@ -94,6 +109,14 @@
           {% endif %}
         </div>
       {% endif %}
+
+      <div id="judgeme_product_reviews" class="product-reviews-rating__judgeme">
+        {% if judge_me_widget != blank %}
+          {{ judge_me_widget }}
+        {% else %}
+          <div class="jdgm-widget jdgm-review-widget" data-product-title="{{ product.title | escape }}" data-id="{{ product.id }}"></div>
+        {% endif %}
+      </div>
     </article>
   </div>
 </section>
@@ -262,6 +285,36 @@
     box-shadow:
       0 18px 40px rgba(0, 229, 255, 0.2),
       0 0 28px rgba(0, 255, 176, 0.16);
+  }
+
+  .product-reviews-rating__judgeme {
+    margin-top: 1.5rem;
+    color: var(--theme-color-text);
+  }
+
+  .product-reviews-rating__judgeme .jdgm-widget {
+    color: inherit;
+  }
+
+  .product-reviews-rating__judgeme .jdgm-rev-widg {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    padding: 1rem;
+    background: rgba(4, 11, 24, 0.42);
+  }
+
+  .product-reviews-rating__judgeme .jdgm-rev,
+  .product-reviews-rating__judgeme .jdgm-rev-widg__summary,
+  .product-reviews-rating__judgeme .jdgm-rev-widg__title {
+    color: inherit;
+  }
+
+  .product-reviews-rating__judgeme .jdgm-rev {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .product-reviews-rating__judgeme .jdgm-star {
+    color: #ffd24d;
   }
 
   @media (min-width: 900px) {
