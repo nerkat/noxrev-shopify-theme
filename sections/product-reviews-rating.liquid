@@ -110,7 +110,7 @@
         </div>
       {% endif %}
 
-      <div id="judgeme_product_reviews" class="product-reviews-rating__judgeme" hidden data-judgeme-reviews-panel>
+      <div id="judgeme_product_reviews" class="product-reviews-rating__judgeme" data-judgeme-reviews-panel aria-hidden="true">
         <div class="product-reviews-rating__judgeme-header">
           <div>
             <p class="product-reviews-rating__judgeme-eyebrow">All Reviews</p>
@@ -188,7 +188,8 @@
     const showReviews = () => {
       if (!widget) return;
 
-      widget.hidden = false;
+      widget.classList.add('is-open');
+      widget.setAttribute('aria-hidden', 'false');
       viewReviewsTrigger?.setAttribute('aria-expanded', 'true');
       window.requestAnimationFrame(() => {
         widget.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -203,7 +204,8 @@
     closeReviewsTrigger?.addEventListener('click', () => {
       if (!widget) return;
 
-      widget.hidden = true;
+      widget.classList.remove('is-open');
+      widget.setAttribute('aria-hidden', 'true');
       viewReviewsTrigger?.setAttribute('aria-expanded', 'false');
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -390,12 +392,26 @@
   }
 
   .product-reviews-rating__judgeme {
-    margin-top: 1.5rem;
+    max-height: 0;
+    margin-top: 0;
+    overflow: hidden;
     color: var(--theme-color-text);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition:
+      max-height 320ms ease,
+      margin-top 220ms ease,
+      opacity 220ms ease,
+      visibility 220ms ease;
   }
 
-  .product-reviews-rating__judgeme[hidden] {
-    display: none;
+  .product-reviews-rating__judgeme.is-open {
+    max-height: none;
+    margin-top: 1.5rem;
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
   }
 
   .product-reviews-rating__judgeme-header {
