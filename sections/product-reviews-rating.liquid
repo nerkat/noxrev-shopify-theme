@@ -284,8 +284,8 @@
       event.preventDefault();
       showReviews();
       window.setTimeout(() => {
-        section
-          .querySelector('.jdgm-write-rev-link, .jdgm-write-rev-link a, .jdgm-write-rev-link button, [data-judgeme-open-review-form]')
+        document
+          .querySelector('.jm-button--primary, .jdgm-write-rev-link, .jdgm-write-rev-link a, .jdgm-write-rev-link button, [data-judgeme-open-review-form]')
           ?.click();
       }, 450);
     });
@@ -549,6 +549,7 @@
     color: #ffd24d;
   }
 
+  .product-reviews-rating__judgeme .jm-review-widget__header,
   .product-reviews-rating__judgeme .jdgm-widget-actions-wrapper,
   .product-reviews-rating__judgeme .jdgm-write-rev-link,
   .product-reviews-rating__judgeme .jdgm-rev-widg__sort-wrapper,
