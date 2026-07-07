@@ -285,7 +285,7 @@
       showReviews();
       window.setTimeout(() => {
         section
-          .querySelector('.jdgm-write-rev-link, .jdgm-write-rev-link a, [data-judgeme-open-review-form]')
+          .querySelector('.jdgm-write-rev-link, .jdgm-write-rev-link a, .jdgm-write-rev-link button, [data-judgeme-open-review-form]')
           ?.click();
       }, 450);
     });
@@ -547,6 +547,19 @@
 
   .product-reviews-rating__judgeme .jdgm-star {
     color: #ffd24d;
+  }
+
+  .product-reviews-rating__judgeme .jdgm-widget-actions-wrapper,
+  .product-reviews-rating__judgeme .jdgm-write-rev-link,
+  .product-reviews-rating__judgeme .jdgm-rev-widg__sort-wrapper,
+  .product-reviews-rating__judgeme .jdgm-rev-widg__filter,
+  .product-reviews-rating__judgeme .jdgm-sort-dropdown-wrapper,
+  .product-reviews-rating__judgeme .jdgm-sort-dropdown,
+  .product-reviews-rating__judgeme .jdgm-histogram__clear-filter,
+  .product-reviews-rating__judgeme .jdgm-rev-widg__filter-trigger,
+  .product-reviews-rating__judgeme [data-sort],
+  .product-reviews-rating__judgeme [data-filter] {
+    display: none !important;
   }
 
   @media (min-width: 900px) {
