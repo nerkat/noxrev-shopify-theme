@@ -5,162 +5,27 @@
 │                                                                              │
 │  Next steps                                                                  │
 │    • Share your theme preview (p) [2]                                        │
-│      https://tykvge-hj.myshopify.com/?preview_theme_id=146795987018          │
+│      https://noxrev.myshopify.com/?preview_theme_id=145346265206             │
 │    • Customize your theme at the theme editor (e) [3]                        │
 │    • Preview your gift cards (g) [4]                                         │
 │                                                                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 [1] http://127.0.0.1:9292
-[2] https://tykvge-hj.myshopify.com/?preview_theme_id=146795987018
-[3] https://tykvge-hj.myshopify.com/admin/themes/146795987018/editor?hr=9292
+[2] https://noxrev.myshopify.com/?preview_theme_id=145346265206
+[3] https://noxrev.myshopify.com/admin/themes/145346265206/editor?hr=9292
 [4] http://127.0.0.1:9292/gift_cards/[store_id]/preview
 
-• 10:10:20 Request »    GET 200 /pages/about 
-• 10:11:26 Request »    GET 200 / 
-• 10:20:37 Request »    GET 200 /pages/about 
-• 10:20:38  Synced » update templates/page.about.json
-• 10:20:38 Request »    GET 200 /pages/about 
-• 10:20:43 Request »    GET 200 /pages/about 
-• 10:20:50 Request »    GET 200 /pages/about 
-• 10:20:51  Synced » update templates/page.about.json
-• 11:57:05 Request »    GET 200 /pages/contact 
-• 11:57:07 Request »    GET 200 /pages/terms 
-• 11:57:16 Request »    GET 200 /search 
-• 11:58:02 Request »    GET 200 /pages/find-your-model 
-• 12:00:53 Request »    GET 200 /cart 
-• 12:00:57 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795724874 
-• 12:01:00 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795036746 
-• 12:01:01 Request »    GET 200 /pages/about 
-• 12:01:02 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795888714 
-• 12:01:06 Request »    GET 200 /pages/contact 
-• 12:01:31 Request »    GET 200 /pages/faq 
-• 12:05:17 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795495498 
-• 12:05:45 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795888714 
-• 12:05:45  Synced » update assets/main-product.css
-• 12:05:47 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795855946 
-• 12:06:33 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794971210 
-• 12:08:12 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795888714 
-• 12:08:58  Synced » update assets/main-product.css
-• 12:09:00  Synced » update assets/main-product.css
-• 12:09:03  Synced » update assets/main-product.css
-• 12:09:05 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795855946 
-• 12:09:05 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794971210 
-• 12:09:17 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795266122 
-• 12:10:17  Synced » update assets/main-product.css
-• 12:10:18  Synced » update assets/main-product.css
-• 12:10:24  Synced » update assets/main-product.css
-• 12:10:27 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795888714 
-• 12:10:29 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794807370 
-• 12:10:29 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795724874 
-• 12:10:29  Synced » update sections/faq-page.liquid
-• 12:10:30  Synced » update templates/page.faq.json
-• 12:10:30 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795724874 
-• 12:33:56 Request »    GET 200 /pages/faq 
-• 12:34:05 Request »    GET 200 /pages/faq 
-• 12:34:05  Synced » update templates/page.faq.json
-• 12:34:05 Request »    GET 200 /pages/faq 
-• 12:37:27 Request »    GET 200 /pages/faq 
-• 12:37:27  Synced » update sections/faq-page.liquid
-• 12:38:22  Synced » update templates/page.faq.json
-• 12:38:22 Request »    GET 401 /pages/faq 
-• 12:40:42  Synced » update assets/main-product.css
-• 12:40:43  Synced » update assets/main-product.css
-• 12:40:55  Synced » update assets/main-product.css
-• 12:40:57  Synced » update assets/main-product.css
-• 12:41:12  Synced » update assets/main-product.css
-• 12:41:13  Synced » update assets/main-product.css
-• 12:41:15  Synced » update assets/main-product.css
-• 12:41:16  Synced » update assets/main-product.css
-• 12:41:18  Synced » update assets/main-product.css
-• 12:42:07  Synced » update assets/main-product.css
-• 12:44:12  Synced » update sections/faq-page.liquid
-• 12:44:14  Synced » update sections/faq-page.liquid
-• 12:44:46  Synced » update sections/faq-page.liquid
-• 12:44:54  Synced » update templates/page.faq.json
-• 12:45:27  Synced » update sections/contact-page.liquid
-• 12:45:33  Synced » update assets/about-noxrev.css
-• 12:45:53 Request »    GET 200 /pages/faq 
-• 12:45:57 Request »    GET 200 /pages/about 
-• 12:46:28  Synced » update assets/about-noxrev.css
-• 12:46:38 Request »    GET 200 /pages/contact 
-• 12:47:02  Synced » update sections/footer.liquid
-• 12:47:33  Synced » update sections/contact-page.liquid
-• 12:47:36 Request »    GET 200 /pages/find-your-model 
-• 12:47:57  Synced » update sections/find-ipad-model-hero.liquid
-• 12:48:14  Synced » update sections/ipad-model-fit-grid.liquid
-• 12:48:30  Synced » update sections/ipad-model-help-cards.liquid
-• 12:48:55 Request »    GET 200 / 
-• 12:49:00 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
-• 12:49:53  Synced » update sections/product-feature-detail-grid.liquid
-• 12:50:01  Synced » update sections/main-page.liquid
-• 12:50:03  Synced » update sections/main-policy.liquid
-• 12:50:05  Synced » update sections/product-precision-feature.liquid
-• 12:50:07  Synced » update sections/product-reviews-rating.liquid
-• 12:50:09  Synced » update sections/product-typing-feature.liquid
-• 12:50:13  Synced » update sections/product-unique-modes-strip.liquid
-• 12:50:16  Synced » update sections/search.liquid
-• 12:50:18  Synced » update sections/main-cart.liquid
-• 12:50:32  Synced » update sections/product-battery-showcase.liquid
-• 12:50:35  Synced » update sections/product-marketing-story.liquid
-• 12:50:37  Synced » update sections/product-mode-showcase.liquid
-• 12:50:40  Synced » update sections/search.liquid
-• 12:50:58  Synced » update sections/product-real-life-videos.liquid
-• 12:52:19  Synced » update sections/product-accessory-bundle.liquid
-• 12:52:35  Synced » update sections/product-accessory-bundle.liquid
-• 12:53:22 Request »    GET 200 / 
-• 12:53:33 Request »    GET 200 /pages/faq 
-• 13:01:48 Request »    GET 200 /pages/faq 
-• 13:02:18  Synced » update sections/faq-page.liquid
-• 13:02:32 Request »    GET 200 / 
-• 13:02:36 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
-• 13:38:48  Synced » update sections/main-product.liquid
-• 13:41:50  Synced » update sections/main-product.liquid
-• 13:42:33  Synced » update sections/main-product.liquid
-• 13:43:31  Synced » update assets/main-product.css
-• 13:46:12 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
-• 13:46:13  Synced » update assets/main-product.js
-• 13:47:50 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
-• 13:47:51  Synced » update assets/main-product.js
-• 13:54:49 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795823178 
-• 13:57:17 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794840138 
-• 13:57:17  Synced » update assets/main-product.js
-• 14:02:26 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794840138 
-• 14:02:27  Synced » update templates/product.json
-• 14:06:28  Synced » update sections/main-product.liquid
-• 14:08:15  Synced » update assets/main-product.css
-• 14:12:31 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:12:31  Synced » update templates/product.json
-• 14:12:32 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:12:34 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:16:05 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:16:08 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:16:11 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:16:11  Synced » update templates/product.json
-• 14:16:12 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:20:08  Synced » update templates/product.json
-• 14:20:08 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:20:14 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:20:21 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730794872906 
-• 14:20:21  Synced » update templates/product.json
-• 14:22:01  Synced » update assets/theme.css
-• 14:22:03 Request »    GET 200 /pages/contact 
-• 14:22:05 Request »    GET 200 /pages/find-your-model 
-• 14:22:07 Request »    GET 200 /pages/about 
-• 14:22:09 Request »    GET 200 /pages/find-your-model 
-• 14:22:09 Request »    GET 200 / 
-• 14:22:14 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
-• 14:22:42  Synced » update assets/theme.css
-• 14:22:46  Synced » update assets/theme.css
-• 14:22:48  Synced » update assets/theme.css
-• 14:22:52  Synced » update assets/theme.css
-• 14:22:54  Synced » update assets/theme.css
-• 14:22:57  Synced » update assets/theme.css
-• 14:23:01  Synced » update assets/theme.css
-• 14:23:23  Synced » update assets/theme.css
-• 14:25:03  Synced » update sections/main-product.liquid
-• 14:25:48  Synced » update assets/main-product.css
-• 14:35:49  Synced » update assets/main-product.css
-• 14:39:14 Request »    GET 401 /products/transparent-core-keyboard-case-ipad 
-• 14:39:16 Request »    GET 401 /products/transparent-core-keyboard-case-ipad 
-• 14:40:17 Request »    GET 401 /products/transparent-core-keyboard-case-ipad 
-• 14:40:53 Request »    GET 401 /products/transparent-core-keyboard-case-ipad 
+• 13:58:25 Request »    GET 404 /favicon.ico 
+╭─ error ──────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│  Failed to delete file "templates/policy.json" from remote theme.            │
+│                                                                              │
+│  Failed to delete file "templates/policy.json" from remote theme.            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+• 13:58:50  Synced » delete templates/policy.liquid
+• 13:58:51 Request »    GET 200 / 
+• 13:59:01 Request »    GET 200 / 
+• 13:59:05 Request »    GET 200 / 
+• 13:59:16 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
