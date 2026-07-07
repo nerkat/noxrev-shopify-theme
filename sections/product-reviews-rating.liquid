@@ -2,14 +2,9 @@
   assign rating_value = section.settings.rating_value
   assign rating_count = product.metafields.reviews.rating_count.value | default: blank
   assign judge_me_widget = product.metafields.judgeme.widget
-  assign has_live_reviews = false
 
   if product.metafields.reviews.rating.value != blank
     assign rating_value = product.metafields.reviews.rating.value.rating | round: 1
-  endif
-
-  if rating_count != blank
-    assign has_live_reviews = true
   endif
 
   assign review_total = section.settings.review_total | plus: 0
@@ -68,40 +63,33 @@
           </div>
         </div>
 
-        {% if has_live_reviews %}
-          <div class="product-reviews-rating__live-note">
-            <span class="product-reviews-rating__live-kicker">Live Judge.me Reviews</span>
-            <p>Rating and review count are synced from Judge.me for this product. Use the reviews below to read customer feedback or leave your own.</p>
+        <div class="product-reviews-rating__bars" aria-label="Rating distribution" data-judgeme-rating-bars>
+          <div class="product-reviews-rating__row" data-rating-row="5">
+            <span>5 Stars</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p5 }}%;" data-rating-bar></span></span>
+            <strong data-rating-count>{{ review_5 }}</strong>
           </div>
-        {% else %}
-          <div class="product-reviews-rating__bars" aria-label="Rating distribution">
-            <div class="product-reviews-rating__row">
-              <span>5 Stars</span>
-              <span class="product-reviews-rating__bar"><span style="width: {{ p5 }}%;"></span></span>
-              <strong>{{ review_5 }}</strong>
-            </div>
-            <div class="product-reviews-rating__row">
-              <span>4 Stars</span>
-              <span class="product-reviews-rating__bar"><span style="width: {{ p4 }}%;"></span></span>
-              <strong>{{ review_4 }}</strong>
-            </div>
-            <div class="product-reviews-rating__row">
-              <span>3 Stars</span>
-              <span class="product-reviews-rating__bar"><span style="width: {{ p3 }}%;"></span></span>
-              <strong>{{ review_3 }}</strong>
-            </div>
-            <div class="product-reviews-rating__row">
-              <span>2 Stars</span>
-              <span class="product-reviews-rating__bar"><span style="width: {{ p2 }}%;"></span></span>
-              <strong>{{ review_2 }}</strong>
-            </div>
-            <div class="product-reviews-rating__row">
-              <span>1 Star</span>
-              <span class="product-reviews-rating__bar"><span style="width: {{ p1 }}%;"></span></span>
-              <strong>{{ review_1 }}</strong>
-            </div>
+          <div class="product-reviews-rating__row" data-rating-row="4">
+            <span>4 Stars</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p4 }}%;" data-rating-bar></span></span>
+            <strong data-rating-count>{{ review_4 }}</strong>
           </div>
-        {% endif %}
+          <div class="product-reviews-rating__row" data-rating-row="3">
+            <span>3 Stars</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p3 }}%;" data-rating-bar></span></span>
+            <strong data-rating-count>{{ review_3 }}</strong>
+          </div>
+          <div class="product-reviews-rating__row" data-rating-row="2">
+            <span>2 Stars</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p2 }}%;" data-rating-bar></span></span>
+            <strong data-rating-count>{{ review_2 }}</strong>
+          </div>
+          <div class="product-reviews-rating__row" data-rating-row="1">
+            <span>1 Star</span>
+            <span class="product-reviews-rating__bar"><span style="width: {{ p1 }}%;" data-rating-bar></span></span>
+            <strong data-rating-count>{{ review_1 }}</strong>
+          </div>
+        </div>
       </div>
 
       {% if section.settings.button_label != blank or section.settings.write_button_label != blank %}
@@ -137,6 +125,55 @@
   (() => {
     const section = document.currentScript.previousElementSibling;
     const trigger = section?.querySelector('[data-judgeme-write-review]');
+    const customRows = Array.from(section?.querySelectorAll('[data-rating-row]') || []);
+    const widget = section?.querySelector('#judgeme_product_reviews');
+
+    const parseCount = (text) => {
+      const match = text?.replace(/,/g, '').match(/\d+/);
+      return match ? Number(match[0]) : 0;
+    };
+
+    const syncRatingBars = () => {
+      if (!widget || !customRows.length) return false;
+
+      const counts = {};
+
+      widget.querySelectorAll('.jdgm-histogram__row').forEach((row) => {
+        const rating = row.getAttribute('data-rating') || row.textContent?.match(/[1-5]/)?.[0];
+        const count = parseCount(
+          row.querySelector('.jdgm-histogram__frequency, .jdgm-histogram__count')?.textContent || row.textContent
+        );
+
+        if (rating) counts[rating] = count;
+      });
+
+      const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+      if (!total) return false;
+
+      customRows.forEach((row) => {
+        const rating = row.dataset.ratingRow;
+        const count = counts[rating] || 0;
+        const percent = Math.round((count / total) * 1000) / 10;
+
+        row.querySelector('[data-rating-count]').textContent = count.toLocaleString();
+        row.querySelector('[data-rating-bar]').style.width = `${percent}%`;
+      });
+
+      return true;
+    };
+
+    const watchJudgeMe = () => {
+      if (syncRatingBars() || !widget) return;
+
+      const observer = new MutationObserver(() => {
+        if (syncRatingBars()) observer.disconnect();
+      });
+
+      observer.observe(widget, { childList: true, subtree: true });
+      window.setTimeout(() => observer.disconnect(), 10000);
+    };
+
+    watchJudgeMe();
 
     if (!trigger) return;
 
@@ -248,31 +285,6 @@
     color: var(--theme-color-text);
     font-weight: 600;
     text-align: right;
-  }
-
-  .product-reviews-rating__live-note {
-    display: grid;
-    align-content: center;
-    min-height: 9rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1rem;
-    padding: 1rem;
-    background: rgba(4, 11, 24, 0.42);
-  }
-
-  .product-reviews-rating__live-kicker {
-    color: #25dfff;
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .product-reviews-rating__live-note p {
-    margin: 0.6rem 0 0;
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 0.95rem;
-    line-height: 1.5;
   }
 
   .product-reviews-rating__bar {
