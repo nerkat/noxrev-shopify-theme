@@ -119,11 +119,13 @@
           <button class="product-reviews-rating__judgeme-close" type="button" data-judgeme-close-reviews aria-label="Hide reviews">Close</button>
         </div>
 
-        {% if judge_me_widget != blank %}
-          {{ judge_me_widget }}
-        {% else %}
-          <div class="jdgm-widget jdgm-review-widget" data-product-title="{{ product.title | escape }}" data-id="{{ product.id }}"></div>
-        {% endif %}
+        <div class="product-reviews-rating__judgeme-body" data-judgeme-panel-body>
+          {% if judge_me_widget != blank %}
+            {{ judge_me_widget }}
+          {% else %}
+            <div class="jdgm-widget jdgm-review-widget" data-product-title="{{ product.title | escape }}" data-id="{{ product.id }}"></div>
+          {% endif %}
+        </div>
       </div>
     </article>
   </div>
@@ -137,6 +139,7 @@
     const closeReviewsTrigger = section?.querySelector('[data-judgeme-close-reviews]');
     const customRows = Array.from(section?.querySelectorAll('[data-rating-row]') || []);
     const widget = section?.querySelector('#judgeme_product_reviews');
+    const panelBody = section?.querySelector('[data-judgeme-panel-body]');
 
     const parseCount = (text) => {
       const match = text?.replace(/,/g, '').match(/\d+/);
@@ -183,6 +186,44 @@
       window.setTimeout(() => observer.disconnect(), 10000);
     };
 
+    const adoptExternalJudgeMeWidget = () => {
+      if (!panelBody) return false;
+
+      const externalWidget = Array.from(document.querySelectorAll('.jdgm-widget.jdgm-review-widget, .jdgm-review-widget')).find((node) => {
+        return node instanceof HTMLElement && !section.contains(node) && node.querySelector('.jdgm-rev-widg, .jdgm-rev, .jdgm-widget-actions-wrapper, .jdgm-histogram');
+      });
+
+      if (!externalWidget) return false;
+
+      const existingPanelWidget = panelBody.querySelector('.jdgm-widget.jdgm-review-widget, .jdgm-review-widget');
+      const originalWrapper = externalWidget.closest('.shopify-section, .shopify-app-block, section, [id^="shopify-section"]');
+
+      if (existingPanelWidget && existingPanelWidget !== externalWidget) {
+        existingPanelWidget.remove();
+      }
+
+      panelBody.appendChild(externalWidget);
+
+      if (originalWrapper instanceof HTMLElement && !section.contains(originalWrapper)) {
+        originalWrapper.style.display = 'none';
+      }
+
+      syncRatingBars();
+      return true;
+    };
+
+    const watchExternalJudgeMeWidget = () => {
+      if (adoptExternalJudgeMeWidget()) return;
+
+      const observer = new MutationObserver(() => {
+        if (adoptExternalJudgeMeWidget()) observer.disconnect();
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+      window.setTimeout(() => observer.disconnect(), 10000);
+    };
+
+    watchExternalJudgeMeWidget();
     watchJudgeMe();
 
     const showReviews = () => {
