@@ -266,6 +266,10 @@
         });
       };
 
+      const publishCartUpdate = (cart) => {
+        window.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart } }));
+      };
+
       const getDrawerSectionId = () => document.querySelector('[data-cart-drawer]')?.dataset.sectionId || 'cart-drawer';
 
       const replaceCartDrawer = (html) => {
@@ -349,6 +353,8 @@
       };
 
       const addAccessory = async (form, card) => {
+        const wasAdded = card.hasAttribute('data-accessory-added');
+        setCardAddedState(card, true);
         setCardBusy(card, true);
 
         try {
@@ -366,8 +372,10 @@
           await refreshCartDrawer();
           const cart = await fetchCart();
           updateHeaderCartCount(cart.item_count || 0);
+          publishCartUpdate(cart);
           syncBundleCards(cart);
         } catch (error) {
+          setCardAddedState(card, wasAdded);
           console.error(error);
         } finally {
           setCardBusy(card, false);
@@ -378,6 +386,8 @@
         const variantId = card.dataset.variantId;
         if (!variantId) return;
 
+        const wasAdded = card.hasAttribute('data-accessory-added');
+        setCardAddedState(card, false);
         setCardBusy(card, true);
 
         try {
@@ -410,8 +420,10 @@
 
           await refreshCartDrawer(cart.sections?.[getDrawerSectionId()]);
           updateHeaderCartCount(cart.item_count || 0);
+          publishCartUpdate(cart);
           syncBundleCards(cart);
         } catch (error) {
+          setCardAddedState(card, wasAdded);
           console.error(error);
         } finally {
           setCardBusy(card, false);
@@ -448,6 +460,12 @@
       fetchCart()
         .then(syncBundleCards)
         .catch(() => {});
+
+      window.addEventListener('cart:updated', (event) => {
+        if (event.detail?.cart) {
+          syncBundleCards(event.detail.cart);
+        }
+      });
     }
 
     document.addEventListener('shopify:section:load', (event) => {

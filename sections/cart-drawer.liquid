@@ -633,6 +633,10 @@
       });
     };
 
+    const publishCartUpdate = (cart) => {
+      window.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart } }));
+    };
+
     const setDrawerBusy = (isBusy) => {
       const drawer = getDrawer();
 
@@ -752,6 +756,7 @@
         }
 
         updateHeaderCartCount(cart.item_count || 0);
+        publishCartUpdate(cart);
       } catch (error) {
         if (error.name === 'AbortError') return;
 
@@ -813,6 +818,7 @@
         const cartResponse = await fetch(`${rootPath()}cart.js`, { headers: { Accept: 'application/json' } });
         const cart = await cartResponse.json();
         updateHeaderCartCount(cart.item_count || 0);
+        publishCartUpdate(cart);
         openDrawer();
       } catch (error) {
         showDrawerError(error.message || 'Unable to add item to cart. Please try again.');
