@@ -1,0 +1,355 @@
+{% liquid
+  assign featured_product = section.settings.product | default: all_products['transparent-core-keyboard-case-ipad']
+  assign product_url = section.settings.button_link
+  assign product_image = section.settings.image
+
+  if featured_product != blank
+    assign product_url = product_url | default: featured_product.url
+    assign product_image = product_image | default: featured_product.featured_media.preview_image | default: featured_product.featured_image
+  endif
+%}
+
+<section class="home-main-product section">
+  <div class="container">
+    <article class="home-main-product__panel">
+      <div class="home-main-product__copy">
+        {% if section.settings.eyebrow != blank %}
+          <p class="home-main-product__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+
+        <h2 class="home-main-product__title">{{ section.settings.heading }}</h2>
+
+        {% if section.settings.text != blank %}
+          <p class="home-main-product__text">{{ section.settings.text }}</p>
+        {% endif %}
+
+        <div class="home-main-product__meta">
+          {% if featured_product != blank %}
+            <span class="home-main-product__price">{{ featured_product.price | money }}</span>
+          {% endif %}
+          {% if section.settings.badge != blank %}
+            <span class="home-main-product__badge">{{ section.settings.badge }}</span>
+          {% endif %}
+        </div>
+
+        {% if section.blocks.size > 0 %}
+          <div class="home-main-product__features" role="list">
+            {% for block in section.blocks %}
+              <div class="home-main-product__feature" role="listitem" {{ block.shopify_attributes }}>
+                <span class="home-main-product__feature-icon" aria-hidden="true">
+                  {% render 'product-marketing-icon', icon: block.settings.icon %}
+                </span>
+                <span>{{ block.settings.label }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="home-main-product__actions">
+          {% if section.settings.button_label != blank %}
+            <a class="button button--primary home-main-product__button" href="{{ product_url | default: routes.all_products_collection_url }}">
+              {{ section.settings.button_label }}
+            </a>
+          {% endif %}
+          {% if section.settings.secondary_label != blank %}
+            <a class="home-main-product__secondary" href="{{ section.settings.secondary_link | default: '/pages/find-your-model' }}">
+              {{ section.settings.secondary_label }}
+              <span aria-hidden="true">-&gt;</span>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <a class="home-main-product__media" href="{{ product_url | default: routes.all_products_collection_url }}" aria-label="{{ section.settings.heading | escape }}">
+        {% if product_image != blank %}
+          {% render 'responsive-image',
+            image: product_image,
+            alt: section.settings.image_alt,
+            class: 'home-main-product__image',
+            loading: 'lazy',
+            sizes: '(min-width: 900px) 48vw, 100vw',
+            widths: '420, 640, 860, 1100, 1400'
+          %}
+        {% else %}
+          <div class="home-main-product__placeholder" aria-hidden="true">
+            {{ 'product-1' | placeholder_svg_tag: 'home-main-product__placeholder-svg' }}
+          </div>
+        {% endif %}
+      </a>
+    </article>
+  </div>
+</section>
+
+{% stylesheet %}
+  .home-main-product {
+    padding: 1rem 0;
+  }
+
+  .home-main-product__panel {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    overflow: hidden;
+    border-radius: 12px;
+    background:
+      radial-gradient(circle at 82% 16%, rgba(36, 229, 255, 0.14), transparent 30%),
+      radial-gradient(circle at 18% 88%, rgba(255, 77, 166, 0.16), transparent 34%),
+      rgba(4, 13, 25, 0.94);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  }
+
+  .home-main-product__copy {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 1rem;
+    align-content: center;
+    padding: 1.1rem;
+  }
+
+  .home-main-product__eyebrow {
+    margin: 0;
+    color: #24e5ff;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .home-main-product__title {
+    max-width: 12ch;
+    margin: 0;
+    color: var(--theme-color-text);
+    font-family: var(--theme-font-display);
+    font-size: clamp(2rem, 8vw, 4.25rem);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  .home-main-product__text {
+    max-width: 35rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .home-main-product__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    align-items: center;
+  }
+
+  .home-main-product__price,
+  .home-main-product__badge {
+    display: inline-flex;
+    min-height: 2rem;
+    align-items: center;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .home-main-product__price {
+    padding: 0.36rem 0.7rem;
+    color: #fff;
+    background: var(--theme-gradient-heading);
+  }
+
+  .home-main-product__badge {
+    padding: 0.32rem 0.65rem;
+    border: 1px solid rgba(36, 229, 255, 0.28);
+    color: #bff7ff;
+    background: rgba(2, 11, 23, 0.68);
+  }
+
+  .home-main-product__features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    max-width: 32rem;
+  }
+
+  .home-main-product__feature {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+    min-height: 3rem;
+    padding: 0.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.84);
+    background: rgba(255, 255, 255, 0.035);
+    font-size: 0.82rem;
+    line-height: 1.25;
+  }
+
+  .home-main-product__feature-icon {
+    display: inline-flex;
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.55rem;
+    color: #27efff;
+    background: rgba(2, 11, 23, 0.72);
+  }
+
+  .home-main-product__feature-icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .home-main-product__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    align-items: center;
+  }
+
+  .home-main-product__secondary {
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+    color: #24e5ff;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .home-main-product__media {
+    position: relative;
+    display: block;
+    min-height: 18rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .home-main-product__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(4, 13, 25, 0) 45%, rgba(4, 13, 25, 0.68) 100%);
+  }
+
+  .home-main-product__image,
+  .home-main-product__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    object-fit: cover;
+  }
+
+  .home-main-product__placeholder {
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .home-main-product__placeholder-svg {
+    width: min(70%, 28rem);
+    opacity: 0.44;
+  }
+
+  @media (min-width: 900px) {
+    .home-main-product {
+      padding: 1.4rem 0;
+    }
+
+    .home-main-product__panel {
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      min-height: 34rem;
+    }
+
+    .home-main-product__copy {
+      padding: 2.2rem;
+    }
+
+    .home-main-product__media {
+      min-height: 34rem;
+    }
+
+    .home-main-product__media::after {
+      background: linear-gradient(90deg, rgba(4, 13, 25, 0.68) 0%, rgba(4, 13, 25, 0) 28%);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .home-main-product__features {
+      grid-template-columns: 1fr;
+    }
+
+    .home-main-product__actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .home-main-product__button,
+    .home-main-product__secondary {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Home Main Product",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Meet NoxRev TXP1" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The iPad case that turns work mode on." },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "A protective keyboard case with a precision trackpad, backlit keys, and flexible viewing modes for writing, studying, creating, and travel."
+    },
+    { "type": "text", "id": "badge", "label": "Badge", "default": "7 iPad fits" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop TXP1" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary label", "default": "Find your iPad model" },
+    { "type": "url", "id": "secondary_link", "label": "Secondary link" },
+    { "type": "image_picker", "id": "image", "label": "Override image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "NoxRev TXP1 keyboard case for iPad" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Backlit keyboard" },
+        { "type": "select", "id": "icon", "label": "Icon", "default": "keyboard", "options": [
+          { "value": "keyboard", "label": "Keyboard" },
+          { "value": "trackpad", "label": "Trackpad" },
+          { "value": "rotation", "label": "Rotation" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "magnet", "label": "Magnet" },
+          { "value": "apps", "label": "Apps" }
+        ] }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Home Main Product",
+      "blocks": [
+        { "type": "feature", "settings": { "label": "Backlit keyboard", "icon": "keyboard" } },
+        { "type": "feature", "settings": { "label": "Precision trackpad", "icon": "trackpad" } },
+        { "type": "feature", "settings": { "label": "Multi-angle modes", "icon": "rotation" } },
+        { "type": "feature", "settings": { "label": "Everyday protection", "icon": "shield" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
