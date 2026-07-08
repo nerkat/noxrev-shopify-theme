@@ -1,26 +1,25 @@
 <section class="product-accessory-bundle section">
-  <div class="container">
-    <article class="product-accessory-bundle__panel">
-      <div class="product-accessory-bundle__header">
-        <div>
-          <p class="product-accessory-bundle__eyebrow">{{ section.settings.eyebrow }}</p>
-          <h2 class="product-accessory-bundle__title">{{ section.settings.title }}</h2>
-          <p class="product-accessory-bundle__text">{{ section.settings.text }}</p>
-        </div>
-
-        {% if section.settings.pill_text != blank %}
-          <div class="product-accessory-bundle__pill">
-            <span class="product-accessory-bundle__pill-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" focusable="false">
-                <path d="M20.6 13.2 13.2 20.6a2 2 0 0 1-2.8 0l-7-7A2 2 0 0 1 2.8 12V5a2 2 0 0 1 2-2h7a2 2 0 0 1 1.4.6l7.4 7.4a2 2 0 0 1 0 2.8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                <circle cx="7.8" cy="7.8" r="1.2" fill="currentColor"/>
-              </svg>
-            </span>
-            <strong>{{ section.settings.pill_label }}</strong>
-            <span>{{ section.settings.pill_text }}</span>
-          </div>
-        {% endif %}
+  <article class="product-accessory-bundle__panel">
+    <div class="product-accessory-bundle__header container">
+      <div>
+        <p class="product-accessory-bundle__eyebrow">{{ section.settings.eyebrow }}</p>
+        <h2 class="product-accessory-bundle__title">{{ section.settings.title }}</h2>
+        <p class="product-accessory-bundle__text">{{ section.settings.text }}</p>
       </div>
+
+      {% if section.settings.pill_text != blank %}
+        <div class="product-accessory-bundle__pill">
+          <span class="product-accessory-bundle__pill-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" focusable="false">
+              <path d="M20.6 13.2 13.2 20.6a2 2 0 0 1-2.8 0l-7-7A2 2 0 0 1 2.8 12V5a2 2 0 0 1 2-2h7a2 2 0 0 1 1.4.6l7.4 7.4a2 2 0 0 1 0 2.8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <circle cx="7.8" cy="7.8" r="1.2" fill="currentColor"/>
+            </svg>
+          </span>
+          <strong>{{ section.settings.pill_label }}</strong>
+          <span>{{ section.settings.pill_text }}</span>
+        </div>
+      {% endif %}
+    </div>
 
       <div class="product-accessory-bundle__slider-wrap" data-accessory-bundle>
         <div class="product-accessory-bundle__grid" data-accessory-bundle-slider>
@@ -215,8 +214,7 @@
           <span aria-hidden="true">&rsaquo;</span>
         </button>
       </div>
-    </article>
-  </div>
+  </article>
 </section>
 
 <script>
@@ -233,20 +231,12 @@
         const next = bundle.querySelector('[data-accessory-bundle-next]');
         if (!slider || !prev || !next) return;
 
-        const isDesktopGrid = () => window.matchMedia('(min-width: 760px)').matches;
-
         const getStep = () => {
           const card = slider.querySelector('.product-accessory-bundle__card');
           return card ? card.getBoundingClientRect().width + 16 : slider.clientWidth * 0.82;
         };
 
         const updateButtons = () => {
-          if (isDesktopGrid()) {
-            prev.hidden = true;
-            next.hidden = true;
-            return;
-          }
-
           const maxScroll = slider.scrollWidth - slider.clientWidth;
           const hasOverflow = maxScroll > 2;
           prev.hidden = !hasOverflow || slider.scrollLeft <= 2;
@@ -594,7 +584,7 @@
   .product-accessory-bundle__slider-wrap {
     position: relative;
     margin-top: 1.5rem;
-    margin-inline: calc(var(--page-margin) * -1);
+    margin-inline: -1.25rem;
   }
 
   .product-accessory-bundle__grid {
@@ -603,8 +593,8 @@
     grid-auto-flow: column;
     gap: 1rem;
     overflow-x: auto;
-    padding: 0 var(--page-margin) 0.4rem;
-    scroll-padding-inline: var(--page-margin);
+    padding: 0 1.25rem 0.4rem;
+    scroll-padding-inline: 1.25rem;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -887,20 +877,14 @@
 
   @media (min-width: 760px) {
     .product-accessory-bundle__slider-wrap {
-      margin-inline: 0;
+      margin-inline: -1.25rem;
     }
 
     .product-accessory-bundle__grid {
-      grid-auto-flow: initial;
-      grid-auto-columns: initial;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      overflow: visible;
-      padding: 0;
-      scroll-snap-type: none;
-    }
-
-    .product-accessory-bundle__arrow {
-      display: none;
+      grid-auto-columns: minmax(17rem, 42%);
+      overflow-x: auto;
+      padding-inline: 1.25rem;
+      scroll-padding-inline: 1.25rem;
     }
   }
 
@@ -919,7 +903,13 @@
     }
 
     .product-accessory-bundle__grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-columns: minmax(17rem, 24%);
+      padding-inline: 2rem;
+      scroll-padding-inline: 2rem;
+    }
+
+    .product-accessory-bundle__slider-wrap {
+      margin-inline: -2rem;
     }
 
     .product-accessory-bundle__content {
