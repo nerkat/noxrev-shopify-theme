@@ -102,7 +102,10 @@
           });
         });
 
-        const storedFamily = activeModelFamilies.get(productHandle) || '';
+        const selectedModelLink = selector.querySelector('[data-variant-link][aria-current="true"]');
+        const selectedPanel = selectedModelLink?.closest('[data-model-panel]');
+        const selectedFamily = selectedPanel?.dataset.modelPanel || '';
+        const storedFamily = activeModelFamilies.get(productHandle) || selectedFamily;
 
         if (storedFamily && tabs.some((tab) => tab.dataset.modelTab === storedFamily)) {
           setActiveFamily(storedFamily);

@@ -2,7 +2,7 @@
 <script src="{{ 'main-product.js' | asset_url }}" defer="defer"></script>
 
 {% liquid
-  assign current_variant = product.selected_or_first_available_variant
+  assign current_variant = product.selected_variant | default: product.selected_or_first_available_variant
   assign current_media = current_variant.featured_media | default: product.featured_media | default: product.media.first
   assign current_media_index = 0
   for media in product.media
@@ -142,6 +142,17 @@
               if option_name_downcase contains 'model'
                 assign is_model_option = true
               endif
+              assign current_option_selected_value = option.selected_value
+              if current_variant
+                case option.position
+                  when 1
+                    assign current_option_selected_value = current_variant.option1
+                  when 2
+                    assign current_option_selected_value = current_variant.option2
+                  when 3
+                    assign current_option_selected_value = current_variant.option3
+                endcase
+              endif
             %}
             <fieldset class="main-product__option">
               <legend class="main-product__option-label{% if is_color_option or is_model_option %} main-product__step-label{% endif %}">
@@ -186,6 +197,16 @@
                         for product_option in product.options_with_values
                           if product_option.position != option.position
                             assign selected_value = product_option.selected_value
+                            if current_variant
+                              case product_option.position
+                                when 1
+                                  assign selected_value = current_variant.option1
+                                when 2
+                                  assign selected_value = current_variant.option2
+                                when 3
+                                  assign selected_value = current_variant.option3
+                              endcase
+                            endif
 
                             case product_option.position
                               when 1
@@ -245,7 +266,7 @@
                             data-variant-media-id="{{ option_variant.featured_media.id }}"
                           {% endif %}
                           aria-label="Choose {{ option.name | escape }}: {{ value.name | escape }}{% unless option_variant.available %} unavailable{% endunless %}"
-                          {% if value.selected %}
+                          {% if value.name == current_option_selected_value %}
                             aria-current="true"
                           {% endif %}
                         >
@@ -432,7 +453,7 @@
                             {% endif %}
                             aria-label="Choose color: {{ value.name | escape }}"
                             style="{{ swatch_style | strip }}"
-                            {% if value.selected %}
+                            {% if value.name == current_option_selected_value %}
                               aria-current="true"
                             {% endif %}
                           >
@@ -441,7 +462,7 @@
                             </span>
                             <span class="visually-hidden">
                               {{ value.name }}
-                              {% if value.selected %} selected{% endif %}
+                              {% if value.name == current_option_selected_value %} selected{% endif %}
                             </span>
                           </a>
                         {% else %}
@@ -450,7 +471,7 @@
                             aria-disabled="true"
                             aria-label="Choose color: {{ value.name | escape }} unavailable"
                             style="{{ swatch_style | strip }}"
-                            {% if value.selected %}
+                            {% if value.name == current_option_selected_value %}
                               aria-current="true"
                             {% endif %}
                           >
@@ -465,7 +486,7 @@
                           <a
                             class="main-product__option-value"
                             href="{{ product.url }}?variant={{ option_variant.id }}"
-                            {% if value.selected %}
+                            {% if value.name == current_option_selected_value %}
                               aria-current="true"
                             {% endif %}
                           >
@@ -475,7 +496,7 @@
                           <span
                             class="main-product__option-value"
                             aria-disabled="true"
-                            {% if value.selected %}
+                            {% if value.name == current_option_selected_value %}
                               aria-current="true"
                             {% endif %}
                           >
