@@ -20,7 +20,6 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-pencil",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_11_46_PM.png",
             "image_alt": "Accessory product",
             "title": "NoxRev Precision Stylus",
             "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
@@ -37,7 +36,6 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-mouse",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_38_01_PM.png",
             "image_alt": "Accessory product",
             "title": "NoxRev Wireless Mouse",
             "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.",
@@ -53,8 +51,7 @@
         "accessory_sleeve": {
           "type": "accessory",
           "settings": {
-            "product": "",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_13_18_PM.png",
+            "product": "txp1-case",
             "image_alt": "Accessory product",
             "title": "NoxRev Urban Sleeve",
             "text": "Premium protection. Slim profile. Built for life on the move.",
@@ -70,11 +67,10 @@
         "accessory_cable": {
           "type": "accessory",
           "settings": {
-            "product": "",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_15_39_PM.png",
+            "product": "txp1-charger",
             "image_alt": "Accessory product",
             "title": "NoxRev USB-C Cable",
-            "text": "100W fast charging. 6ft braided. Built to last.",
+            "text": "65W GaN Fast Charging. Runs cooler with greater efficiency in a smaller charger.",
             "price": "$24.00",
             "compare_price": "$34.00",
             "savings_label": "Save 29%",
