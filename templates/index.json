@@ -86,6 +86,49 @@
         "slide_3_external": ""
       }
     },
+    "category_tiles": {
+      "type": "category-tiles",
+      "blocks": {
+        "tile_1": {
+          "type": "tile",
+          "settings": {
+            "collection": "",
+            "eyebrow": "",
+            "title": "Everyday essentials",
+            "text": ""
+          }
+        },
+        "tile_2": {
+          "type": "tile",
+          "settings": {
+            "collection": "",
+            "eyebrow": "",
+            "title": "Weekend picks",
+            "text": ""
+          }
+        },
+        "tile_3": {
+          "type": "tile",
+          "settings": {
+            "collection": "",
+            "eyebrow": "",
+            "title": "New arrivals",
+            "text": ""
+          }
+        }
+      },
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3"
+      ],
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Categories",
+        "heading": "Shop by collection",
+        "text": ""
+      }
+    },
     "home_main_product_3K38Nr": {
       "type": "home-main-product",
       "blocks": {
@@ -139,49 +182,6 @@
         "image_alt": "NoxRev TXP1 keyboard case for iPad"
       }
     },
-    "category_tiles": {
-      "type": "category-tiles",
-      "blocks": {
-        "tile_1": {
-          "type": "tile",
-          "settings": {
-            "collection": "",
-            "eyebrow": "",
-            "title": "Everyday essentials",
-            "text": ""
-          }
-        },
-        "tile_2": {
-          "type": "tile",
-          "settings": {
-            "collection": "",
-            "eyebrow": "",
-            "title": "Weekend picks",
-            "text": ""
-          }
-        },
-        "tile_3": {
-          "type": "tile",
-          "settings": {
-            "collection": "",
-            "eyebrow": "",
-            "title": "New arrivals",
-            "text": ""
-          }
-        }
-      },
-      "block_order": [
-        "tile_1",
-        "tile_2",
-        "tile_3"
-      ],
-      "disabled": true,
-      "settings": {
-        "eyebrow": "Categories",
-        "heading": "Shop by collection",
-        "text": ""
-      }
-    },
     "featured_catalog": {
       "type": "featured-catalog",
       "settings": {
@@ -231,8 +231,8 @@
   },
   "order": [
     "main",
-    "home_main_product_3K38Nr",
     "category_tiles",
+    "home_main_product_3K38Nr",
     "featured_catalog",
     "trust_strip"
   ]
