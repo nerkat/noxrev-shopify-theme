@@ -38,9 +38,9 @@
         "mobile_drawer_contact_email": "contact@noxrev.com",
         "mobile_drawer_contact_phone": "+4893720484",
         "mobile_drawer_show_social_links": true,
-        "mobile_drawer_social_tiktok": "",
-        "mobile_drawer_social_instagram": "",
-        "mobile_drawer_social_facebook": "",
+        "mobile_drawer_social_tiktok": "https://tiktok.com",
+        "mobile_drawer_social_instagram": "https://tiktok.com",
+        "mobile_drawer_social_facebook": "https://tiktok.com",
         "mobile_drawer_social_youtube": "",
         "mobile_drawer_help_menu": "footer"
       }
