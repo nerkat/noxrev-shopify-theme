@@ -174,12 +174,66 @@
         "item_3"
       ],
       "settings": {}
+    },
+    "home_main_product_3K38Nr": {
+      "type": "home-main-product",
+      "blocks": {
+        "feature_CHMNpc": {
+          "type": "feature",
+          "settings": {
+            "label": "Backlit keyboard",
+            "icon": "keyboard"
+          }
+        },
+        "feature_qErB6Y": {
+          "type": "feature",
+          "settings": {
+            "label": "Precision trackpad",
+            "icon": "trackpad"
+          }
+        },
+        "feature_zYFF6x": {
+          "type": "feature",
+          "settings": {
+            "label": "Multi-angle modes",
+            "icon": "rotation"
+          }
+        },
+        "feature_3f87eH": {
+          "type": "feature",
+          "settings": {
+            "label": "Everyday protection",
+            "icon": "shield"
+          }
+        }
+      },
+      "block_order": [
+        "feature_CHMNpc",
+        "feature_qErB6Y",
+        "feature_zYFF6x",
+        "feature_3f87eH"
+      ],
+      "name": "Home Main Product",
+      "settings": {
+        "product": "",
+        "eyebrow": "Meet NoxRev TXP1",
+        "heading": "The iPad case that turns work mode on.",
+        "text": "A protective keyboard case with a precision trackpad, backlit keys, and flexible viewing modes for writing, studying, creating, and travel.",
+        "badge": "7 iPad fits",
+        "button_label": "Shop TXP1",
+        "button_link": "",
+        "secondary_label": "Find your iPad model",
+        "secondary_link": "",
+        "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_01_47_32_PM.png",
+        "image_alt": "NoxRev TXP1 keyboard case for iPad"
+      }
     }
   },
   "order": [
     "main",
     "category_tiles",
     "featured_catalog",
-    "trust_strip"
+    "trust_strip",
+    "home_main_product_3K38Nr"
   ]
 }
