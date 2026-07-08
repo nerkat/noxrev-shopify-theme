@@ -6,7 +6,7 @@
 <section class="product-accessory-details section">
   <div class="container">
     <article class="product-accessory-details__panel">
-      <div class="product-accessory-details__copy">
+      {% comment %} <div class="product-accessory-details__copy">
         {% if section.settings.eyebrow != blank %}
           <p class="product-accessory-details__eyebrow">{{ section.settings.eyebrow }}</p>
         {% endif %}
@@ -18,7 +18,7 @@
         {% if section.settings.text != blank %}
           <div class="product-accessory-details__text">{{ section.settings.text }}</div>
         {% endif %}
-      </div>
+      </div> {% endcomment %}
 
       <div class="product-accessory-details__media">
         {% if hero_image != blank %}
@@ -189,7 +189,7 @@
 
   @media (min-width: 760px) {
     .product-accessory-details__panel {
-      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      /* grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); */
       align-items: center;
       padding: 2rem;
     }
