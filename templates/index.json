@@ -132,8 +132,8 @@
     "featured_catalog": {
       "type": "featured-catalog",
       "settings": {
-        "eyebrow": "Featured products",
-        "heading": "Featured catalog",
+        "eyebrow": "Bundle options",
+        "heading": "Accessories Catalog",
         "text": "",
         "collection": "",
         "product_limit": 8,
