@@ -1,5 +1,6 @@
 {% liquid
-  assign hero_image = section.settings.image | default: product.featured_media.preview_image
+  assign accessory_section_image = product.metafields.accessory.section_image.value
+  assign hero_image = accessory_section_image | default: section.settings.image | default: product.featured_media.preview_image
 %}
 
 <section class="product-accessory-details section">
