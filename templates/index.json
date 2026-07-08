@@ -20,7 +20,13 @@
             "heading": "Use \"ND\"",
             "text": "Source-store promo code surfaced upfront so the main shop CTA feels like a live offer, not a placeholder badge.",
             "link_label": "Shop with code",
-            "link": ""
+            "link": "",
+            "contact_label_1": "",
+            "contact_value_1": "",
+            "contact_link_1": "",
+            "contact_label_2": "",
+            "contact_value_2": "",
+            "contact_link_2": ""
           }
         },
         "card_2": {
@@ -29,7 +35,15 @@
             "card_style": "reviews",
             "label": "Reviews",
             "heading": "4.91 / 5",
-            "text": "3,672 verified source-store reviews give the hero a real trust signal instead of a plain count."
+            "text": "3,672 verified source-store reviews give the hero a real trust signal instead of a plain count.",
+            "link_label": "",
+            "link": "",
+            "contact_label_1": "",
+            "contact_value_1": "",
+            "contact_link_1": "",
+            "contact_label_2": "",
+            "contact_value_2": "",
+            "contact_link_2": ""
           }
         },
         "card_3": {
@@ -38,6 +52,9 @@
             "card_style": "support",
             "label": "Support",
             "heading": "Talk to NaiDun",
+            "text": "Highlight a promotion, campaign note, or featured collection without hardcoding business-specific content.",
+            "link_label": "",
+            "link": "",
             "contact_label_1": "Email",
             "contact_value_1": "naidun2021@163.com",
             "contact_link_1": "mailto:naidun2021@163.com",
@@ -72,19 +89,28 @@
         "tile_1": {
           "type": "tile",
           "settings": {
-            "title": "Everyday essentials"
+            "collection": "",
+            "eyebrow": "",
+            "title": "Everyday essentials",
+            "text": ""
           }
         },
         "tile_2": {
           "type": "tile",
           "settings": {
-            "title": "Weekend picks"
+            "collection": "",
+            "eyebrow": "",
+            "title": "Weekend picks",
+            "text": ""
           }
         },
         "tile_3": {
           "type": "tile",
           "settings": {
-            "title": "New arrivals"
+            "collection": "",
+            "eyebrow": "",
+            "title": "New arrivals",
+            "text": ""
           }
         }
       },
@@ -93,15 +119,22 @@
         "tile_2",
         "tile_3"
       ],
+      "disabled": true,
       "settings": {
-        "heading": "Shop by collection"
+        "eyebrow": "Categories",
+        "heading": "Shop by collection",
+        "text": ""
       }
     },
     "featured_catalog": {
       "type": "featured-catalog",
       "settings": {
+        "eyebrow": "Featured products",
         "heading": "Featured catalog",
-        "product_limit": 8
+        "text": "",
+        "collection": "",
+        "product_limit": 8,
+        "show_vendor": false
       }
     },
     "trust_strip": {
@@ -137,6 +170,7 @@
         "item_2",
         "item_3"
       ],
+      "disabled": true,
       "settings": {}
     }
   },
