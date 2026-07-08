@@ -51,8 +51,7 @@
         "accessory_sleeve": {
           "type": "accessory",
           "settings": {
-            "product": "",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_13_18_PM.png",
+            "product": "txp1-case",
             "image_alt": "Accessory product",
             "title": "NoxRev Urban Sleeve",
             "text": "Premium protection. Slim profile. Built for life on the move.",
