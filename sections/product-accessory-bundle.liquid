@@ -124,60 +124,64 @@
               </div>
 
               <div class="product-accessory-bundle__content">
-                <h3 class="product-accessory-bundle__card-title">
-                  {% if card_url != blank %}
-                    <a href="{{ card_url }}">{{ card_title }}</a>
-                  {% else %}
-                    {{ card_title }}
-                  {% endif %}
-                </h3>
-                <p class="product-accessory-bundle__card-text">{{ card_text }}</p>
+                <div class="product-accessory-bundle__copy">
+                  <h3 class="product-accessory-bundle__card-title">
+                    {% if card_url != blank %}
+                      <a href="{{ card_url }}">{{ card_title }}</a>
+                    {% else %}
+                      {{ card_title }}
+                    {% endif %}
+                  </h3>
+                  <p class="product-accessory-bundle__card-text">{{ card_text }}</p>
+                </div>
 
-                <div class="product-accessory-bundle__price-row">
-                  {% if card_price != blank %}
-                    <span class="product-accessory-bundle__price">{{ card_price }}</span>
-                  {% endif %}
-                  {% if card_compare_price != blank %}
-                    <s class="product-accessory-bundle__compare">{{ card_compare_price }}</s>
-                  {% endif %}
-                  {% if savings_percent != blank %}
-                    <span class="product-accessory-bundle__save">
-                      {% if accessory_product != blank %}
-                        Save {{ savings_percent }}%
-                      {% else %}
-                        {{ savings_percent }}
-                      {% endif %}
+                <div class="product-accessory-bundle__purchase">
+                  <div class="product-accessory-bundle__price-row">
+                    {% if card_price != blank %}
+                      <span class="product-accessory-bundle__price">{{ card_price }}</span>
+                    {% endif %}
+                    {% if card_compare_price != blank %}
+                      <s class="product-accessory-bundle__compare">{{ card_compare_price }}</s>
+                    {% endif %}
+                    {% if savings_percent != blank %}
+                      <span class="product-accessory-bundle__save">
+                        {% if accessory_product != blank %}
+                          Save {{ savings_percent }}%
+                        {% else %}
+                          {{ savings_percent }}
+                        {% endif %}
+                      </span>
+                    {% endif %}
+                  </div>
+
+                  {% if accessory_product != blank and accessory_variant != blank %}
+                    <form class="product-accessory-bundle__form" method="post" action="{{ routes.cart_add_url }}" data-accessory-bundle-form>
+                      <input type="hidden" name="id" value="{{ accessory_variant.id }}">
+                      <input type="hidden" name="quantity" value="1">
+                      <button
+                        class="product-accessory-bundle__button"
+                        type="submit"
+                        {% unless can_add_accessory %}
+                          disabled
+                        {% endunless %}
+                      >
+                        <span aria-hidden="true" data-accessory-button-icon>+</span>
+                        <span data-accessory-button-text>
+                          {% if can_add_accessory %}
+                            {{ block.settings.button_label }}
+                          {% else %}
+                            Sold out
+                          {% endif %}
+                        </span>
+                      </button>
+                    </form>
+                  {% else %}
+                    <span class="product-accessory-bundle__button product-accessory-bundle__button--disabled">
+                      <span aria-hidden="true">+</span>
+                      <span>Select product</span>
                     </span>
                   {% endif %}
                 </div>
-
-                {% if accessory_product != blank and accessory_variant != blank %}
-                  <form class="product-accessory-bundle__form" method="post" action="{{ routes.cart_add_url }}" data-accessory-bundle-form>
-                    <input type="hidden" name="id" value="{{ accessory_variant.id }}">
-                    <input type="hidden" name="quantity" value="1">
-                    <button
-                      class="product-accessory-bundle__button"
-                      type="submit"
-                      {% unless can_add_accessory %}
-                        disabled
-                      {% endunless %}
-                    >
-                      <span aria-hidden="true" data-accessory-button-icon>+</span>
-                      <span data-accessory-button-text>
-                        {% if can_add_accessory %}
-                          {{ block.settings.button_label }}
-                        {% else %}
-                          Sold out
-                        {% endif %}
-                      </span>
-                    </button>
-                  </form>
-                {% else %}
-                  <span class="product-accessory-bundle__button product-accessory-bundle__button--disabled">
-                    <span aria-hidden="true">+</span>
-                    <span>Select product</span>
-                  </span>
-                {% endif %}
               </div>
             </article>
           {% endfor %}
@@ -696,7 +700,25 @@
 
   .product-accessory-bundle__content {
     align-self: end;
+    display: flex;
+    min-height: 13.8rem;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
     padding: 1.25rem;
+  }
+
+  .product-accessory-bundle__copy,
+  .product-accessory-bundle__purchase {
+    display: grid;
+  }
+
+  .product-accessory-bundle__copy {
+    align-content: start;
+  }
+
+  .product-accessory-bundle__purchase {
+    align-content: end;
   }
 
   .product-accessory-bundle__card-title {
@@ -719,7 +741,6 @@
   }
 
   .product-accessory-bundle__card-text {
-    min-height: 3.3em;
     margin: 0.45rem 0 0;
     color: rgba(255, 255, 255, 0.66);
     font-size: 0.9rem;
@@ -731,7 +752,7 @@
     flex-wrap: wrap;
     gap: 0.65rem;
     align-items: center;
-    margin-top: 1rem;
+    margin-top: 0;
   }
 
   .product-accessory-bundle__price {
@@ -886,6 +907,10 @@
 
     .product-accessory-bundle__grid {
       grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .product-accessory-bundle__content {
+      min-height: 14.8rem;
     }
   }
 {% endstylesheet %}
