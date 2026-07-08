@@ -67,8 +67,7 @@
         "accessory_cable": {
           "type": "accessory",
           "settings": {
-            "product": "",
-            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_02_15_39_PM.png",
+            "product": "txp1-charger",
             "image_alt": "Accessory product",
             "title": "NoxRev USB-C Cable",
             "text": "100W fast charging. 6ft braided. Built to last.",
