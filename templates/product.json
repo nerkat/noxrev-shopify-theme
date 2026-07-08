@@ -95,24 +95,6 @@
         "pill_text": "Save up to 20% when you bundle."
       }
     },
-    "1783425997ca25e2c8": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_review_widget_axCXAD": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "sample_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_review_widget_axCXAD"
-      ],
-      "settings": {}
-    },
     "product_real_life_videos": {
       "type": "product-real-life-videos",
       "blocks": {
@@ -559,12 +541,30 @@
         "button_label": "View All Reviews",
         "button_link": ""
       }
+    },
+    "1783425997ca25e2c8": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_axCXAD": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_axCXAD"
+      ],
+      "settings": {}
     }
   },
   "order": [
     "main",
     "product_accessory_bundle",
-    "1783425997ca25e2c8",
+    "product_reviews_rating",
     "product_real_life_videos",
     "product_mode_showcase",
     "product_battery_showcase",
@@ -573,6 +573,6 @@
     "product_typing_feature",
     "product_precision_feature",
     "product_feature_icon_strip",
-    "product_reviews_rating"
+    "1783425997ca25e2c8"
   ]
 }
