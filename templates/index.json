@@ -78,9 +78,12 @@
         "button_link": "",
         "secondary_label": "Browse collections",
         "secondary_link": "",
-        "slide_1_external": "https://ipadkeyboard.shop/cdn/shop/files/8_282bf360-c999-4b07-8095-796b982106bd.jpg?v=1741923254&width=1800",
-        "slide_2_external": "https://ipadkeyboard.shop/cdn/shop/files/9_2b41a72b-d950-47aa-a84d-c916aacf5f73.jpg?v=1741844115&width=1800",
-        "slide_3_external": "https://ipadkeyboard.shop/cdn/shop/files/11_77953d2a-beb8-447a-a8c5-72bcb3e57687.jpg?v=1741844336&width=1800"
+        "slide_image_1": "shopify://shop_images/Product_Visual_005acb76-8109-4542-ae51-82ceae6497a2.jpg",
+        "slide_1_external": "",
+        "slide_image_2": "shopify://shop_images/Product_Visual_35da0f1d-2160-4c99-80fa-a75e69506672.jpg",
+        "slide_2_external": "",
+        "slide_image_3": "shopify://shop_images/Product_Visual_d3f31145-f888-423d-9b57-931e9f63674f.jpg",
+        "slide_3_external": ""
       }
     },
     "category_tiles": {
