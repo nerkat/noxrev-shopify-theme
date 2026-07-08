@@ -13,6 +13,25 @@
       "type": "main-product",
       "settings": {}
     },
+    "product_reviews_rating": {
+      "type": "product-reviews-rating",
+      "settings": {
+        "eyebrow": "Customer Reviews",
+        "title": "Trusted by real customers.",
+        "rating_value": "4.9",
+        "subtitle": "Based on 3,672 reviews",
+        "review_total": "3672",
+        "review_5": "3182",
+        "review_4": "362",
+        "review_3": "74",
+        "review_2": "28",
+        "review_1": "26",
+        "write_button_label": "Write A Review",
+        "write_button_link": "",
+        "button_label": "View All Reviews",
+        "button_link": ""
+      }
+    },
     "product_accessory_bundle": {
       "type": "product-accessory-bundle",
       "blocks": {
@@ -523,25 +542,6 @@
       ],
       "settings": {}
     },
-    "product_reviews_rating": {
-      "type": "product-reviews-rating",
-      "settings": {
-        "eyebrow": "Customer Reviews",
-        "title": "Trusted by real customers.",
-        "rating_value": "4.9",
-        "subtitle": "Based on 3,672 reviews",
-        "review_total": "3672",
-        "review_5": "3182",
-        "review_4": "362",
-        "review_3": "74",
-        "review_2": "28",
-        "review_1": "26",
-        "write_button_label": "Write A Review",
-        "write_button_link": "",
-        "button_label": "View All Reviews",
-        "button_link": ""
-      }
-    },
     "1783425997ca25e2c8": {
       "type": "apps",
       "blocks": {
@@ -563,8 +563,8 @@
   },
   "order": [
     "main",
-    "product_accessory_bundle",
     "product_reviews_rating",
+    "product_accessory_bundle",
     "product_real_life_videos",
     "product_mode_showcase",
     "product_battery_showcase",
