@@ -95,7 +95,11 @@
 
           {% if section.settings.show_mobile_drawer_footer %}
             <div class="header__mobile-footer">
-              <a class="header__mobile-footer-brand" href="{{ routes.root_url }}" aria-label="{{ mobile_drawer_brand_text | escape }}">
+              <a
+                class="header__mobile-footer-brand"
+                href="{{ routes.root_url }}"
+                aria-label="{{ mobile_drawer_brand_text | escape }}"
+              >
                 {% if section.settings.mobile_drawer_logo != blank %}
                   {{
                     section.settings.mobile_drawer_logo
@@ -119,7 +123,9 @@
 
               <div class="header__mobile-footer-contact">
                 {% if section.settings.mobile_drawer_contact_email != blank %}
-                  <a href="mailto:{{ section.settings.mobile_drawer_contact_email }}">{{ section.settings.mobile_drawer_contact_email }}</a>
+                  <a href="mailto:{{ section.settings.mobile_drawer_contact_email }}">
+                    {{- section.settings.mobile_drawer_contact_email -}}
+                  </a>
                 {% endif %}
                 {% if section.settings.mobile_drawer_contact_phone != blank %}
                   <a href="tel:{{ section.settings.mobile_drawer_contact_phone | replace: ' ', '' }}">
@@ -131,7 +137,11 @@
               {% if section.settings.mobile_drawer_show_social_links and has_mobile_drawer_social_links %}
                 <div class="header__mobile-footer-social" aria-label="Social links">
                   {% if section.settings.mobile_drawer_social_tiktok != blank %}
-                    <a class="header__mobile-footer-social-link" href="{{ section.settings.mobile_drawer_social_tiktok }}" aria-label="TikTok">
+                    <a
+                      class="header__mobile-footer-social-link"
+                      href="{{ section.settings.mobile_drawer_social_tiktok }}"
+                      aria-label="TikTok"
+                    >
                       <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
                         <path d="M14 4v9.1a4.2 4.2 0 1 1-3.2-4.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
                         <path d="M14 4c.5 2.6 2.1 4.2 4.8 4.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
@@ -139,7 +149,11 @@
                     </a>
                   {% endif %}
                   {% if section.settings.mobile_drawer_social_instagram != blank %}
-                    <a class="header__mobile-footer-social-link" href="{{ section.settings.mobile_drawer_social_instagram }}" aria-label="Instagram">
+                    <a
+                      class="header__mobile-footer-social-link"
+                      href="{{ section.settings.mobile_drawer_social_instagram }}"
+                      aria-label="Instagram"
+                    >
                       <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
                         <rect x="5" y="5" width="14" height="14" rx="4" stroke="currentColor" stroke-width="1.7"></rect>
                         <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.7"></circle>
@@ -148,14 +162,22 @@
                     </a>
                   {% endif %}
                   {% if section.settings.mobile_drawer_social_facebook != blank %}
-                    <a class="header__mobile-footer-social-link" href="{{ section.settings.mobile_drawer_social_facebook }}" aria-label="Facebook">
+                    <a
+                      class="header__mobile-footer-social-link"
+                      href="{{ section.settings.mobile_drawer_social_facebook }}"
+                      aria-label="Facebook"
+                    >
                       <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
                         <path d="M14 8.6h2.3V5.2A10 10 0 0 0 13.1 5c-3.1 0-5 1.8-5 5.2v2.2H5v3.8h3.1V22h3.8v-5.8h3.1l.5-3.8h-3.6v-1.8c0-1.1.3-2 2.1-2Z" stroke="currentColor" stroke-width="1.45" stroke-linejoin="round"></path>
                       </svg>
                     </a>
                   {% endif %}
                   {% if section.settings.mobile_drawer_social_youtube != blank %}
-                    <a class="header__mobile-footer-social-link" href="{{ section.settings.mobile_drawer_social_youtube }}" aria-label="YouTube">
+                    <a
+                      class="header__mobile-footer-social-link"
+                      href="{{ section.settings.mobile_drawer_social_youtube }}"
+                      aria-label="YouTube"
+                    >
                       <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
                         <path d="M21 12s0-3.2-.4-4.4c-.2-.7-.8-1.3-1.5-1.5C17.8 5.8 12 5.8 12 5.8s-5.8 0-7.1.3c-.7.2-1.3.8-1.5 1.5C3 8.8 3 12 3 12s0 3.2.4 4.4c.2.7.8 1.3 1.5 1.5 1.3.3 7.1.3 7.1.3s5.8 0 7.1-.3c.7-.2 1.3-.8 1.5-1.5.4-1.2.4-4.4.4-4.4Z" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"></path>
                         <path d="m10.4 9.4 4.2 2.6-4.2 2.6V9.4Z" fill="currentColor"></path>
@@ -534,7 +556,7 @@
     display: grid;
     gap: 1rem;
     margin-top: auto;
-    padding-top: 1.2rem;
+    padding: 0.85rem 0.9rem;
   }
 
   .header__mobile-footer-brand,
@@ -604,10 +626,7 @@
     color: var(--theme-color-secondary);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    transition:
-      border-color var(--transition-base),
-      color var(--transition-base),
-      box-shadow var(--transition-base),
+    transition: border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base),
       transform var(--transition-base);
   }
 
@@ -629,9 +648,7 @@
   .header__mobile-footer-social-link:focus-visible {
     border-color: rgba(0, 229, 255, 0.68);
     color: var(--theme-color-accent);
-    box-shadow:
-      0 0 24px rgba(0, 229, 255, 0.18),
-      0 0 18px rgba(255, 77, 166, 0.12),
+    box-shadow: 0 0 24px rgba(0, 229, 255, 0.18), 0 0 18px rgba(255, 77, 166, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
     transform: translateY(-1px) scale(1.05);
   }
