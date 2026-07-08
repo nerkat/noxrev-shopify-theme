@@ -78,7 +78,12 @@
               {{ block.shopify_attributes }}
             >
               {% if accessory_product != blank and accessory_variant != blank %}
-                <form class="product-accessory-bundle__form" method="post" action="{{ routes.cart_add_url }}" data-accessory-bundle-form>
+                <form
+                  class="product-accessory-bundle__form"
+                  method="post"
+                  action="{{ routes.cart_add_url }}"
+                  data-accessory-bundle-form
+                >
                   <input type="hidden" name="id" value="{{ accessory_variant.id }}">
                   <input type="hidden" name="quantity" value="1">
                   <button
@@ -110,7 +115,8 @@
 
               <div class="product-accessory-bundle__media">
                 {% if card_image != blank %}
-                  {% render 'responsive-image',
+                  {%
+                    render 'responsive-image',
                     image: card_image,
                     alt: block.settings.image_alt | default: card_title,
                     class: 'product-accessory-bundle__image',
@@ -155,7 +161,12 @@
                   </div>
 
                   {% if accessory_product != blank and accessory_variant != blank %}
-                    <form class="product-accessory-bundle__form" method="post" action="{{ routes.cart_add_url }}" data-accessory-bundle-form>
+                    <form
+                      class="product-accessory-bundle__form"
+                      method="post"
+                      action="{{ routes.cart_add_url }}"
+                      data-accessory-bundle-form
+                    >
                       <input type="hidden" name="id" value="{{ accessory_variant.id }}">
                       <input type="hidden" name="quantity" value="1">
                       <button
@@ -187,10 +198,20 @@
           {% endfor %}
         </div>
 
-        <button class="product-accessory-bundle__arrow product-accessory-bundle__arrow--prev" type="button" aria-label="Previous accessories" data-accessory-bundle-prev>
+        <button
+          class="product-accessory-bundle__arrow product-accessory-bundle__arrow--prev"
+          type="button"
+          aria-label="Previous accessories"
+          data-accessory-bundle-prev
+        >
           <span aria-hidden="true">&lsaquo;</span>
         </button>
-        <button class="product-accessory-bundle__arrow product-accessory-bundle__arrow--next" type="button" aria-label="Next accessories" data-accessory-bundle-next>
+        <button
+          class="product-accessory-bundle__arrow product-accessory-bundle__arrow--next"
+          type="button"
+          aria-label="Next accessories"
+          data-accessory-bundle-next
+        >
           <span aria-hidden="true">&rsaquo;</span>
         </button>
       </div>
@@ -234,7 +255,7 @@
 
         const scrollByDirection = (direction) => {
           const maxScroll = slider.scrollWidth - slider.clientWidth;
-          const target = Math.max(0, Math.min(maxScroll, slider.scrollLeft + (getStep() * direction)));
+          const target = Math.max(0, Math.min(maxScroll, slider.scrollLeft + getStep() * direction));
           slider.scrollTo({ left: target, behavior: 'smooth' });
           window.setTimeout(updateButtons, 260);
         };
@@ -434,32 +455,40 @@
         }
       };
 
-      document.addEventListener('submit', (event) => {
-        const form = event.target.closest('[data-accessory-bundle-form]');
-        if (!form) return;
+      document.addEventListener(
+        'submit',
+        (event) => {
+          const form = event.target.closest('[data-accessory-bundle-form]');
+          if (!form) return;
 
-        const card = form.closest('[data-accessory-card]');
-        if (!card) return;
+          const card = form.closest('[data-accessory-card]');
+          if (!card) return;
 
-        event.preventDefault();
-        event.stopImmediatePropagation();
+          event.preventDefault();
+          event.stopImmediatePropagation();
 
-        if (card.hasAttribute('data-accessory-added')) return;
+          if (card.hasAttribute('data-accessory-added')) return;
 
-        addAccessory(form, card);
-      }, true);
+          addAccessory(form, card);
+        },
+        true
+      );
 
-      document.addEventListener('click', (event) => {
-        const toggle = event.target.closest('[data-accessory-toggle]');
-        if (!toggle) return;
+      document.addEventListener(
+        'click',
+        (event) => {
+          const toggle = event.target.closest('[data-accessory-toggle]');
+          if (!toggle) return;
 
-        const card = toggle.closest('[data-accessory-card]');
-        if (!card || !card.hasAttribute('data-accessory-added')) return;
+          const card = toggle.closest('[data-accessory-card]');
+          if (!card || !card.hasAttribute('data-accessory-added')) return;
 
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        removeAccessory(card);
-      }, true);
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          removeAccessory(card);
+        },
+        true
+      );
 
       fetchCart()
         .then(syncBundleCards)
@@ -487,8 +516,7 @@
     overflow: hidden;
     border-radius: 1.35rem;
     padding: 1.25rem;
-    background:
-      radial-gradient(circle at 100% 0%, rgba(0, 229, 255, 0.14), transparent 34%),
+    background: radial-gradient(circle at 100% 0%, rgba(0, 229, 255, 0.14), transparent 34%),
       radial-gradient(circle at 0% 5%, rgba(155, 0, 255, 0.12), transparent 34%),
       linear-gradient(180deg, rgba(7, 14, 30, 0.96), rgba(3, 10, 22, 0.98));
   }
@@ -588,35 +616,30 @@
 
   .product-accessory-bundle__card {
     position: relative;
+    text-shadow: #000000d9 2px 2px 2px;
     display: grid;
     min-height: 31rem;
     overflow: hidden;
     border: 1px solid rgba(0, 229, 255, 0.18);
     border-radius: 1rem;
     background: rgba(4, 13, 25, 0.94);
-    transition:
-      border-color 180ms ease,
-      box-shadow 180ms ease,
-      transform 180ms ease;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
     scroll-snap-align: start;
   }
 
   .product-accessory-bundle__card::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background:
-      linear-gradient(180deg, rgba(2, 8, 18, 0.12) 0%, rgba(2, 8, 18, 0.02) 42%, rgba(2, 8, 18, 0.88) 100%),
+    background: linear-gradient(180deg, rgba(2, 8, 18, 0.12) 0%, rgba(2, 8, 18, 0.02) 42%, rgba(2, 8, 18, 0.88) 100%),
       radial-gradient(circle at 50% 50%, rgba(155, 0, 255, 0.16), transparent 42%);
   }
 
   .product-accessory-bundle__card.is-added {
     border-color: rgba(255, 76, 218, 0.9);
-    box-shadow:
-      0 0 0 1px rgba(0, 229, 255, 0.4),
-      0 0 34px rgba(255, 45, 180, 0.26);
+    box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.4), 0 0 34px rgba(255, 45, 180, 0.26);
   }
 
   .product-accessory-bundle__select,
@@ -640,11 +663,7 @@
     color: #02111d;
     background: rgba(2, 10, 20, 0.58);
     cursor: pointer;
-    transition:
-      border-color 180ms ease,
-      background 180ms ease,
-      box-shadow 180ms ease,
-      transform 180ms ease;
+    transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
   }
 
   .product-accessory-bundle__card.is-added .product-accessory-bundle__select {
@@ -693,8 +712,7 @@
   }
 
   .product-accessory-bundle__placeholder {
-    background:
-      radial-gradient(circle at 50% 42%, rgba(0, 229, 255, 0.16), transparent 36%),
+    background: radial-gradient(circle at 50% 42%, rgba(0, 229, 255, 0.16), transparent 36%),
       linear-gradient(135deg, rgba(255, 45, 120, 0.11), rgba(3, 10, 22, 0.98));
   }
 
@@ -801,13 +819,8 @@
     appearance: none;
     cursor: pointer;
     text-decoration: none;
-    transition:
-      border-color 180ms ease,
-      background 180ms ease,
-      box-shadow 180ms ease,
-      color 180ms ease,
-      transform 180ms ease,
-      opacity 180ms ease;
+    transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease, color 180ms ease,
+      transform 180ms ease, opacity 180ms ease;
   }
 
   .product-accessory-bundle__card.is-added .product-accessory-bundle__button {
@@ -921,7 +934,12 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Complete Your Setup" },
     { "type": "text", "id": "title", "label": "Title", "default": "Bundle with accessories and save more." },
-    { "type": "textarea", "id": "text", "label": "Text", "default": "Level up your setup with hand-picked accessories built to protect, power, and perform anywhere." },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Level up your setup with hand-picked accessories built to protect, power, and perform anywhere."
+    },
     { "type": "text", "id": "pill_label", "label": "Pill label", "default": "Bundle & Save" },
     { "type": "text", "id": "pill_text", "label": "Pill text", "default": "Save up to 20% when you bundle." }
   ],
@@ -935,7 +953,12 @@
         { "type": "image_picker", "id": "image", "label": "Image override" },
         { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Accessory product" },
         { "type": "text", "id": "title", "label": "Fallback title", "default": "NoxRev Precision Stylus" },
-        { "type": "textarea", "id": "text", "label": "Description", "default": "Tilt sensitivity. Palm rejection. Pixel-perfect control." },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Tilt sensitivity. Palm rejection. Pixel-perfect control."
+        },
         { "type": "text", "id": "price", "label": "Fallback price", "default": "$59.00" },
         { "type": "text", "id": "compare_price", "label": "Fallback compare-at price", "default": "$79.00" },
         { "type": "text", "id": "savings_label", "label": "Fallback savings label", "default": "Save 25%" },
@@ -950,10 +973,51 @@
     {
       "name": "PDP Accessory Bundle",
       "blocks": [
-        { "type": "accessory", "settings": { "title": "NoxRev Precision Stylus", "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.", "price": "$59.00", "compare_price": "$79.00", "savings_label": "Save 25%", "badge": "Best Add-On", "highlight": false } },
-        { "type": "accessory", "settings": { "title": "NoxRev Urban Sleeve", "text": "Premium protection. Slim profile. Built for life on the move.", "price": "$49.00", "compare_price": "$69.00", "savings_label": "Save 29%", "badge": "Popular" } },
-        { "type": "accessory", "settings": { "title": "NoxRev USB-C Cable", "text": "100W fast charging. 6ft braided. Built to last.", "price": "$24.00", "compare_price": "$34.00", "savings_label": "Save 29%", "badge": "" } },
-        { "type": "accessory", "settings": { "title": "NoxRev Wireless Mouse", "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.", "price": "$39.00", "compare_price": "$59.00", "savings_label": "Save 34%", "badge": "" } }
+        {
+          "type": "accessory",
+          "settings": {
+            "title": "NoxRev Precision Stylus",
+            "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
+            "price": "$59.00",
+            "compare_price": "$79.00",
+            "savings_label": "Save 25%",
+            "badge": "Best Add-On",
+            "highlight": false
+          }
+        },
+        {
+          "type": "accessory",
+          "settings": {
+            "title": "NoxRev Urban Sleeve",
+            "text": "Premium protection. Slim profile. Built for life on the move.",
+            "price": "$49.00",
+            "compare_price": "$69.00",
+            "savings_label": "Save 29%",
+            "badge": "Popular"
+          }
+        },
+        {
+          "type": "accessory",
+          "settings": {
+            "title": "NoxRev USB-C Cable",
+            "text": "100W fast charging. 6ft braided. Built to last.",
+            "price": "$24.00",
+            "compare_price": "$34.00",
+            "savings_label": "Save 29%",
+            "badge": ""
+          }
+        },
+        {
+          "type": "accessory",
+          "settings": {
+            "title": "NoxRev Wireless Mouse",
+            "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.",
+            "price": "$39.00",
+            "compare_price": "$59.00",
+            "savings_label": "Save 34%",
+            "badge": ""
+          }
+        }
       ]
     }
   ]
