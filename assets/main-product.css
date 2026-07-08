@@ -837,12 +837,4 @@
         border-radius: 0;
       }
 
-      .main-product__model-tab-title {
-        left: 0.5rem;
-        right: 0.5rem;
-        bottom: 0.5rem;
-        font-size: 0.75rem;
-        padding: 0.3rem 0.45rem;
-      }
-     
     }
