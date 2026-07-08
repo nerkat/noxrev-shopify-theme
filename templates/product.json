@@ -98,13 +98,30 @@
             "button_label": "Add",
             "highlight": false
           }
+        },
+        "accessory_PWPzn8": {
+          "type": "accessory",
+          "settings": {
+            "product": "tpx1-cable",
+            "image_alt": "Accessory product",
+            "title": "NoxRev Precision Stylus",
+            "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
+            "price": "$59.00",
+            "compare_price": "$79.00",
+            "savings_label": "Save 25%",
+            "link": "",
+            "badge": "",
+            "button_label": "Add",
+            "highlight": false
+          }
         }
       },
       "block_order": [
         "accessory_stylus",
         "accessory_mouse",
         "accessory_sleeve",
-        "accessory_cable"
+        "accessory_cable",
+        "accessory_PWPzn8"
       ],
       "settings": {
         "eyebrow": "Complete Your Setup",
