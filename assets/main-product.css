@@ -284,7 +284,6 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 2.75rem;
       padding: 0.6rem 0.9rem;
       border: 1px solid rgba(0, 0, 0, 0.16);
       background: transparent;
