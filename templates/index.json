@@ -56,10 +56,10 @@
             "link_label": "",
             "link": "",
             "contact_label_1": "Email",
-            "contact_value_1": "naidun2021@163.com",
-            "contact_link_1": "mailto:naidun2021@163.com",
+            "contact_value_1": "contact@noxrev.com",
+            "contact_link_1": "mailto:contact@noxrev.com",
             "contact_label_2": "WhatsApp",
-            "contact_value_2": "WhatsApp +86 13610355551",
+            "contact_value_2": "WhatsApp +4893720484",
             "contact_link_2": "https://wa.me/8613610355551"
           }
         }
@@ -129,31 +129,31 @@
         "text": ""
       }
     },
-    "main_product_spotlight": {
+    "home_main_product_3K38Nr": {
       "type": "home-main-product",
       "blocks": {
-        "feature_keyboard": {
+        "feature_CHMNpc": {
           "type": "feature",
           "settings": {
             "label": "Backlit keyboard",
             "icon": "keyboard"
           }
         },
-        "feature_trackpad": {
+        "feature_qErB6Y": {
           "type": "feature",
           "settings": {
             "label": "Precision trackpad",
             "icon": "trackpad"
           }
         },
-        "feature_modes": {
+        "feature_zYFF6x": {
           "type": "feature",
           "settings": {
             "label": "Multi-angle modes",
             "icon": "rotation"
           }
         },
-        "feature_protection": {
+        "feature_3f87eH": {
           "type": "feature",
           "settings": {
             "label": "Everyday protection",
@@ -162,22 +162,23 @@
         }
       },
       "block_order": [
-        "feature_keyboard",
-        "feature_trackpad",
-        "feature_modes",
-        "feature_protection"
+        "feature_CHMNpc",
+        "feature_qErB6Y",
+        "feature_zYFF6x",
+        "feature_3f87eH"
       ],
+      "name": "Home Main Product",
       "settings": {
-        "product": "transparent-core-keyboard-case-ipad",
+        "product": "",
         "eyebrow": "Meet NoxRev TXP1",
         "heading": "The iPad case that turns work mode on.",
         "text": "A protective keyboard case with a precision trackpad, backlit keys, and flexible viewing modes for writing, studying, creating, and travel.",
         "badge": "7 iPad fits",
         "button_label": "Shop TXP1",
-        "button_link": "/products/transparent-core-keyboard-case-ipad",
+        "button_link": "",
         "secondary_label": "Find your iPad model",
-        "secondary_link": "/pages/find-your-model",
-        "image": "",
+        "secondary_link": "",
+        "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_01_47_32_PM.png",
         "image_alt": "NoxRev TXP1 keyboard case for iPad"
       }
     },
@@ -225,14 +226,13 @@
         "item_2",
         "item_3"
       ],
-      "disabled": true,
       "settings": {}
     }
   },
   "order": [
     "main",
-    "main_product_spotlight",
     "category_tiles",
+    "home_main_product_3K38Nr",
     "featured_catalog",
     "trust_strip"
   ]
