@@ -4,7 +4,7 @@
 
     .main-product__main {
       display: grid;
-      gap: 0.7rem;
+      gap: 1rem;
       align-items: start;
     }
 
@@ -794,7 +794,6 @@
     @media (min-width: 861px) {
       .main-product__main {
         grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
-        gap: 1rem;
       }
 
       .main-product__title {
