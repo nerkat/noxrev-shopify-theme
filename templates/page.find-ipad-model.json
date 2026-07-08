@@ -50,8 +50,8 @@
         "cta_label": "Browse All Compatible Models",
         "cta_link": "",
         "video_eyebrow": "Quick Guide",
-        "video_title": "How to identify your iPad in 30 seconds",
-        "video": "shopify://files/videos/How_To_Identify_Your_iPad_Model_Generation_-_Step_By_Step_302723db-d461-4d1d-97eb-882065c35bc6.mp4",
+        "video_title": "How to identify your iPad",
+        "video": "shopify://files/videos/YTDown.com_YouTube_How-To-Find-Your-iPad-Model-Number-_-Gen_Media_eoVKsbw-O6M_001_1080p.mp4",
         "video_image_alt": "iPad model identification guide",
         "video_link": "https://www.youtube.com/watch?v=jwq2ZMSM-Kk"
       }
@@ -66,6 +66,7 @@
             "subtitle": "M4/M5",
             "cta_label": "Shop This Fit",
             "link": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_11_26_18_AM.png",
             "image_alt": "Compatible iPad model"
           }
         },
@@ -76,6 +77,7 @@
             "subtitle": "M4/M5",
             "cta_label": "Shop This Fit",
             "link": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_11_28_05_AM.png",
             "image_alt": "Compatible iPad model"
           }
         },
@@ -86,6 +88,7 @@
             "subtitle": "Air M2/M3/M4 / Pro 3rd-6th Gen",
             "cta_label": "Shop This Fit",
             "link": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_11_35_26_AM.png",
             "image_alt": "Compatible iPad model"
           }
         },
@@ -96,6 +99,7 @@
             "subtitle": "Air 4th/5th/M2/M3/M4 / Pro 1st-4th Gen",
             "cta_label": "Shop This Fit",
             "link": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_11_32_44_AM.png",
             "image_alt": "Compatible iPad model"
           }
         },
@@ -106,6 +110,7 @@
             "subtitle": "10th/A16/11th",
             "cta_label": "Shop This Fit",
             "link": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_11_31_49_AM.png",
             "image_alt": "Compatible iPad model"
           }
         },
@@ -116,6 +121,7 @@
             "subtitle": "7th/8th/9th Gen",
             "cta_label": "Shop This Fit",
             "link": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_11_30_26_AM.png",
             "image_alt": "Compatible iPad model"
           }
         },
@@ -126,6 +132,7 @@
             "subtitle": "6th/7th Gen",
             "cta_label": "Shop This Fit",
             "link": "",
+            "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_11_29_16_AM_7f05e0e8-9fc1-4668-88b2-12d016c42afb.png",
             "image_alt": "Compatible iPad model"
           }
         }
