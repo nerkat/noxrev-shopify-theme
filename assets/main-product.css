@@ -792,6 +792,23 @@
     }
 
     @media (min-width: 861px) {
+      .main-product__model-panel:nth-of-type(4) .main-product__model-list {
+        grid-template-columns: 1fr 1fr;
+
+        .main-product__model-item:nth-of-type(3) {
+          grid-column: span 2;
+        }
+      }
+
+      .main-product__media-column {
+        height: 100%;
+
+        .main-product__gallery-frame {
+          aspect-ratio: auto;
+          height: 100%;
+        }
+      }
+
       .main-product__main {
         grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
       }
