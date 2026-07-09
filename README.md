@@ -39,8 +39,12 @@ shopify theme init
 Preview this theme using Shopify CLI:
 
 ```bash
-shopify theme dev
+shopify theme dev --store tykvge-hj.myshopify.com --theme 147007733834
 ```
+
+This repository targets the Shopify store `tykvge-hj.myshopify.com`. Do not use
+`noxrev.myshopify.com` for local development; that is an old store context and
+will show stale product/media data.
 
 ## Theme architecture
 

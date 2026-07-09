@@ -199,25 +199,25 @@
         "item_1": {
           "type": "item",
           "settings": {
-            "eyebrow": "Store promise",
-            "heading": "Set one practical expectation clearly.",
-            "text": "Use concise copy for shipping, quality, support response, or any reassurance that helps shoppers commit."
+            "eyebrow": "Compatibility",
+            "heading": "Choose the exact iPad fit before checkout.",
+            "text": "Use the fit guide or send us your model name so your NoxRev keyboard case matches your device the first time."
           }
         },
         "item_2": {
           "type": "item",
           "settings": {
-            "eyebrow": "Support",
-            "heading": "Keep service messaging easy to scan.",
-            "text": "This block works well for contact guidance, returns confidence, or a short explanation of how help is delivered."
+            "eyebrow": "Everyday setup",
+            "heading": "Built for typing, drawing, streaming, and travel.",
+            "text": "Backlit keys, a precision trackpad, flexible angles, and protective coverage help your iPad work like a real mobile desk."
           }
         },
         "item_3": {
           "type": "item",
           "settings": {
-            "eyebrow": "Quality",
-            "heading": "Reinforce what makes the offer dependable.",
-            "text": "Use the final tile for materials, fulfillment confidence, customization notes, or another merchant-editable trust point."
+            "eyebrow": "Help before you buy",
+            "heading": "Unsure about model, color, or accessories?",
+            "text": "Contact NoxRev support before ordering and we will help confirm the right keyboard case and add-ons for your setup."
           }
         }
       },

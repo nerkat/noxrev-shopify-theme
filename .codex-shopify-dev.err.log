@@ -5,32 +5,79 @@
 │                                                                              │
 │  Next steps                                                                  │
 │    • Share your theme preview (p) [2]                                        │
-│      https://noxrev.myshopify.com/?preview_theme_id=145346265206             │
+│      https://tykvge-hj.myshopify.com/?preview_theme_id=147007733834          │
 │    • Customize your theme at the theme editor (e) [3]                        │
 │    • Preview your gift cards (g) [4]                                         │
 │                                                                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 [1] http://127.0.0.1:9292
-[2] https://noxrev.myshopify.com/?preview_theme_id=145346265206
-[3] https://noxrev.myshopify.com/admin/themes/145346265206/editor?hr=9292
+[2] https://tykvge-hj.myshopify.com/?preview_theme_id=147007733834
+[3] https://tykvge-hj.myshopify.com/admin/themes/147007733834/editor?hr=9292
 [4] http://127.0.0.1:9292/gift_cards/[store_id]/preview
 
-• 11:59:59  Synced » update templates/page.find-ipad-model.json
-• 12:00:00 Request »    GET 200 / 
-• 12:00:00 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
-• 12:00:01 Request »    GET 200 / 
-╭─ error ──────────────────────────────────────────────────────────────────────╮
-│                                                                              │
-│  Failed to upload file "templates/page.find-ipad-model.json" to remote       │
-│  theme.                                                                      │
-│                                                                              │
-│  Setting 'video' value does not point to an applicable shopify-hosted video  │
-│   resource.                                                                  │
-│                                                                              │
-╰──────────────────────────────────────────────────────────────────────────────╯
-
-• 12:00:39 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
-• 12:00:39 Request »    GET 200 / 
-• 12:00:47  Synced » update templates/page.find-ipad-model.json
-• 12:00:47 Request »    GET 200 / 
-• 12:00:47 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
+• 12:27:08 Request »    GET 404 /pages/find-your-ipad-model 
+• 12:27:13 Request »    GET 200 /pages/find-your-model 
+• 12:27:20 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
+• 12:27:21 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795298890 
+• 12:27:28 Request »   POST 200 /api/event/collect 
+• 12:27:28 Request »   POST 200 /api/event/collect 
+• 12:27:37 Request »   POST 200 /api/event/collect 
+• 12:27:52 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795298890 
+• 12:27:53 Request »   POST 200 /api/event/collect 
+• 12:27:56 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795298890 
+• 12:27:56 Request »   POST 200 /api/event/collect 
+• 12:27:56 Request »   POST 200 /api/event/collect 
+• 12:27:57 Request »   POST 200 /api/event/collect 
+• 12:27:57 Request »   POST 200 /api/event/collect 
+• 12:28:00 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795298890 
+• 12:28:00 Request »   POST 200 /api/event/collect 
+• 12:28:00 Request »   POST 200 /api/event/collect 
+• 12:28:01 Request »   POST 200 /api/event/collect 
+• 12:28:01 Request »   POST 200 /api/event/collect 
+• 12:28:05 Request »   POST 200 /api/event/collect 
+• 12:28:05 Request »   POST 200 /api/event/collect 
+• 12:28:11 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795298890 
+• 12:28:12 Request »   POST 200 /api/event/collect 
+• 12:28:13 Request »   POST 200 /api/event/collect 
+• 12:28:18 Request »   POST 200 /api/event/collect 
+• 12:28:19 Request »   POST 200 /api/event/collect 
+• 12:28:29 Request »   POST 200 /api/event/collect 
+• 12:28:50 Request »    GET 200 /products/transparent-core-keyboard-case-ipad?variant=43730795298890 
+• 12:28:51 Request »   POST 200 /api/event/collect 
+• 12:28:51 Request »   POST 200 /api/event/collect 
+• 12:28:54 Request »    GET 200 / 
+• 12:28:55 Request »   POST 200 /api/event/collect 
+• 12:28:55 Request »   POST 200 /api/event/collect 
+• 12:28:55 Request »   POST 200 /api/event/collect 
+• 12:28:57 Request »   POST 200 /api/event/collect 
+• 12:29:11 Request »   POST 200 /api/event/collect 
+• 12:29:44 Request »   POST 200 /api/event/collect 
+• 12:29:52  Synced » update sections/trust-strip.liquid
+• 12:29:54 Request »   POST 200 /api/event/collect 
+• 12:30:17 Request »    GET 200 / 
+• 12:30:17  Synced » update templates/index.json
+• 12:30:18 Request »   POST 200 /api/event/collect 
+• 12:30:18 Request »   POST 200 /api/event/collect 
+• 12:30:20 Request »   POST 200 /api/event/collect 
+• 12:30:21  Synced » update sections/trust-strip.liquid
+• 12:30:21 Request »    GET 200 / 
+• 12:30:22 Request »   POST 200 /api/event/collect 
+• 12:30:22 Request »   POST 200 /api/event/collect 
+• 12:30:24 Request »   POST 200 /api/event/collect 
+• 12:30:28 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
+• 12:30:29 Request »   POST 200 /api/event/collect 
+• 12:30:36 Request »   POST 200 /api/event/collect 
+• 12:30:37 Request »   POST 200 /api/event/collect 
+• 12:30:45 Request »   POST 200 /api/event/collect 
+• 12:30:45 Request »    GET 200 / 
+• 12:30:46 Request »   POST 200 /api/event/collect 
+• 12:30:48 Request »   POST 200 /api/event/collect 
+• 12:30:49  Synced » update sections/trust-strip.liquid
+• 12:30:55 Request »   POST 200 /api/event/collect 
+• 12:31:06 Request »   POST 200 /api/event/collect 
+• 12:31:13 Request »   POST 200 /api/event/collect 
+• 12:31:23 Request »   POST 200 /api/event/collect 
+• 12:31:40 Request »   POST 200 /api/event/collect 
+• 12:31:49 Request »    GET 200 / 
+• 12:31:50 Request »   POST 200 /api/event/collect 
+• 12:31:52 Request »   POST 200 /api/event/collect 

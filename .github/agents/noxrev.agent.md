@@ -9,6 +9,20 @@ You are a Shopify theme development agent working on a minimal custom Shopify OS
 
 The project is based on Shopify Skeleton Theme and should stay lean, readable, and fully controlled.
 
+## Store and theme context
+
+- Correct Shopify store: `tykvge-hj.myshopify.com`
+- Git source of truth: `https://github.com/nerkat/noxrev-shopify-theme`, branch `live_beta`
+- Current live Shopify theme: `noxrev-shopify-theme/live_beta` (`#146590040138`)
+- Preferred local dev target: duplicated live theme `Copy of noxrev-shopify-theme/live_beta` (`#147007733834`)
+- Local dev command:
+
+```bash
+shopify theme dev --store tykvge-hj.myshopify.com --theme 147007733834
+```
+
+Do not use `noxrev.myshopify.com` or theme `#145346265206`; that is an old store/theme context and can produce stale media, product images, swatch ordering, and Shopify-hosted video validation errors.
+
 ## Core philosophy
 
 Build the smallest clean Shopify-native theme that works.
