@@ -108,8 +108,8 @@
 
           {% if section.settings.button_label != blank %}
             <a class="product-reviews-rating__button" href="{{ section.settings.button_link | default: '#judgeme_reviews_panel' }}" data-judgeme-view-reviews aria-controls="judgeme_reviews_panel" aria-expanded="false">
-              <span>{{ section.settings.button_label }}</span>
-              <span aria-hidden="true">&rsaquo;</span>
+              <span data-judgeme-view-reviews-label>{{ section.settings.button_label }}</span>
+              <span aria-hidden="true" data-judgeme-view-reviews-icon>&rsaquo;</span>
             </a>
           {% endif %}
         </div>
@@ -121,7 +121,6 @@
             <p class="product-reviews-rating__judgeme-eyebrow">All Reviews</p>
             <h3 class="product-reviews-rating__judgeme-title">What customers are saying</h3>
           </div>
-          <button class="product-reviews-rating__judgeme-close" type="button" data-judgeme-close-reviews aria-label="Hide reviews">Close</button>
         </div>
 
         <div class="product-reviews-rating__judgeme-body" data-judgeme-panel-body>
@@ -163,10 +162,14 @@
     const section = document.currentScript.previousElementSibling;
     const trigger = section?.querySelector('[data-judgeme-write-review]');
     const viewReviewsTrigger = section?.querySelector('[data-judgeme-view-reviews]');
-    const closeReviewsTrigger = section?.querySelector('[data-judgeme-close-reviews]');
+    const viewReviewsLabel = section?.querySelector('[data-judgeme-view-reviews-label]');
+    const viewReviewsIcon = section?.querySelector('[data-judgeme-view-reviews-icon]');
     const customRows = Array.from(section?.querySelectorAll('[data-rating-row]') || []);
     const widget = section?.querySelector('[data-judgeme-reviews-panel]');
     const panelBody = section?.querySelector('[data-judgeme-panel-body]');
+    const viewReviewsOpenLabel = 'Close';
+    const viewReviewsClosedLabel = viewReviewsLabel?.textContent || 'View All Reviews';
+    const viewReviewsClosedIcon = viewReviewsIcon?.innerHTML || '&rsaquo;';
 
     const parseCount = (text) => {
       const match = text?.replace(/,/g, '').match(/\d+/);
@@ -259,23 +262,33 @@
       widget.classList.add('is-open');
       widget.setAttribute('aria-hidden', 'false');
       viewReviewsTrigger?.setAttribute('aria-expanded', 'true');
+      if (viewReviewsLabel) viewReviewsLabel.textContent = viewReviewsOpenLabel;
+      if (viewReviewsIcon) viewReviewsIcon.textContent = '';
       window.requestAnimationFrame(() => {
         widget.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     };
 
-    viewReviewsTrigger?.addEventListener('click', (event) => {
-      event.preventDefault();
-      showReviews();
-    });
-
-    closeReviewsTrigger?.addEventListener('click', () => {
+    const hideReviews = () => {
       if (!widget) return;
 
       widget.classList.remove('is-open');
       widget.setAttribute('aria-hidden', 'true');
       viewReviewsTrigger?.setAttribute('aria-expanded', 'false');
+      if (viewReviewsLabel) viewReviewsLabel.textContent = viewReviewsClosedLabel;
+      if (viewReviewsIcon) viewReviewsIcon.innerHTML = viewReviewsClosedIcon;
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    viewReviewsTrigger?.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      if (widget?.classList.contains('is-open')) {
+        hideReviews();
+        return;
+      }
+
+      showReviews();
     });
 
     if (!trigger) return;
@@ -507,21 +520,6 @@
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1.1;
-  }
-
-  .product-reviews-rating__judgeme-close {
-    min-height: 2.35rem;
-    border: 1px solid rgba(137, 111, 255, 0.38);
-    border-radius: var(--theme-radius-pill);
-    padding: 0 1rem;
-    color: var(--theme-color-text);
-    background: rgba(4, 11, 24, 0.52);
-    font: inherit;
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
   }
 
   .product-reviews-rating__judgeme .jdgm-widget {
