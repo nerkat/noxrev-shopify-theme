@@ -21,6 +21,9 @@
   @param {boolean} [show_keyboard] - Include the keyboard group
   @param {boolean} [show_accessories] - Include the accessory group
   @param {string} [submit_destination] - Search URL used by future modes
+  @param {string} [empty_prompt] - Compact empty-query helper for header mode
+  @param {string} [no_results_text] - Compact zero-results message for header mode
+  @param {string} [view_all_label] - Header-mode full search action label
 {% enddoc %}
 
 {%- liquid
@@ -28,6 +31,9 @@
   assign component_heading_tag = heading_tag | default: 'h2'
   assign component_initial_results = initial_results | default: 'all'
   assign component_submit_destination = submit_destination | default: routes.search_url
+  assign component_empty_prompt = empty_prompt | default: placeholder
+  assign component_no_results_text = no_results_text | default: 'No matching products. Try another model or A-number.'
+  assign component_view_all_label = view_all_label | default: 'View all results'
   assign component_keyboard_limit = keyboard_limit | default: 0
   assign component_accessory_limit = accessory_limit | default: 0
   assign component_show_descriptions = 'false'
@@ -132,6 +138,21 @@
     <p>Please try again shortly.</p>
   </div>
 
+  {%- if component_mode == 'header' -%}
+    <div class="catalog-search__header-prompt" data-catalog-search-prompt>
+      <span class="catalog-search__header-prompt-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" focusable="false">
+          <circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.5"></circle>
+          <path d="m16 16 4.3 4.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+      </span>
+      <p>{{ component_empty_prompt | escape }}</p>
+    </div>
+    <p class="catalog-search__header-empty" data-catalog-search-no-results hidden>
+      {{- component_no_results_text | escape -}}
+    </p>
+  {%- endif -%}
+
   {%- if request.design_mode -%}
     {%- if keyboard_product == blank or settings.catalog_search_accessories_collection == blank or configured_model_option_found == false -%}
       <div class="catalog-search__configuration-warning" role="status">
@@ -151,7 +172,11 @@
 
   <div class="catalog-search__groups" data-catalog-search-groups>
     {%- if show_keyboard -%}
-      <section class="catalog-search__group" aria-labelledby="CatalogSearchKeyboardHeading-{{ instance_id | escape }}">
+      <section
+        class="catalog-search__group"
+        aria-labelledby="CatalogSearchKeyboardHeading-{{ instance_id | escape }}"
+        data-catalog-search-keyboard-group
+      >
         <div class="catalog-search__group-header">
           <h2 id="CatalogSearchKeyboardHeading-{{ instance_id | escape }}" class="catalog-search__group-title">
             {{- keyboard_heading | escape -}}
@@ -180,7 +205,11 @@
     {%- endif -%}
 
     {%- if show_accessories -%}
-      <section class="catalog-search__group" aria-labelledby="CatalogSearchAccessoriesHeading-{{ instance_id | escape }}">
+      <section
+        class="catalog-search__group"
+        aria-labelledby="CatalogSearchAccessoriesHeading-{{ instance_id | escape }}"
+        data-catalog-search-accessory-group
+      >
         <div class="catalog-search__group-header">
           <h2 id="CatalogSearchAccessoriesHeading-{{ instance_id | escape }}" class="catalog-search__group-title">
             {{- accessories_heading | escape -}}
@@ -208,6 +237,13 @@
       </section>
     {%- endif -%}
   </div>
+
+  {%- if component_mode == 'header' -%}
+    <a class="catalog-search__view-all" href="{{ component_submit_destination }}" data-catalog-search-view-all>
+      <span>{{ component_view_all_label | escape }}</span>
+      <span aria-hidden="true">→</span>
+    </a>
+  {%- endif -%}
 
   <noscript>
     <div class="catalog-search__noscript panel">JavaScript is required to use this search.</div>

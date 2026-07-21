@@ -254,6 +254,26 @@
     return searchPreparedIndex(getPreparedIndex(documentRef), query, options);
   }
 
+  function buildSearchUrl(baseUrl, query, origin) {
+    const destination = asString(baseUrl);
+
+    if (!destination) {
+      return '';
+    }
+
+    const baseOrigin = origin || (globalScope.location && globalScope.location.origin) || 'https://example.invalid';
+    const url = new URL(destination, baseOrigin);
+    const normalizedQuery = asString(query).trim();
+
+    if (normalizedQuery) {
+      url.searchParams.set('q', normalizedQuery);
+    } else {
+      url.searchParams.delete('q');
+    }
+
+    return destination.startsWith('/') ? `${url.pathname}${url.search}${url.hash}` : url.toString();
+  }
+
   function createElement(documentRef, tagName, className, text) {
     const element = documentRef.createElement(tagName);
 
@@ -334,6 +354,9 @@
     article.setAttribute('role', 'listitem');
     article.dataset.catalogSearchEntryId = entry.id || '';
     article.classList.add(isKeyboard ? 'catalog-search__card--keyboard' : 'catalog-search__card--accessory');
+    if (options.mode === 'header') {
+      article.classList.add('catalog-search__card--compact');
+    }
     link.href = entry.url || '#';
     link.setAttribute('aria-label', `Open ${entry.title || entry.productTitle || 'product'}`);
     link.append(renderImage(documentRef, entry));
@@ -392,12 +415,12 @@
     return article;
   }
 
-  function renderGroup(documentRef, container, emptyState, countBadge, entries, renderOptions) {
+  function renderGroup(documentRef, container, emptyState, countBadge, entries, renderOptions, showEmptyState) {
     const fragment = documentRef.createDocumentFragment();
 
     entries.forEach((entry) => fragment.append(renderCard(documentRef, entry, renderOptions)));
     container.replaceChildren(fragment);
-    emptyState.hidden = entries.length > 0;
+    emptyState.hidden = !showEmptyState || entries.length > 0;
     container.hidden = entries.length === 0;
     countBadge.textContent = asString(entries.length);
   }
@@ -452,7 +475,12 @@
       keyboardCount: root.querySelector('[data-catalog-search-keyboard-count]'),
       accessoryResults: root.querySelector('[data-catalog-search-accessory-results]'),
       accessoryEmpty: root.querySelector('[data-catalog-search-accessory-empty]'),
-      accessoryCount: root.querySelector('[data-catalog-search-accessory-count]')
+      accessoryCount: root.querySelector('[data-catalog-search-accessory-count]'),
+      keyboardGroup: root.querySelector('[data-catalog-search-keyboard-group]'),
+      accessoryGroup: root.querySelector('[data-catalog-search-accessory-group]'),
+      prompt: root.querySelector('[data-catalog-search-prompt]'),
+      noResults: root.querySelector('[data-catalog-search-no-results]'),
+      viewAll: root.querySelector('[data-catalog-search-view-all]')
     };
     const mode = root.dataset.catalogSearchMode || 'section';
     const showKeyboard = root.dataset.catalogSearchShowKeyboard !== 'false';
@@ -491,8 +519,10 @@
         const renderOptions = {
           exactANumber: results.exactANumber,
           showDescriptions: settings.showDescriptions,
-          showPrices: settings.showPrices
+          showPrices: settings.showPrices,
+          mode
         };
+        const showGroupEmptyStates = mode !== 'header';
 
         if (showKeyboard && elements.keyboardResults && elements.keyboardEmpty && elements.keyboardCount) {
           renderGroup(
@@ -501,7 +531,8 @@
             elements.keyboardEmpty,
             elements.keyboardCount,
             results.keyboard,
-            renderOptions
+            renderOptions,
+            showGroupEmptyStates
           );
         }
 
@@ -512,13 +543,42 @@
             elements.accessoryEmpty,
             elements.accessoryCount,
             results.accessory,
-            renderOptions
+            renderOptions,
+            showGroupEmptyStates
           );
         }
 
         const keyboardCount = showKeyboard ? results.keyboard.length : 0;
         const accessoryCount = showAccessories ? results.accessory.length : 0;
-        elements.status.textContent = statusText(keyboardCount, accessoryCount);
+        const hasQuery = normalize(query).length > 0;
+        const totalCount = keyboardCount + accessoryCount;
+
+        if (mode === 'header') {
+          if (elements.prompt) {
+            elements.prompt.hidden = hasQuery;
+          }
+          if (elements.noResults) {
+            elements.noResults.hidden = !hasQuery || totalCount > 0;
+          }
+          if (elements.groups) {
+            elements.groups.hidden = !hasQuery || totalCount === 0;
+          }
+          if (elements.keyboardGroup) {
+            elements.keyboardGroup.hidden = !hasQuery || keyboardCount === 0;
+          }
+          if (elements.accessoryGroup) {
+            elements.accessoryGroup.hidden = !hasQuery || accessoryCount === 0;
+          }
+          if (elements.viewAll) {
+            elements.viewAll.href = buildSearchUrl(root.dataset.catalogSearchUrl, query);
+          }
+        }
+
+        elements.status.textContent = hasQuery
+          ? statusText(keyboardCount, accessoryCount)
+          : mode === 'header'
+            ? 'Start typing to search the catalog'
+            : statusText(keyboardCount, accessoryCount);
         elements.clear.hidden = !asString(query).length;
 
         if (syncUrl && mode === 'page') {
@@ -540,6 +600,10 @@
 
     elements.form.addEventListener('submit', (event) => {
       event.preventDefault();
+      if (mode === 'header') {
+        globalScope.location.assign(buildSearchUrl(root.dataset.catalogSearchUrl, elements.input.value));
+        return;
+      }
       instance.render(elements.input.value, true);
     });
     elements.input.addEventListener('input', () => instance.render(elements.input.value, true));
@@ -599,6 +663,7 @@
 
   const publicApi = Object.freeze({
     getIndex,
+    buildSearchUrl,
     mount,
     mountAll,
     normalize,

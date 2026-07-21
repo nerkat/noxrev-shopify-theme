@@ -260,6 +260,22 @@
         {% endif %}
       {% endcomment %}
 
+      {% if section.settings.enable_search %}
+        <button
+          class="header__search"
+          type="button"
+          aria-label="Search"
+          aria-expanded="false"
+          aria-controls="HeaderCatalogSearch-{{ section.id }}"
+          data-header-search-open
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+            <circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"></circle>
+            <path d="m16 16 4.3 4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+        </button>
+      {% endif %}
+
       <a class="header__cart" href="{{ routes.cart_url }}">
         <span class="header__cart-icon">{{ 'icon-cart.svg' | inline_asset_content }}</span>
         <span class="header__cart-label visually-hidden">Cart</span>
@@ -267,6 +283,69 @@
       </a>
     </div>
   </div>
+
+  {% if section.settings.enable_search %}
+    <div
+      id="HeaderCatalogSearch-{{ section.id }}"
+      class="catalog-search-overlay"
+      data-header-search-overlay
+      aria-hidden="true"
+    >
+      <button
+        class="catalog-search-overlay__backdrop"
+        type="button"
+        aria-label="Close search"
+        data-header-search-close
+      ></button>
+      <div
+        class="catalog-search-overlay__panel"
+        role="dialog"
+        aria-label="Search"
+        tabindex="-1"
+        data-header-search-panel
+      >
+        <div class="catalog-search-overlay__top">
+          <p>Search NoxRev</p>
+          <button
+            class="catalog-search__close"
+            type="button"
+            aria-label="Close search"
+            data-header-search-close
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+              <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+            </svg>
+          </button>
+        </div>
+
+        {% render 'catalog-search-interface',
+          mode: 'header',
+          instance_id: section.id,
+          heading: 'Search',
+          heading_tag: 'h2',
+          placeholder: section.settings.search_placeholder,
+          keyboard_heading: 'Keyboard Cases',
+          accessories_heading: 'Accessories & Bundles',
+          keyboard_empty_title: 'No matching keyboard',
+          keyboard_empty_text: 'Try another iPad model or A-number.',
+          accessories_empty_title: 'No matching accessories',
+          accessories_empty_text: 'Try another product name or search term.',
+          initial_query: '',
+          initial_results: 'hidden',
+          keyboard_limit: section.settings.search_keyboard_limit,
+          accessory_limit: section.settings.search_accessory_limit,
+          show_descriptions: false,
+          show_prices: true,
+          show_keyboard: true,
+          show_accessories: true,
+          submit_destination: routes.search_url,
+          empty_prompt: section.settings.search_placeholder,
+          no_results_text: 'No matching products. Try another model or A-number.',
+          view_all_label: section.settings.search_view_all_label
+        %}
+      </div>
+    </div>
+  {% endif %}
 </header>
 
 {% stylesheet %}
@@ -387,12 +466,14 @@
   }
 
   .header__account svg,
+  .header__search svg,
   .header__cart-icon svg {
     width: 1.5rem;
     color: currentcolor;
   }
 
   .header__account,
+  .header__search,
   .header__cart {
     display: inline-flex;
     align-items: center;
@@ -405,16 +486,29 @@
     transition: color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   }
 
+  .header__search {
+    padding: 0;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+
   .header__cart {
     padding-inline: 0.7rem;
     position: relative;
   }
 
   .header__account:hover,
+  .header__search:hover,
+  .header__search:focus-visible,
   .header__cart:hover {
     border-color: rgba(0, 229, 255, 0.42);
     color: var(--theme-color-secondary);
     box-shadow: 0 0 22px rgba(0, 229, 255, 0.1);
+  }
+
+  .header__search:focus-visible {
+    outline: 2px solid rgba(0, 229, 255, 0.82);
+    outline-offset: 3px;
   }
 
   .header__cart-count {
@@ -732,6 +826,7 @@
     }
 
     .header__account,
+    .header__search,
     .header__cart {
       min-width: 2.45rem;
       min-height: 2.45rem;
@@ -845,6 +940,15 @@
 
 {% javascript %}
   (() => {
+    if (window.__noxrevHeaderReady) {
+      return;
+    }
+
+    window.__noxrevHeaderReady = true;
+
+    const HEADER_OVERLAY_EVENT = 'noxrev:header-overlay-open';
+    const mobileSearchMedia = window.matchMedia('(max-width: 989px)');
+    const searchControllers = new Set();
     const shell = document.querySelector('[data-site-header-shell]');
 
     const updateScrolledState = () => {
@@ -859,8 +963,6 @@
 
     updateScrolledState();
     window.addEventListener('scroll', updateScrolledState, { passive: true });
-    document.addEventListener('shopify:section:load', updateScrolledState);
-
     const closeMobileMenu = (mobileMenu) => {
       if (!mobileMenu) {
         return;
@@ -886,13 +988,198 @@
 
       if (mobileMenu.open && !mobileMenu.classList.contains('is-closing')) {
         document.body.classList.add('mobile-menu-open');
+        document.dispatchEvent(new CustomEvent(HEADER_OVERLAY_EVENT, { detail: { source: 'menu' } }));
       } else if (!mobileMenu.open) {
         document.body.classList.remove('mobile-menu-open');
       }
     };
 
-    document.querySelectorAll('.header__mobile').forEach((mobileMenu) => {
+    const bindMobileMenu = (mobileMenu) => {
+      if (!mobileMenu || mobileMenu.dataset.headerMenuInitialized === 'true') {
+        return;
+      }
+
+      mobileMenu.dataset.headerMenuInitialized = 'true';
       mobileMenu.addEventListener('toggle', () => syncMobileMenuState(mobileMenu));
+    };
+
+    const getFocusableElements = (panel) =>
+      Array.from(
+        panel.querySelectorAll(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((element) => !element.hidden && element.getAttribute('aria-hidden') !== 'true' && element.offsetParent !== null);
+
+    const bindHeaderSearch = (header) => {
+      if (!header || header.dataset.headerSearchInitialized === 'true') {
+        return;
+      }
+
+      const trigger = header.querySelector('[data-header-search-open]');
+      const overlay = header.querySelector('[data-header-search-overlay]');
+      const panel = overlay?.querySelector('[data-header-search-panel]');
+      const searchRoot = overlay?.querySelector('[data-catalog-search]');
+      const input = searchRoot?.querySelector('[data-catalog-search-input]');
+
+      if (!trigger || !overlay || !panel || !searchRoot || !input) {
+        return;
+      }
+
+      header.dataset.headerSearchInitialized = 'true';
+      window.NoxrevCatalogSearch?.mount(searchRoot);
+
+      const controller = {
+        header,
+        trigger,
+        overlay,
+        panel,
+        input,
+        isOpen: () => overlay.getAttribute('aria-hidden') === 'false',
+        syncPosition() {
+          if (!controller.isOpen()) {
+            return;
+          }
+
+          const isMobile = mobileSearchMedia.matches;
+          panel.toggleAttribute('aria-modal', isMobile);
+          if (isMobile) {
+            panel.setAttribute('aria-modal', 'true');
+            overlay.style.removeProperty('--catalog-search-header-top');
+          } else {
+            panel.removeAttribute('aria-modal');
+            const headerBottom = Math.max(0, header.getBoundingClientRect().bottom);
+            overlay.style.setProperty('--catalog-search-header-top', `${headerBottom}px`);
+          }
+          document.body.classList.toggle('catalog-search-open', isMobile);
+        },
+        open() {
+          if (controller.isOpen()) {
+            return;
+          }
+
+          document.querySelectorAll('.header__mobile[open]').forEach(closeMobileMenu);
+          document.dispatchEvent(new CustomEvent(HEADER_OVERLAY_EVENT, { detail: { source: 'search' } }));
+          overlay.setAttribute('aria-hidden', 'false');
+          trigger.setAttribute('aria-expanded', 'true');
+          controller.syncPosition();
+          window.requestAnimationFrame(() => input.focus({ preventScroll: true }));
+        },
+        close(options = {}) {
+          if (!controller.isOpen()) {
+            return;
+          }
+
+          overlay.setAttribute('aria-hidden', 'true');
+          trigger.setAttribute('aria-expanded', 'false');
+          panel.removeAttribute('aria-modal');
+          document.body.classList.remove('catalog-search-open');
+
+          if (options.restoreFocus !== false && trigger.isConnected) {
+            trigger.focus({ preventScroll: true });
+          }
+        }
+      };
+
+      trigger.addEventListener('click', () => {
+        if (controller.isOpen()) {
+          controller.close();
+        } else {
+          controller.open();
+        }
+      });
+
+      overlay.addEventListener('click', (event) => {
+        if (event.target.closest('[data-header-search-close]')) {
+          controller.close();
+          return;
+        }
+
+        if (event.target.closest('[data-catalog-search-entry-id] a, [data-catalog-search-view-all]')) {
+          controller.close({ restoreFocus: false });
+        }
+      });
+
+      overlay.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          controller.close();
+          return;
+        }
+
+        if (event.key !== 'Tab' || !mobileSearchMedia.matches) {
+          return;
+        }
+
+        const focusable = getFocusableElements(panel);
+        if (!focusable.length) {
+          event.preventDefault();
+          panel.focus({ preventScroll: true });
+          return;
+        }
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus({ preventScroll: true });
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus({ preventScroll: true });
+        }
+      });
+
+      searchControllers.add(controller);
+    };
+
+    const initializeHeader = (scope = document) => {
+      const headers = [];
+      const mobileMenus = [];
+
+      if (scope.matches?.('[data-site-header]')) {
+        headers.push(scope);
+      }
+      if (scope.matches?.('.header__mobile')) {
+        mobileMenus.push(scope);
+      }
+      headers.push(...scope.querySelectorAll('[data-site-header]'));
+      mobileMenus.push(...scope.querySelectorAll('.header__mobile'));
+      headers.forEach(bindHeaderSearch);
+      mobileMenus.forEach(bindMobileMenu);
+    };
+
+    initializeHeader();
+
+    document.addEventListener('shopify:section:load', (event) => {
+      updateScrolledState();
+      initializeHeader(event.target);
+    });
+
+    document.addEventListener(HEADER_OVERLAY_EVENT, (event) => {
+      const source = event.detail?.source;
+
+      if (source !== 'menu') {
+        document.querySelectorAll('.header__mobile[open]').forEach(closeMobileMenu);
+      }
+
+      if (source !== 'search') {
+        searchControllers.forEach((controller) => {
+          if (!controller.header.isConnected) {
+            searchControllers.delete(controller);
+            return;
+          }
+          controller.close({ restoreFocus: false });
+        });
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      searchControllers.forEach((controller) => {
+        if (!controller.header.isConnected) {
+          searchControllers.delete(controller);
+          return;
+        }
+        controller.syncPosition();
+      });
     });
 
     document.addEventListener('click', (event) => {
@@ -982,6 +1269,46 @@
       "type": "url",
       "id": "cta_link",
       "label": "CTA link"
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "label": "Show search icon",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search by product, iPad model, or A-number"
+    },
+    {
+      "type": "range",
+      "id": "search_keyboard_limit",
+      "label": "Keyboard result limit",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "search_accessory_limit",
+      "label": "Accessory result limit",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "search_view_all_label",
+      "label": "View all label",
+      "default": "View all results"
     },
     {
       "type": "header",

@@ -25,7 +25,7 @@
     {% endif %}
   </header>
 
-  <div class="featured-catalog__grid grid grid--4">
+  <div class="featured-catalog__grid grid grid--5">
     {% for product in catalog_collection.products limit: product_limit %}
       {% render 'product-card', product: product, show_vendor: section.settings.show_vendor %}
     {% endfor %}

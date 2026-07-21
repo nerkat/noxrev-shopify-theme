@@ -619,6 +619,7 @@
 
     window.__noxrevCartDrawerReady = true;
 
+    const HEADER_OVERLAY_EVENT = 'noxrev:header-overlay-open';
     let drawerController = null;
     let drawerRequestSequence = 0;
     let lastFocusedElement = null;
@@ -693,6 +694,7 @@
 
       if (!drawer || !panel) return;
 
+      document.dispatchEvent(new CustomEvent(HEADER_OVERLAY_EVENT, { detail: { source: 'cart' } }));
       lastFocusedElement = document.activeElement;
       drawer.setAttribute('aria-hidden', 'false');
       document.body.classList.add('cart-drawer-open');
@@ -877,6 +879,12 @@
 
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && getDrawer()?.getAttribute('aria-hidden') === 'false') {
+        closeDrawer();
+      }
+    });
+
+    document.addEventListener(HEADER_OVERLAY_EVENT, (event) => {
+      if (event.detail?.source !== 'cart' && getDrawer()?.getAttribute('aria-hidden') === 'false') {
         closeDrawer();
       }
     });
