@@ -52,7 +52,7 @@ function App() {
         <s-stack gap="base">
           {error ? <s-banner tone="critical">{error}</s-banner> : null}
 
-          <s-paragraph>{i18n.translate("description")}</s-paragraph>
+          <s-paragraph>{i18n.translate("body")}</s-paragraph>
 
           <s-unordered-list>
             <s-list-item>{i18n.translate("keyboard")}</s-list-item>
