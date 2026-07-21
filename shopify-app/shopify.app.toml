@@ -1,6 +1,6 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "fab61fe38ef5c5394a6458e6bf5e6951"
+client_id = "952eb5c093bbe04413abf0f678e54973"
 name = "noxrev-bundle-discount"
 application_url = "https://shopify.dev/apps/default-app-home"
 embedded = true
