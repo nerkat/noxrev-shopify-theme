@@ -1,20 +1,11 @@
 {
-  "name": "[Example] Discount UI extension",
-  "description": "Discount UI extension",
-  "title": "Select which discount types to apply at checkout",
-  "loading": "Loading...",
-  "label": "Percentage off",
-  "collections": {
-    "buttonLabel": "Choose collections",
-    "allProducts": "All products",
-    "collections": "Collections",
-    "appliesTo": "Applies to"
-  },
-  "discountClasses": {
-    "product": "Product discount",
-    "order": "Order discount",
-    "shipping": "Shipping discount"
-  },
-  "error": "Unable to update discount types. Please try again."
+  "name": "NoxRev Bundle Discount Settings",
+  "description": "Settings for the NoxRev keyboard bundle discount",
+  "title": "NoxRev keyboard bundle discount",
+  "description": "Applies a flat 20% product discount to configured accessories when a keyboard is in the cart.",
+  "keyboard": "Keyboard parent: transparent-core-keyboard-case-ipad",
+  "accessories": "Accessories: TXP1 pencil, mouse, case, charger, and TPX1 cable",
+  "cap": "Discounted accessory quantity is capped by keyboard quantity.",
+  "error": "Unable to save the discount settings. Please try again."
 }
 

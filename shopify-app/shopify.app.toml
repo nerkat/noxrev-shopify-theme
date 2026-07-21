@@ -19,5 +19,13 @@ embedded_app_direct_api_access = true
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_products,write_discounts"
 
+[discount.metafields.app.function-configuration]
+type = "json"
+name = "Function configuration"
+
+  [discount.metafields.app.function-configuration.access]
+  admin = "merchant_read_write"
+  storefront = "none"
+
 [auth]
 redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
