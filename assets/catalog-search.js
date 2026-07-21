@@ -562,6 +562,10 @@
           }
           if (elements.groups) {
             elements.groups.hidden = !hasQuery || totalCount === 0;
+            elements.groups.classList.toggle(
+              'catalog-search__groups--single',
+              hasQuery && totalCount > 0 && (keyboardCount === 0 || accessoryCount === 0)
+            );
           }
           if (elements.keyboardGroup) {
             elements.keyboardGroup.hidden = !hasQuery || keyboardCount === 0;

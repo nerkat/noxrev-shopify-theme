@@ -631,6 +631,10 @@
   gap: 1rem;
 }
 
+.catalog-search--header .catalog-search__groups--single {
+  grid-template-columns: 1fr;
+}
+
 .catalog-search--header .catalog-search__group {
   align-content: start;
   gap: 0.65rem;
