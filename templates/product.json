@@ -576,38 +576,6 @@
         "judge_me_reviews_review_widget_axCXAD"
       ],
       "settings": {}
-    },
-    "17846294188bba5577": {
-      "type": "apps",
-      "blocks": {
-        "ai_bundles_upsells_cross_sell_product_Pni6Dk": {
-          "type": "shopify://apps/ai-bundles-upsells/blocks/cross-sell-product/e7899ee1-733f-4841-a6fd-a105f0489b54",
-          "settings": {
-            "title": "This goes with...",
-            "style": "carousel",
-            "itemsLimit": 20,
-            "fallbackMethod": "HideBox",
-            "fallbackCollection": "accessories",
-            "imageMaxWidth": 200,
-            "imageMaxWidthMobile": 150,
-            "imageMaxHeight": 250,
-            "imageMaxHeightMobile": 200,
-            "imageMarginRight": 40,
-            "imageMarginRightMobile": 10,
-            "imageBorderRadius": 0,
-            "imageHoverMode": "",
-            "navigationArrowMode": "popOut",
-            "navigationArrowType": "strikingChevron",
-            "quickActionsAddToCartTitle": "ADD TO CART",
-            "quickActionsMode": "hoverOverlay",
-            "extraClasses": "page-width"
-          }
-        }
-      },
-      "block_order": [
-        "ai_bundles_upsells_cross_sell_product_Pni6Dk"
-      ],
-      "settings": {}
     }
   },
   "order": [
@@ -622,7 +590,6 @@
     "product_typing_feature",
     "product_precision_feature",
     "product_feature_icon_strip",
-    "1783425997ca25e2c8",
-    "17846294188bba5577"
+    "1783425997ca25e2c8"
   ]
 }
