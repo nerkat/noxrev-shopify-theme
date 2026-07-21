@@ -16,9 +16,5 @@ description = "t:description"
   command = ""
   path = "dist/function.wasm"
 
-  [extensions.input.variables]
-  namespace = "$app"
-  key = "function-configuration"
-
   [extensions.ui]
   handle = "noxrev-bundle-discount-ui"
