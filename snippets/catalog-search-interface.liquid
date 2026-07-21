@@ -1,0 +1,215 @@
+{% doc %}
+  Renders a reusable local catalog search interface.
+
+  @param {string} mode - page, header, or section
+  @param {string} instance_id - Unique component identifier
+  @param {string} heading - Visible component heading
+  @param {string} [heading_tag] - Heading element, defaults to h2
+  @param {string} placeholder - Input placeholder
+  @param {string} keyboard_heading - Keyboard result group heading
+  @param {string} accessories_heading - Accessory result group heading
+  @param {string} keyboard_empty_title - Keyboard empty-state title
+  @param {string} keyboard_empty_text - Keyboard empty-state copy
+  @param {string} accessories_empty_title - Accessory empty-state title
+  @param {string} accessories_empty_text - Accessory empty-state copy
+  @param {string} [initial_query] - Initial local query
+  @param {string} [initial_results] - all or hidden
+  @param {number} [keyboard_limit] - Zero means unlimited
+  @param {number} [accessory_limit] - Zero means unlimited
+  @param {boolean} [show_descriptions] - Render descriptions on cards
+  @param {boolean} [show_prices] - Render prices on cards
+  @param {boolean} [show_keyboard] - Include the keyboard group
+  @param {boolean} [show_accessories] - Include the accessory group
+  @param {string} [submit_destination] - Search URL used by future modes
+{% enddoc %}
+
+{%- liquid
+  assign component_mode = mode | default: 'section'
+  assign component_heading_tag = heading_tag | default: 'h2'
+  assign component_initial_results = initial_results | default: 'all'
+  assign component_submit_destination = submit_destination | default: routes.search_url
+  assign component_keyboard_limit = keyboard_limit | default: 0
+  assign component_accessory_limit = accessory_limit | default: 0
+  assign component_show_descriptions = 'false'
+  assign component_show_prices = 'false'
+  assign component_show_keyboard = 'false'
+  assign component_show_accessories = 'false'
+
+  if show_descriptions
+    assign component_show_descriptions = 'true'
+  endif
+  if show_prices
+    assign component_show_prices = 'true'
+  endif
+  if show_keyboard
+    assign component_show_keyboard = 'true'
+  endif
+  if show_accessories
+    assign component_show_accessories = 'true'
+  endif
+
+  assign keyboard_product = settings.catalog_search_keyboard_product
+  assign configured_model_option_name = settings.catalog_search_model_option_name | strip
+  assign configured_model_option_name_downcase = configured_model_option_name | downcase
+  assign configured_model_option_found = false
+
+  if keyboard_product != blank and configured_model_option_name != blank
+    for product_option in keyboard_product.options_with_values
+      assign product_option_name_downcase = product_option.name | downcase
+      if product_option_name_downcase == configured_model_option_name_downcase
+        assign configured_model_option_found = true
+        break
+      endif
+    endfor
+  endif
+-%}
+
+<section
+  class="catalog-search catalog-search--{{ component_mode | handle }}"
+  data-catalog-search
+  data-catalog-search-mode="{{ component_mode | escape }}"
+  data-catalog-search-initial-results="{{ component_initial_results | escape }}"
+  data-catalog-search-keyboard-limit="{{ component_keyboard_limit }}"
+  data-catalog-search-accessory-limit="{{ component_accessory_limit }}"
+  data-catalog-search-show-descriptions="{{ component_show_descriptions }}"
+  data-catalog-search-show-prices="{{ component_show_prices }}"
+  data-catalog-search-show-keyboard="{{ component_show_keyboard }}"
+  data-catalog-search-show-accessories="{{ component_show_accessories }}"
+  data-catalog-search-url="{{ component_submit_destination | escape }}"
+>
+  <div class="catalog-search__intro">
+    <{{ component_heading_tag }} class="catalog-search__title">{{ heading | escape }}</{{ component_heading_tag }}>
+
+    <form
+      class="catalog-search__form"
+      action="{{ component_submit_destination }}"
+      method="get"
+      role="search"
+      data-catalog-search-form
+    >
+      <label class="visually-hidden" for="CatalogSearchInput-{{ instance_id | escape }}">
+        {{- heading | escape -}}
+      </label>
+      <div class="catalog-search__input-shell">
+        <span class="catalog-search__search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" focusable="false">
+            <circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"></circle>
+            <path d="m16 16 4.3 4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+        </span>
+        <input
+          id="CatalogSearchInput-{{ instance_id | escape }}"
+          class="catalog-search__input"
+          type="search"
+          name="q"
+          value="{{ initial_query | escape }}"
+          placeholder="{{ placeholder | escape }}"
+          autocomplete="off"
+          autocapitalize="none"
+          spellcheck="false"
+          enterkeyhint="search"
+          data-catalog-search-input
+        >
+        <button
+          class="catalog-search__clear"
+          type="button"
+          aria-label="Clear search"
+          data-catalog-search-clear
+          hidden
+        >
+          <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+            <path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+        </button>
+      </div>
+    </form>
+
+    <p class="catalog-search__status" aria-live="polite" aria-atomic="true" data-catalog-search-status></p>
+  </div>
+
+  <div class="catalog-search__unavailable panel" data-catalog-search-unavailable hidden>
+    <h2>Search is temporarily unavailable</h2>
+    <p>Please try again shortly.</p>
+  </div>
+
+  {%- if request.design_mode -%}
+    {%- if keyboard_product == blank or settings.catalog_search_accessories_collection == blank or configured_model_option_found == false -%}
+      <div class="catalog-search__configuration-warning" role="status">
+        <strong>Catalog search configuration needed.</strong>
+        {%- if keyboard_product == blank -%}
+          Select the primary keyboard product in Theme settings → Catalog search.
+        {%- elsif configured_model_option_name == blank or configured_model_option_found == false -%}
+          The model option setting must exactly match an option on {{ keyboard_product.title | escape }}.
+          Current value: “{{ configured_model_option_name | escape }}”.
+        {%- endif -%}
+        {%- if settings.catalog_search_accessories_collection == blank -%}
+          Select the accessories collection in Theme settings → Catalog search.
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  <div class="catalog-search__groups" data-catalog-search-groups>
+    {%- if show_keyboard -%}
+      <section class="catalog-search__group" aria-labelledby="CatalogSearchKeyboardHeading-{{ instance_id | escape }}">
+        <div class="catalog-search__group-header">
+          <h2 id="CatalogSearchKeyboardHeading-{{ instance_id | escape }}" class="catalog-search__group-title">
+            {{- keyboard_heading | escape -}}
+          </h2>
+          <span class="catalog-search__count" data-catalog-search-keyboard-count aria-hidden="true">0</span>
+        </div>
+        <div
+          class="catalog-search__grid"
+          role="list"
+          aria-labelledby="CatalogSearchKeyboardHeading-{{ instance_id | escape }}"
+          data-catalog-search-keyboard-results
+        ></div>
+        <div class="catalog-search__empty panel" data-catalog-search-keyboard-empty hidden>
+          <span class="catalog-search__empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" focusable="false">
+              <rect x="3.5" y="6" width="17" height="12" rx="2.5" stroke="currentColor" stroke-width="1.5"></rect>
+              <path d="M7 10h.01M10 10h.01M13 10h.01M16 10h.01M8 14h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+            </svg>
+          </span>
+          <div>
+            <h3>{{ keyboard_empty_title | escape }}</h3>
+            <p>{{ keyboard_empty_text | escape }}</p>
+          </div>
+        </div>
+      </section>
+    {%- endif -%}
+
+    {%- if show_accessories -%}
+      <section class="catalog-search__group" aria-labelledby="CatalogSearchAccessoriesHeading-{{ instance_id | escape }}">
+        <div class="catalog-search__group-header">
+          <h2 id="CatalogSearchAccessoriesHeading-{{ instance_id | escape }}" class="catalog-search__group-title">
+            {{- accessories_heading | escape -}}
+          </h2>
+          <span class="catalog-search__count" data-catalog-search-accessory-count aria-hidden="true">0</span>
+        </div>
+        <div
+          class="catalog-search__grid"
+          role="list"
+          aria-labelledby="CatalogSearchAccessoriesHeading-{{ instance_id | escape }}"
+          data-catalog-search-accessory-results
+        ></div>
+        <div class="catalog-search__empty panel" data-catalog-search-accessory-empty hidden>
+          <span class="catalog-search__empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" focusable="false">
+              <circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.5"></circle>
+              <path d="m16 16 4.3 4.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            </svg>
+          </span>
+          <div>
+            <h3>{{ accessories_empty_title | escape }}</h3>
+            <p>{{ accessories_empty_text | escape }}</p>
+          </div>
+        </div>
+      </section>
+    {%- endif -%}
+  </div>
+
+  <noscript>
+    <div class="catalog-search__noscript panel">JavaScript is required to use this search.</div>
+  </noscript>
+</section>

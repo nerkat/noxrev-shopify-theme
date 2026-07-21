@@ -19,6 +19,30 @@
     ]
   },
   {
+    "name": "Catalog search",
+    "settings": [
+      {
+        "type": "product",
+        "id": "catalog_search_keyboard_product",
+        "label": "Primary keyboard product",
+        "info": "Variants are grouped into one search card per configured model option value."
+      },
+      {
+        "type": "text",
+        "id": "catalog_search_model_option_name",
+        "label": "Model option name",
+        "default": "Model",
+        "info": "Must match the keyboard product option that represents the iPad model."
+      },
+      {
+        "type": "collection",
+        "id": "catalog_search_accessories_collection",
+        "label": "Accessories collection",
+        "info": "Each product in this collection becomes one accessory search result."
+      }
+    ]
+  },
+  {
     "name": "t:general.typography",
     "settings": [
       {

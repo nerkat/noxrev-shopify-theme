@@ -1,0 +1,118 @@
+<div
+  class="container section main-catalog-search"
+  style="--catalog-search-padding-top: {{ section.settings.padding_top }}px; --catalog-search-padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  {% render 'catalog-search-interface',
+    mode: 'page',
+    instance_id: section.id,
+    heading: section.settings.heading,
+    heading_tag: 'h1',
+    placeholder: section.settings.placeholder,
+    keyboard_heading: section.settings.keyboard_heading,
+    accessories_heading: section.settings.accessories_heading,
+    keyboard_empty_title: section.settings.keyboard_empty_title,
+    keyboard_empty_text: section.settings.keyboard_empty_text,
+    accessories_empty_title: section.settings.accessories_empty_title,
+    accessories_empty_text: section.settings.accessories_empty_text,
+    initial_query: search.terms,
+    initial_results: 'all',
+    keyboard_limit: 0,
+    accessory_limit: 0,
+    show_descriptions: section.settings.show_descriptions,
+    show_prices: section.settings.show_prices,
+    show_keyboard: true,
+    show_accessories: true,
+    submit_destination: routes.search_url
+  %}
+</div>
+
+{% schema %}
+{
+  "name": "Catalog search",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Page heading",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Search placeholder",
+      "default": "Search by product, iPad model, or A-number"
+    },
+    {
+      "type": "text",
+      "id": "keyboard_heading",
+      "label": "Keyboard group heading",
+      "default": "Keyboard Cases"
+    },
+    {
+      "type": "text",
+      "id": "accessories_heading",
+      "label": "Accessories group heading",
+      "default": "Accessories & Bundles"
+    },
+    {
+      "type": "text",
+      "id": "keyboard_empty_title",
+      "label": "Keyboard no-results title",
+      "default": "No matching keyboard"
+    },
+    {
+      "type": "text",
+      "id": "keyboard_empty_text",
+      "label": "Keyboard no-results text",
+      "default": "Try another iPad model or A-number."
+    },
+    {
+      "type": "text",
+      "id": "accessories_empty_title",
+      "label": "Accessories no-results title",
+      "default": "No matching accessories"
+    },
+    {
+      "type": "text",
+      "id": "accessories_empty_text",
+      "label": "Accessories no-results text",
+      "default": "Try another product name or search term."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_descriptions",
+      "label": "Show card descriptions",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_prices",
+      "label": "Show prices",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 16,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 24,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

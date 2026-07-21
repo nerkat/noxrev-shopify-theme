@@ -27,12 +27,14 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ 'catalog-search.css' | asset_url | stylesheet_tag }}
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
     {{ content_for_header }}
 
+    <script src="{{ 'catalog-search.js' | asset_url }}" defer></script>
     <script src="https://t.contentsquare.net/uxa/aa8c8c113a0c5.js" defer></script>
   </head>
 
@@ -47,5 +49,6 @@
 
     {% sections 'footer-group' %}
     {% section 'cart-drawer' %}
+    {% render 'catalog-search-index' %}
   </body>
 </html>

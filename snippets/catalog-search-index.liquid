@@ -1,0 +1,286 @@
+{% comment %}
+  Global catalog search index. This snippet is rendered once from theme.liquid.
+  It groups the configured keyboard product by its configured model option and
+  emits one safe JSON entry per logical model plus one per accessory product.
+{% endcomment %}
+
+{%- liquid
+  assign keyboard_product = settings.catalog_search_keyboard_product
+  assign accessories_collection = settings.catalog_search_accessories_collection
+  assign configured_model_option_name = settings.catalog_search_model_option_name | strip
+  assign configured_model_option_name_downcase = configured_model_option_name | downcase
+  assign model_option = blank
+  assign model_option_index = -1
+
+  if keyboard_product != blank and configured_model_option_name != blank
+    for option in keyboard_product.options_with_values
+      assign option_name_downcase = option.name | downcase
+      if option_name_downcase == configured_model_option_name_downcase
+        assign model_option = option
+        assign model_option_index = option.position | minus: 1
+        break
+      endif
+    endfor
+  endif
+
+  assign keyboard_status = 'ready'
+  if keyboard_product == blank
+    assign keyboard_status = 'missing-product'
+  elsif configured_model_option_name == blank
+    assign keyboard_status = 'missing-option-setting'
+  elsif model_option == blank
+    assign keyboard_status = 'missing-option'
+  endif
+
+  assign accessories_status = 'ready'
+  if accessories_collection == blank
+    assign accessories_status = 'missing-collection'
+  endif
+-%}
+
+<script
+  type="application/json"
+  id="CatalogSearchIndex"
+  data-keyboard-status="{{ keyboard_status | escape }}"
+  data-accessories-status="{{ accessories_status | escape }}"
+  data-model-option-name="{{ configured_model_option_name | escape }}"
+>
+  [
+    {%- assign has_catalog_entry = false -%}
+    {%- if keyboard_status == 'ready' -%}
+      {%- for model_option_value in model_option.values -%}
+        {%- liquid
+          assign model_name = model_option_value.name | default: model_option_value
+          assign first_model_variant = blank
+          assign representative_variant = blank
+          assign model_available = false
+
+          for candidate_variant in keyboard_product.variants
+            assign candidate_model = candidate_variant.options[model_option_index]
+            if candidate_model == model_name
+              if first_model_variant == blank
+                assign first_model_variant = candidate_variant
+              endif
+              if candidate_variant.available
+                assign model_available = true
+                if representative_variant == blank
+                  assign representative_variant = candidate_variant
+                endif
+              endif
+            endif
+          endfor
+
+          if representative_variant == blank
+            assign representative_variant = first_model_variant
+          endif
+        -%}
+
+        {%- if representative_variant != blank -%}
+          {%- if has_catalog_entry -%},{%- endif -%}
+          {%- assign has_catalog_entry = true -%}
+          {%- assign product_id_string = keyboard_product.id | append: '' -%}
+          {%- assign variant_id_string = representative_variant.id | append: '' -%}
+          {%- capture entry_id -%}keyboard-model-{{ model_name | handleize }}{%- endcapture -%}
+          {%- capture variant_url -%}{{ keyboard_product.url }}?variant={{ representative_variant.id }}{%- endcapture -%}
+          {%- assign entry_image = representative_variant.featured_media.preview_image | default: representative_variant.image | default: keyboard_product.featured_image -%}
+          {%- assign image_alt = entry_image.alt | default: model_name | default: keyboard_product.title -%}
+          {%- capture image_srcset -%}
+            {%- if entry_image != blank -%}
+              {{ entry_image | image_url: width: 360 }} 360w, {{ entry_image | image_url: width: 540 }} 540w, {{ entry_image | image_url: width: 720 }} 720w, {{ entry_image | image_url: width: 960 }} 960w
+            {%- endif -%}
+          {%- endcapture -%}
+          {
+            "id": {{ entry_id | json }},
+            "group": {{ 'keyboard' | json }},
+            "productId": {{ product_id_string | json }},
+            "variantId": {{ variant_id_string | json }},
+            "title": {{ model_name | json }},
+            "productTitle": {{ keyboard_product.title | json }},
+            "model": {{ model_name | json }},
+            "handle": {{ keyboard_product.handle | json }},
+            "url": {{ variant_url | json }},
+            "image": {
+              "src": {% if entry_image != blank %}{{ entry_image | image_url: width: 960 | json }}{% else %}{{ '' | json }}{% endif %},
+              "srcset": {{ image_srcset | strip | json }},
+              "alt": {{ image_alt | json }},
+              "width": {% if entry_image != blank %}{{ entry_image.width | json }}{% else %}null{% endif %},
+              "height": {% if entry_image != blank %}{{ entry_image.height | json }}{% else %}null{% endif %}
+            },
+            "price": {
+              "cents": {{ representative_variant.price | default: 0 | json }},
+              "formatted": {{ representative_variant.price | money | json }},
+              "compareAtCents": {% if representative_variant.compare_at_price != blank %}{{ representative_variant.compare_at_price | json }}{% else %}null{% endif %},
+              "compareAtFormatted": {% if representative_variant.compare_at_price != blank %}{{ representative_variant.compare_at_price | money | json }}{% else %}null{% endif %}
+            },
+            "available": {{ model_available | json }},
+            "aNumbers": [
+              {%- assign a_number_seen = '|' -%}
+              {%- assign has_a_number = false -%}
+              {%- for grouped_variant in keyboard_product.variants -%}
+                {%- assign grouped_variant_model = grouped_variant.options[model_option_index] -%}
+                {%- if grouped_variant_model == model_name -%}
+                  {%- assign compatible_a_numbers = grouped_variant.metafields.custom.compatible_a_numbers.value -%}
+                  {%- for a_number in compatible_a_numbers -%}
+                    {%- assign clean_a_number = a_number | strip -%}
+                    {%- assign normalized_a_number = clean_a_number | downcase -%}
+                    {%- capture a_number_needle -%}|{{ normalized_a_number }}|{%- endcapture -%}
+                    {%- unless clean_a_number == blank or a_number_seen contains a_number_needle -%}
+                      {%- if has_a_number -%},{%- endif -%}{{ clean_a_number | json }}
+                      {%- assign has_a_number = true -%}
+                      {%- assign a_number_seen = a_number_seen | append: normalized_a_number | append: '|' -%}
+                    {%- endunless -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endfor -%}
+            ],
+            "vendor": {{ keyboard_product.vendor | json }},
+            "productType": {{ keyboard_product.type | json }},
+            "tags": {{ keyboard_product.tags | json }},
+            "descriptionText": {{ keyboard_product.description | strip_html | strip_newlines | json }},
+            "variantTitles": [
+              {%- assign has_variant_title = false -%}
+              {%- for grouped_variant in keyboard_product.variants -%}
+                {%- assign grouped_variant_model = grouped_variant.options[model_option_index] -%}
+                {%- if grouped_variant_model == model_name -%}
+                  {%- if has_variant_title -%},{%- endif -%}{{ grouped_variant.title | json }}
+                  {%- assign has_variant_title = true -%}
+                {%- endif -%}
+              {%- endfor -%}
+            ],
+            "optionValues": [
+              {%- assign option_value_seen = '|' -%}
+              {%- assign has_option_value = false -%}
+              {%- for grouped_variant in keyboard_product.variants -%}
+                {%- assign grouped_variant_model = grouped_variant.options[model_option_index] -%}
+                {%- if grouped_variant_model == model_name -%}
+                  {%- for option_value in grouped_variant.options -%}
+                    {%- assign normalized_option_value = option_value | downcase -%}
+                    {%- capture option_value_needle -%}|{{ normalized_option_value }}|{%- endcapture -%}
+                    {%- unless option_value_seen contains option_value_needle -%}
+                      {%- if has_option_value -%},{%- endif -%}{{ option_value | json }}
+                      {%- assign has_option_value = true -%}
+                      {%- assign option_value_seen = option_value_seen | append: normalized_option_value | append: '|' -%}
+                    {%- endunless -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endfor -%}
+            ],
+            "skus": [
+              {%- assign sku_seen = '|' -%}
+              {%- assign has_sku = false -%}
+              {%- for grouped_variant in keyboard_product.variants -%}
+                {%- assign grouped_variant_model = grouped_variant.options[model_option_index] -%}
+                {%- assign clean_sku = grouped_variant.sku | strip -%}
+                {%- if grouped_variant_model == model_name and clean_sku != blank -%}
+                  {%- assign normalized_sku = clean_sku | downcase -%}
+                  {%- capture sku_needle -%}|{{ normalized_sku }}|{%- endcapture -%}
+                  {%- unless sku_seen contains sku_needle -%}
+                    {%- if has_sku -%},{%- endif -%}{{ clean_sku | json }}
+                    {%- assign has_sku = true -%}
+                    {%- assign sku_seen = sku_seen | append: normalized_sku | append: '|' -%}
+                  {%- endunless -%}
+                {%- endif -%}
+              {%- endfor -%}
+            ],
+            "searchKeywords": {{ keyboard_product.metafields.custom.search_keywords.value | default: blank | json }}
+          }
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if accessories_status == 'ready' -%}
+      {%- for accessory_product in accessories_collection.products -%}
+        {%- unless keyboard_product != blank and accessory_product.id == keyboard_product.id -%}
+          {%- liquid
+            assign accessory_variant = accessory_product.selected_or_first_available_variant
+            assign accessory_image = accessory_product.featured_image
+            assign accessory_image_alt = accessory_image.alt | default: accessory_product.title
+            assign accessory_product_id_string = accessory_product.id | append: ''
+            assign accessory_variant_id_string = accessory_variant.id | append: ''
+          -%}
+          {%- capture accessory_entry_id -%}accessory-product-{{ accessory_product.handle }}{%- endcapture -%}
+          {%- capture accessory_image_srcset -%}
+            {%- if accessory_image != blank -%}
+              {{ accessory_image | image_url: width: 360 }} 360w, {{ accessory_image | image_url: width: 540 }} 540w, {{ accessory_image | image_url: width: 720 }} 720w, {{ accessory_image | image_url: width: 960 }} 960w
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- if has_catalog_entry -%},{%- endif -%}
+          {%- assign has_catalog_entry = true -%}
+          {
+            "id": {{ accessory_entry_id | json }},
+            "group": {{ 'accessory' | json }},
+            "productId": {{ accessory_product_id_string | json }},
+            "variantId": {{ accessory_variant_id_string | json }},
+            "title": {{ accessory_product.title | json }},
+            "productTitle": {{ accessory_product.title | json }},
+            "model": {{ '' | json }},
+            "handle": {{ accessory_product.handle | json }},
+            "url": {{ accessory_product.url | json }},
+            "image": {
+              "src": {% if accessory_image != blank %}{{ accessory_image | image_url: width: 960 | json }}{% else %}{{ '' | json }}{% endif %},
+              "srcset": {{ accessory_image_srcset | strip | json }},
+              "alt": {{ accessory_image_alt | json }},
+              "width": {% if accessory_image != blank %}{{ accessory_image.width | json }}{% else %}null{% endif %},
+              "height": {% if accessory_image != blank %}{{ accessory_image.height | json }}{% else %}null{% endif %}
+            },
+            "price": {
+              "cents": {{ accessory_variant.price | default: 0 | json }},
+              "formatted": {{ accessory_variant.price | money | json }},
+              "compareAtCents": {% if accessory_variant.compare_at_price != blank %}{{ accessory_variant.compare_at_price | json }}{% else %}null{% endif %},
+              "compareAtFormatted": {% if accessory_variant.compare_at_price != blank %}{{ accessory_variant.compare_at_price | money | json }}{% else %}null{% endif %}
+            },
+            "available": {{ accessory_product.available | json }},
+            "aNumbers": [],
+            "vendor": {{ accessory_product.vendor | json }},
+            "productType": {{ accessory_product.type | json }},
+            "tags": {{ accessory_product.tags | json }},
+            "descriptionText": {{ accessory_product.description | strip_html | strip_newlines | json }},
+            "variantTitles": [
+              {%- assign has_accessory_variant_title = false -%}
+              {%- for accessory_product_variant in accessory_product.variants -%}
+                {%- unless accessory_product_variant.title == 'Default Title' -%}
+                  {%- if has_accessory_variant_title -%},{%- endif -%}{{ accessory_product_variant.title | json }}
+                  {%- assign has_accessory_variant_title = true -%}
+                {%- endunless -%}
+              {%- endfor -%}
+            ],
+            "optionValues": [
+              {%- assign accessory_option_seen = '|' -%}
+              {%- assign has_accessory_option = false -%}
+              {%- for accessory_product_variant in accessory_product.variants -%}
+                {%- for accessory_option_value in accessory_product_variant.options -%}
+                  {%- unless accessory_option_value == 'Default Title' -%}
+                    {%- assign normalized_accessory_option = accessory_option_value | downcase -%}
+                    {%- capture accessory_option_needle -%}|{{ normalized_accessory_option }}|{%- endcapture -%}
+                    {%- unless accessory_option_seen contains accessory_option_needle -%}
+                      {%- if has_accessory_option -%},{%- endif -%}{{ accessory_option_value | json }}
+                      {%- assign has_accessory_option = true -%}
+                      {%- assign accessory_option_seen = accessory_option_seen | append: normalized_accessory_option | append: '|' -%}
+                    {%- endunless -%}
+                  {%- endunless -%}
+                {%- endfor -%}
+              {%- endfor -%}
+            ],
+            "skus": [
+              {%- assign accessory_sku_seen = '|' -%}
+              {%- assign has_accessory_sku = false -%}
+              {%- for accessory_product_variant in accessory_product.variants -%}
+                {%- assign clean_accessory_sku = accessory_product_variant.sku | strip -%}
+                {%- if clean_accessory_sku != blank -%}
+                  {%- assign normalized_accessory_sku = clean_accessory_sku | downcase -%}
+                  {%- capture accessory_sku_needle -%}|{{ normalized_accessory_sku }}|{%- endcapture -%}
+                  {%- unless accessory_sku_seen contains accessory_sku_needle -%}
+                    {%- if has_accessory_sku -%},{%- endif -%}{{ clean_accessory_sku | json }}
+                    {%- assign has_accessory_sku = true -%}
+                    {%- assign accessory_sku_seen = accessory_sku_seen | append: normalized_accessory_sku | append: '|' -%}
+                  {%- endunless -%}
+                {%- endif -%}
+              {%- endfor -%}
+            ],
+            "searchKeywords": {{ accessory_product.metafields.custom.search_keywords.value | default: blank | json }}
+          }
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endif -%}
+  ]
+</script>

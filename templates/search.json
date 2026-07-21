@@ -10,8 +10,21 @@
 {
   "sections": {
     "main": {
-      "type": "search",
-      "settings": {}
+      "type": "main-catalog-search",
+      "settings": {
+        "heading": "Search",
+        "placeholder": "Search by product, iPad model, or A-number",
+        "keyboard_heading": "Keyboard Cases",
+        "accessories_heading": "Accessories & Bundles",
+        "keyboard_empty_title": "No matching keyboard",
+        "keyboard_empty_text": "Try another iPad model or A-number.",
+        "accessories_empty_title": "No matching accessories",
+        "accessories_empty_text": "Try another product name or search term.",
+        "show_descriptions": false,
+        "show_prices": true,
+        "padding_top": 48,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
