@@ -1,0 +1,23 @@
+{
+  "automaticAppDiscount": {
+    "title": "NoxRev keyboard bundle",
+    "functionHandle": "noxrev-bundle-discount",
+    "discountClasses": [
+      "PRODUCT"
+    ],
+    "startsAt": "2026-07-21T00:00:00Z",
+    "combinesWith": {
+      "orderDiscounts": false,
+      "productDiscounts": false,
+      "shippingDiscounts": false
+    },
+    "metafields": [
+      {
+        "namespace": "$app",
+        "key": "function-configuration",
+        "type": "json",
+        "value": "{\"keyboardProductHandles\":[\"transparent-core-keyboard-case-ipad\"],\"accessories\":{\"txp1-pencil\":{\"percentage\":20},\"txp1-mouse\":{\"percentage\":20},\"txp1-case\":{\"percentage\":20},\"txp1-charger\":{\"percentage\":20},\"tpx1-cable\":{\"percentage\":20}}}"
+      }
+    ]
+  }
+}

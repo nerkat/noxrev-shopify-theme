@@ -1,0 +1,23 @@
+mutation CreateNoxRevAutomaticBundleDiscount($automaticAppDiscount: DiscountAutomaticAppInput!) {
+  discountAutomaticAppCreate(automaticAppDiscount: $automaticAppDiscount) {
+    automaticAppDiscount {
+      discountId
+      title
+      startsAt
+      status
+      appDiscountType {
+        appKey
+        functionId
+      }
+      combinesWith {
+        orderDiscounts
+        productDiscounts
+        shippingDiscounts
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
