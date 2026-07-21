@@ -81,3 +81,19 @@
 • 12:31:49 Request »    GET 200 / 
 • 12:31:50 Request »   POST 200 /api/event/collect 
 • 12:31:52 Request »   POST 200 /api/event/collect 
+╭─ error ──────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│  Failed to upload file "sections/trust-strip.liquid" to remote theme.        │
+│                                                                              │
+│  The Admin GraphQL API responded unsuccessfully with the HTTP status 500     │
+│  and errors:                                                                 │
+│                                                                              │
+│  {}                                                                          │
+│                                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+• 12:31:59 Request »   POST 200 /api/event/collect 
+• 12:31:59 Request »    GET 200 / 
+• 12:32:00 Request »   POST 200 /api/event/collect 
+• 12:32:02 Request »   POST 200 /api/event/collect 
