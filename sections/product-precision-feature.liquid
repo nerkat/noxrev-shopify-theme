@@ -32,9 +32,10 @@
 
       <div class="product-precision-feature__media">
         {% if feature_image != blank %}
+          {% assign feature_image_alt = section.settings.image_alt | default: section.settings.title %}
           {% render 'responsive-image',
             image: feature_image,
-            alt: section.settings.image_alt,
+            alt: feature_image_alt,
             class: 'product-precision-feature__image',
             loading: 'lazy',
             sizes: '(min-width: 900px) 45vw, 100vw',

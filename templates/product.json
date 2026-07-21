@@ -39,7 +39,7 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-pencil",
-            "image_alt": "Accessory product",
+            "image_alt": "NoxRev Precision Stylus for iPad",
             "title": "NoxRev Precision Stylus",
             "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
             "price": "$59.00",
@@ -55,7 +55,7 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-mouse",
-            "image_alt": "Accessory product",
+            "image_alt": "NoxRev Wireless Mouse for an iPad setup",
             "title": "NoxRev Wireless Mouse",
             "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.",
             "price": "$39.00",
@@ -71,7 +71,7 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-case",
-            "image_alt": "Accessory product",
+            "image_alt": "NoxRev Urban Sleeve for iPad",
             "title": "NoxRev Urban Sleeve",
             "text": "Premium protection. Slim profile. Built for life on the move.",
             "price": "$49.00",
@@ -87,7 +87,7 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-charger",
-            "image_alt": "Accessory product",
+            "image_alt": "NoxRev USB-C charging cable",
             "title": "NoxRev USB-C Cable",
             "text": "65W GaN Fast Charging. Runs cooler with greater efficiency in a smaller charger.",
             "price": "$24.00",
@@ -103,7 +103,7 @@
           "type": "accessory",
           "settings": {
             "product": "tpx1-cable",
-            "image_alt": "Accessory product",
+            "image_alt": "NoxRev Precision Stylus accessory",
             "title": "NoxRev Precision Stylus",
             "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
             "price": "$59.00",
@@ -138,7 +138,7 @@
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/1.mp4",
-            "poster_alt": "Real customer setup video",
+            "poster_alt": "Customer typing on a NoxRev iPad keyboard case",
             "title": "Typing setup",
             "text": "Backlit keys in action",
             "duration": "0:18"
@@ -148,7 +148,7 @@
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/2.mp4",
-            "poster_alt": "Real customer setup video",
+            "poster_alt": "Student using a NoxRev iPad keyboard case",
             "title": "Study session",
             "text": "Notes, docs and more",
             "duration": "0:24"
@@ -158,7 +158,7 @@
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/3.mp4",
-            "poster_alt": "Real customer setup video",
+            "poster_alt": "Pairing a NoxRev keyboard case with an iPad",
             "title": "Bluetooth pairing",
             "text": "Fast and effortless",
             "duration": "0:15"
@@ -168,7 +168,7 @@
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/4.mp4",
-            "poster_alt": "Real customer setup video",
+            "poster_alt": "NoxRev iPad keyboard case used in a kitchen",
             "title": "Kitchen workflow",
             "text": "Recipes, shows, multitask",
             "duration": "0:20"
@@ -178,7 +178,7 @@
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/5.mp4",
-            "poster_alt": "Real customer setup video",
+            "poster_alt": "Customer typing on a NoxRev iPad keyboard case",
             "title": "Typing setup",
             "text": "Backlit keys in action",
             "duration": "0:18"
@@ -188,7 +188,7 @@
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/6.mp4",
-            "poster_alt": "Real customer setup video",
+            "poster_alt": "NoxRev iPad keyboard case in a typing setup",
             "title": "Typing setup",
             "text": "Backlit keys in action",
             "duration": "0:18"
@@ -288,7 +288,7 @@
             "title": "Secure, Form-Fit Protection",
             "text": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches.",
             "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_25_07_PM.png",
-            "image_alt": "Product feature detail",
+            "image_alt": "NoxRev keyboard case with form-fit iPad protection",
             "icon": "shield"
           }
         },
@@ -298,7 +298,7 @@
             "title": "Pencil Storage",
             "text": "Built-in drawer keeps your Apple Pencil safe and always within reach.",
             "image": "shopify://shop_images/image_1_ebd306ef-7f36-48c0-9093-5d82c42ee0b3.jpg",
-            "image_alt": "Product feature detail",
+            "image_alt": "Built-in Apple Pencil storage on a NoxRev keyboard case",
             "icon": "draw"
           }
         },
@@ -308,7 +308,7 @@
             "title": "Mute Button",
             "text": "Instant mute for quiet focus anytime, anywhere.",
             "image": "shopify://shop_images/image_2_1.jpg",
-            "image_alt": "Product feature detail",
+            "image_alt": "Mute button on a NoxRev iPad keyboard case",
             "icon": "type"
           }
         },
@@ -318,7 +318,7 @@
             "title": "Fast Charging",
             "text": "USB-C fast charging for uninterrupted productivity.",
             "image": "shopify://shop_images/image_1_7cb9a7cd-4b94-497d-ac8e-a95dfbf304d8.jpg",
-            "image_alt": "Product feature detail",
+            "image_alt": "USB-C charging port on a NoxRev iPad keyboard case",
             "icon": "bolt"
           }
         }
@@ -339,7 +339,7 @@
           "settings": {
             "label": "Laptop Mode",
             "image": "shopify://shop_images/edited-photo_0bba9500-568a-4002-9e71-43b6466a81f4.png",
-            "image_alt": "Keyboard case mode"
+            "image_alt": "NoxRev iPad keyboard case in laptop mode"
           }
         },
         "unique_stand": {
@@ -347,7 +347,7 @@
           "settings": {
             "label": "Stand Mode",
             "image": "shopify://shop_images/edited-photo_2_3e75043f-3a4a-4c66-9444-ded0faa57b2b.png",
-            "image_alt": "Keyboard case mode"
+            "image_alt": "NoxRev iPad keyboard case in stand mode"
           }
         },
         "unique_tent": {
@@ -355,7 +355,7 @@
           "settings": {
             "label": "Tent Mode",
             "image": "shopify://shop_images/edited-photo_1_e992bbb0-8710-4767-8359-e597c3f593ff.png",
-            "image_alt": "Keyboard case mode"
+            "image_alt": "NoxRev iPad keyboard case in tent mode"
           }
         },
         "unique_tablet": {
@@ -363,7 +363,7 @@
           "settings": {
             "label": "Tablet Mode",
             "image": "shopify://shop_images/edited-photo_cd87a57f-f53f-410e-abd2-fbb64380c51a.png",
-            "image_alt": "Keyboard case mode"
+            "image_alt": "NoxRev iPad keyboard case in tablet mode"
           }
         },
         "unique_drawing": {
@@ -371,7 +371,7 @@
           "settings": {
             "label": "Drawing Mode",
             "image": "shopify://shop_images/edited-photo_2_427eb45e-bd68-4edd-ad97-ea0f822f98ba.png",
-            "image_alt": "Keyboard case mode"
+            "image_alt": "NoxRev iPad keyboard case in drawing mode"
           }
         },
         "unique_viewing": {
@@ -379,7 +379,7 @@
           "settings": {
             "label": "Viewing Mode",
             "image": "shopify://shop_images/edited-photo_1_7c5018e1-30e8-46e1-858f-9849165f8301.png",
-            "image_alt": "Keyboard case mode"
+            "image_alt": "NoxRev iPad keyboard case in viewing mode"
           }
         },
         "unique_presentation": {
@@ -387,7 +387,7 @@
           "settings": {
             "label": "Presentation Mode",
             "image": "shopify://shop_images/edited-photo_9ee8a1d0-6c95-45e6-a01b-339386591f59.png",
-            "image_alt": "Keyboard case mode"
+            "image_alt": "NoxRev iPad keyboard case in presentation mode"
           }
         }
       },

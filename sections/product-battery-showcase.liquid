@@ -37,9 +37,10 @@
 
       <div class="product-battery-showcase__media">
         {% if showcase_image != blank %}
+          {% assign showcase_image_alt = section.settings.image_alt | default: section.settings.title %}
           {% render 'responsive-image',
             image: showcase_image,
-            alt: section.settings.image_alt,
+            alt: showcase_image_alt,
             class: 'product-battery-showcase__image',
             loading: 'lazy',
             sizes: '(min-width: 900px) 58vw, 100vw',

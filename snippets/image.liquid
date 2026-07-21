@@ -10,6 +10,7 @@
   @param {image} image - The image to be rendered
   @param {string} [url] - An optional destination URL for the image
   @param {string} [class] - Optional class to be added to the image wrapper
+  @param {string} [alt] - Optional alt text override
   @param {number} [width] - The highest resolution width of the image to be rendered
   @param {number} [height] - The highest resolution height of the image to be rendered
   @param {string} [crop] - The crop position of the image
@@ -28,6 +29,8 @@
 {% enddoc %}
 
 {% liquid
+  assign image_alt = alt | default: image.alt
+
   unless height
     assign width = width | default: image.width
   endunless
@@ -45,7 +48,7 @@
     href="{{ url }}"
   {% endif %}
 >
-  {{ image | image_url: width: width, height: height, crop: crop | image_tag }}
+  {{ image | image_url: width: width, height: height, crop: crop | image_tag: alt: image_alt }}
 </{{ wrapper }}>
 
 {% stylesheet %}

@@ -14,9 +14,11 @@
   {% for collection in collections %}
     <a class="collection-card" href="{{ collection.url }}">
       {% if collection.featured_image %}
+        {% assign collection_image_alt = collection.featured_image.alt | default: collection.title %}
         {% render 'image',
           class: 'collection-card__image',
           image: collection.featured_image,
+          alt: collection_image_alt,
           width: 600,
           height: 600,
           crop: 'center'

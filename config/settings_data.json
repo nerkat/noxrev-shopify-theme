@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "social_share_image": "shopify://shop_images/Product_Visual_005acb76-8109-4542-ae51-82ceae6497a2.jpg",
     "sections": {
       "cart-drawer": {
         "type": "cart-drawer",

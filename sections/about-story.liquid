@@ -17,7 +17,11 @@
         {% for block in section.blocks %}
           <div class="about-noxrev__media-card about-noxrev__collage-item" {{ block.shopify_attributes }}>
             {% if block.settings.image != blank %}
-              {{ block.settings.image | image_url: width: 900 | image_tag: class: 'about-noxrev__image', loading: 'lazy' }}
+              {% assign story_image_alt = block.settings.image.alt %}
+              {% if story_image_alt == blank %}
+                {% capture story_image_alt %}{{ section.settings.heading }} — image {{ forloop.index }}{% endcapture %}
+              {% endif %}
+              {{ block.settings.image | image_url: width: 900 | image_tag: class: 'about-noxrev__image', loading: 'lazy', alt: story_image_alt }}
             {% else %}
               {{ 'lifestyle-2' | placeholder_svg_tag: 'about-noxrev__placeholder' }}
             {% endif %}

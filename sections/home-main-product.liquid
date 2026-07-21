@@ -62,9 +62,10 @@
 
       <a class="home-main-product__media" href="{{ product_url | default: routes.all_products_collection_url }}" aria-label="{{ section.settings.heading | escape }}">
         {% if product_image != blank %}
+          {% assign home_product_image_alt = section.settings.image_alt | default: section.settings.heading %}
           {% render 'responsive-image',
             image: product_image,
-            alt: section.settings.image_alt,
+            alt: home_product_image_alt,
             class: 'home-main-product__image',
             loading: 'lazy',
             sizes: '(min-width: 900px) 48vw, 100vw',

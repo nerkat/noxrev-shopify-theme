@@ -97,3 +97,10 @@
 • 12:31:59 Request »    GET 200 / 
 • 12:32:00 Request »   POST 200 /api/event/collect 
 • 12:32:02 Request »   POST 200 /api/event/collect 
+• 12:32:15 Request »    GET 200 /products/transparent-core-keyboard-case-ipad 
+• 12:32:16 Request »   POST 200 /api/event/collect 
+• 12:32:16 Request »   POST 200 /api/event/collect 
+• 12:32:22 Request »   POST 200 /api/event/collect 
+• 12:32:22 Request »   POST 200 /api/event/collect 
+• 12:32:25 Request »   POST 200 /api/event/collect 
+• 07:51:50 Request »   POST 200 /api/event/collect 

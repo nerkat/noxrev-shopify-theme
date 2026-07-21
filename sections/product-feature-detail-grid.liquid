@@ -22,9 +22,10 @@
 
           <div class="product-feature-detail-grid__media">
             {% if card_image != blank %}
+              {% assign card_image_alt = block.settings.image_alt | default: block.settings.title %}
               {% render 'responsive-image',
                 image: card_image,
-                alt: block.settings.image_alt,
+                alt: card_image_alt,
                 class: 'product-feature-detail-grid__image',
                 loading: 'lazy',
                 sizes: '(min-width: 900px) 25vw, 50vw',
@@ -171,7 +172,7 @@
         { "type": "text", "id": "title", "label": "Title", "default": "Secure, Form-Fit Protection" },
         { "type": "textarea", "id": "text", "label": "Text", "default": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches." },
         { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Product feature detail" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text" },
         { "type": "select", "id": "icon", "label": "Fallback icon", "default": "shield", "options": [
           { "value": "shield", "label": "Shield" },
           { "value": "draw", "label": "Pencil" },

@@ -12,7 +12,8 @@
       </div>
       <div class="about-noxrev__media-card">
         {% if section.settings.image != blank %}
-          {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'about-noxrev__image', loading: 'lazy' }}
+          {% assign engineering_image_alt = section.settings.image.alt | default: section.settings.heading %}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'about-noxrev__image', loading: 'lazy', alt: engineering_image_alt }}
         {% else %}
           {{ 'product-1' | placeholder_svg_tag: 'about-noxrev__placeholder' }}
         {% endif %}

@@ -14,9 +14,10 @@
           <div class="product-unique-modes-strip__item" role="listitem" {{ block.shopify_attributes }}>
             <div class="product-unique-modes-strip__media">
               {% if mode_image != blank %}
+                {% assign mode_image_alt = block.settings.image_alt | default: block.settings.label %}
                 {% render 'responsive-image',
                   image: mode_image,
-                  alt: block.settings.image_alt,
+                  alt: mode_image_alt,
                   class: 'product-unique-modes-strip__image',
                   loading: 'lazy',
                   sizes: '(min-width: 900px) 14vw, 34vw',
@@ -145,7 +146,7 @@
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "Laptop Mode" },
         { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Keyboard case mode" }
+        { "type": "text", "id": "image_alt", "label": "Image alt text" }
       ]
     }
   ],

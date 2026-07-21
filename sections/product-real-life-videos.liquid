@@ -55,9 +55,10 @@
                   </button>
                 </div>
               {% elsif poster_image != blank %}
+                {% assign poster_image_alt = block.settings.poster_alt | default: block.settings.title %}
                 {% render 'responsive-image',
                   image: poster_image,
-                  alt: block.settings.poster_alt,
+                  alt: poster_image_alt,
                   class: 'product-real-life-videos__image',
                   loading: 'lazy',
                   sizes: '(min-width: 900px) 18vw, 72vw',
@@ -525,7 +526,7 @@
       "settings": [
         { "type": "video", "id": "video", "label": "Shopify-hosted video" },
         { "type": "image_picker", "id": "poster", "label": "Poster image" },
-        { "type": "text", "id": "poster_alt", "label": "Poster alt text", "default": "Real customer setup video" },
+        { "type": "text", "id": "poster_alt", "label": "Poster alt text" },
         { "type": "text", "id": "title", "label": "Title", "default": "Typing setup" },
         { "type": "text", "id": "text", "label": "Subtitle", "default": "Backlit keys in action" },
         { "type": "text", "id": "duration", "label": "Duration", "default": "0:18" }

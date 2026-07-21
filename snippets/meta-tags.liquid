@@ -3,10 +3,155 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 {%- liquid
-  assign og_title = page_title | default: shop.name
+  assign seo_title = page_title | default: shop.name
+
+  case request.page_type
+    when 'index'
+      if page_title == blank or page_title == shop.name
+        assign seo_title = 'iPad Keyboard Cases for Work, Study & Travel | NoxRev'
+      endif
+    when 'cart'
+      assign seo_title = 'NoxRev Shopping Cart | Review Your iPad Setup & Fit'
+    when 'search'
+      if search.performed and search.terms != blank
+        capture seo_title
+          echo 'Search results for “'
+          echo search.terms
+          echo '” | NoxRev'
+        endcapture
+      else
+        assign seo_title = 'Search NoxRev | iPad Keyboard Cases & Accessories'
+      endif
+    when 'list-collections'
+      assign seo_title = 'Shop iPad Keyboard Cases & Accessories | NoxRev'
+    when 'page'
+      if page_title == page.title
+        case template.suffix
+          when 'about'
+            assign seo_title = 'About NoxRev | Premium iPad Keyboard Cases & Accessories'
+          when 'contact'
+            assign seo_title = 'Contact NoxRev | iPad Keyboard Case Fit & Order Support'
+          when 'faq'
+            assign seo_title = 'NoxRev FAQ | iPad Keyboard Case Help, Fit & Support'
+          when 'find-ipad-model'
+            assign seo_title = 'Find Your iPad Model | NoxRev Keyboard Case Guide'
+        endcase
+      endif
+    when 'blog'
+      if page_title == blog.title
+        capture seo_title
+          echo blog.title
+          echo ' | iPad Tips & Guides | NoxRev'
+        endcapture
+      endif
+    when 'article'
+      if page_title == article.title
+        capture seo_title
+          echo article.title
+          echo ' | NoxRev'
+        endcapture
+      endif
+    when '404'
+      assign seo_title = 'Page Not Found | Shop NoxRev iPad Keyboard Cases'
+    when 'password'
+      assign seo_title = 'NoxRev Store Opening Soon | iPad Keyboard Cases'
+    when 'gift_card'
+      assign seo_title = 'NoxRev Gift Card Balance'
+  endcase
+
+  assign seo_title_downcase = seo_title | downcase
+  assign shop_name_downcase = shop.name | downcase
+  unless seo_title_downcase contains shop_name_downcase
+    capture seo_title
+      echo seo_title
+      echo ' | '
+      echo shop.name
+    endcapture
+  endunless
+
+  assign seo_description = page_description
+
+  if seo_description == blank
+    case request.page_type
+      when 'index'
+        assign seo_description = 'Shop NoxRev iPad keyboard cases with backlit keys, precision trackpads, protective designs, and flexible modes for work, study, travel, and more.'
+      when 'product'
+        if product.description != blank
+          assign seo_description = product.description
+        else
+          capture seo_description
+            echo 'Shop '
+            echo product.title
+            echo ' from NoxRev. Explore compatibility, features, colors, pricing, and accessories to build the right iPad setup for your day.'
+          endcapture
+        endif
+      when 'collection'
+        if collection.description != blank
+          assign seo_description = collection.description
+        else
+          capture seo_description
+            echo 'Shop the '
+            echo collection.title
+            echo ' collection from NoxRev for iPad keyboard cases and accessories designed for compatibility, protection, work, study, and travel.'
+          endcapture
+        endif
+      when 'list-collections'
+        assign seo_description = 'Browse NoxRev iPad keyboard cases and accessories designed for precise compatibility, comfortable typing, everyday protection, work, study, and travel.'
+      when 'search'
+        if search.performed and search.terms != blank
+          capture seo_description
+            echo 'View NoxRev search results for “'
+            echo search.terms
+            echo '” across iPad keyboard cases, compatible accessories, model-fit guidance, and product support.'
+          endcapture
+        else
+          assign seo_description = 'Search NoxRev for iPad keyboard cases, compatible accessories, model-fit guidance, order help, and product support for your ideal setup in one place.'
+        endif
+      when 'cart'
+        assign seo_description = 'Review your NoxRev cart, confirm the right iPad model and accessories, and complete your order for a keyboard case setup built around your day.'
+      when 'page'
+        case template.suffix
+          when 'about'
+            assign seo_description = 'Learn how NoxRev designs premium iPad keyboard cases around precise fit, versatile modes, dependable protection, and comfortable everyday use.'
+          when 'contact'
+            assign seo_description = 'Contact NoxRev for help with iPad model compatibility, keyboard case selection, orders, shipping, returns, warranty questions, and product support.'
+          when 'faq'
+            assign seo_description = 'Get clear answers about NoxRev iPad keyboard case compatibility, shipping, returns, warranties, battery life, setup, trackpads, and product support.'
+          when 'find-ipad-model'
+            assign seo_description = 'Identify your exact iPad model, compare compatible sizes and generations, and choose the right NoxRev keyboard case fit without the guesswork.'
+          else
+            assign seo_description = page.content
+        endcase
+      when 'blog'
+        assign seo_description = 'Explore NoxRev guides, product tips, iPad compatibility advice, setup ideas, and practical help for getting more from your keyboard case and accessories.'
+      when 'article'
+        assign seo_description = article.excerpt_or_content
+      when '404'
+        assign seo_description = 'The page you requested could not be found. Browse NoxRev iPad keyboard cases and accessories, find your model, or contact our support team for help.'
+      when 'policy'
+        assign seo_description = policy.body
+      when 'password'
+        assign seo_description = 'The NoxRev store is opening soon. Check back for premium iPad keyboard cases, compatible accessories, model-fit guidance, and helpful product support.'
+      when 'gift_card'
+        assign seo_description = 'View the balance and details for your NoxRev gift card and use it toward eligible products when you complete your purchase at checkout.'
+      else
+        assign seo_description = shop.description | default: shop.name
+    endcase
+  endif
+
+  if seo_description == blank
+    capture seo_description
+      echo 'Learn more about '
+      echo page_title | default: seo_title
+      echo ' from NoxRev. Explore iPad keyboard case details, compatibility guidance, accessories, ordering information, and support.'
+    endcapture
+  endif
+
+  assign seo_description = seo_description | strip_html | strip_newlines | strip | truncate: 160
   assign og_url = canonical_url | default: request.origin
   assign og_type = 'website'
-  assign og_description = page_description | default: shop.description | default: shop.name
+  assign seo_image = page_image
+  assign twitter_card = 'summary'
 
   if request.page_type == 'product'
     assign og_type = 'product'
@@ -15,46 +160,53 @@
   elsif request.page_type == 'password'
     assign og_url = request.origin
   endif
-%}
 
-<meta
-  property="og:site_name"
-  content="{{ shop.name }}"
->
-<meta
-  property="og:url"
-  content="{{ og_url }}"
->
-<meta
-  property="og:title"
-  content="{{ og_title | escape }}"
->
-<meta
-  property="og:type"
-  content="{{ og_type }}"
->
-<meta
-  property="og:description"
-  content="{{ og_description | escape }}"
->
+  if seo_image != blank
+    assign twitter_card = 'summary_large_image'
+  elsif settings.social_share_image != blank
+    assign seo_image = settings.social_share_image
+    assign twitter_card = 'summary_large_image'
+  elsif shop.brand.logo != blank
+    assign seo_image = shop.brand.logo
+  endif
 
-{%- if page_image -%}
-  <meta
-    property="og:image"
-    content="http:{{ page_image | image_url }}"
-  >
-  <meta
-    property="og:image:secure_url"
-    content="https:{{ page_image | image_url }}"
-  >
-  <meta
-    property="og:image:width"
-    content="{{ page_image.width }}"
-  >
-  <meta
-    property="og:image:height"
-    content="{{ page_image.height }}"
-  >
+  assign seo_image_alt = seo_image.alt | default: seo_title
+
+  case request.page_type
+    when 'search', 'cart', '404', 'password', 'gift_card'
+      assign robots_content = 'noindex,follow'
+  endcase
+
+  assign root_absolute_url = request.origin | append: routes.root_url
+  assign products_absolute_url = request.origin | append: routes.all_products_collection_url
+  assign collections_absolute_url = request.origin | append: routes.collections_url
+  assign organization_id = shop.url | append: '#organization'
+-%}
+
+<title>
+  {{- seo_title | escape -}}
+  {%- if current_tags %} &ndash; tagged “{{ current_tags | join: ', ' | escape }}”{% endif -%}
+  {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+</title>
+
+<meta name="description" content="{{ seo_description | escape }}">
+
+{%- if robots_content != blank -%}
+  <meta name="robots" content="{{ robots_content }}">
+{%- endif -%}
+
+<link rel="canonical" href="{{ og_url | escape }}">
+
+<meta property="og:site_name" content="{{ shop.name | escape }}">
+<meta property="og:url" content="{{ og_url | escape }}">
+<meta property="og:title" content="{{ seo_title | escape }}">
+<meta property="og:type" content="{{ og_type }}">
+<meta property="og:description" content="{{ seo_description | escape }}">
+
+{%- if seo_image != blank -%}
+  <meta property="og:image" content="https:{{ seo_image | image_url: width: 1200 }}">
+  <meta property="og:image:secure_url" content="https:{{ seo_image | image_url: width: 1200 }}">
+  <meta property="og:image:alt" content="{{ seo_image_alt | escape }}">
 {%- endif -%}
 
 {%- if request.page_type == 'product' -%}
@@ -62,44 +214,110 @@
     {{ product | structured_data }}
   </script>
 
-  <meta
-    property="og:price:amount"
-    content="{{ product.price | money_without_currency | strip_html }}"
-  >
-  <meta
-    property="og:price:currency"
-    content="{{ cart.currency.iso_code }}"
-  >
+  <meta property="product:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+  <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
 {%- endif -%}
 
-<meta
-  name="twitter:card"
-  content="summary_large_image"
->
-<meta
-  name="twitter:title"
-  content="{{ og_title | escape }}"
->
-<meta
-  name="twitter:description"
-  content="{{ og_description | escape }}"
->
+<meta name="twitter:card" content="{{ twitter_card }}">
+<meta name="twitter:url" content="{{ og_url | escape }}">
+<meta name="twitter:title" content="{{ seo_title | escape }}">
+<meta name="twitter:description" content="{{ seo_description | escape }}">
+{%- if seo_image != blank -%}
+  <meta name="twitter:image" content="https:{{ seo_image | image_url: width: 1200 }}">
+  <meta name="twitter:image:alt" content="{{ seo_image_alt | escape }}">
+{%- endif -%}
 
-<title>
-  {{ page_title }}
-  {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-  {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-  {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
-</title>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": {{ organization_id | json }},
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }}{% if shop.brand.logo != blank %},
+    "logo": {{ shop.brand.logo | image_url: width: 600 | prepend: 'https:' | json }}{% endif %}
+  }
+</script>
 
-<link
-  rel="canonical"
-  href="{{ canonical_url }}"
->
-
-{% if page_description %}
-  <meta
-    name="description"
-    content="{{ page_description | escape }}"
-  >
-{% endif %}
+{%- case request.page_type -%}
+  {%- when 'product' -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ root_absolute_url | json }} },
+          { "@type": "ListItem", "position": 2, "name": "Products", "item": {{ products_absolute_url | json }} },
+          { "@type": "ListItem", "position": 3, "name": {{ product.title | json }}, "item": {{ canonical_url | json }} }
+        ]
+      }
+    </script>
+  {%- when 'collection' -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ root_absolute_url | json }} },
+          { "@type": "ListItem", "position": 2, "name": "Collections", "item": {{ collections_absolute_url | json }} },
+          { "@type": "ListItem", "position": 3, "name": {{ collection.title | json }}, "item": {{ canonical_url | json }} }
+        ]
+      }
+    </script>
+  {%- when 'list-collections' -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ root_absolute_url | json }} },
+          { "@type": "ListItem", "position": 2, "name": "Collections", "item": {{ canonical_url | json }} }
+        ]
+      }
+    </script>
+  {%- when 'page' -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ root_absolute_url | json }} },
+          { "@type": "ListItem", "position": 2, "name": {{ page.title | json }}, "item": {{ canonical_url | json }} }
+        ]
+      }
+    </script>
+  {%- when 'blog' -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ root_absolute_url | json }} },
+          { "@type": "ListItem", "position": 2, "name": {{ blog.title | json }}, "item": {{ canonical_url | json }} }
+        ]
+      }
+    </script>
+  {%- when 'article' -%}
+    {%- assign blog_absolute_url = request.origin | append: blog.url -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ root_absolute_url | json }} },
+          { "@type": "ListItem", "position": 2, "name": {{ blog.title | json }}, "item": {{ blog_absolute_url | json }} },
+          { "@type": "ListItem", "position": 3, "name": {{ article.title | json }}, "item": {{ canonical_url | json }} }
+        ]
+      }
+    </script>
+  {%- when 'policy' -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ root_absolute_url | json }} },
+          { "@type": "ListItem", "position": 2, "name": {{ policy.title | json }}, "item": {{ canonical_url | json }} }
+        ]
+      }
+    </script>
+{%- endcase -%}
