@@ -562,6 +562,10 @@
     "1783425997ca25e2c8": {
       "type": "apps",
       "blocks": {
+        "appstle_bundles_appstle_buy_x_get_y_bundle_TEd9wF": {
+          "type": "shopify://apps/appstle-bundles/blocks/appstle-buy-x-get-y-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+          "settings": {}
+        },
         "judge_me_reviews_review_widget_axCXAD": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
@@ -573,6 +577,7 @@
         }
       },
       "block_order": [
+        "appstle_bundles_appstle_buy_x_get_y_bundle_TEd9wF",
         "judge_me_reviews_review_widget_axCXAD"
       ],
       "settings": {}
