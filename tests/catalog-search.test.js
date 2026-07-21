@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const {
+  buildSearchUrl,
   compact,
   extractANumber,
   getIndex,
@@ -174,6 +175,65 @@ test('hidden initial behavior returns no results until a query exists', () => {
   const results = searchEntries([entry()], '', { initialResults: 'hidden' });
   assert.equal(results.all.length, 0);
   assert.equal(searchEntries([entry()], 'keyboard', { initialResults: 'hidden' }).keyboard.length, 1);
+});
+
+test('header-mode result limits cap keyboard and accessory groups independently', () => {
+  const entries = [];
+
+  for (let index = 0; index < 5; index += 1) {
+    entries.push(
+      entry({
+        id: `keyboard-${index}`,
+        variantId: `keyboard-variant-${index}`,
+        title: `Keyboard setup ${index}`,
+        model: `Keyboard setup ${index}`
+      })
+    );
+    entries.push(
+      entry({
+        id: `accessory-${index}`,
+        group: 'accessory',
+        variantId: `accessory-variant-${index}`,
+        title: `Accessory setup ${index}`,
+        productTitle: `Accessory setup ${index}`,
+        model: '',
+        aNumbers: []
+      })
+    );
+  }
+
+  const results = searchEntries(entries, 'setup', {
+    initialResults: 'hidden',
+    keyboardLimit: 3,
+    accessoryLimit: 3
+  });
+  assert.equal(results.keyboard.length, 3);
+  assert.equal(results.accessory.length, 3);
+});
+
+test('header search URLs encode the query and preserve route query parameters', () => {
+  assert.equal(
+    buildSearchUrl('/en/search?type=product', 'A 2757', 'https://noxrev.example'),
+    '/en/search?type=product&q=A+2757'
+  );
+  assert.equal(
+    buildSearchUrl('/en/search?type=product&q=old', '', 'https://noxrev.example'),
+    '/en/search?type=product'
+  );
+});
+
+test('header markup uses the shared interface and accessible controls', () => {
+  const headerSource = fs.readFileSync(path.join(__dirname, '..', 'sections', 'header.liquid'), 'utf8');
+  assert.match(headerSource, /aria-label="Search"/);
+  assert.match(headerSource, /aria-expanded="false"/);
+  assert.match(headerSource, /aria-controls="HeaderCatalogSearch-/);
+  assert.match(headerSource, /render 'catalog-search-interface',[\s\S]*mode: 'header'/);
+  assert.match(headerSource, /data-header-search-close/);
+  assert.match(headerSource, /event\.key === 'Escape'/);
+
+  const headerScript = headerSource.match(/{% javascript %}([\s\S]*?){% endjavascript %}/);
+  assert.ok(headerScript, 'header JavaScript block should exist');
+  assert.doesNotThrow(() => new Function(headerScript[1]));
 });
 
 test('normalization handles punctuation, typographic quotes, slashes, underscores, and accents', () => {

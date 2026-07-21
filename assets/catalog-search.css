@@ -1,5 +1,4 @@
 .main-catalog-search {
-  width: 100%;
   padding-top: var(--catalog-search-padding-top, 3rem);
   padding-bottom: var(--catalog-search-padding-bottom, 5rem);
 }
@@ -858,6 +857,10 @@
 }
 
 @media (max-width: 520px) {
+  .catalog-search.catalog-search--header {
+    gap: 1rem;
+  }
+
   .catalog-search--header .catalog-search__intro {
     padding: 0;
   }
