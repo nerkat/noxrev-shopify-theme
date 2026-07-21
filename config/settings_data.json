@@ -33,7 +33,7 @@
       },
       "10508887350528622030": {
         "type": "shopify://apps/appstle-bundles/blocks/appstle-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
-        "disabled": false,
+        "disabled": true,
         "settings": {}
       }
     }
