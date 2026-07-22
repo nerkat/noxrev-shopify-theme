@@ -191,6 +191,7 @@
         "help_settings",
         "help_size"
       ],
+      "disabled": true,
       "settings": {
         "eyebrow": "Need Help?",
         "title": "Still not sure? Here's how to check."
@@ -238,7 +239,6 @@
         "trust_protected",
         "trust_materials"
       ],
-      "disabled": true,
       "settings": {}
     },
     "catalog_search": {
