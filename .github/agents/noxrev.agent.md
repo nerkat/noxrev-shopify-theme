@@ -21,7 +21,7 @@ The project is based on Shopify Skeleton Theme and should stay lean, readable, a
 shopify theme dev --store tykvge-hj.myshopify.com --theme 147007733834
 ```
 
-Do not use `noxrev.myshopify.com` or theme `#145346265206`; that is an old store/theme context and can produce stale media, product images, swatch ordering, and Shopify-hosted video validation errors.
+Use `tykvge-hj.myshopify.com` for all Shopify CLI work. Do not use any old development-store context or theme `#145346265206`; those can produce stale media, product images, swatch ordering, and Shopify-hosted video validation errors.
 
 ## Core philosophy
 

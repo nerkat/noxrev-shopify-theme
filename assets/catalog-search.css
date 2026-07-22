@@ -19,7 +19,6 @@
   gap: 1.25rem;
   overflow: hidden;
   padding: clamp(1.25rem, 4vw, 2.5rem);
-  border: 1px solid rgba(0, 229, 255, 0.15);
   border-radius: var(--theme-radius-xl);
   background:
     radial-gradient(circle at 4% 0%, rgba(0, 229, 255, 0.16), transparent 38%),
@@ -44,14 +43,16 @@
 }
 
 .catalog-search__title {
-  margin: 0;
-  max-width: 58rem;
-  color: var(--theme-color-text);
-  font-family: var(--theme-font-display);
-  font-size: clamp(2.8rem, 9vw, 5.75rem);
-  font-weight: 800;
-  line-height: 0.96;
-  letter-spacing: -0.055em;
+    background: linear-gradient(100deg, #ff4da6 8%, #c98bff 48%, #6ec8ff 92%);  
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #ff4da6;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--theme-font-display);
+    font-size: clamp(3rem, 16vw, 5.6rem);
+    font-weight: 800;
+    line-height: .92;
+    letter-spacing: -.055em;
 }
 
 .catalog-search__eyebrow {

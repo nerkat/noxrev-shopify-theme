@@ -268,7 +268,6 @@ html {
 }
 
 .panel {
-  border: 1px solid var(--theme-color-border);
   background: var(--theme-gradient-panel), var(--theme-color-surface);
   box-shadow:
     var(--theme-shadow-lg),
