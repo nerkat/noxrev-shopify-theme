@@ -1053,8 +1053,19 @@
           }
           document.body.classList.toggle('catalog-search-open', isMobile);
         },
+        focusInput() {
+          const focusOptions = { preventScroll: true };
+          input.focus(focusOptions);
+          window.requestAnimationFrame(() => input.focus(focusOptions));
+          window.setTimeout(() => {
+            if (controller.isOpen()) {
+              input.focus(focusOptions);
+            }
+          }, 120);
+        },
         open() {
           if (controller.isOpen()) {
+            controller.focusInput();
             return;
           }
 
@@ -1063,7 +1074,7 @@
           overlay.setAttribute('aria-hidden', 'false');
           trigger.setAttribute('aria-expanded', 'true');
           controller.syncPosition();
-          window.requestAnimationFrame(() => input.focus({ preventScroll: true }));
+          controller.focusInput();
         },
         close(options = {}) {
           if (!controller.isOpen()) {

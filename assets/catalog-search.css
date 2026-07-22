@@ -814,6 +814,7 @@
   aspect-ratio: 1;
   border-right: 1px solid var(--theme-color-border);
   border-bottom: 0;
+  height: 100%;
 }
 
 .catalog-search--header .catalog-search__card-content {
