@@ -211,6 +211,27 @@ test('header-mode result limits cap keyboard and accessory groups independently'
   assert.equal(results.accessory.length, 3);
 });
 
+test('section result limits retain total match counts for view-all decisions', () => {
+  const entries = Array.from({ length: 7 }, (_, index) =>
+    entry({
+      id: `section-keyboard-${index}`,
+      variantId: `section-variant-${index}`,
+      title: `iPad model ${index}`,
+      model: `iPad model ${index}`
+    })
+  );
+  const results = searchEntries(entries, 'ipad', {
+    initialResults: 'hidden',
+    keyboardLimit: 4,
+    accessoryLimit: 3
+  });
+
+  assert.equal(results.keyboard.length, 4);
+  assert.equal(results.keyboardTotal, 7);
+  assert.equal(results.accessory.length, 0);
+  assert.equal(results.accessoryTotal, 0);
+});
+
 test('header search URLs encode the query and preserve route query parameters', () => {
   assert.equal(
     buildSearchUrl('/en/search?type=product', 'A 2757', 'https://noxrev.example'),
@@ -234,6 +255,51 @@ test('header markup uses the shared interface and accessible controls', () => {
   const headerScript = headerSource.match(/{% javascript %}([\s\S]*?){% endjavascript %}/);
   assert.ok(headerScript, 'header JavaScript block should exist');
   assert.doesNotThrow(() => new Function(headerScript[1]));
+});
+
+test('the reusable section delegates to the shared section-mode interface', () => {
+  const sectionSource = fs.readFileSync(
+    path.join(__dirname, '..', 'sections', 'catalog-search-section.liquid'),
+    'utf8'
+  );
+  const interfaceSource = fs.readFileSync(
+    path.join(__dirname, '..', 'snippets', 'catalog-search-interface.liquid'),
+    'utf8'
+  );
+
+  assert.match(sectionSource, /render 'catalog-search-interface',\s*\n\s*mode: 'section'/);
+  assert.match(sectionSource, /"name": "Catalog search"/);
+  assert.match(sectionSource, /"presets": \[/);
+  assert.match(sectionSource, /initial_results: section\.settings\.empty_query_behavior/);
+  assert.match(sectionSource, /show_accessories: section\.settings\.show_accessories/);
+  assert.match(interfaceSource, /data-catalog-search-mode="\{\{ component_mode/);
+  assert.match(interfaceSource, /data-catalog-search-card-presentation=/);
+  assert.doesNotMatch(sectionSource, /CatalogSearchIndex|fetch\s*\(/);
+});
+
+test('Find Your Model keeps its existing content and appends the keyboard-only search section', () => {
+  const templatePath = path.join(__dirname, '..', 'templates', 'page.find-ipad-model.json');
+  const templateSource = fs.readFileSync(templatePath, 'utf8');
+  const template = JSON.parse(templateSource.replace(/^\/\*[\s\S]*?\*\/\s*/, ''));
+
+  assert.equal(template.sections.hero.type, 'find-ipad-model-hero');
+  assert.equal(template.sections.model_grid.type, 'ipad-model-fit-grid');
+  assert.equal(template.sections.help_cards.type, 'ipad-model-help-cards');
+  assert.equal(template.sections.catalog_search.type, 'catalog-search-section');
+  assert.equal(template.sections.catalog_search.settings.show_keyboard, true);
+  assert.equal(template.sections.catalog_search.settings.show_accessories, false);
+  assert.equal(template.sections.catalog_search.settings.empty_query_behavior, 'hidden');
+  assert.equal(template.order.at(-1), 'catalog_search');
+});
+
+test('section mode navigates only on submit and does not synchronize the embedded page URL while typing', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', 'assets', 'catalog-search.js'), 'utf8');
+
+  assert.match(source, /if \(syncUrl && mode === 'page'\)/);
+  assert.match(source, /mode === 'header' \|\| mode === 'section'/);
+  assert.match(source, /mode === 'section' && settings\.initialResults === 'hidden'[\s\S]*\? ''/);
+  assert.match(source, /document\.addEventListener\('shopify:section:load'/);
+  assert.match(source, /document\.addEventListener\('shopify:section:unload'/);
 });
 
 test('normalization handles punctuation, typographic quotes, slashes, underscores, and accents', () => {

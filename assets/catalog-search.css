@@ -54,6 +54,30 @@
   letter-spacing: -0.055em;
 }
 
+.catalog-search__eyebrow {
+  margin: 0;
+  color: var(--theme-color-secondary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.catalog-search__supporting-text {
+  max-width: 48rem;
+  color: var(--theme-color-text-muted);
+  font-size: clamp(1rem, 2vw, 1.12rem);
+  line-height: 1.65;
+}
+
+.catalog-search__supporting-text > :first-child {
+  margin-top: 0;
+}
+
+.catalog-search__supporting-text > :last-child {
+  margin-bottom: 0;
+}
+
 .catalog-search__form {
   width: 100%;
   max-width: 58rem;
@@ -454,6 +478,113 @@
   font-size: clamp(2rem, 5vw, 3.4rem);
 }
 
+.catalog-search-section {
+  padding-top: var(--catalog-search-section-padding-top, 4.5rem);
+  padding-bottom: var(--catalog-search-section-padding-bottom, 6rem);
+}
+
+.catalog-search-section__inner {
+  margin-inline: auto;
+}
+
+.catalog-search-section--width-narrow .catalog-search-section__inner {
+  max-width: 54rem;
+}
+
+.catalog-search-section--width-standard .catalog-search-section__inner {
+  max-width: 76rem;
+}
+
+.catalog-search-section--width-wide .catalog-search-section__inner {
+  max-width: 90rem;
+}
+
+.catalog-search--section {
+  gap: clamp(1.5rem, 4vw, 2.75rem);
+}
+
+.catalog-search--section .catalog-search__intro {
+  gap: 0.85rem;
+}
+
+.catalog-search-section--align-center .catalog-search--section .catalog-search__intro {
+  justify-items: center;
+  text-align: center;
+}
+
+.catalog-search-section--align-center .catalog-search--section .catalog-search__title,
+.catalog-search-section--align-center .catalog-search--section .catalog-search__supporting-text {
+  margin-inline: auto;
+}
+
+.catalog-search-section--align-center .catalog-search--section .catalog-search__form {
+  margin-inline: auto;
+}
+
+.catalog-search--section .catalog-search__form {
+  max-width: 44rem;
+  margin-top: 0.35rem;
+}
+
+.catalog-search--section .catalog-search__input-shell {
+  min-height: 4.25rem;
+}
+
+.catalog-search--section .catalog-search__status {
+  min-height: 1.25rem;
+}
+
+.catalog-search--section .catalog-search__groups {
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+
+.catalog-search--section .catalog-search__grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16.5rem), 1fr));
+}
+
+.catalog-search__card--section .catalog-search__card-media {
+  aspect-ratio: 16 / 10;
+}
+
+.catalog-search__card--section .catalog-search__card-content {
+  min-height: 10.75rem;
+}
+
+.catalog-search__card--section .catalog-search__card-description {
+  -webkit-line-clamp: 2;
+}
+
+.catalog-search__card--section-compact .catalog-search__card-link {
+  grid-template-rows: none;
+  grid-template-columns: minmax(6.5rem, 34%) minmax(0, 1fr);
+}
+
+.catalog-search__card--section-compact .catalog-search__card-media {
+  height: 100%;
+  min-height: 10rem;
+  border-right: 1px solid var(--theme-color-border);
+  border-bottom: 0;
+}
+
+.catalog-search__card--section-compact .catalog-search__card-content {
+  min-height: 10rem;
+  padding: 0.9rem;
+}
+
+.catalog-search__card--section-compact .catalog-search__card-parent,
+.catalog-search__card--section-compact .catalog-search__card-description {
+  display: none;
+}
+
+.catalog-search--section .catalog-search__view-all {
+  width: min(100%, 28rem);
+  margin-inline: auto;
+}
+
+.catalog-search-section--align-left .catalog-search--section .catalog-search__view-all {
+  margin-inline: 0;
+}
+
 .catalog-search-overlay {
   --catalog-search-header-top: 5rem;
   position: fixed;
@@ -744,8 +875,8 @@
   transform-origin: top left;
 }
 
-.catalog-search__header-prompt,
-.catalog-search__header-empty {
+.catalog-search__prompt,
+.catalog-search__no-results {
   min-height: 8.5rem;
   margin: 0;
   border: 1px solid var(--theme-color-border);
@@ -756,7 +887,7 @@
   color: var(--theme-color-text-muted);
 }
 
-.catalog-search__header-prompt {
+.catalog-search__prompt {
   display: grid;
   place-items: center;
   align-content: center;
@@ -765,7 +896,7 @@
   text-align: center;
 }
 
-.catalog-search__header-prompt p {
+.catalog-search__prompt p {
   max-width: 31rem;
   margin: 0;
   line-height: 1.55;
@@ -782,11 +913,35 @@
   color: var(--theme-color-secondary);
 }
 
-.catalog-search__header-empty {
+.catalog-search__no-results {
   display: grid;
   place-items: center;
   padding: 1.25rem;
   text-align: center;
+}
+
+.catalog-search__prompt--section,
+.catalog-search__no-results--section {
+  min-height: 6.5rem;
+  border-radius: var(--theme-radius-lg);
+}
+
+.catalog-search__prompt--section {
+  padding: 1rem 1.25rem;
+}
+
+.catalog-search__prompt--section .catalog-search__header-prompt-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.catalog-search__no-results--section {
+  padding: 1.25rem;
+  border-color: rgba(0, 229, 255, 0.18);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.07), transparent 70%),
+    rgba(255, 255, 255, 0.025);
+  line-height: 1.6;
 }
 
 .catalog-search__view-all {
@@ -877,8 +1032,8 @@
     aspect-ratio: 1;
   }
 
-  .catalog-search--header .catalog-search__header-prompt,
-  .catalog-search--header .catalog-search__header-empty {
+  .catalog-search--header .catalog-search__prompt,
+  .catalog-search--header .catalog-search__no-results {
     min-height: 7rem;
   }
 }
@@ -907,6 +1062,32 @@
   .catalog-search__empty {
     justify-content: flex-start;
     min-height: 9rem;
+  }
+
+  .catalog-search-section {
+    padding-top: max(2rem, calc(var(--catalog-search-section-padding-top, 4.5rem) * 0.7));
+    padding-bottom: max(2.5rem, calc(var(--catalog-search-section-padding-bottom, 6rem) * 0.7));
+  }
+
+  .catalog-search--section {
+    gap: 1.5rem;
+  }
+
+  .catalog-search--section .catalog-search__intro {
+    padding: 1.15rem;
+  }
+
+  .catalog-search--section .catalog-search__input-shell {
+    min-height: 3.85rem;
+  }
+
+  .catalog-search__card--section-compact .catalog-search__card-link {
+    grid-template-columns: 6.25rem minmax(0, 1fr);
+  }
+
+  .catalog-search__card--section-compact .catalog-search__card-media,
+  .catalog-search__card--section-compact .catalog-search__card-content {
+    min-height: 8.75rem;
   }
 }
 

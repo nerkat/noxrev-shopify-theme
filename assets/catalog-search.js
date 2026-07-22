@@ -208,7 +208,15 @@
     const exactANumber = extractANumber(query);
 
     if (!normalizedQuery && !showInitial) {
-      return { query: '', exactANumber: '', keyboard: [], accessory: [], all: [] };
+      return {
+        query: '',
+        exactANumber: '',
+        keyboard: [],
+        accessory: [],
+        keyboardTotal: 0,
+        accessoryTotal: 0,
+        all: []
+      };
     }
 
     const matches = deduplicateMatches(
@@ -224,6 +232,8 @@
     let accessory = matches
       .filter((match) => match.prepared.entry.group === 'accessory')
       .map((match) => match.prepared.entry);
+    const keyboardTotal = keyboard.length;
+    const accessoryTotal = accessory.length;
 
     const keyboardLimit = Number(settings.keyboardLimit) || 0;
     const accessoryLimit = Number(settings.accessoryLimit) || 0;
@@ -240,6 +250,8 @@
       exactANumber,
       keyboard,
       accessory,
+      keyboardTotal,
+      accessoryTotal,
       all: keyboard.concat(accessory)
     };
   }
@@ -357,6 +369,12 @@
     if (options.mode === 'header') {
       article.classList.add('catalog-search__card--compact');
     }
+    if (options.mode === 'section') {
+      article.classList.add('catalog-search__card--section');
+      if (options.cardPresentation === 'compact') {
+        article.classList.add('catalog-search__card--section-compact');
+      }
+    }
     link.href = entry.url || '#';
     link.setAttribute('aria-label', `Open ${entry.title || entry.productTitle || 'product'}`);
     link.append(renderImage(documentRef, entry));
@@ -425,7 +443,8 @@
     countBadge.textContent = asString(entries.length);
   }
 
-  function statusText(keyboardCount, accessoryCount) {
+  function statusText(keyboardCount, accessoryCount, options) {
+    const groups = options || { showKeyboard: true, showAccessories: true };
     const total = keyboardCount + accessoryCount;
 
     if (!total) {
@@ -434,6 +453,12 @@
 
     const keyboardLabel = `${keyboardCount} keyboard result${keyboardCount === 1 ? '' : 's'}`;
     const accessoryLabel = `${accessoryCount} accessory result${accessoryCount === 1 ? '' : 's'}`;
+    if (!groups.showAccessories) {
+      return keyboardLabel;
+    }
+    if (!groups.showKeyboard) {
+      return accessoryLabel;
+    }
     return `${keyboardLabel} and ${accessoryLabel}`;
   }
 
@@ -490,7 +515,9 @@
       keyboardLimit: root.dataset.catalogSearchKeyboardLimit || 0,
       accessoryLimit: root.dataset.catalogSearchAccessoryLimit || 0,
       showDescriptions: root.dataset.catalogSearchShowDescriptions === 'true',
-      showPrices: root.dataset.catalogSearchShowPrices !== 'false'
+      showPrices: root.dataset.catalogSearchShowPrices !== 'false',
+      showViewAll: root.dataset.catalogSearchShowViewAll === 'true',
+      cardPresentation: root.dataset.catalogSearchCardPresentation || 'standard'
     };
 
     if (!elements.form || !elements.input || !elements.clear || !elements.status) {
@@ -520,9 +547,10 @@
           exactANumber: results.exactANumber,
           showDescriptions: settings.showDescriptions,
           showPrices: settings.showPrices,
+          cardPresentation: settings.cardPresentation,
           mode
         };
-        const showGroupEmptyStates = mode !== 'header';
+        const showGroupEmptyStates = mode === 'page';
 
         if (showKeyboard && elements.keyboardResults && elements.keyboardEmpty && elements.keyboardCount) {
           renderGroup(
@@ -552,6 +580,9 @@
         const accessoryCount = showAccessories ? results.accessory.length : 0;
         const hasQuery = normalize(query).length > 0;
         const totalCount = keyboardCount + accessoryCount;
+        const hasAdditionalResults =
+          (showKeyboard && results.keyboardTotal > keyboardCount) ||
+          (showAccessories && results.accessoryTotal > accessoryCount);
 
         if (mode === 'header') {
           if (elements.prompt) {
@@ -578,11 +609,42 @@
           }
         }
 
+        if (mode === 'section') {
+          const showInitialResults = settings.initialResults !== 'hidden';
+          const shouldShowGroups = (hasQuery || showInitialResults) && totalCount > 0;
+
+          if (elements.prompt) {
+            elements.prompt.hidden = hasQuery || showInitialResults;
+          }
+          if (elements.noResults) {
+            elements.noResults.hidden = !hasQuery || totalCount > 0;
+          }
+          if (elements.groups) {
+            elements.groups.hidden = !shouldShowGroups;
+            elements.groups.classList.toggle(
+              'catalog-search__groups--single',
+              shouldShowGroups && (keyboardCount === 0 || accessoryCount === 0 || !showKeyboard || !showAccessories)
+            );
+          }
+          if (elements.keyboardGroup) {
+            elements.keyboardGroup.hidden = !shouldShowGroups || keyboardCount === 0;
+          }
+          if (elements.accessoryGroup) {
+            elements.accessoryGroup.hidden = !shouldShowGroups || accessoryCount === 0;
+          }
+          if (elements.viewAll) {
+            elements.viewAll.href = buildSearchUrl(root.dataset.catalogSearchUrl, query);
+            elements.viewAll.classList.toggle('catalog-search__view-all--more', hasAdditionalResults);
+          }
+        }
+
         elements.status.textContent = hasQuery
-          ? statusText(keyboardCount, accessoryCount)
+          ? statusText(keyboardCount, accessoryCount, { showKeyboard, showAccessories })
           : mode === 'header'
             ? 'Start typing to search the catalog'
-            : statusText(keyboardCount, accessoryCount);
+            : mode === 'section' && settings.initialResults === 'hidden'
+              ? ''
+              : statusText(keyboardCount, accessoryCount, { showKeyboard, showAccessories });
         elements.clear.hidden = !asString(query).length;
 
         if (syncUrl && mode === 'page') {
@@ -604,7 +666,7 @@
 
     elements.form.addEventListener('submit', (event) => {
       event.preventDefault();
-      if (mode === 'header') {
+      if (mode === 'header' || mode === 'section') {
         globalScope.location.assign(buildSearchUrl(root.dataset.catalogSearchUrl, elements.input.value));
         return;
       }
@@ -641,6 +703,14 @@
     return roots.map(mount).filter(Boolean);
   }
 
+  function releaseInstances(scope) {
+    instances.forEach((instance) => {
+      if (!instance.root.isConnected || instance.root === scope || (scope && scope.contains(instance.root))) {
+        instances.delete(instance);
+      }
+    });
+  }
+
   function bindBrowserEvents() {
     if (browserEventsBound || typeof document === 'undefined') {
       return;
@@ -657,6 +727,7 @@
       });
     });
     document.addEventListener('shopify:section:load', (event) => mountAll(event.target));
+    document.addEventListener('shopify:section:unload', (event) => releaseInstances(event.target));
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => mountAll(document), { once: true });

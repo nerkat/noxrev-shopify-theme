@@ -1,0 +1,254 @@
+<div
+  class="catalog-search-section section catalog-search-section--width-{{ section.settings.content_width }} catalog-search-section--align-{{ section.settings.text_alignment }}"
+  style="--catalog-search-section-padding-top: {{ section.settings.padding_top }}px; --catalog-search-section-padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="container catalog-search-section__inner">
+    {% render 'catalog-search-interface',
+      mode: 'section',
+      instance_id: section.id,
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      heading_tag: 'h2',
+      supporting_text: section.settings.text,
+      placeholder: section.settings.placeholder,
+      keyboard_heading: section.settings.keyboard_heading,
+      accessories_heading: section.settings.accessories_heading,
+      keyboard_empty_title: '',
+      keyboard_empty_text: '',
+      accessories_empty_title: '',
+      accessories_empty_text: '',
+      initial_query: '',
+      initial_results: section.settings.empty_query_behavior,
+      keyboard_limit: section.settings.keyboard_limit,
+      accessory_limit: section.settings.accessory_limit,
+      show_descriptions: section.settings.show_descriptions,
+      show_prices: section.settings.show_prices,
+      show_keyboard: section.settings.show_keyboard,
+      show_accessories: section.settings.show_accessories,
+      submit_destination: routes.search_url,
+      empty_prompt: section.settings.empty_prompt,
+      no_results_text: section.settings.no_results_text,
+      view_all_label: section.settings.view_all_label,
+      show_view_all: section.settings.show_view_all,
+      card_presentation: section.settings.card_presentation
+    %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Catalog search",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Still not sure?"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Search your iPad model"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Supporting text",
+      "default": "<p>Enter your iPad model or the A-number printed on the back of your device.</p>"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Search placeholder",
+      "default": "Try A2757, iPad Air 11, or M4"
+    },
+    {
+      "type": "text",
+      "id": "empty_prompt",
+      "label": "Empty-query helper",
+      "default": "Start typing to see compatible products."
+    },
+    {
+      "type": "text",
+      "id": "keyboard_heading",
+      "label": "Keyboard group heading",
+      "default": "Compatible Keyboard Cases"
+    },
+    {
+      "type": "text",
+      "id": "accessories_heading",
+      "label": "Accessories group heading",
+      "default": "Accessories"
+    },
+    {
+      "type": "text",
+      "id": "no_results_text",
+      "label": "No-results text",
+      "default": "We could not find a matching model. Check the A-number and try again."
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View-all label",
+      "default": "View all search results"
+    },
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_keyboard",
+      "label": "Show keyboard results",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_accessories",
+      "label": "Show accessory results",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "keyboard_limit",
+      "label": "Keyboard result limit",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "accessory_limit",
+      "label": "Accessory result limit",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "empty_query_behavior",
+      "label": "Empty-query behavior",
+      "options": [
+        {
+          "value": "hidden",
+          "label": "Hidden"
+        },
+        {
+          "value": "all",
+          "label": "Show all"
+        }
+      ],
+      "default": "hidden"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_prices",
+      "label": "Show prices",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_descriptions",
+      "label": "Show descriptions",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view-all link",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "select",
+      "id": "card_presentation",
+      "label": "Card presentation",
+      "options": [
+        {
+          "value": "compact",
+          "label": "Compact"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "Catalog search"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

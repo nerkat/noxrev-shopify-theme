@@ -240,12 +240,40 @@
       ],
       "disabled": true,
       "settings": {}
+    },
+    "catalog_search": {
+      "type": "catalog-search-section",
+      "settings": {
+        "eyebrow": "Still not sure?",
+        "heading": "Search your iPad model",
+        "text": "<p>Enter your iPad model or the A-number printed on the back of your device.</p>",
+        "placeholder": "Try A2757, iPad Air 11, or M4",
+        "empty_prompt": "Start typing to see compatible keyboard cases.",
+        "keyboard_heading": "Compatible Keyboard Cases",
+        "accessories_heading": "Accessories",
+        "no_results_text": "We could not find a matching model. Check the A-number and try again.",
+        "view_all_label": "View all search results",
+        "show_keyboard": true,
+        "show_accessories": false,
+        "keyboard_limit": 4,
+        "accessory_limit": 3,
+        "empty_query_behavior": "hidden",
+        "show_prices": true,
+        "show_descriptions": false,
+        "show_view_all": true,
+        "content_width": "standard",
+        "card_presentation": "standard",
+        "text_alignment": "center",
+        "padding_top": 72,
+        "padding_bottom": 96
+      }
     }
   },
   "order": [
     "hero",
     "model_grid",
     "help_cards",
-    "trust_strip"
+    "trust_strip",
+    "catalog_search"
   ]
 }
