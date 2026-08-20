@@ -1,0 +1,61 @@
+{%- liquid
+  assign show_breadcrumbs = true
+  assign current_label = ''
+  assign parent_label = ''
+  assign parent_url = ''
+
+  case request.page_type
+    when 'index', 'password', 'gift_card'
+      assign show_breadcrumbs = false
+    when 'product'
+      assign current_label = product.title
+      assign parent_label = 'Products'
+      assign parent_url = routes.all_products_collection_url
+    when 'collection'
+      assign current_label = collection.title
+      assign parent_label = 'Collections'
+      assign parent_url = routes.collections_url
+    when 'list-collections'
+      assign current_label = 'Collections'
+    when 'page'
+      assign current_label = page.title
+    when 'blog'
+      assign current_label = blog.title
+    when 'article'
+      assign current_label = article.title
+      assign parent_label = blog.title
+      assign parent_url = blog.url
+    when 'policy'
+      assign current_label = policy.title
+    when 'search'
+      assign current_label = 'Search'
+    when 'cart'
+      assign current_label = 'Cart'
+    when '404'
+      assign current_label = 'Page not found'
+    else
+      assign show_breadcrumbs = false
+  endcase
+
+  if current_label == blank
+    assign show_breadcrumbs = false
+  endif
+-%}
+
+{%- if show_breadcrumbs -%}
+  <nav class="visible-breadcrumbs" aria-label="Breadcrumb">
+    <ol class="visible-breadcrumbs__list page-width" role="list">
+      <li class="visible-breadcrumbs__item">
+        <a class="visible-breadcrumbs__link" href="{{ routes.root_url }}">Home</a>
+      </li>
+      {%- if parent_label != blank and parent_url != blank -%}
+        <li class="visible-breadcrumbs__item">
+          <a class="visible-breadcrumbs__link" href="{{ parent_url }}">{{ parent_label | escape }}</a>
+        </li>
+      {%- endif -%}
+      <li class="visible-breadcrumbs__item" aria-current="page">
+        <span class="visible-breadcrumbs__current">{{ current_label | escape }}</span>
+      </li>
+    </ol>
+  </nav>
+{%- endif -%}

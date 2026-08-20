@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
-{% include 'limespot' %}
+    {% include 'limespot' %}
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 
@@ -45,8 +45,9 @@
     </div>
 
     <main id="MainContent" role="main">
+      {% render 'visible-breadcrumbs' %}
       {{ content_for_layout }}
-<limespot></limespot>
+      <limespot></limespot>
     </main>
 
     {% sections 'footer-group' %}
