@@ -162,7 +162,9 @@ html {
   margin-inline: auto;
 }
 
-.visible-breadcrumbs {}
+.visible-breadcrumbs {
+  grid-column: span 4;
+}
 
 .visible-breadcrumbs__list {
   display: flex;
