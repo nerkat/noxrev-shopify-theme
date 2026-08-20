@@ -1,21 +1,28 @@
-╭─ error ──────────────────────────────────────────────────────────────────────╮
+╭─ success ────────────────────────────────────────────────────────────────────╮
 │                                                                              │
-│  The authenticated account or access token is missing `read_themes` access   │
-│  scope.                                                                      │
+│  Preview your theme (t)                                                      │
+│    • [1]                                                                     │
 │                                                                              │
 │  Next steps                                                                  │
-│    • If you authenticated with an Admin API access token, update the app or  │
-│      integration that issued the token to include the required theme access  │
-│      scopes, then reauthorize it or generate a new token.                    │
-│    • For `theme pull`, `theme list`, and `theme info`, add the               │
-│      `read_themes` scope.                                                    │
-│    • For `theme push` and `theme dev`, add both the `read_themes` and        │
-│      `write_themes` scopes.                                                  │
-│    • If you authenticated with your Shopify account, make sure your staff    │
-│      or collaborator account can access Online Store themes, then run        │
-│      `shopify auth logout` and try again.                                    │
-│    • See Shopify access scopes [1].                                          │
+│    • Share your theme preview (p) [2]                                        │
+│      https://tykvge-hj.myshopify.com/?preview_theme_id=148189478986          │
+│    • Customize your theme at the theme editor (e) [3]                        │
+│    • Preview your gift cards (g) [4]                                         │
 │                                                                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-[1] https://shopify.dev/api/usage/access-scopes
+[1] http://127.0.0.1:9292
+[2] https://tykvge-hj.myshopify.com/?preview_theme_id=148189478986
+[3] https://tykvge-hj.myshopify.com/admin/themes/148189478986/editor?hr=9292
+[4] http://127.0.0.1:9292/gift_cards/[store_id]/preview
 
+• 15:00:04 Request »    GET 200 / 
+• 15:00:06 Request »   POST 200 /shopify_pay/accelerated_checkout 
+• 15:00:08 Request »    GET 404 /favicon.ico 
+• 15:02:01 Request »    GET 200 / 
+• 15:02:01  Synced » update templates/product.accessory.json
+• 15:02:02 Request »    GET 200 / 
+• 15:02:03  Synced » update templates/index.json
+• 15:02:04  Synced » update sections/footer-group.json
+• 15:02:05  Synced » update sections/header-group.json
+• 15:02:07 Request »    GET 200 / 
+• 15:02:07  Synced » update sections/header.liquid
