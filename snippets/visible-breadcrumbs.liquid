@@ -9,8 +9,6 @@
       assign show_breadcrumbs = false
     when 'product'
       assign current_label = product.title
-      assign parent_label = 'Products'
-      assign parent_url = routes.all_products_collection_url
     when 'collection'
       assign current_label = collection.title
       assign parent_label = 'Collections'
