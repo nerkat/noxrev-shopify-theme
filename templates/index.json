@@ -199,25 +199,25 @@
         "item_1": {
           "type": "item",
           "settings": {
-            "eyebrow": "Compatibility",
-            "heading": "Choose the exact iPad fit before checkout.",
-            "text": "Use the fit guide or send us your model name so your NoxRev keyboard case matches your device the first time."
+            "eyebrow": "Fast U.S. delivery",
+            "heading": "Free 3–5 day domestic shipping.",
+            "text": "Enjoy free U.S. shipping on NoxRev orders, with tracking after fulfillment so you can follow your delivery."
           }
         },
         "item_2": {
           "type": "item",
           "settings": {
-            "eyebrow": "Everyday setup",
-            "heading": "Built for typing, drawing, streaming, and travel.",
-            "text": "Backlit keys, a precision trackpad, flexible angles, and protective coverage help your iPad work like a real mobile desk."
+            "eyebrow": "Risk-free setup",
+            "heading": "Money-back guarantee.",
+            "text": "If your NoxRev setup is not the right fit, contact support and we will help with the next step."
           }
         },
         "item_3": {
           "type": "item",
           "settings": {
-            "eyebrow": "Help before you buy",
-            "heading": "Unsure about model, color, or accessories?",
-            "text": "Contact NoxRev support before ordering and we will help confirm the right keyboard case and add-ons for your setup."
+            "eyebrow": "Easy returns",
+            "heading": "30-day returns.",
+            "text": "Need to return your order? Reach out within 30 days and our support team will guide you through the process."
           }
         }
       },
