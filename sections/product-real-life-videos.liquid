@@ -22,8 +22,12 @@
       {% endif %}
     </div>
 
-    <div class="product-real-life-videos__slider-wrap">
-      <div class="product-real-life-videos__slider" data-real-life-videos-slider>
+    <div
+      class="product-real-life-videos__slider-wrap noxrev-slider"
+      data-noxrev-slider
+      data-noxrev-slider-step-card=".product-real-life-videos__card"
+    >
+      <div class="product-real-life-videos__slider" data-noxrev-slider-track>
         {% for block in section.blocks %}
           {% liquid
             assign poster_image = block.settings.poster | default: product.featured_media.preview_image
@@ -83,18 +87,20 @@
       </div>
 
       <button
-        class="product-real-life-videos__arrow product-real-life-videos__arrow--prev"
+        class="product-real-life-videos__arrow noxrev-slider__arrow noxrev-slider__arrow--prev"
         type="button"
         aria-label="Previous videos"
-        data-real-life-videos-prev
+        data-noxrev-slider-prev
+        hidden
       >
         <span aria-hidden="true">&lsaquo;</span>
       </button>
       <button
-        class="product-real-life-videos__arrow product-real-life-videos__arrow--next"
+        class="product-real-life-videos__arrow noxrev-slider__arrow noxrev-slider__arrow--next"
         type="button"
         aria-label="Next videos"
-        data-real-life-videos-next
+        data-noxrev-slider-next
+        hidden
       >
         <span aria-hidden="true">&rsaquo;</span>
       </button>
@@ -122,11 +128,6 @@
     sections.forEach((section) => {
       if (section.dataset.realLifeVideosReady === 'true') return;
       section.dataset.realLifeVideosReady = 'true';
-
-      const slider = section.querySelector('[data-real-life-videos-slider]');
-      const prev = section.querySelector('[data-real-life-videos-prev]');
-      const next = section.querySelector('[data-real-life-videos-next]');
-      if (!slider || !prev || !next) return;
 
       const videoShells = section.querySelectorAll('[data-real-life-video-shell]');
       videoShells.forEach((shell) => {
@@ -161,23 +162,6 @@
         updateState();
       });
 
-      const getStep = () => {
-        const card = slider.querySelector('.product-real-life-videos__card');
-        return card ? card.getBoundingClientRect().width + 18 : slider.clientWidth * 0.8;
-      };
-
-      const updateButtons = () => {
-        const maxScroll = slider.scrollWidth - slider.clientWidth;
-        const hasOverflow = maxScroll > 2;
-        prev.hidden = !hasOverflow || slider.scrollLeft <= 2;
-        next.hidden = !hasOverflow || slider.scrollLeft >= maxScroll - 2;
-      };
-
-      prev.addEventListener('click', () => slider.scrollBy({ left: -getStep(), behavior: 'smooth' }));
-      next.addEventListener('click', () => slider.scrollBy({ left: getStep(), behavior: 'smooth' }));
-      slider.addEventListener('scroll', updateButtons, { passive: true });
-      window.addEventListener('resize', updateButtons);
-      updateButtons();
     });
   })();
 </script>
@@ -403,37 +387,6 @@
     font-size: 0.72rem;
     font-weight: 800;
     line-height: 1;
-  }
-
-  .product-real-life-videos__arrow {
-    position: absolute;
-    top: 50%;
-    z-index: 3;
-    display: inline-flex;
-    width: 3rem;
-    height: 3rem;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 999px;
-    color: var(--theme-color-text);
-    background: rgba(4, 11, 24, 0.7);
-    cursor: pointer;
-    transform: translateY(-50%);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
-  .product-real-life-videos__arrow[hidden] {
-    display: none;
-  }
-
-  .product-real-life-videos__arrow--prev {
-    left: 0.4rem;
-  }
-
-  .product-real-life-videos__arrow--next {
-    right: 0.4rem;
   }
 
   .product-real-life-videos__footer {

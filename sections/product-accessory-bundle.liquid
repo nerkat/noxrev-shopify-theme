@@ -21,8 +21,13 @@
       {% endif %}
     </div>
 
-      <div class="product-accessory-bundle__slider-wrap" data-accessory-bundle>
-        <div class="product-accessory-bundle__grid" data-accessory-bundle-slider>
+      <div
+        class="product-accessory-bundle__slider-wrap noxrev-slider"
+        data-accessory-bundle
+        data-noxrev-slider
+        data-noxrev-slider-step-card=".product-accessory-bundle__card"
+      >
+        <div class="product-accessory-bundle__grid" data-noxrev-slider-track>
           {% for block in section.blocks %}
             {% liquid
               assign accessory_product = block.settings.product
@@ -198,18 +203,20 @@
         </div>
 
         <button
-          class="product-accessory-bundle__arrow product-accessory-bundle__arrow--prev"
+          class="product-accessory-bundle__arrow noxrev-slider__arrow noxrev-slider__arrow--prev"
           type="button"
           aria-label="Previous accessories"
-          data-accessory-bundle-prev
+          data-noxrev-slider-prev
+          hidden
         >
           <span aria-hidden="true">&lsaquo;</span>
         </button>
         <button
-          class="product-accessory-bundle__arrow product-accessory-bundle__arrow--next"
+          class="product-accessory-bundle__arrow noxrev-slider__arrow noxrev-slider__arrow--next"
           type="button"
           aria-label="Next accessories"
-          data-accessory-bundle-next
+          data-noxrev-slider-next
+          hidden
         >
           <span aria-hidden="true">&rsaquo;</span>
         </button>
@@ -219,57 +226,6 @@
 
 <script>
   (() => {
-    const initAccessoryBundleSliders = (root = document) => {
-      const bundles = root.querySelectorAll('[data-accessory-bundle]');
-
-      bundles.forEach((bundle) => {
-        if (bundle.dataset.accessoryBundleReady === 'true') return;
-        bundle.dataset.accessoryBundleReady = 'true';
-
-        const slider = bundle.querySelector('[data-accessory-bundle-slider]');
-        const prev = bundle.querySelector('[data-accessory-bundle-prev]');
-        const next = bundle.querySelector('[data-accessory-bundle-next]');
-        if (!slider || !prev || !next) return;
-
-        const getStep = () => {
-          const card = slider.querySelector('.product-accessory-bundle__card');
-          return card ? card.getBoundingClientRect().width + 16 : slider.clientWidth * 0.82;
-        };
-
-        const updateButtons = () => {
-          const maxScroll = slider.scrollWidth - slider.clientWidth;
-          const hasOverflow = maxScroll > 2;
-          prev.hidden = !hasOverflow || slider.scrollLeft <= 2;
-          next.hidden = !hasOverflow || slider.scrollLeft >= maxScroll - 2;
-        };
-
-        const scrollByDirection = (direction) => {
-          const maxScroll = slider.scrollWidth - slider.clientWidth;
-          const target = Math.max(0, Math.min(maxScroll, slider.scrollLeft + getStep() * direction));
-          slider.scrollTo({ left: target, behavior: 'smooth' });
-          window.setTimeout(updateButtons, 260);
-        };
-
-        prev.addEventListener('click', (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          scrollByDirection(-1);
-        });
-
-        next.addEventListener('click', (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          scrollByDirection(1);
-        });
-
-        slider.addEventListener('scroll', updateButtons, { passive: true });
-        window.addEventListener('resize', updateButtons);
-        updateButtons();
-      });
-    };
-
-    initAccessoryBundleSliders();
-
     if (!window.__noxrevAccessoryBundleSubmitReady) {
       window.__noxrevAccessoryBundleSubmitReady = true;
 
@@ -490,10 +446,6 @@
         }
       });
     }
-
-    document.addEventListener('shopify:section:load', (event) => {
-      initAccessoryBundleSliders(event.target);
-    });
   })();
 </script>
 
@@ -841,38 +793,6 @@
 
   .product-accessory-bundle__form {
     margin: 0;
-  }
-
-  .product-accessory-bundle__arrow {
-    position: absolute;
-    top: 50%;
-    z-index: 20;
-    display: inline-flex;
-    width: 3rem;
-    height: 3rem;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 999px;
-    color: var(--theme-color-text);
-    background: rgba(4, 11, 24, 0.72);
-    cursor: pointer;
-    pointer-events: auto;
-    transform: translateY(-50%);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
-  .product-accessory-bundle__arrow[hidden] {
-    display: none;
-  }
-
-  .product-accessory-bundle__arrow--prev {
-    left: 0.4rem;
-  }
-
-  .product-accessory-bundle__arrow--next {
-    right: 0.4rem;
   }
 
   @media (min-width: 760px) {

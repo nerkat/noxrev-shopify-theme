@@ -25,89 +25,33 @@
     {% endif %}
   </header>
 
-  <div class="featured-catalog__slider-wrap" data-featured-catalog>
-    <div class="featured-catalog__grid grid grid--5" data-featured-catalog-slider>
+  <div class="featured-catalog__slider-wrap noxrev-slider" data-noxrev-slider data-noxrev-slider-step-card=".product-card">
+    <div class="featured-catalog__grid grid grid--5" data-noxrev-slider-track>
       {% for product in catalog_collection.products limit: product_limit %}
         {% render 'product-card', product: product, show_vendor: section.settings.show_vendor %}
       {% endfor %}
     </div>
 
     <button
-      class="featured-catalog__arrow featured-catalog__arrow--prev"
+      class="featured-catalog__arrow noxrev-slider__arrow noxrev-slider__arrow--prev"
       type="button"
       aria-label="Previous featured products"
-      data-featured-catalog-prev
+      data-noxrev-slider-prev
       hidden
     >
       <span aria-hidden="true">&lsaquo;</span>
     </button>
     <button
-      class="featured-catalog__arrow featured-catalog__arrow--next"
+      class="featured-catalog__arrow noxrev-slider__arrow noxrev-slider__arrow--next"
       type="button"
       aria-label="Next featured products"
-      data-featured-catalog-next
+      data-noxrev-slider-next
       hidden
     >
       <span aria-hidden="true">&rsaquo;</span>
     </button>
   </div>
 </section>
-
-<script>
-  (() => {
-    const initFeaturedCatalogSliders = (root = document) => {
-      const catalogs = root.querySelectorAll('[data-featured-catalog]');
-
-      catalogs.forEach((catalog) => {
-        if (catalog.dataset.featuredCatalogReady === 'true') return;
-        catalog.dataset.featuredCatalogReady = 'true';
-
-        const slider = catalog.querySelector('[data-featured-catalog-slider]');
-        const prev = catalog.querySelector('[data-featured-catalog-prev]');
-        const next = catalog.querySelector('[data-featured-catalog-next]');
-        if (!slider || !prev || !next) return;
-
-        const getStep = () => {
-          const card = slider.querySelector('.product-card');
-          return card ? card.getBoundingClientRect().width + 16 : slider.clientWidth * 0.82;
-        };
-
-        const updateButtons = () => {
-          const maxScroll = slider.scrollWidth - slider.clientWidth;
-          const hasOverflow = maxScroll > 2;
-          prev.hidden = !hasOverflow || slider.scrollLeft <= 2;
-          next.hidden = !hasOverflow || slider.scrollLeft >= maxScroll - 2;
-        };
-
-        const scrollByDirection = (direction) => {
-          const maxScroll = slider.scrollWidth - slider.clientWidth;
-          const target = Math.max(0, Math.min(maxScroll, slider.scrollLeft + getStep() * direction));
-          slider.scrollTo({ left: target, behavior: 'smooth' });
-          window.setTimeout(updateButtons, 260);
-        };
-
-        prev.addEventListener('click', (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          scrollByDirection(-1);
-        });
-
-        next.addEventListener('click', (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          scrollByDirection(1);
-        });
-
-        slider.addEventListener('scroll', updateButtons, { passive: true });
-        window.addEventListener('resize', updateButtons);
-        updateButtons();
-      });
-    };
-
-    initFeaturedCatalogSliders();
-    document.addEventListener('shopify:section:load', (event) => initFeaturedCatalogSliders(event.target));
-  })();
-</script>
 
 {% stylesheet %}
   .featured-catalog__header {
@@ -130,42 +74,6 @@
     color: var(--theme-color-text-muted);
     font-size: 0.95rem;
     line-height: 1.7;
-  }
-
-  .featured-catalog__slider-wrap {
-    position: relative;
-  }
-
-  .featured-catalog__arrow {
-    position: absolute;
-    top: 50%;
-    z-index: 3;
-    display: inline-flex;
-    width: 3rem;
-    height: 3rem;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 999px;
-    color: var(--theme-color-text);
-    background: rgba(4, 11, 24, 0.72);
-    cursor: pointer;
-    pointer-events: auto;
-    transform: translateY(-50%);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
-  .featured-catalog__arrow[hidden] {
-    display: none;
-  }
-
-  .featured-catalog__arrow--prev {
-    left: 0.4rem;
-  }
-
-  .featured-catalog__arrow--next {
-    right: 0.4rem;
   }
 
   @media (max-width: 749px) {

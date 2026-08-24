@@ -627,6 +627,42 @@ html {
   white-space: nowrap;
 }
 
+.noxrev-slider {
+  position: relative;
+}
+
+.noxrev-slider__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: inline-flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: var(--theme-color-text);
+  background: rgba(4, 11, 24, 0.72);
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translateY(-50%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.noxrev-slider__arrow[hidden] {
+  display: none;
+}
+
+.noxrev-slider__arrow--prev {
+  left: 0.4rem;
+}
+
+.noxrev-slider__arrow--next {
+  right: 0.4rem;
+}
+
 @media (max-width: 989px) {
   .grid--4 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
