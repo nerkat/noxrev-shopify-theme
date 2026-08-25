@@ -9,6 +9,7 @@
   assign current_variant = product.selected_or_first_available_variant
   assign featured_media = product.featured_media | default: product.media.first
   assign featured_image = featured_media.preview_image | default: featured_media
+  assign featured_image_alt = featured_image.alt | default: product.title
   assign compare_at_price = current_variant.compare_at_price
   assign price = current_variant.price | default: product.price
   assign on_sale = false
@@ -45,7 +46,7 @@
     <div class="product-card__media card__media">
       {% render 'responsive-image',
         image: featured_image,
-        alt: product.title,
+        alt: featured_image_alt,
         class: 'product-card__image',
         loading: 'lazy',
         sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',

@@ -178,7 +178,6 @@
   endcase
 
   assign root_absolute_url = request.origin | append: routes.root_url
-  assign products_absolute_url = request.origin | append: routes.all_products_collection_url
   assign collections_absolute_url = request.origin | append: routes.collections_url
   assign organization_id = shop.url | append: '#organization'
 -%}
@@ -210,11 +209,12 @@
 {%- endif -%}
 
 {%- if request.page_type == 'product' -%}
+  {%- assign og_variant = product.selected_variant | default: product.selected_or_first_available_variant -%}
   <script type="application/ld+json">
     {{ product | structured_data }}
   </script>
 
-  <meta property="product:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+  <meta property="product:price:amount" content="{{ og_variant.price | money_without_currency | strip_html }}">
   <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
 {%- endif -%}
 
@@ -246,8 +246,7 @@
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ root_absolute_url | json }} },
-          { "@type": "ListItem", "position": 2, "name": "Products", "item": {{ products_absolute_url | json }} },
-          { "@type": "ListItem", "position": 3, "name": {{ product.title | json }}, "item": {{ canonical_url | json }} }
+          { "@type": "ListItem", "position": 2, "name": {{ product.title | json }}, "item": {{ canonical_url | json }} }
         ]
       }
     </script>
