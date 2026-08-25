@@ -57,6 +57,7 @@
     "product_reviews_rating": {
       "type": "product-reviews-rating",
       "settings": {
+        "show_reviews_rating_section": false,
         "eyebrow": "Customer Reviews",
         "title": "Trusted by real customers.",
         "rating_value": "4.9",

@@ -45,6 +45,7 @@
   endif
 %}
 
+{% if section.settings.show_reviews_rating_section %}
 <section class="product-reviews-rating section">
   <div class="container">
     <article class="product-reviews-rating__panel">
@@ -156,6 +157,7 @@
     </article>
   </div>
 </section>
+{% endif %}
 
 <script>
   (() => {
@@ -621,6 +623,7 @@
 {
   "name": "PDP Reviews Rating",
   "settings": [
+    { "type": "checkbox", "id": "show_reviews_rating_section", "label": "Show reviews rating section", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Customer Reviews" },
     { "type": "text", "id": "title", "label": "Title", "default": "Trusted by real customers." },
     { "type": "text", "id": "rating_value", "label": "Rating value", "default": "4.9" },
