@@ -31,21 +31,26 @@
         {% for block in section.blocks %}
           {% liquid
             assign poster_image = block.settings.poster | default: product.featured_media.preview_image
+            assign video_accessible_label = block.settings.poster_alt | default: block.settings.title | default: 'Product demonstration video'
           %}
           <article class="product-real-life-videos__card" {{ block.shopify_attributes }}>
             <div class="product-real-life-videos__media">
               {% if block.settings.video != blank %}
                 <div class="product-real-life-videos__video-shell" data-real-life-video-shell>
-                  {{
-                    block.settings.video
-                    | video_tag:
-                      image_size: '720x',
-                      controls: false,
-                      muted: true,
-                      playsinline: true,
-                      preload: 'metadata',
-                      class: 'product-real-life-videos__video'
-                  }}
+                  {% capture video_markup %}
+                    {{
+                      block.settings.video
+                      | video_tag:
+                        image_size: '720x',
+                        controls: false,
+                        muted: true,
+                        playsinline: true,
+                        preload: 'metadata',
+                        aria_label: video_accessible_label,
+                        class: 'product-real-life-videos__video'
+                    }}
+                  {% endcapture %}
+                  {{ video_markup | replace: 'aria_label=', 'aria-label=' }}
                   <button
                     class="product-real-life-videos__play product-real-life-videos__play--video"
                     type="button"

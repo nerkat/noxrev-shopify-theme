@@ -28,7 +28,17 @@
           {{ 'cart.remove' | t | link_to: item.url_to_remove }}
         </td>
         <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
+          <label class="visually-hidden" for="CartQuantity-{{ forloop.index }}">
+            Quantity for {{ item.product.title | escape }}
+          </label>
+          <input
+            id="CartQuantity-{{ forloop.index }}"
+            type="number"
+            name="updates[]"
+            min="0"
+            value="{{ item.quantity }}"
+            inputmode="numeric"
+          >
           <input type="submit" value="{{ 'cart.update' | t }}">
         </td>
       </tr>

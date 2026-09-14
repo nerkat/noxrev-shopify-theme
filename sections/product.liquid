@@ -28,7 +28,8 @@
   {% form 'product', product %}
     {% assign current_variant = product.selected_or_first_available_variant %}
 
-    <select name="id">
+    <label class="visually-hidden" for="ProductVariant-{{ section.id }}">Product variant</label>
+    <select id="ProductVariant-{{ section.id }}" name="id">
       {% for variant in product.variants %}
         <option
           value="{{ variant.id }}"
@@ -41,7 +42,8 @@
       {% endfor %}
     </select>
 
-    <input type="text" name="quantity" min="1" value="1">
+    <label class="visually-hidden" for="ProductQuantity-{{ section.id }}">Quantity</label>
+    <input id="ProductQuantity-{{ section.id }}" type="number" name="quantity" min="1" value="1" inputmode="numeric">
 
     <input type="submit" value="Add to cart">
     {{ form | payment_button }}

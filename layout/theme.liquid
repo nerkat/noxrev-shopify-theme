@@ -35,7 +35,13 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'theme.css' | asset_url | stylesheet_tag }}
-    {{ 'catalog-search.css' | asset_url | stylesheet_tag }}
+    <link
+      rel="preload"
+      as="style"
+      href="{{ 'catalog-search.css' | asset_url }}"
+      onload="this.onload=null;this.rel='stylesheet'"
+    >
+    <noscript>{{ 'catalog-search.css' | asset_url | stylesheet_tag }}</noscript>
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
