@@ -31,6 +31,7 @@
         {% for block in section.blocks %}
           {% liquid
             assign poster_image = block.settings.poster | default: product.featured_media.preview_image
+            assign video_poster_image = block.settings.video.preview_image
             assign video_accessible_label = block.settings.poster_alt | default: block.settings.title | default: 'Product demonstration video'
           %}
           <article class="product-real-life-videos__card" {{ block.shopify_attributes }}>
@@ -40,6 +41,9 @@
                   <video
                     class="product-real-life-videos__video"
                     aria-label="{{ video_accessible_label | escape }}"
+                    {% if video_poster_image != blank %}
+                      data-poster-src="{{ video_poster_image | image_url: width: 420 }}"
+                    {% endif %}
                     playsinline
                     muted
                     preload="none"
@@ -132,10 +136,36 @@
       section.dataset.realLifeVideosReady = 'true';
 
       const videoShells = section.querySelectorAll('[data-real-life-video-shell]');
+      const loadPoster = (video) => {
+        const posterUrl = video.dataset.posterSrc;
+        if (!posterUrl) return;
+
+        video.poster = posterUrl;
+        delete video.dataset.posterSrc;
+      };
+      const posterObserver = 'IntersectionObserver' in window
+        ? new IntersectionObserver(
+            (entries, observer) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                loadPoster(entry.target);
+                observer.unobserve(entry.target);
+              });
+            },
+            { rootMargin: '900px 500px' }
+          )
+        : null;
+
       videoShells.forEach((shell) => {
         const video = shell.querySelector('video');
         const toggle = shell.querySelector('[data-real-life-video-toggle]');
         if (!video || !toggle) return;
+
+        if (posterObserver) {
+          posterObserver.observe(video);
+        } else {
+          loadPoster(video);
+        }
 
         const updateState = () => {
           const isPlaying = !video.paused && !video.ended;
@@ -145,6 +175,7 @@
         };
 
         const togglePlayback = () => {
+          loadPoster(video);
           if (video.paused || video.ended) {
             video.play().catch(() => {});
           } else {
