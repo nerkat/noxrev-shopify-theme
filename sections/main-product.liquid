@@ -64,6 +64,7 @@
                       width="{{ slide_image.width }}"
                       height="{{ slide_image.height }}"
                       loading="{% if is_active_media %}eager{% else %}lazy{% endif %}"
+                      fetchpriority="{% if is_active_media %}high{% else %}low{% endif %}"
                     >
                   {% else %}
                     {{ 'image' | placeholder_svg_tag: 'main-product__gallery-placeholder' }}
