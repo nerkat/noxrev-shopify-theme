@@ -208,7 +208,7 @@
         {% if section.settings.logo != blank %}
           {{
             section.settings.logo
-            | image_url: width: 400
+            | image_url: width: 240
             | image_tag: class: 'header__logo', loading: 'eager', alt: brand_text
           }}
         {% else %}

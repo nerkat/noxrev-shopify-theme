@@ -37,24 +37,17 @@
             <div class="product-real-life-videos__media">
               {% if block.settings.video != blank %}
                 <div class="product-real-life-videos__video-shell" data-real-life-video-shell>
-                  {% capture video_markup %}
-                    {{
-                      block.settings.video
-                      | video_tag:
-                        image_size: '720x',
-                        controls: false,
-                        muted: true,
-                        playsinline: true,
-                        preload: 'metadata',
-                        aria_label: video_accessible_label,
-                        class: 'product-real-life-videos__video'
-                    }}
-                  {% endcapture %}
-                  {% capture video_poster_img_open %}<img alt="{{ video_accessible_label | escape }}" {% endcapture %}
-                  {{ video_markup
-                    | replace: 'aria_label=', 'aria-label='
-                    | replace: '<img ', video_poster_img_open
-                  }}
+                  <video
+                    class="product-real-life-videos__video"
+                    aria-label="{{ video_accessible_label | escape }}"
+                    playsinline
+                    muted
+                    preload="none"
+                  >
+                    {% for source in block.settings.video.sources %}
+                      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                    {% endfor %}
+                  </video>
                   <button
                     class="product-real-life-videos__play product-real-life-videos__play--video"
                     type="button"
