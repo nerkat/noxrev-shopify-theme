@@ -50,7 +50,11 @@
                         class: 'product-real-life-videos__video'
                     }}
                   {% endcapture %}
-                  {{ video_markup | replace: 'aria_label=', 'aria-label=' }}
+                  {% capture video_poster_img_open %}<img alt="{{ video_accessible_label | escape }}" {% endcapture %}
+                  {{ video_markup
+                    | replace: 'aria_label=', 'aria-label='
+                    | replace: '<img ', video_poster_img_open
+                  }}
                   <button
                     class="product-real-life-videos__play product-real-life-videos__play--video"
                     type="button"
