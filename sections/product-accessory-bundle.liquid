@@ -436,9 +436,29 @@
         true
       );
 
-      fetchCart()
-        .then(syncBundleCards)
-        .catch(() => {});
+      const syncInitialCart = () => {
+        fetchCart()
+          .then(syncBundleCards)
+          .catch(() => {});
+      };
+
+      const bundleSections = document.querySelectorAll('.product-accessory-bundle');
+
+      if (!('IntersectionObserver' in window)) {
+        syncInitialCart();
+      } else if (bundleSections.length) {
+        const cartSyncObserver = new IntersectionObserver(
+          (entries) => {
+            if (!entries.some((entry) => entry.isIntersecting)) return;
+
+            cartSyncObserver.disconnect();
+            syncInitialCart();
+          },
+          { rootMargin: '400px 0px' }
+        );
+
+        bundleSections.forEach((section) => cartSyncObserver.observe(section));
+      }
 
       window.addEventListener('cart:updated', (event) => {
         if (event.detail?.cart) {
