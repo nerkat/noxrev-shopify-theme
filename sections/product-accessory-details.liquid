@@ -22,14 +22,7 @@
 
       <div class="product-accessory-details__media">
         {% if hero_image != blank %}
-          {% render 'responsive-image',
-            image: hero_image,
-            alt: section.settings.image_alt | default: product.title,
-            class: 'product-accessory-details__image',
-            loading: 'lazy',
-            sizes: '(min-width: 900px) 45vw, 100vw',
-            widths: '420, 640, 860, 1100, 1400'
-          %}
+          {% render 'responsive-image', image: hero_image, alt: section.settings.image_alt, default: product.title, class: 'product-accessory-details__image', loading: 'lazy', sizes: '(min-width: 900px) 45vw, 100vw', widths: '420, 640, 860, 1100, 1400' %}
         {% else %}
           <div class="product-accessory-details__placeholder" aria-hidden="true"></div>
         {% endif %}
@@ -258,3 +251,23 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {% render 'responsive-image',
+                image: hero_image,
+                alt: section.settings.image_alt | default: product.title,
+                class: 'product-accessory-details__image',
+                loading: 'lazy',
+                sizes: '(min-width: 900px) 45vw, 100vw',
+                widths: '420, 640, 860, 1100, 1400'
+              %}
+  to: "{% render 'responsive-image', image: hero_image, alt: section.settings.image_alt,
+    default: product.title, class: 'product-accessory-details__image', loading: 'lazy',
+    sizes: '(min-width: 900px) 45vw, 100vw', widths: '420, 640, 860, 1100, 1400' %}"
+  position: 1035..1280
+{% endcomment %}
