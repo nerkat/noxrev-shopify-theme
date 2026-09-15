@@ -24,6 +24,15 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {% if request.page_type == 'product' %}
+      <link
+        rel="preload"
+        as="style"
+        href="{{ 'pdp-below-fold.css' | asset_url }}"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+      <noscript>{{ 'pdp-below-fold.css' | asset_url | stylesheet_tag }}</noscript>
+    {% endif %}
     <link
       rel="preload"
       as="style"
@@ -35,11 +44,87 @@
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
+    {% if request.page_type == 'product' %}
+      {% comment %}Pause Judge.me's deferred loader until the initial product-page load has completed.{% endcomment %}
+      <script>
+        window.jdgm = window.jdgm || {};
+        window.jdgm._loaderExecuted = true;
+      </script>
+    {% endif %}
+
     {{ content_for_header }}
+
+    {% if request.page_type == 'product' %}
+      <script>
+        (() => {
+          const deferredJudgeMe = window.jdgm;
+          let loading = false;
+          let loaderRetries = 0;
+          let timer;
+
+          const loadJudgeMe = () => {
+            if (loading) return;
+
+            const installedLoader = document.querySelector(
+              'script[src*="/judgeme-"][src*="/assets/loader.js"]'
+            );
+            if (!installedLoader) {
+              if (loaderRetries < 50) {
+                loaderRetries += 1;
+                timer = window.setTimeout(loadJudgeMe, 100);
+              }
+              return;
+            }
+
+            loading = true;
+            window.clearTimeout(timer);
+            window.jdgm = deferredJudgeMe || {};
+            window.jdgm._loaderExecuted = false;
+
+            const script = document.createElement('script');
+            script.src = installedLoader.src;
+            script.async = true;
+            script.dataset.deferredJudgeMe = '';
+            document.head.appendChild(script);
+          };
+
+          document.addEventListener(
+            'click',
+            (event) => {
+              if (event.target.closest('[data-judgeme-write-review], [data-judgeme-view-reviews]')) {
+                loadJudgeMe();
+              }
+            },
+            { capture: true }
+          );
+
+          window.addEventListener(
+            'load',
+            () => {
+              timer = window.setTimeout(loadJudgeMe, 8000);
+            },
+            { once: true }
+          );
+        })();
+      </script>
+    {% endif %}
 
     <script src="{{ 'noxrev-slider.js' | asset_url }}" defer></script>
     <script src="{{ 'catalog-search.js' | asset_url }}" defer></script>
-    <script src="https://t.contentsquare.net/uxa/aa8c8c113a0c5.js" defer></script>
+    <script>
+      window.addEventListener(
+        'load',
+        () => {
+          window.setTimeout(() => {
+            const script = document.createElement('script');
+            script.src = 'https://t.contentsquare.net/uxa/aa8c8c113a0c5.js';
+            script.async = true;
+            document.head.appendChild(script);
+          }, 3000);
+        },
+        { once: true }
+      );
+    </script>
   </head>
 
   <body class="theme template-{{ template.name | handle }}">
