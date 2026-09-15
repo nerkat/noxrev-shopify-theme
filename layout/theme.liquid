@@ -4,30 +4,19 @@
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 
-    {% comment %}
-      Font preloading:
-      1. Preconnect to font CDN for faster connection
-      2. Preload only the critical font variant (base weight)
-      3. Additional variants load on-demand via @font-face
-    {% endcomment %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&display=swap"
-      media="print"
-      onload="this.media='all'"
-    >
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&display=swap"
-      >
-    </noscript>
+    {% comment %}Self-host Oxanium to remove the external Google Fonts request chain.{% endcomment %}
+    {{ 'oxanium-latin-variable.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    <style>
+      @font-face {
+        font-family: 'Oxanium';
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: swap;
+        src: url('{{ 'oxanium-latin-variable.woff2' | asset_url }}') format('woff2');
+      }
+    </style>
 
     {% unless settings.type_primary_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-
       {% comment %} Preload the base font variant for initial page render {% endcomment %}
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}

@@ -778,3 +778,8 @@ html {
     margin-inline: 0;
   }
 }
+
+/* Klaviyo injects this referral badge into onsite forms. */
+a[aria-label^='Created with Klaviyo'][href*='utm_source=plgform'] {
+  display: none !important;
+}
