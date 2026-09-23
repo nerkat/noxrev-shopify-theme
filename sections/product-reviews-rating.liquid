@@ -1,6 +1,5 @@
 {% liquid
   assign rating_value = section.settings.rating_value
-  assign rating_count = product.metafields.reviews.rating_count.value | default: blank
   assign judge_me_widget = product.metafields.judgeme.widget
   assign has_legacy_judgeme_widget = false
 
@@ -37,12 +36,7 @@
     assign p1 = review_1 | times: 100.0 | divided_by: review_total
   endif
 
-  assign review_total_label = rating_count | default: review_total
   assign subtitle = section.settings.subtitle
-
-  if rating_count != blank
-    assign subtitle = 'Based on ' | append: review_total_label | append: ' reviews'
-  endif
 %}
 
 {% if section.settings.show_reviews_rating_section %}
