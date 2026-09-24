@@ -620,6 +620,8 @@
     window.__noxrevCartDrawerReady = true;
 
     const HEADER_OVERLAY_EVENT = 'noxrev:header-overlay-open';
+    const KLAVIYO_FORM_ID = 'X8pvLK';
+
     let drawerController = null;
     let drawerRequestSequence = 0;
     let lastFocusedElement = null;
@@ -627,6 +629,21 @@
     const rootPath = () => window.Shopify?.routes?.root || '/';
     const getDrawer = () => document.querySelector('[data-cart-drawer]');
     const getPanel = () => getDrawer()?.querySelector('[data-cart-drawer-panel]');
+
+    /*
+     * NOXREV / Klaviyo
+     * Prevent the 10% welcome popup from covering the cart drawer.
+     */
+    const suppressKlaviyoForms = () => {
+      document.body.classList.add('noxrev-cart-open');
+
+      window._klOnsite = window._klOnsite || [];
+      window._klOnsite.push(['closeForm', KLAVIYO_FORM_ID]);
+    };
+
+    const restoreKlaviyoForms = () => {
+      document.body.classList.remove('noxrev-cart-open');
+    };
 
     const updateHeaderCartCount = (itemCount) => {
       document.querySelectorAll('.header__cart-count').forEach((count) => {
@@ -645,9 +662,14 @@
 
       drawer.classList.toggle('is-updating', isBusy);
       drawer.setAttribute('aria-busy', isBusy ? 'true' : 'false');
-      drawer.querySelectorAll('[data-cart-drawer-change], [data-cart-drawer-remove], [data-cart-drawer-checkout]').forEach((control) => {
-        control.toggleAttribute('disabled', isBusy);
-      });
+
+      drawer
+        .querySelectorAll(
+          '[data-cart-drawer-change], [data-cart-drawer-remove], [data-cart-drawer-checkout]'
+        )
+        .forEach((control) => {
+          control.toggleAttribute('disabled', isBusy);
+        });
     };
 
     const showDrawerError = (message) => {
@@ -677,12 +699,20 @@
         return false;
       }
 
-      const wasOpen = currentDrawer.getAttribute('aria-hidden') === 'false';
+      const wasOpen =
+        currentDrawer.getAttribute('aria-hidden') === 'false';
+
       currentDrawer.replaceWith(nextDrawer);
 
       if (wasOpen) {
         nextDrawer.setAttribute('aria-hidden', 'false');
         document.body.classList.add('cart-drawer-open');
+
+        /*
+         * The drawer HTML can be replaced after quantity/remove actions,
+         * so make sure Klaviyo remains suppressed.
+         */
+        suppressKlaviyoForms();
       }
 
       return true;
@@ -694,11 +724,25 @@
 
       if (!drawer || !panel) return;
 
-      document.dispatchEvent(new CustomEvent(HEADER_OVERLAY_EVENT, { detail: { source: 'cart' } }));
+      document.dispatchEvent(
+        new CustomEvent(HEADER_OVERLAY_EVENT, {
+          detail: { source: 'cart' },
+        })
+      );
+
       lastFocusedElement = document.activeElement;
+
       drawer.setAttribute('aria-hidden', 'false');
       document.body.classList.add('cart-drawer-open');
-      window.requestAnimationFrame(() => panel.focus({ preventScroll: true }));
+
+      /*
+       * Close/suppress the NOXREV 10% Klaviyo popup.
+       */
+      suppressKlaviyoForms();
+
+      window.requestAnimationFrame(() => {
+        panel.focus({ preventScroll: true });
+      });
     };
 
     const closeDrawer = () => {
@@ -709,12 +753,19 @@
       drawer.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('cart-drawer-open');
 
+      /*
+       * Allow Klaviyo to return to its normal targeting behaviour.
+       * We do NOT force the popup to reopen.
+       */
+      restoreKlaviyoForms();
+
       if (lastFocusedElement?.isConnected) {
         lastFocusedElement.focus({ preventScroll: true });
       }
     };
 
-    const getSectionId = () => getDrawer()?.dataset.sectionId || 'cart-drawer';
+    const getSectionId = () =>
+      getDrawer()?.dataset.sectionId || 'cart-drawer';
 
     const requestCartChange = async ({ line, quantity }) => {
       const requestId = ++drawerRequestSequence;
@@ -724,6 +775,7 @@
       }
 
       drawerController = new AbortController();
+
       clearDrawerError();
       setDrawerBusy(true);
 
@@ -746,7 +798,11 @@
         const cart = await response.json();
 
         if (!response.ok) {
-          throw new Error(cart.description || cart.message || 'Unable to update cart.');
+          throw new Error(
+            cart.description ||
+              cart.message ||
+              'Unable to update cart.'
+          );
         }
 
         if (requestId !== drawerRequestSequence) return;
@@ -763,7 +819,10 @@
         if (error.name === 'AbortError') return;
 
         if (requestId === drawerRequestSequence) {
-          showDrawerError(error.message || 'Unable to update cart. Please try again.');
+          showDrawerError(
+            error.message ||
+              'Unable to update cart. Please try again.'
+          );
         }
       } finally {
         if (requestId === drawerRequestSequence) {
@@ -775,10 +834,16 @@
 
     const refreshDrawer = async () => {
       const url = new URL(window.location.href);
-      url.searchParams.set('section_id', getSectionId());
+
+      url.searchParams.set(
+        'section_id',
+        getSectionId()
+      );
 
       const response = await fetch(url.toString(), {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+        },
       });
 
       if (!response.ok) {
@@ -792,11 +857,16 @@
       const submitButton = form.querySelector('[type="submit"]');
       const originalText = submitButton?.textContent;
       const originalDisabled = submitButton?.disabled;
-      const shouldSwapSubmitText = !submitButton?.hasAttribute('data-cart-compact-submit');
+
+      const shouldSwapSubmitText =
+        !submitButton?.hasAttribute(
+          'data-cart-compact-submit'
+        );
 
       if (submitButton) {
         submitButton.disabled = true;
         submitButton.classList.add('is-loading');
+
         if (shouldSwapSubmitText) {
           submitButton.textContent = 'Adding...';
         }
@@ -804,31 +874,57 @@
 
       try {
         const formData = new FormData(form);
-        const response = await fetch(`${rootPath()}cart/add.js`, {
-          method: 'POST',
-          headers: { Accept: 'application/json' },
-          body: formData,
-        });
+
+        const response = await fetch(
+          `${rootPath()}cart/add.js`,
+          {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+            },
+            body: formData,
+          }
+        );
 
         const result = await response.json();
 
         if (!response.ok) {
-          throw new Error(result.description || result.message || 'Unable to add item to cart.');
+          throw new Error(
+            result.description ||
+              result.message ||
+              'Unable to add item to cart.'
+          );
         }
 
         await refreshDrawer();
-        const cartResponse = await fetch(`${rootPath()}cart.js`, { headers: { Accept: 'application/json' } });
+
+        const cartResponse = await fetch(
+          `${rootPath()}cart.js`,
+          {
+            headers: {
+              Accept: 'application/json',
+            },
+          }
+        );
+
         const cart = await cartResponse.json();
+
         updateHeaderCartCount(cart.item_count || 0);
         publishCartUpdate(cart);
+
         openDrawer();
       } catch (error) {
-        showDrawerError(error.message || 'Unable to add item to cart. Please try again.');
+        showDrawerError(
+          error.message ||
+            'Unable to add item to cart. Please try again.'
+        );
+
         openDrawer();
       } finally {
         if (submitButton) {
           submitButton.disabled = originalDisabled;
           submitButton.classList.remove('is-loading');
+
           if (shouldSwapSubmitText) {
             submitButton.textContent = originalText;
           }
@@ -837,7 +933,9 @@
     };
 
     document.addEventListener('submit', (event) => {
-      const form = event.target.closest('form[action*="/cart/add"]');
+      const form = event.target.closest(
+        'form[action*="/cart/add"]'
+      );
 
       if (!form || !form.querySelector('[name="id"]')) {
         return;
@@ -848,10 +946,23 @@
     });
 
     document.addEventListener('click', (event) => {
-      const headerCartTrigger = event.target.closest('.header__cart');
-      const closeTrigger = event.target.closest('[data-cart-drawer-close]');
-      const removeTrigger = event.target.closest('[data-cart-drawer-remove]');
-      const changeTrigger = event.target.closest('[data-cart-drawer-change]');
+      const headerCartTrigger =
+        event.target.closest('.header__cart');
+
+      const closeTrigger =
+        event.target.closest(
+          '[data-cart-drawer-close]'
+        );
+
+      const removeTrigger =
+        event.target.closest(
+          '[data-cart-drawer-remove]'
+        );
+
+      const changeTrigger =
+        event.target.closest(
+          '[data-cart-drawer-change]'
+        );
 
       if (headerCartTrigger) {
         event.preventDefault();
@@ -867,27 +978,48 @@
 
       if (removeTrigger) {
         event.preventDefault();
-        requestCartChange({ line: removeTrigger.dataset.line, quantity: 0 });
+
+        requestCartChange({
+          line: removeTrigger.dataset.line,
+          quantity: 0,
+        });
+
         return;
       }
 
       if (changeTrigger) {
         event.preventDefault();
-        requestCartChange({ line: changeTrigger.dataset.line, quantity: changeTrigger.dataset.quantity });
+
+        requestCartChange({
+          line: changeTrigger.dataset.line,
+          quantity: changeTrigger.dataset.quantity,
+        });
       }
     });
 
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && getDrawer()?.getAttribute('aria-hidden') === 'false') {
+      if (
+        event.key === 'Escape' &&
+        getDrawer()?.getAttribute('aria-hidden') ===
+          'false'
+      ) {
         closeDrawer();
       }
     });
 
-    document.addEventListener(HEADER_OVERLAY_EVENT, (event) => {
-      if (event.detail?.source !== 'cart' && getDrawer()?.getAttribute('aria-hidden') === 'false') {
-        closeDrawer();
+    document.addEventListener(
+      HEADER_OVERLAY_EVENT,
+      (event) => {
+        if (
+          event.detail?.source !== 'cart' &&
+          getDrawer()?.getAttribute(
+            'aria-hidden'
+          ) === 'false'
+        ) {
+          closeDrawer();
+        }
       }
-    });
+    );
   })();
 {% endjavascript %}
 
