@@ -13,9 +13,8 @@
   "sections": {
     "announcement": {
       "type": "announcement-bar",
-      "disabled": true,
       "settings": {
-        "text": "Free standard shipping on orders over $100",
+        "text": "Free Domestic 🇺🇸 shipping on orders over $99",
         "link": "",
         "secondary_text": "Track order",
         "secondary_link": ""
