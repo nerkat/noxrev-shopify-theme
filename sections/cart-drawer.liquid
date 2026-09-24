@@ -602,12 +602,18 @@
   }
 
   @media (max-width: 520px) {
-    .cart-drawer__panel {
-      inset: 0;
-      width: 100%;
-      border-radius: 0;
-      border-left: 0;
-    }
+  .cart-drawer__panel {
+    inset: 0;
+    width: 100%;
+    border-radius: 0;
+    border-left: 0;
+  }
+}
+
+/* Hide Klaviyo signup forms while the cart drawer is open. */
+body.noxrev-cart-open .klaviyo-form {
+  display: none !important;
+}
   }
 {% endstylesheet %}
 
