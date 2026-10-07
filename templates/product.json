@@ -16,6 +16,7 @@
     "product_reviews_rating": {
       "type": "product-reviews-rating",
       "settings": {
+        "show_reviews_rating_section": true,
         "eyebrow": "Customer Reviews",
         "title": "Trusted by real customers.",
         "rating_value": "4.9",
@@ -137,7 +138,7 @@
         "real_life_typing": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/1.mp4",
+            "video": "shopify://files/videos/AQPDxtVL8JCIC0-knDBe14QBlzD-egPPeWQaNKgTbkWHQE0kGkc5ogTSeu63o8UuEWdDw0FkqZHbeUwaSbwrsHVzmhTdCtWFQqrORAc.mp4",
             "poster_alt": "Customer typing on a NoxRev iPad keyboard case",
             "title": "Typing setup",
             "text": "Backlit keys in action",
@@ -147,7 +148,7 @@
         "real_life_study": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/2.mp4",
+            "video": "shopify://files/videos/AQOb6ujANAO380jx1S_5dTp9fBDtwnjrY7Iadzwww2fTe9Ojrs9n-gfcXMvM50WKRQVx_FDvZOQEBeH3c7XlMgp4.mp4",
             "poster_alt": "Student using a NoxRev iPad keyboard case",
             "title": "Study session",
             "text": "Notes, docs and more",
@@ -167,7 +168,7 @@
         "real_life_kitchen": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/4.mp4",
+            "video": "shopify://files/videos/AQM-13B2b45Yg55A4AiT1Gh1fdPYpiHI0iVbvRv4xojOlRwQ9ls_eVPu5Ln6-t2hDnN2YsDvEeoRdfiOKuZ4G2_CZ-FC7z7JCy86JoI.mp4",
             "poster_alt": "NoxRev iPad keyboard case used in a kitchen",
             "title": "Kitchen workflow",
             "text": "Recipes, shows, multitask",
@@ -177,7 +178,7 @@
         "video_card_fe4A7V": {
           "type": "video_card",
           "settings": {
-            "video": "shopify://files/videos/5.mp4",
+            "video": "shopify://files/videos/Whisper-Quiet_Typing!_Experience_the_magic_of_iMac-style_scissor_keys_on_your_iPad,_in_stunning_pink-20260917_135325.mp4",
             "poster_alt": "Customer typing on a NoxRev iPad keyboard case",
             "title": "Typing setup",
             "text": "Backlit keys in action",
@@ -561,7 +562,6 @@
     },
     "1783425997ca25e2c8": {
       "type": "apps",
-      "disabled": true,
       "blocks": {
         "judge_me_reviews_review_widget_axCXAD": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
@@ -576,6 +576,7 @@
       "block_order": [
         "judge_me_reviews_review_widget_axCXAD"
       ],
+      "disabled": true,
       "settings": {}
     }
   },
