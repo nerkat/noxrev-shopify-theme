@@ -36,11 +36,19 @@
               assign card_text = block.settings.text
               assign card_image = block.settings.image
               assign card_price = block.settings.price
-              assign card_compare_price = block.settings.compare_price
+              assign card_compare_price = blank
               assign card_url = block.settings.link
               assign can_add_accessory = false
+              assign savings_percent = blank
+              assign fallback_price_amount = block.settings.price | remove: '$' | remove: ',' | strip | plus: 0
+              assign fallback_compare_amount = block.settings.compare_price | remove: '$' | remove: ',' | strip | plus: 0
+              assign fallback_savings_text = block.settings.savings_label | downcase | remove: 'save' | remove: '%' | strip
+              assign fallback_savings_percent = fallback_savings_text | plus: 0
 
               if accessory_product != blank
+                assign card_price = blank
+                assign card_compare_price = blank
+                assign savings_percent = blank
                 assign accessory_variant = accessory_product.selected_or_first_available_variant
                 assign card_title = accessory_product.title
                 assign card_url = accessory_product.url
@@ -49,8 +57,10 @@
                 endif
                 if accessory_variant != blank
                   assign card_price = accessory_variant.price | money
-                  if accessory_variant.compare_at_price > accessory_variant.price
+                  if accessory_variant.price > 0 and accessory_variant.compare_at_price > accessory_variant.price
                     assign card_compare_price = accessory_variant.compare_at_price | money
+                    assign savings_amount = accessory_variant.compare_at_price | minus: accessory_variant.price
+                    assign savings_percent = savings_amount | times: 100.0 | divided_by: accessory_variant.compare_at_price | round
                   endif
                   if accessory_variant.available
                     assign can_add_accessory = true
@@ -62,12 +72,16 @@
                 assign card_image = product.featured_media.preview_image
               endif
 
-              assign savings_percent = blank
-              if accessory_product != blank and accessory_product.compare_at_price > accessory_product.price
-                assign savings_amount = accessory_product.compare_at_price | minus: accessory_product.price
-                assign savings_percent = savings_amount | times: 100 | divided_by: accessory_product.compare_at_price
-              elsif block.settings.savings_label != blank
-                assign savings_percent = block.settings.savings_label
+              if accessory_product == blank
+                if fallback_price_amount > 0 and fallback_compare_amount > fallback_price_amount
+                  assign card_compare_price = block.settings.compare_price
+                  assign savings_amount = fallback_compare_amount | minus: fallback_price_amount
+                  assign savings_percent = savings_amount | times: 100.0 | divided_by: fallback_compare_amount | round
+
+                  if fallback_savings_text != blank and fallback_savings_percent == savings_percent
+                    assign savings_percent = fallback_savings_percent
+                  endif
+                endif
               endif
             %}
 
@@ -147,11 +161,7 @@
                     {% endif %}
                     {% if savings_percent != blank %}
                       <span class="product-accessory-bundle__save">
-                        {% if accessory_product != blank %}
-                          Save {{ savings_percent }}%
-                        {% else %}
-                          {{ savings_percent }}
-                        {% endif %}
+                        Save {{ savings_percent }}%
                       </span>
                     {% endif %}
                   </div>
