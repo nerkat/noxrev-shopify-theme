@@ -34,6 +34,36 @@
     "quantity": "Quantity",
     "total": "Total"
   },
+  "noxrev_cart": {
+    "drawer_eyebrow": "Added setup",
+    "drawer_title": "Your Cart",
+    "empty_eyebrow": "Nothing here yet",
+    "empty_body": "Find your perfect iPad fit and build your setup.",
+    "find_model": "Find Your iPad Model",
+    "line_total": "Line total",
+    "checkout_note": "Taxes, shipping, and discounts are calculated at checkout.",
+    "view_cart": "View cart",
+    "page_eyebrow": "YOUR CART",
+    "page_title": "Review your setup",
+    "page_intro": "Adjust your items before checkout.",
+    "shop_product": "Shop NoxRev TXP1",
+    "order_summary": "Order Summary"
+  },
+  "noxrev_contact": {
+    "success_title": "Message sent.",
+    "success_message": "Thanks for reaching out. We'll get back to you soon.",
+    "error_title": "Please check the form.",
+    "name_label": "Name",
+    "name_placeholder": "Your name",
+    "email_label": "Email",
+    "email_placeholder": "you@example.com",
+    "subject_label": "Subject",
+    "subject_placeholder": "Compatibility, order, shipping...",
+    "message_label": "Message",
+    "message_placeholder": "Tell us how we can help.",
+    "support_email_label": "Support email",
+    "response_time_label": "Response time"
+  },
   "customers": {
     "login": {
       "email": "Email",

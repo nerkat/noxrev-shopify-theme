@@ -5,7 +5,9 @@
         <p class="main-page__eyebrow">{{ section.settings.eyebrow }}</p>
       {% endif %}
 
-      <h1 class="main-page__title">{{ page.title }}</h1>
+      {% if section.settings.show_title %}
+        <h1 class="main-page__title">{{ page.title }}</h1>
+      {% endif %}
 
       {% if section.settings.intro != blank %}
         <p class="main-page__intro">{{ section.settings.intro | escape }}</p>
@@ -210,6 +212,12 @@
 {
   "name": "t:general.page",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show page title",
+      "default": true
+    },
     {
       "type": "checkbox",
       "id": "show_eyebrow",

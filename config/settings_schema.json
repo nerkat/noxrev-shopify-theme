@@ -12,6 +12,11 @@
     "settings": [
       {
         "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      },
+      {
+        "type": "image_picker",
         "id": "social_share_image",
         "label": "Default social sharing image",
         "info": "Used when a page has no featured image. Recommended size: 1200 x 630 px."

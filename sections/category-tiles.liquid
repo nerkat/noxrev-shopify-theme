@@ -1,6 +1,9 @@
 {% if section.blocks.size > 0 %}
   <section class="container section category-tiles">
-    <div class="category-tiles__header">
+    <div
+      class="category-tiles__header"
+      style="--category-tiles-header-spacing: {{ section.settings.header_bottom_spacing | default: 32 }}px;"
+    >
       <div>
         {% if section.settings.eyebrow != blank %}
           <p class="kicker">{{ section.settings.eyebrow | escape }}</p>
@@ -78,7 +81,7 @@
     align-items: end;
     justify-content: space-between;
     gap: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: var(--category-tiles-header-spacing, 2rem);
   }
 
   .category-tiles__title {
@@ -188,6 +191,16 @@
       "type": "textarea",
       "id": "text",
       "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "header_bottom_spacing",
+      "label": "Space between header and tiles",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
     }
   ],
   "blocks": [
@@ -219,6 +232,11 @@
       ]
     }
   ],
-  "max_blocks": 3
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Category tiles"
+    }
+  ]
 }
 {% endschema %}

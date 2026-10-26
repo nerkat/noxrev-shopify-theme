@@ -4,9 +4,9 @@
   data-section-id="{{ section.id }}"
 >
   <div class="main-cart__intro">
-    <p class="main-cart__eyebrow">YOUR CART</p>
-    <h1 class="main-cart__title">Review your setup</h1>
-    <p class="main-cart__text">Adjust your items before checkout.</p>
+    <p class="main-cart__eyebrow">{{ 'noxrev_cart.page_eyebrow' | t }}</p>
+    <h1 class="main-cart__title">{{ 'noxrev_cart.page_title' | t }}</h1>
+    <p class="main-cart__text">{{ 'noxrev_cart.page_intro' | t }}</p>
   </div>
 
   <div class="main-cart__error" data-cart-error role="status" aria-live="polite" hidden></div>
@@ -14,12 +14,12 @@
   {% if cart.item_count == 0 %}
     <div class="main-cart__empty" data-cart-empty-region>
       <div class="main-cart__empty-card">
-        <p class="main-cart__empty-eyebrow">Nothing here yet</p>
-        <h2>Your cart is empty</h2>
-        <p>Find your perfect iPad fit and build your setup.</p>
+        <p class="main-cart__empty-eyebrow">{{ 'noxrev_cart.empty_eyebrow' | t }}</p>
+        <h2>{{ 'cart.empty' | t }}</h2>
+        <p>{{ 'noxrev_cart.empty_body' | t }}</p>
         <div class="main-cart__empty-actions">
-          <a class="button button--primary" href="{{ routes.all_products_collection_url }}">Shop NoxRev TXP1</a>
-          <a class="main-cart__secondary-link" href="/pages/find-your-ipad-model">Find Your iPad Model</a>
+          <a class="button button--primary" href="{{ section.settings.shopping_link | default: routes.all_products_collection_url | escape }}">{{ 'noxrev_cart.shop_product' | t }}</a>
+          <a class="main-cart__secondary-link" href="{{ section.settings.fit_guide_link | default: '/pages/find-your-ipad-model' | escape }}">{{ 'noxrev_cart.find_model' | t }}</a>
         </div>
       </div>
     </div>
@@ -123,7 +123,7 @@
                 </a>
 
                 <p class="main-cart__line-total">
-                  <span>Line total</span>
+                  <span>{{ 'noxrev_cart.line_total' | t }}</span>
                   <strong>{% render 'price', amount: item.final_line_price %}</strong>
                 </p>
               </div>
@@ -134,7 +134,7 @@
 
       <aside class="main-cart__summary" data-cart-summary-region aria-label="Cart summary">
         <div class="main-cart__summary-card">
-          <p class="main-cart__summary-eyebrow">Order Summary</p>
+          <p class="main-cart__summary-eyebrow">{{ 'noxrev_cart.order_summary' | t }}</p>
 
           <div class="main-cart__summary-row">
             <span>Subtotal</span>
@@ -157,15 +157,15 @@
             <strong>{% render 'price', amount: cart.total_price %}</strong>
           </div>
 
-          <p class="main-cart__note">Taxes, shipping, and discounts are calculated at checkout.</p>
+          <p class="main-cart__note">{{ 'noxrev_cart.checkout_note' | t }}</p>
 
           <form action="{{ routes.cart_url }}" method="post" class="main-cart__checkout-form">
             <button class="button button--primary main-cart__checkout" type="submit" name="checkout" data-cart-checkout>
-              Checkout
+              {{ 'cart.checkout' | t }}
             </button>
           </form>
 
-          <a class="main-cart__continue" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+          <a class="main-cart__continue" href="{{ section.settings.shopping_link | default: routes.all_products_collection_url | escape }}">{{ 'cart.continue_shopping' | t }}</a>
         </div>
       </aside>
     </div>
@@ -727,7 +727,22 @@
 {% schema %}
 {
   "name": "t:general.cart",
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cart destinations"
+    },
+    {
+      "type": "url",
+      "id": "shopping_link",
+      "label": "Shopping link"
+    },
+    {
+      "type": "url",
+      "id": "fit_guide_link",
+      "label": "Find your iPad model link"
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

@@ -111,7 +111,7 @@
         <div class="footer__navs">
           {% if has_primary_menu %}
             <nav class="footer__menu" aria-label="Footer primary">
-              <h2 class="footer__heading">Browse</h2>
+              <h2 class="footer__heading">{{ section.settings.primary_menu_heading | default: 'Browse' | escape }}</h2>
               {% for link in section.settings.primary_menu.links %}
                 <a class="footer__link" href="{{ link.url }}">{{ link.title }}</a>
               {% endfor %}
@@ -120,7 +120,7 @@
 
           {% if has_secondary_menu %}
             <nav class="footer__menu" aria-label="Footer secondary">
-              <h2 class="footer__heading">Help</h2>
+              <h2 class="footer__heading">{{ section.settings.secondary_menu_heading | default: 'Help' | escape }}</h2>
               {% for link in section.settings.secondary_menu.links %}
                 <a class="footer__link" href="{{ link.url }}">{{ link.title }}</a>
               {% endfor %}
@@ -162,15 +162,19 @@
       {% endif %}
 
       <div class="footer__bottom">
-        <div class="footer__payments" aria-label="Accepted payment methods">
-          {% if shop.enabled_payment_types.size > 0 %}
-            {% for type in shop.enabled_payment_types %}
-              {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
-            {% endfor %}
-          {% elsif section.settings.payment_text != blank %}
-            <p class="footer__payment-text">{{ section.settings.payment_text | escape }}</p>
+        {% if shop.enabled_payment_types.size > 0 %}
+          {% if section.settings.show_payment_icons != false %}
+            <div class="footer__payments" aria-label="Accepted payment methods">
+              {% for type in shop.enabled_payment_types %}
+                {{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}
+              {% endfor %}
+            </div>
           {% endif %}
-        </div>
+        {% elsif section.settings.payment_text != blank %}
+          <div class="footer__payments" aria-label="Accepted payment methods">
+            <p class="footer__payment-text">{{ section.settings.payment_text | escape }}</p>
+          </div>
+        {% endif %}
         <p class="footer__copyright">{{ section.settings.copyright_text | escape }}</p>
       </div>
     </div>
@@ -467,9 +471,21 @@
       "label": "Primary menu"
     },
     {
+      "type": "text",
+      "id": "primary_menu_heading",
+      "label": "Primary menu heading",
+      "default": "Browse"
+    },
+    {
       "type": "link_list",
       "id": "secondary_menu",
       "label": "Secondary menu"
+    },
+    {
+      "type": "text",
+      "id": "secondary_menu_heading",
+      "label": "Secondary menu heading",
+      "default": "Help"
     },
     {
       "type": "text",
@@ -523,6 +539,12 @@
       "id": "payment_text",
       "label": "Payment text",
       "default": "Secure payments powered by Shopify"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
     },
     {
       "type": "text",

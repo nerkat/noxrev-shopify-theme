@@ -4,6 +4,10 @@
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 
+    {% if settings.favicon != blank %}
+      <link rel="icon" href="{{ settings.favicon | image_url: width: 32 }}">
+    {% endif %}
+
     {% comment %}Self-host Oxanium to remove the external Google Fonts request chain.{% endcomment %}
     {{ 'oxanium-latin-variable.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
     <style>

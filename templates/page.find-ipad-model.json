@@ -53,7 +53,8 @@
         "video_title": "How to identify your iPad",
         "video": "shopify://files/videos/YTDown.com_YouTube_How-To-Find-Your-iPad-Model-Number-_-Gen_Media_eoVKsbw-O6M_001_1080p.mp4",
         "video_image_alt": "iPad model identification guide",
-        "video_link": "#"
+        "show_video_controls": false,
+        "video_link": ""
       }
     },
     "model_grid": {

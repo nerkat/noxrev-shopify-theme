@@ -12,8 +12,8 @@
   <div class="cart-drawer__panel" data-cart-drawer-panel tabindex="-1">
     <header class="cart-drawer__header">
       <div>
-        <p class="cart-drawer__eyebrow">Added setup</p>
-        <h2 id="CartDrawerTitle" class="cart-drawer__title">Your Cart</h2>
+        <p class="cart-drawer__eyebrow">{{ 'noxrev_cart.drawer_eyebrow' | t }}</p>
+        <h2 id="CartDrawerTitle" class="cart-drawer__title">{{ 'noxrev_cart.drawer_title' | t }}</h2>
       </div>
 
       <div class="cart-drawer__header-actions">
@@ -31,12 +31,12 @@
     <div class="cart-drawer__body" data-cart-drawer-body aria-live="polite">
       {% if cart.item_count == 0 %}
         <div class="cart-drawer__empty">
-          <p class="cart-drawer__empty-eyebrow">Nothing here yet</p>
-          <h3>Your cart is empty</h3>
-          <p>Find your perfect iPad fit and build your setup.</p>
+          <p class="cart-drawer__empty-eyebrow">{{ 'noxrev_cart.empty_eyebrow' | t }}</p>
+          <h3>{{ 'cart.empty' | t }}</h3>
+          <p>{{ 'noxrev_cart.empty_body' | t }}</p>
           <div class="cart-drawer__empty-actions">
-            <a class="button button--primary" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
-            <a class="cart-drawer__text-link" href="/pages/find-your-ipad-model">Find Your iPad Model</a>
+            <a class="button button--primary" href="{{ section.settings.shopping_link | default: routes.all_products_collection_url | escape }}">{{ 'cart.continue_shopping' | t }}</a>
+            <a class="cart-drawer__text-link" href="{{ section.settings.fit_guide_link | default: '/pages/find-your-ipad-model' | escape }}">{{ 'noxrev_cart.find_model' | t }}</a>
           </div>
         </div>
       {% else %}
@@ -130,7 +130,7 @@
                   </button>
 
                   <p class="cart-drawer__line-total">
-                    <span>Line total</span>
+                    <span>{{ 'noxrev_cart.line_total' | t }}</span>
                     <strong>{% render 'price', amount: item.final_line_price %}</strong>
                   </p>
                 </div>
@@ -144,7 +144,7 @@
     <footer class="cart-drawer__summary" data-cart-drawer-summary>
       {% if cart.item_count > 0 %}
         <div class="cart-drawer__summary-row">
-          <span>Subtotal</span>
+          <span>{{ 'cart.subtotal' | t }}</span>
           <strong>{% render 'price', amount: cart.items_subtotal_price %}</strong>
         </div>
 
@@ -159,15 +159,15 @@
           </div>
         {% endif %}
 
-        <p class="cart-drawer__note">Taxes, shipping, and discounts are calculated at checkout.</p>
+        <p class="cart-drawer__note">{{ 'noxrev_cart.checkout_note' | t }}</p>
 
         <a class="button button--primary cart-drawer__checkout" href="/checkout" data-cart-drawer-checkout>
-          Checkout
+          {{ 'cart.checkout' | t }}
         </a>
-        <a class="cart-drawer__view-cart" href="{{ routes.cart_url }}">View cart</a>
+        <a class="cart-drawer__view-cart" href="{{ routes.cart_url }}">{{ 'noxrev_cart.view_cart' | t }}</a>
       {% endif %}
 
-      <button class="cart-drawer__continue" type="button" data-cart-drawer-close>Continue shopping</button>
+      <button class="cart-drawer__continue" type="button" data-cart-drawer-close>{{ 'cart.continue_shopping' | t }}</button>
     </footer>
   </div>
 </aside>
@@ -1041,7 +1041,22 @@ body.noxrev-cart-open .klaviyo-form {
 {% schema %}
 {
   "name": "Cart drawer",
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cart destinations"
+    },
+    {
+      "type": "url",
+      "id": "shopping_link",
+      "label": "Shopping link"
+    },
+    {
+      "type": "url",
+      "id": "fit_guide_link",
+      "label": "Find your iPad model link"
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

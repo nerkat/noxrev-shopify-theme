@@ -17,32 +17,32 @@
         {% form 'contact', class: 'contact-page__form' %}
           {% if form.posted_successfully? %}
             <div class="contact-page__message contact-page__message--success" role="status" tabindex="-1">
-              <strong>Message sent.</strong>
-              <span>Thanks for reaching out. We'll get back to you soon.</span>
+              <strong>{{ 'noxrev_contact.success_title' | t }}</strong>
+              <span>{{ 'noxrev_contact.success_message' | t }}</span>
             </div>
           {% endif %}
 
           {% if form.errors %}
             <div id="ContactFormError" class="contact-page__message contact-page__message--error" role="alert" tabindex="-1">
-              <strong>Please check the form.</strong>
+              <strong>{{ 'noxrev_contact.error_title' | t }}</strong>
               {{ form.errors | default_errors }}
             </div>
           {% endif %}
 
           <div class="contact-page__field">
-            <label for="ContactFormName">Name</label>
+            <label for="ContactFormName">{{ 'noxrev_contact.name_label' | t }}</label>
             <input
               id="ContactFormName"
               type="text"
               name="contact[name]"
               autocomplete="name"
               value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.name | escape }}{% endif %}"
-              placeholder="Your name"
+              placeholder="{{ 'noxrev_contact.name_placeholder' | t | escape }}"
             >
           </div>
 
           <div class="contact-page__field">
-            <label for="ContactFormEmail">Email</label>
+            <label for="ContactFormEmail">{{ 'noxrev_contact.email_label' | t }}</label>
             <input
               id="ContactFormEmail"
               type="email"
@@ -57,25 +57,25 @@
                 aria-describedby="ContactFormError"
               {% endif %}
               required
-              placeholder="you@example.com"
+              placeholder="{{ 'noxrev_contact.email_placeholder' | t | escape }}"
             >
           </div>
 
           {% if section.settings.show_subject %}
             <div class="contact-page__field">
-              <label for="ContactFormSubject">Subject</label>
+              <label for="ContactFormSubject">{{ 'noxrev_contact.subject_label' | t }}</label>
               <input
                 id="ContactFormSubject"
                 type="text"
                 name="contact[subject]"
                 value="{% if form.subject %}{{ form.subject | escape }}{% endif %}"
-                placeholder="Compatibility, order, shipping..."
+                placeholder="{{ 'noxrev_contact.subject_placeholder' | t | escape }}"
               >
             </div>
           {% endif %}
 
           <div class="contact-page__field">
-            <label for="ContactFormMessage">Message</label>
+            <label for="ContactFormMessage">{{ 'noxrev_contact.message_label' | t }}</label>
             <textarea
               id="ContactFormMessage"
               name="contact[body]"
@@ -86,7 +86,7 @@
                 aria-describedby="ContactFormError"
               {% endif %}
               required
-              placeholder="Tell us how we can help."
+              placeholder="{{ 'noxrev_contact.message_placeholder' | t | escape }}"
             >{% if form.body %}{{ form.body | escape }}{% endif %}</textarea>
           </div>
 
@@ -110,7 +110,7 @@
         <dl class="contact-page__support-list">
           {% if section.settings.support_email != blank %}
             <div>
-              <dt>Support email</dt>
+              <dt>{{ 'noxrev_contact.support_email_label' | t }}</dt>
               <dd>
                 <a href="mailto:{{ section.settings.support_email | escape }}">{{ section.settings.support_email }}</a>
               </dd>
@@ -119,7 +119,7 @@
 
           {% if section.settings.response_time != blank %}
             <div>
-              <dt>Response time</dt>
+              <dt>{{ 'noxrev_contact.response_time_label' | t }}</dt>
               <dd>{{ section.settings.response_time }}</dd>
             </div>
           {% endif %}

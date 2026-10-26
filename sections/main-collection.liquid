@@ -7,31 +7,38 @@
     <div class="main-collection__intro">
       <h1 class="main-collection__title">{{ collection.title }}</h1>
 
-      {% if collection.description != blank %}
+      {% if section.settings.show_description and collection.description != blank %}
         <div class="main-collection__description">{{ collection.description }}</div>
       {% endif %}
 
-      <p class="main-collection__count">{{ collection.products_count }} {{ 'collections.products' | t }}</p>
+      {% if section.settings.show_product_count %}
+        <p class="main-collection__count">{{ collection.products_count }} {{ 'collections.products' | t }}</p>
+      {% endif %}
     </div>
 
-    <form class="main-collection__sort" action="{{ collection.url }}" method="get">
-      <label class="main-collection__sort-label" for="SortBy-{{ section.id }}">{{ 'collections.sort_label' | t }}</label>
-      <div class="main-collection__sort-controls">
-        <select id="SortBy-{{ section.id }}" class="select" name="sort_by">
-          {% for option in collection.sort_options %}
-            <option value="{{ option.value }}" {% if option.value == current_sort %}selected="selected"{% endif %}>
-              {{ option.name }}
-            </option>
-          {% endfor %}
-        </select>
-        <button class="button button--secondary" type="submit">{{ 'collections.sort_submit' | t }}</button>
-      </div>
-    </form>
+    {% if section.settings.show_sort %}
+      <form class="main-collection__sort" action="{{ collection.url }}" method="get">
+        <label class="main-collection__sort-label" for="SortBy-{{ section.id }}">{{ 'collections.sort_label' | t }}</label>
+        <div class="main-collection__sort-controls">
+          <select id="SortBy-{{ section.id }}" class="select" name="sort_by">
+            {% for option in collection.sort_options %}
+              <option value="{{ option.value }}" {% if option.value == current_sort %}selected="selected"{% endif %}>
+                {{ option.name }}
+              </option>
+            {% endfor %}
+          </select>
+          <button class="button button--secondary" type="submit">{{ 'collections.sort_submit' | t }}</button>
+        </div>
+      </form>
+    {% endif %}
   </div>
 
-  {% paginate collection.products by 12 %}
+  {% paginate collection.products by section.settings.products_per_page %}
     {% if paginate.items > 0 %}
-      <div class="main-collection__grid grid grid--4">
+      <div
+        class="main-collection__grid grid"
+        style="--main-collection-columns-desktop: {{ section.settings.columns_desktop | default: 4 }}; --main-collection-columns-mobile: {{ section.settings.columns_mobile | default: 1 }};"
+      >
         {% for product in collection.products %}
           {% render 'product-card', product: product, show_vendor: section.settings.show_vendor %}
         {% endfor %}
@@ -51,6 +58,10 @@
 </div>
 
 {% stylesheet %}
+  .main-collection__grid.grid {
+    grid-template-columns: repeat(var(--main-collection-columns-desktop, 4), minmax(0, 1fr));
+  }
+
   .main-collection__header {
     display: flex;
     align-items: end;
@@ -105,12 +116,72 @@
       width: 100%;
     }
   }
+
+  @media (max-width: 989px) and (min-width: 750px) {
+    .main-collection__grid.grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 749px) {
+    .main-collection__grid.grid {
+      grid-template-columns: repeat(var(--main-collection-columns-mobile, 1), minmax(0, 1fr));
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.collection",
   "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Desktop columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Mobile columns",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "label": "Show sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Show product count",
+      "default": true
+    },
     {
       "type": "checkbox",
       "id": "show_vendor",

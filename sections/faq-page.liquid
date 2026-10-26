@@ -1,4 +1,4 @@
-<section class="faq-page section" data-faq-page>
+<section class="faq-page section" data-faq-page data-allow-multiple="{{ section.settings.allow_multiple_open }}">
   <div class="container">
     <div class="faq-page__hero">
       <div class="faq-page__hero-content">
@@ -33,29 +33,31 @@
       </div>
     </div>
 
-    <div class="faq-page__search-card">
-      <label class="faq-page__search-label" for="FaqSearch-{{ section.id }}">Search FAQ</label>
-      <div class="faq-page__search-wrap">
-        <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
-          <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"></circle>
-          <path d="m16 16 4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
-        </svg>
-        <input
-          id="FaqSearch-{{ section.id }}"
-          class="faq-page__search-input"
-          type="search"
-          placeholder="{{ section.settings.search_placeholder | escape }}"
-          data-faq-search
-        >
+    {% if section.settings.show_search %}
+      <div class="faq-page__search-card">
+        <label class="faq-page__search-label" for="FaqSearch-{{ section.id }}">{{ section.settings.search_label | escape }}</label>
+        <div class="faq-page__search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"></circle>
+            <path d="m16 16 4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+          </svg>
+          <input
+            id="FaqSearch-{{ section.id }}"
+            class="faq-page__search-input"
+            type="search"
+            placeholder="{{ section.settings.search_placeholder | escape }}"
+            data-faq-search
+          >
+        </div>
+        <p class="faq-page__no-results" data-faq-no-results hidden>{{ section.settings.no_results_text }}</p>
       </div>
-      <p class="faq-page__no-results" data-faq-no-results hidden>{{ section.settings.no_results_text }}</p>
-    </div>
+    {% endif %}
 
     {% assign rendered_categories = '' %}
     <div class="faq-page__groups" data-faq-groups>
       {% for block in section.blocks %}
         {% liquid
-          assign category = block.settings.category | default: 'General'
+          assign category = block.settings.category | default: section.settings.default_category_label | default: 'General'
           assign category_handle = category | handle
           assign category_token = '|' | append: category_handle | append: '|'
         %}
@@ -69,7 +71,7 @@
             <div class="faq-page__items">
               {% for item_block in section.blocks %}
                 {% liquid
-                  assign item_category = item_block.settings.category | default: 'General'
+                  assign item_category = item_block.settings.category | default: section.settings.default_category_label | default: 'General'
                   assign item_category_handle = item_category | handle
                 %}
 
@@ -83,7 +85,7 @@
                     <button
                       class="faq-page__question"
                       type="button"
-                      aria-expanded="false"
+                      aria-expanded="{% if section.settings.open_first_item and forloop.first %}true{% else %}false{% endif %}"
                       aria-controls="FaqAnswer-{{ section.id }}-{{ item_block.id }}"
                       data-faq-toggle
                     >
@@ -96,7 +98,7 @@
                       id="FaqAnswer-{{ section.id }}-{{ item_block.id }}"
                       class="faq-page__answer"
                       data-faq-answer
-                      hidden
+                      {% unless section.settings.open_first_item and forloop.first %}hidden{% endunless %}
                     >
                       <div class="faq-page__answer-inner">
                         {{ item_block.settings.answer }}
@@ -394,12 +396,14 @@
         const answer = item?.querySelector('[data-faq-answer]');
         const isOpen = toggle.getAttribute('aria-expanded') === 'true';
 
-        group?.querySelectorAll('[data-faq-toggle][aria-expanded="true"]').forEach((openToggle) => {
-          if (openToggle === toggle) return;
-          openToggle.setAttribute('aria-expanded', 'false');
-          const openAnswer = openToggle.closest('[data-faq-item]')?.querySelector('[data-faq-answer]');
-          if (openAnswer) openAnswer.hidden = true;
-        });
+        if (root.dataset.allowMultiple !== 'true') {
+          group?.querySelectorAll('[data-faq-toggle][aria-expanded="true"]').forEach((openToggle) => {
+            if (openToggle === toggle) return;
+            openToggle.setAttribute('aria-expanded', 'false');
+            const openAnswer = openToggle.closest('[data-faq-item]')?.querySelector('[data-faq-answer]');
+            if (openAnswer) openAnswer.hidden = true;
+          });
+        }
 
         toggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
         if (answer) answer.hidden = isOpen;
@@ -440,7 +444,12 @@
     { "type": "text", "id": "hero_cta_label", "label": "Hero CTA label", "default": "Contact Us" },
     { "type": "url", "id": "hero_cta_link", "label": "Hero CTA link" },
     { "type": "text", "id": "search_placeholder", "label": "Search placeholder", "default": "Search FAQ..." },
+    { "type": "checkbox", "id": "show_search", "label": "Show FAQ search", "default": true },
+    { "type": "text", "id": "search_label", "label": "Search label", "default": "Search FAQ" },
     { "type": "text", "id": "no_results_text", "label": "No results text", "default": "No matching questions found." },
+    { "type": "text", "id": "default_category_label", "label": "Default category label", "default": "General" },
+    { "type": "checkbox", "id": "open_first_item", "label": "Open first FAQ item by default", "default": false },
+    { "type": "checkbox", "id": "allow_multiple_open", "label": "Allow multiple FAQ answers open", "default": false },
     { "type": "text", "id": "support_eyebrow", "label": "Support eyebrow", "default": "SUPPORT" },
     { "type": "text", "id": "support_title", "label": "Support title", "default": "Still have a question?" },
     { "type": "textarea", "id": "support_text", "label": "Support text", "default": "Our support team usually replies within 24–48 hours." },

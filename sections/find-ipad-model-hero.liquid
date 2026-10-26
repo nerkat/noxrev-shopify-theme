@@ -1,3 +1,18 @@
+{% liquid
+  assign video_link = section.settings.video_link
+  assign video_link_label = section.settings.video_title | default: section.settings.video_eyebrow | default: 'Open video guide'
+  assign has_video_link = false
+  assign wrap_video_with_link = false
+
+  if video_link != blank and video_link != '#'
+    assign has_video_link = true
+  endif
+
+  if has_video_link and section.settings.show_video_controls == false
+    assign wrap_video_with_link = true
+  endif
+%}
+
 <section class="find-model-hero section">
   <div class="container">
     <div class="find-model-hero__panel">
@@ -42,7 +57,11 @@
         {% endfor %}
       </div>
 
-      <a class="find-model-hero__video" href="{{ section.settings.video_link | default: '#' }}" aria-label="{{ section.settings.video_title | escape }}">
+      {% if wrap_video_with_link %}
+        <a class="find-model-hero__video" href="{{ video_link | escape }}" aria-label="{{ video_link_label | escape }}">
+      {% else %}
+        <div class="find-model-hero__video{% if section.settings.show_video_controls %} find-model-hero__video--controls{% endif %}">
+      {% endif %}
         <div class="find-model-hero__video-media">
           {% if section.settings.video != blank %}
             {% assign video_poster_image = section.settings.video_image | default: section.settings.video.preview_image %}
@@ -56,7 +75,7 @@
                 autoplay: section.settings.video_autoplay,
                 loop: true,
                 muted: true,
-                controls: false,
+                controls: section.settings.show_video_controls,
                 playsinline: true
             }}
           {% elsif section.settings.video_image != blank %}
@@ -80,10 +99,20 @@
 
         <div class="find-model-hero__video-copy">
           <p>{{ section.settings.video_eyebrow }}</p>
-          <h2>{{ section.settings.video_title }}</h2>
+          <h2>
+            {% if has_video_link and section.settings.show_video_controls %}
+              <a class="find-model-hero__video-link" href="{{ video_link | escape }}">{{ video_link_label | escape }}</a>
+            {% else %}
+              {{ section.settings.video_title }}
+            {% endif %}
+          </h2>
           <span class="find-model-hero__progress" aria-hidden="true"><span></span></span>
         </div>
-      </a>
+      {% if wrap_video_with_link %}
+        </a>
+      {% else %}
+        </div>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -258,6 +287,21 @@
     background: linear-gradient(180deg, transparent 36%, rgba(2, 8, 18, 0.74));
   }
 
+  .find-model-hero__video--controls .find-model-hero__video-media::after {
+    pointer-events: none;
+  }
+
+  .find-model-hero__video-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .find-model-hero__video-link:focus-visible {
+    border-radius: 0.15rem;
+    outline: 2px solid currentColor;
+    outline-offset: 0.2rem;
+  }
+
   .find-model-hero__play {
     position: absolute;
     inset: 50% auto auto 50%;
@@ -355,6 +399,7 @@
     { "type": "text", "id": "video_eyebrow", "label": "Video eyebrow", "default": "Quick Guide" },
     { "type": "text", "id": "video_title", "label": "Video title", "default": "How to identify your iPad in 30 seconds" },
     { "type": "checkbox", "id": "video_autoplay", "label": "Autoplay video", "default": true },
+    { "type": "checkbox", "id": "show_video_controls", "label": "Show video controls", "default": false },
     { "type": "video", "id": "video", "label": "Shopify-hosted video" },
     { "type": "image_picker", "id": "video_image", "label": "Video thumbnail image" },
     { "type": "text", "id": "video_image_alt", "label": "Video image alt text", "default": "iPad model identification guide" },

@@ -1,5 +1,5 @@
 {% if section.settings.text != blank %}
-  <div class="announcement-bar">
+  <div class="announcement-bar{% if section.settings.show_secondary_on_mobile and section.settings.secondary_text != blank %} announcement-bar--secondary-mobile{% endif %}">
     <div class="announcement-bar__inner container">
       <div class="announcement-bar__primary">
         {% if section.settings.link != blank %}
@@ -117,6 +117,11 @@
       min-height: 0;
     }
 
+    .announcement-bar--secondary-mobile .announcement-bar__inner {
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
     .announcement-bar__link,
     .announcement-bar__text {
       letter-spacing: 0.16em;
@@ -124,6 +129,12 @@
 
     .announcement-bar__secondary {
       display: none;
+    }
+
+    .announcement-bar--secondary-mobile .announcement-bar__secondary {
+      display: block;
+      white-space: normal;
+      text-align: center;
     }
   }
 {% endstylesheet %}
@@ -153,6 +164,12 @@
       "type": "url",
       "id": "secondary_link",
       "label": "Secondary link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_on_mobile",
+      "label": "Show secondary message on mobile",
+      "default": false
     }
   ]
 }
