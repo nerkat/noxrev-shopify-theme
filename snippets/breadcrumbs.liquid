@@ -1,0 +1,36 @@
+{% unless request.page_type == 'index' or request.page_type == 'password' %}
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol class="breadcrumbs__list">
+      <li class="breadcrumbs__item">
+        <a class="breadcrumbs__link" href="{{ routes.root_url }}">Home</a>
+      </li>
+
+      {% case request.page_type %}
+        {% when 'product' %}
+          {% if collection %}
+            <li class="breadcrumbs__item">
+              <a class="breadcrumbs__link" href="{{ collection.url }}">{{ collection.title }}</a>
+            </li>
+          {% endif %}
+          <li class="breadcrumbs__item" aria-current="page">{{ product.title }}</li>
+        {% when 'collection' %}
+          <li class="breadcrumbs__item" aria-current="page">{{ collection.title }}</li>
+        {% when 'page' %}
+          <li class="breadcrumbs__item" aria-current="page">{{ page.title }}</li>
+        {% when 'article' %}
+          <li class="breadcrumbs__item">
+            <a class="breadcrumbs__link" href="{{ blog.url }}">{{ blog.title }}</a>
+          </li>
+          <li class="breadcrumbs__item" aria-current="page">{{ article.title }}</li>
+        {% when 'blog' %}
+          <li class="breadcrumbs__item" aria-current="page">{{ blog.title }}</li>
+        {% when 'cart' %}
+          <li class="breadcrumbs__item" aria-current="page">Cart</li>
+        {% when 'search' %}
+          <li class="breadcrumbs__item" aria-current="page">Search</li>
+        {% else %}
+          <li class="breadcrumbs__item" aria-current="page">{{ page_title }}</li>
+      {% endcase %}
+    </ol>
+  </nav>
+{% endunless %}
