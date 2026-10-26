@@ -11,7 +11,6 @@
       break
     endif
   endfor
-  assign excerpt = product.description | strip_html | truncatewords: 28
 %}
 
 <div
@@ -19,6 +18,7 @@
   data-main-product-section
   data-section-id="{{ section.id }}"
   data-product-handle="{{ product.handle }}"
+  style="--main-product-gallery-image-fit: {{ section.settings.gallery_image_fit | default: 'cover' }};"
 >
   <div class="main-product__main">
     <div class="main-product__media-column" data-product-gallery-region>
@@ -606,20 +606,46 @@
             </button>
           </div>
 
-          <div class="main-product__trust-cues" aria-label="After-sales benefits">
-            <div class="main-product__trust-cue">
-              <span class="main-product__trust-cue-icon main-product__trust-cue-icon--shipping" aria-hidden="true"></span>
-              <span>Free 3–5 day U.S. shipping</span>
+          {% if section.settings.show_trust_cues != false %}
+            <div class="main-product__trust-cues" aria-label="After-sales benefits">
+              {% if section.settings.shipping_trust_text != blank %}
+                <div class="main-product__trust-cue">
+                  {% if section.settings.shipping_trust_icon != blank %}
+                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--image" aria-hidden="true">
+                      {{ section.settings.shipping_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
+                    </span>
+                  {% else %}
+                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--shipping" aria-hidden="true"></span>
+                  {% endif %}
+                  <span>{{ section.settings.shipping_trust_text | escape }}</span>
+                </div>
+              {% endif %}
+              {% if section.settings.guarantee_trust_text != blank %}
+                <div class="main-product__trust-cue">
+                  {% if section.settings.guarantee_trust_icon != blank %}
+                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--image" aria-hidden="true">
+                      {{ section.settings.guarantee_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
+                    </span>
+                  {% else %}
+                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--guarantee" aria-hidden="true"></span>
+                  {% endif %}
+                  <span>{{ section.settings.guarantee_trust_text | escape }}</span>
+                </div>
+              {% endif %}
+              {% if section.settings.returns_trust_text != blank %}
+                <div class="main-product__trust-cue">
+                  {% if section.settings.returns_trust_icon != blank %}
+                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--image" aria-hidden="true">
+                      {{ section.settings.returns_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
+                    </span>
+                  {% else %}
+                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--returns" aria-hidden="true"></span>
+                  {% endif %}
+                  <span>{{ section.settings.returns_trust_text | escape }}</span>
+                </div>
+              {% endif %}
             </div>
-            <div class="main-product__trust-cue">
-              <span class="main-product__trust-cue-icon main-product__trust-cue-icon--guarantee" aria-hidden="true"></span>
-              <span>Money-back guarantee</span>
-            </div>
-            <div class="main-product__trust-cue">
-              <span class="main-product__trust-cue-icon main-product__trust-cue-icon--returns" aria-hidden="true"></span>
-              <span>30-day returns</span>
-            </div>
-          </div>
+          {% endif %}
 
           {% comment %} <p class="main-product__help-text">{{ 'product.help_text' | t }}</p> {% endcomment %}
         {% endform %}
@@ -627,14 +653,12 @@
     </div>
   </div>
 
-  {% comment %}
-    {% if product.description != blank %}
-      <div class="main-product__details">
-        <h2 class="main-product__details-title">{{ 'product.details' | t }}</h2>
-        <div class="main-product__details-content">{{ product.description }}</div>
-      </div>
-    {% endif %}
-  {% endcomment %}
+  {% if section.settings.show_product_description and product.description != blank %}
+    <div class="main-product__details">
+      <h2 class="main-product__details-title">{{ 'product.details' | t }}</h2>
+      <div class="main-product__details-content">{{ product.description }}</div>
+    </div>
+  {% endif %}
 </div>
 
 
@@ -642,7 +666,63 @@
 {% schema %}
 {
   "name": "t:general.product",
-  "settings": [],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_product_description",
+      "label": "Show product description",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "gallery_image_fit",
+      "label": "Product gallery image fit",
+      "options": [
+        { "value": "cover", "label": "Fill frame (crop)" },
+        { "value": "contain", "label": "Fit entire image" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_cues",
+      "label": "Show shipping and service messages",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_trust_text",
+      "label": "Shipping message",
+      "default": "Free 3–5 day U.S. shipping"
+    },
+    {
+      "type": "image_picker",
+      "id": "shipping_trust_icon",
+      "label": "Shipping message icon"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_trust_text",
+      "label": "Guarantee message",
+      "default": "Money-back guarantee"
+    },
+    {
+      "type": "image_picker",
+      "id": "guarantee_trust_icon",
+      "label": "Guarantee message icon"
+    },
+    {
+      "type": "text",
+      "id": "returns_trust_text",
+      "label": "Returns message",
+      "default": "30-day returns"
+    },
+    {
+      "type": "image_picker",
+      "id": "returns_trust_icon",
+      "label": "Returns message icon"
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

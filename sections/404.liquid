@@ -5,12 +5,31 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/404
 {% endcomment %}
 
+{% liquid
+  assign error_title = section.settings.title
+  assign error_message = section.settings.text
+  assign error_button_label = section.settings.button_label
+  assign error_button_link = section.settings.button_link | default: routes.all_products_collection_url
+
+  if error_title == blank
+    assign error_title = '404.title' | t
+  endif
+
+  if error_message == blank
+    assign error_message = '404.not_found' | t
+  endif
+
+  if error_button_label == blank
+    assign error_button_label = '404.back_to_shopping' | t
+  endif
+-%}
+
 <section class="container section error-page">
   <div class="error-page__content">
-    <h1 class="error-page__title">{{ '404.title' | t }}</h1>
-    <p class="error-page__text">{{ '404.not_found' | t }}</p>
-    <a class="button" href="{{ routes.all_products_collection_url }}">
-      {{ '404.back_to_shopping' | t }}
+    <h1 class="error-page__title">{{ error_title | escape }}</h1>
+    <p class="error-page__text">{{ error_message | escape }}</p>
+    <a class="button" href="{{ error_button_link | escape }}">
+      {{ error_button_label | escape }}
     </a>
   </div>
 </section>
@@ -34,6 +53,11 @@
 {% schema %}
 {
   "name": "t:general.404",
-  "settings": []
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading" },
+    { "type": "text", "id": "text", "label": "Message" },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ]
 }
 {% endschema %}

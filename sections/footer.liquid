@@ -35,7 +35,7 @@
   endif
 -%}
 
-<footer class="footer">
+<footer class="footer" style="--footer-logo-max-width: {{ section.settings.logo_max_width | default: 190 }}px;">
   <div class="section footer__inner">
     <div class="footer__shell container">
       <div class="footer__top">
@@ -256,7 +256,7 @@
 
   .footer__logo {
     display: block;
-    max-width: 190px;
+    max-width: var(--footer-logo-max-width, 190px);
     width: auto;
     height: auto;
   }
@@ -452,6 +452,16 @@
       "type": "image_picker",
       "id": "logo",
       "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "label": "Logo max width",
+      "min": 100,
+      "max": 240,
+      "step": 10,
+      "unit": "px",
+      "default": 190
     },
     {
       "type": "text",

@@ -72,7 +72,13 @@
           rgba(2, 7, 18, 0.26) 100%);
     }
 
-    .main-product__gallery-image,
+    .main-product__gallery-image {
+      display: block;
+      width: 100%;
+      object-fit: var(--main-product-gallery-image-fit, cover);
+      height: 100%;
+    }
+
     .main-product__gallery-placeholder {
       display: block;
       width: 100%;
@@ -806,6 +812,17 @@
       width: 1.3rem;
       height: 1.3rem;
       filter: drop-shadow(0 0 10px rgba(37, 237, 255, 0.28));
+    }
+
+    .main-product__trust-cue-icon--image::before {
+      display: none;
+    }
+
+    .main-product__trust-cue-icon-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .main-product__trust-cue-icon::before {

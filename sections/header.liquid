@@ -45,7 +45,11 @@
   endif
 -%}
 
-<header class="header" data-site-header>
+<header
+  class="header"
+  data-site-header
+  style="--header-logo-max-width: {{ section.settings.logo_max_width | default: 196 }}px; --header-mobile-logo-max-height: {{ section.settings.mobile_logo_max_height | default: 16 }}px;"
+>
   <div class="header__inner container">
     {% if has_mobile_nav %}
       <details class="header__mobile hidden-desktop">
@@ -414,7 +418,7 @@
 
   .header__logo {
     display: block;
-    max-width: 196px;
+    max-width: var(--header-logo-max-width, 196px);
     width: auto;
     height: auto;
   }
@@ -843,7 +847,7 @@
     }
 
     .header__logo {
-      max-height: 16px;
+      max-height: var(--header-mobile-logo-max-height, 16px);
     }
 
     .header__actions {
@@ -1293,6 +1297,26 @@
       "type": "image_picker",
       "id": "logo",
       "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "label": "Desktop logo max width",
+      "min": 96,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 196
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_max_height",
+      "label": "Mobile logo max height",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
     },
     {
       "type": "text",

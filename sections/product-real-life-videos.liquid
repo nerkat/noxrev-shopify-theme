@@ -1,4 +1,7 @@
-<section class="product-real-life-videos section">
+<section
+  class="product-real-life-videos section"
+  style="--product-real-life-video-fit: {{ section.settings.video_fit | default: 'cover' }};"
+>
   <article class="product-real-life-videos__panel" data-real-life-videos>
     <div class="product-real-life-videos__header container">
       <div class="product-real-life-videos__copy">
@@ -205,6 +208,16 @@
 {
   "name": "PDP Real Life Videos",
   "settings": [
+    {
+      "type": "select",
+      "id": "video_fit",
+      "label": "Video and poster fit",
+      "options": [
+        { "value": "cover", "label": "Fill frame (crop)" },
+        { "value": "contain", "label": "Fit entire video/poster" }
+      ],
+      "default": "cover"
+    },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Real People. Real Setups." },
     { "type": "text", "id": "title", "label": "Title", "default": "See It In Real Life" },
     {

@@ -24,7 +24,10 @@
 %}
 
 {% if section.settings.show_reviews_rating_section %}
-<section class="product-reviews-rating section">
+<section
+  class="product-reviews-rating section"
+  data-close-reviews-label="{{ section.settings.close_button_label | default: 'Close' | escape }}"
+>
   <div class="container">
     <article class="product-reviews-rating__panel">
       <div class="product-reviews-rating__header">
@@ -32,7 +35,7 @@
         <h2 class="product-reviews-rating__title">{{ section.settings.title }}</h2>
       </div>
 
-      {% if has_review_summary %}
+      {% if has_review_summary and section.settings.show_rating_summary != false %}
         <div class="product-reviews-rating__summary">
           <div class="product-reviews-rating__score">
             <div class="product-reviews-rating__value">{{ rating_value }}</div>
@@ -100,8 +103,8 @@
       <div id="judgeme_reviews_panel" class="product-reviews-rating__judgeme" data-judgeme-reviews-panel aria-hidden="true">
         <div class="product-reviews-rating__judgeme-header">
           <div>
-            <p class="product-reviews-rating__judgeme-eyebrow">All Reviews</p>
-            <h3 class="product-reviews-rating__judgeme-title">What customers are saying</h3>
+            <p class="product-reviews-rating__judgeme-eyebrow">{{ section.settings.widget_eyebrow | default: 'All Reviews' | escape }}</p>
+            <h3 class="product-reviews-rating__judgeme-title">{{ section.settings.widget_title | default: 'What customers are saying' | escape }}</h3>
           </div>
         </div>
 
@@ -150,7 +153,7 @@
     const ratingBars = section?.querySelector('[data-judgeme-rating-bars]');
     const widget = section?.querySelector('[data-judgeme-reviews-panel]');
     const panelBody = section?.querySelector('[data-judgeme-panel-body]');
-    const viewReviewsOpenLabel = 'Close';
+    const viewReviewsOpenLabel = section?.dataset.closeReviewsLabel || 'Close';
     const viewReviewsClosedLabel = viewReviewsLabel?.textContent || 'View All Reviews';
     const viewReviewsClosedIcon = viewReviewsIcon?.innerHTML || '&rsaquo;';
 
@@ -298,12 +301,16 @@
   "name": "PDP Reviews Rating",
   "settings": [
     { "type": "checkbox", "id": "show_reviews_rating_section", "label": "Show reviews rating section", "default": true },
+    { "type": "checkbox", "id": "show_rating_summary", "label": "Show rating and review summary", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Customer Reviews" },
     { "type": "text", "id": "title", "label": "Title", "default": "Trusted by real customers." },
+    { "type": "text", "id": "widget_eyebrow", "label": "Review widget eyebrow", "default": "All Reviews" },
+    { "type": "text", "id": "widget_title", "label": "Review widget heading", "default": "What customers are saying" },
     { "type": "text", "id": "write_button_label", "label": "Write review button label", "default": "Write A Review" },
     { "type": "url", "id": "write_button_link", "label": "Write review button link" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "View All Reviews" },
-    { "type": "url", "id": "button_link", "label": "Button link" }
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "close_button_label", "label": "Close reviews button label", "default": "Close" }
   ],
   "presets": [
     {

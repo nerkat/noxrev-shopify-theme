@@ -857,7 +857,7 @@
 
   .product-real-life-videos__video,
   .product-real-life-videos__image {
-    object-fit: cover;
+    object-fit: var(--product-real-life-video-fit, cover);
   }
 
   .product-real-life-videos__placeholder {
