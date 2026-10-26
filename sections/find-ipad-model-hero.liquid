@@ -45,11 +45,14 @@
       <a class="find-model-hero__video" href="{{ section.settings.video_link | default: '#' }}" aria-label="{{ section.settings.video_title | escape }}">
         <div class="find-model-hero__video-media">
           {% if section.settings.video != blank %}
+            {% assign video_poster_image = section.settings.video_image | default: section.settings.video.preview_image %}
+            {% assign video_poster_url = video_poster_image | image_url: width: 1100 %}
             {{
               section.settings.video
               | video_tag:
                 class: 'find-model-hero__video-element',
                 image_size: '1100x',
+                poster: video_poster_url,
                 autoplay: true,
                 loop: true,
                 muted: true,

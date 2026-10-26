@@ -31,7 +31,7 @@
         {% for block in section.blocks %}
           {% liquid
             assign poster_image = block.settings.poster | default: product.featured_media.preview_image
-            assign video_poster_image = block.settings.video.preview_image
+            assign video_poster_image = block.settings.poster | default: block.settings.video.preview_image
             assign video_accessible_label = block.settings.poster_alt | default: block.settings.title | default: 'Product demonstration video'
           %}
           <article class="product-real-life-videos__card" {{ block.shopify_attributes }}>

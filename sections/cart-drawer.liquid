@@ -947,6 +947,15 @@ body.noxrev-cart-open .klaviyo-form {
         return;
       }
 
+      const submitter = event.submitter;
+      if (
+        submitter?.matches('.main-product__buy-now') &&
+        submitter.name === 'return_to' &&
+        submitter.value === '/checkout'
+      ) {
+        return;
+      }
+
       event.preventDefault();
       handleProductAdd(form);
     });
