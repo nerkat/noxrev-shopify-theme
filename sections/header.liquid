@@ -251,14 +251,22 @@
         </a>
       {% endif %}
 
-      {% comment %}
-        {% if shop.customer_accounts_enabled %}
-          <shopify-account class="header__account" menu="{{ section.settings.customer_account_menu }}">
+      {% if shop.customer_accounts_enabled %}
+        <shopify-account
+          class="header__account"
+          menu="{{ section.settings.customer_account_menu | default: 'customer-account-main-menu' }}"
+        >
+          <span slot="signed-out-avatar" class="header__account-avatar">
             <span class="visually-hidden">Account</span>
             {{ 'icon-account.svg' | inline_asset_content }}
-          </shopify-account>
-        {% endif %}
-      {% endcomment %}
+          </span>
+        </shopify-account>
+        <noscript>
+          <a class="header__account" href="{{ routes.account_url }}" aria-label="Account">
+            {{ 'icon-account.svg' | inline_asset_content }}
+          </a>
+        </noscript>
+      {% endif %}
 
       {% if section.settings.enable_search %}
         <button
@@ -487,6 +495,40 @@
     transition: color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   }
 
+  .header__account {
+    border: 1px solid transparent;
+  }
+
+  shopify-account.header__account {
+    --shopify-account-avatar-size: 2.5rem;
+    --shopify-account-signed-in-avatar-size: 2.5rem;
+    --shopify-account-signed-in-avatar-color-background: rgba(255, 255, 255, 0.04);
+    --shopify-account-signed-in-avatar-color-text: var(--theme-color-text);
+    --shopify-account-color-accent: var(--theme-color-secondary);
+  }
+
+  .header__account::part(signed-out-avatar) {
+    display: inline-flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .header__account-avatar {
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
   .header__search {
     padding: 0;
     border: 1px solid transparent;
@@ -505,6 +547,13 @@
     border-color: rgba(0, 229, 255, 0.42);
     color: var(--theme-color-secondary);
     box-shadow: 0 0 22px rgba(0, 229, 255, 0.1);
+  }
+
+  .header__account:focus-visible,
+  .header__account:focus-within,
+  .header__account::part(signed-out-avatar):focus-visible {
+    outline: 2px solid rgba(0, 229, 255, 0.82);
+    outline-offset: 3px;
   }
 
   .header__search:focus-visible {
