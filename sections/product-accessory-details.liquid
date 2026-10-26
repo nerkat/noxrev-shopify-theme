@@ -3,7 +3,21 @@
   assign hero_image = accessory_section_image | default: section.settings.image | default: product.featured_media.preview_image
 %}
 
-<section class="product-accessory-details section">
+<section
+  class="product-accessory-details section"
+  style="
+    --product-accessory-details-copy-padding-desktop: {{ section.settings.copy_padding_desktop }}px;
+    --product-accessory-details-copy-padding-mobile: {{ section.settings.copy_padding_mobile }}px;
+    --product-accessory-details-copy-padding-block-desktop: {{ section.settings.copy_padding_block_desktop }}px;
+    --product-accessory-details-copy-padding-block-mobile: {{ section.settings.copy_padding_block_mobile }}px;
+    --product-accessory-details-eyebrow-size-desktop: {{ section.settings.eyebrow_size_desktop }}px;
+    --product-accessory-details-eyebrow-size-mobile: {{ section.settings.eyebrow_size_mobile }}px;
+    --product-accessory-details-title-size-desktop: {{ section.settings.title_size_desktop }}px;
+    --product-accessory-details-title-size-mobile: {{ section.settings.title_size_mobile }}px;
+    --product-accessory-details-text-size-desktop: {{ section.settings.text_size_desktop }}px;
+    --product-accessory-details-text-size-mobile: {{ section.settings.text_size_mobile }}px;
+  "
+>
   <div class="container">
     <article class="product-accessory-details__panel">
       <div class="product-accessory-details__copy">
@@ -86,10 +100,15 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-size: 0.78rem;
+    font-size: var(--product-accessory-details-eyebrow-size-desktop, 0.78rem);
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+  }
+
+  .product-accessory-details__copy {
+    padding-inline: var(--product-accessory-details-copy-padding-desktop, 2rem);
+    padding-block: var(--product-accessory-details-copy-padding-block-desktop, 1.5rem);
   }
 
   .product-accessory-details__title {
@@ -97,7 +116,11 @@
     margin: 0;
     color: var(--theme-color-text);
     font-family: var(--theme-font-display);
-    font-size: clamp(2rem, 7vw, 3.4rem);
+    font-size: clamp(
+      var(--product-accessory-details-title-size-mobile, 2rem),
+      7vw,
+      var(--product-accessory-details-title-size-desktop, 3.4rem)
+    );
     font-weight: 600;
     line-height: 1.02;
     letter-spacing: -0.04em;
@@ -107,8 +130,16 @@
     max-width: 40rem;
     margin-top: 0.85rem;
     color: rgba(255, 255, 255, 0.72);
-    font-size: 1rem;
+    font-size: var(--product-accessory-details-text-size-desktop, 1rem);
     line-height: 1.6;
+  }
+
+  .product-accessory-details__text > :first-child {
+    margin-top: 0;
+  }
+
+  .product-accessory-details__text > :last-child {
+    margin-bottom: 0;
   }
 
   .product-accessory-details__media {
@@ -193,6 +224,19 @@
   }
 
   @media (max-width: 749px) {
+    .product-accessory-details__eyebrow {
+      font-size: var(--product-accessory-details-eyebrow-size-mobile, 0.78rem);
+    }
+
+    .product-accessory-details__copy {
+      padding-inline: var(--product-accessory-details-copy-padding-mobile, 1.25rem);
+      padding-block: var(--product-accessory-details-copy-padding-block-mobile, 1.25rem);
+    }
+
+    .product-accessory-details__text {
+      font-size: var(--product-accessory-details-text-size-mobile, 1rem);
+    }
+
     .product-accessory-details .container {
       padding-inline: 0;
     }
@@ -212,7 +256,17 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Designed For Your Setup" },
     { "type": "text", "id": "title", "label": "Title", "default": "Small upgrades. Big daily difference." },
-    { "type": "textarea", "id": "text", "label": "Text", "default": "Accessory products get a lighter PDP story than the main keyboard case, while keeping the same premium NoxRev visual system." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Accessory products get a lighter PDP story than the main keyboard case, while keeping the same premium NoxRev visual system.</p>" },
+    { "type": "range", "id": "copy_padding_desktop", "label": "Copy horizontal padding (desktop)", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 32 },
+    { "type": "range", "id": "copy_padding_mobile", "label": "Copy horizontal padding (mobile)", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "copy_padding_block_desktop", "label": "Copy vertical padding (desktop)", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "copy_padding_block_mobile", "label": "Copy vertical padding (mobile)", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "eyebrow_size_desktop", "label": "Eyebrow font size (desktop)", "min": 8, "max": 24, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "eyebrow_size_mobile", "label": "Eyebrow font size (mobile)", "min": 8, "max": 24, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "title_size_desktop", "label": "Heading font size (desktop)", "min": 24, "max": 96, "step": 1, "unit": "px", "default": 54 },
+    { "type": "range", "id": "title_size_mobile", "label": "Heading font size (mobile)", "min": 20, "max": 64, "step": 1, "unit": "px", "default": 32 },
+    { "type": "range", "id": "text_size_desktop", "label": "Description font size (desktop)", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 16 },
+    { "type": "range", "id": "text_size_mobile", "label": "Description font size (mobile)", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 16 },
     { "type": "image_picker", "id": "image", "label": "Feature image" },
     { "type": "text", "id": "image_alt", "label": "Image alt text" }
   ],
