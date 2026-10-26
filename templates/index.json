@@ -12,6 +12,27 @@
     "main": {
       "type": "home-hero",
       "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Product_Visual_005acb76-8109-4542-ae51-82ceae6497a2.jpg",
+            "external_image_url": ""
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Product_Visual_35da0f1d-2160-4c99-80fa-a75e69506672.jpg",
+            "external_image_url": ""
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Product_Visual_d3f31145-f888-423d-9b57-931e9f63674f.jpg",
+            "external_image_url": ""
+          }
+        },
         "card_1": {
           "type": "card",
           "settings": {
@@ -34,8 +55,7 @@
           "settings": {
             "card_style": "reviews",
             "label": "Reviews",
-            "heading": "4.71 / 5",
-            "text": "Verified shoppers rate the keyboard case for sturdy protection, smooth typing, and everyday iPad use.",
+            "text": "",
             "link_label": "",
             "link": "",
             "contact_label_1": "",
@@ -65,25 +85,22 @@
         }
       },
       "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3",
         "card_1",
         "card_2",
         "card_3"
       ],
       "settings": {
-        "rating_text": "4.7 out of 5 stars based on 3672 reviews Verified",
+        "review_product": "tpx1",
         "eyebrow": "NoxRev iPad keyboard cases",
         "heading": "Turn your iPad into a laptop-style workspace.",
         "text": "Shop protective keyboard cases with backlit keys, precision trackpads, magnetic attachment, and flexible viewing modes for work, study, travel, and streaming.",
         "button_label": "Shop NoxRev TXP1",
         "button_link": "",
         "secondary_label": "Browse collections",
-        "secondary_link": "",
-        "slide_image_1": "shopify://shop_images/Product_Visual_005acb76-8109-4542-ae51-82ceae6497a2.jpg",
-        "slide_1_external": "",
-        "slide_image_2": "shopify://shop_images/Product_Visual_35da0f1d-2160-4c99-80fa-a75e69506672.jpg",
-        "slide_2_external": "",
-        "slide_image_3": "shopify://shop_images/Product_Visual_d3f31145-f888-423d-9b57-931e9f63674f.jpg",
-        "slide_3_external": ""
+        "secondary_link": ""
       }
     },
     "category_tiles": {

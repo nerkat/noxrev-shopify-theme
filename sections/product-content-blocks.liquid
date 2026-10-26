@@ -771,6 +771,19 @@
     document.addEventListener('shopify:section:load', (event) => {
       initAnimatedFaqs(event.target);
     });
+
+    document.addEventListener('shopify:block:select', (event) => {
+      const item = event.target.closest?.('.product-content-blocks__faq-item') || event.target.querySelector?.('.product-content-blocks__faq-item');
+      if (!item) return;
+
+      item.open = true;
+      item.classList.remove('is-animating');
+      const panel = item.querySelector('.product-content-blocks__faq-panel');
+      if (panel) {
+        panel.style.height = 'auto';
+        panel.style.opacity = '1';
+      }
+    });
   })();
 {% endjavascript %}
 

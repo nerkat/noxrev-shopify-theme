@@ -1,3 +1,5 @@
+{% assign support_email = section.settings.support_email | default: settings.global_support_email | default: 'support@noxrev.com' %}
+
 <section class="contact-page section">
   <div class="container">
     <div class="contact-page__intro">
@@ -108,11 +110,11 @@
         <p>{{ section.settings.support_text }}</p>
 
         <dl class="contact-page__support-list">
-          {% if section.settings.support_email != blank %}
+          {% if support_email != blank %}
             <div>
               <dt>{{ 'noxrev_contact.support_email_label' | t }}</dt>
               <dd>
-                <a href="mailto:{{ section.settings.support_email | escape }}">{{ section.settings.support_email }}</a>
+                <a href="mailto:{{ support_email | escape }}">{{ support_email | escape }}</a>
               </dd>
             </div>
           {% endif %}

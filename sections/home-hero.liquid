@@ -1,24 +1,36 @@
 {% liquid
   assign hero_link = section.settings.button_link
+  assign slide_blocks = section.blocks | where: 'type', 'slide'
   assign slide_count = 0
-  assign slide_1_fallback = section.settings.slide_1_external | strip
-  assign slide_2_fallback = section.settings.slide_2_external | strip
-  assign slide_3_fallback = section.settings.slide_3_external | strip
+  assign card_count = 0
+  assign review_product = section.settings.review_product | default: all_products['tpx1']
+  assign review_rating = review_product.metafields.reviews.rating
+  assign review_average = review_rating.value.rating | plus: 0
+  assign review_scale = review_rating.value.scale_max | default: 5 | plus: 0
+  assign review_count = review_product.metafields.reviews.rating_count.value | default: 0 | plus: 0
+  assign review_average_rounded = review_average | round: 1
+  assign has_review_data = false
+  assign review_star_fill = 0
+
+  if review_count > 0 and review_rating.value.rating != blank and review_scale > 0 and review_average > 0 and review_average <= review_scale
+    assign has_review_data = true
+    assign review_star_fill = review_average | times: 100.0 | divided_by: review_scale
+  endif
+
+  for block in section.blocks
+    if block.type == 'card'
+      if block.settings.card_style != 'reviews' or has_review_data
+        assign card_count = card_count | plus: 1
+      endif
+    elsif block.type == 'slide'
+      if block.settings.image != blank or block.settings.external_image_url != blank
+        assign slide_count = slide_count | plus: 1
+      endif
+    endif
+  endfor
 
   if hero_link == blank and collections.all != blank
     assign hero_link = collections.all.url
-  endif
-
-  if section.settings.slide_image_1 != blank or slide_1_fallback != blank
-    assign slide_count = slide_count | plus: 1
-  endif
-
-  if section.settings.slide_image_2 != blank or slide_2_fallback != blank
-    assign slide_count = slide_count | plus: 1
-  endif
-
-  if section.settings.slide_image_3 != blank or slide_3_fallback != blank
-    assign slide_count = slide_count | plus: 1
   endif
 
   assign has_multiple_slides = false
@@ -30,47 +42,30 @@
 <section class="home-hero full-width hero-shell" data-hero-slider data-autoplay="{% if has_multiple_slides %}true{% else %}false{% endif %}">
   <div class="home-hero__background">
     <div class="home-hero__slides">
-      {% if section.settings.slide_image_1 != blank or slide_1_fallback != blank %}
-        <div class="home-hero__slide is-active" data-hero-slide>
-          {% if section.settings.slide_image_1 != blank %}
-            {{
-              section.settings.slide_image_1
-              | image_url: width: 2200
-              | image_tag: class: 'home-hero__image', loading: 'eager', alt: section.settings.heading
-            }}
-          {% elsif slide_1_fallback != blank %}
-            <img class="home-hero__image" src="{{ slide_1_fallback | escape }}" alt="{{ section.settings.heading | escape }}" loading="eager" width="1800" height="1200">
-          {% endif %}
-        </div>
-      {% endif %}
-
-      {% if section.settings.slide_image_2 != blank or slide_2_fallback != blank %}
-        <div class="home-hero__slide" data-hero-slide>
-          {% if section.settings.slide_image_2 != blank %}
-            {{
-              section.settings.slide_image_2
-              | image_url: width: 2200
-              | image_tag: class: 'home-hero__image', loading: 'lazy', alt: section.settings.heading
-            }}
-          {% elsif slide_2_fallback != blank %}
-            <img class="home-hero__image" src="{{ slide_2_fallback | escape }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1800" height="1200">
-          {% endif %}
-        </div>
-      {% endif %}
-
-      {% if section.settings.slide_image_3 != blank or slide_3_fallback != blank %}
-        <div class="home-hero__slide" data-hero-slide>
-          {% if section.settings.slide_image_3 != blank %}
-            {{
-              section.settings.slide_image_3
-              | image_url: width: 2200
-              | image_tag: class: 'home-hero__image', loading: 'lazy', alt: section.settings.heading
-            }}
-          {% elsif slide_3_fallback != blank %}
-            <img class="home-hero__image" src="{{ slide_3_fallback | escape }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1800" height="1200">
-          {% endif %}
-        </div>
-      {% endif %}
+      {% assign rendered_slide = 0 %}
+      {% for block in slide_blocks %}
+        {% if block.settings.image != blank or block.settings.external_image_url != blank %}
+          {% liquid
+            assign slide_image_alt = block.settings.image.alt | default: section.settings.heading
+            assign slide_loading = 'lazy'
+            if rendered_slide == 0
+              assign slide_loading = 'eager'
+            endif
+          %}
+          <div class="home-hero__slide{% if rendered_slide == 0 %} is-active{% endif %}" data-hero-slide {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              {{
+                block.settings.image
+                | image_url: width: 2200
+                | image_tag: class: 'home-hero__image', loading: slide_loading, alt: slide_image_alt
+              }}
+            {% else %}
+              <img class="home-hero__image" src="{{ block.settings.external_image_url | escape }}" alt="{{ slide_image_alt | escape }}" loading="{{ slide_loading }}" width="1800" height="1200">
+            {% endif %}
+          </div>
+          {% assign rendered_slide = rendered_slide | plus: 1 %}
+        {% endif %}
+      {% endfor %}
 
       {% if slide_count == 0 %}
         <div class="home-hero__slide is-active" data-hero-slide>
@@ -86,10 +81,10 @@
 
   <div class="container home-hero__inner">
     <div class="home-hero__content">
-      {% if section.settings.rating_text != blank %}
+      {% if has_review_data %}
         <div class="home-hero__rating chip">
-          <span class="home-hero__rating-dot"></span>
-          <span>{{ section.settings.rating_text | escape }}</span>
+          <span class="home-hero__rating-dot" aria-hidden="true"></span>
+          <span>Rated {{ review_average_rounded }} / {{ review_scale }} by {{ review_count }} {% if review_count == 1 %}review{% else %}reviews{% endif %}</span>
         </div>
       {% endif %}
 
@@ -125,12 +120,23 @@
         {% endif %}
       </div>
 
-      {% if section.blocks.size > 0 %}
+      {% if card_count > 0 %}
         <div class="home-hero__cards">
           {% for block in section.blocks %}
             {% liquid
               assign card_style = block.settings.card_style | default: 'promo'
+              assign card_contact_value_1 = block.settings.contact_value_1
+              assign card_contact_link_1 = block.settings.contact_link_1
+              assign card_contact_label_1 = block.settings.contact_label_1 | downcase
+              if card_contact_value_1 == blank and card_contact_label_1 contains 'email'
+                assign card_contact_value_1 = settings.global_support_email | default: 'support@noxrev.com'
+              endif
+              if card_contact_link_1 == blank and card_contact_value_1 contains '@'
+                assign card_contact_link_1 = 'mailto:' | append: card_contact_value_1
+              endif
             %}
+            {% if block.type == 'card' %}
+              {% if card_style != 'reviews' or has_review_data %}
             <article class="home-hero__card home-hero__card--{{ card_style }}" {{ block.shopify_attributes }}>
               <div class="home-hero__card-top">
                 <div>
@@ -138,7 +144,9 @@
                     <p class="home-hero__card-label">{{ block.settings.label | escape }}</p>
                   {% endif %}
 
-                  {% if block.settings.heading != blank %}
+                  {% if card_style == 'reviews' and has_review_data %}
+                    <h2 class="home-hero__card-heading">{{ review_average_rounded }} / {{ review_scale }}</h2>
+                  {% elsif block.settings.heading != blank %}
                     <h2 class="home-hero__card-heading">{{ block.settings.heading | escape }}</h2>
                   {% endif %}
                 </div>
@@ -170,13 +178,18 @@
                 </span>
               </div>
 
-              {% if card_style == 'reviews' %}
-                <div class="home-hero__card-stars" aria-hidden="true">
-                  {% for index in (1..5) %}
-                    <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                      <path d="M12 2.85 14.91 8.74l6.5.95-4.7 4.58 1.11 6.47L12 17.69l-5.82 3.05 1.11-6.47-4.7-4.58 6.5-.95L12 2.85Z" fill="currentColor"/>
-                    </svg>
-                  {% endfor %}
+              {% if card_style == 'reviews' and has_review_data %}
+                <div class="home-hero__card-stars" role="img" aria-label="{{ review_average_rounded }} out of {{ review_scale }} stars from {{ review_count }} {% if review_count == 1 %}review{% else %}reviews{% endif %}">
+                  <span class="home-hero__card-stars-base" aria-hidden="true">
+                    {% for star in (1..5) %}
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M12 2.85 14.91 8.74l6.5.95-4.7 4.58 1.11 6.47L12 17.69l-5.82 3.05 1.11-6.47-4.7-4.58 6.5-.95L12 2.85Z" fill="currentColor"/></svg>
+                    {% endfor %}
+                  </span>
+                  <span class="home-hero__card-stars-fill" style="width: {{ review_star_fill }}%;" aria-hidden="true">
+                    {% for star in (1..5) %}
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M12 2.85 14.91 8.74l6.5.95-4.7 4.58 1.11 6.47L12 17.69l-5.82 3.05 1.11-6.47-4.7-4.58 6.5-.95L12 2.85Z" fill="currentColor"/></svg>
+                    {% endfor %}
+                  </span>
                 </div>
               {% endif %}
 
@@ -186,8 +199,8 @@
 
               {% if card_style == 'support' %}
                 <div class="home-hero__contact-list">
-                  {% if block.settings.contact_value_1 != blank %}
-                    <a class="home-hero__contact-item" href="{{ block.settings.contact_link_1 | default: '#' }}">
+                  {% if card_contact_value_1 != blank %}
+                    <a class="home-hero__contact-item" href="{{ card_contact_link_1 | default: '#' | escape }}">
                       <span class="home-hero__contact-icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
                           <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
@@ -198,7 +211,7 @@
                         {% if block.settings.contact_label_1 != blank %}
                           <span class="home-hero__contact-label">{{ block.settings.contact_label_1 | escape }}</span>
                         {% endif %}
-                        <span class="home-hero__contact-value">{{ block.settings.contact_value_1 | escape }}</span>
+                        <span class="home-hero__contact-value">{{ card_contact_value_1 | escape }}</span>
                       </span>
                     </a>
                   {% endif %}
@@ -229,6 +242,8 @@
                 </a>
               {% endif %}
             </article>
+              {% endif %}
+            {% endif %}
           {% endfor %}
         </div>
       {% endif %}
@@ -236,18 +251,17 @@
       {% if has_multiple_slides %}
         <div class="home-hero__dots" aria-label="Hero slides">
           {% assign rendered_dot = 0 %}
-          {% if section.settings.slide_image_1 != blank or slide_1_fallback != blank %}
-            {% assign rendered_dot = rendered_dot | plus: 1 %}
-            <button class="home-hero__dot is-active" type="button" aria-label="Show hero image {{ rendered_dot }}" aria-pressed="true" data-hero-dot></button>
-          {% endif %}
-          {% if section.settings.slide_image_2 != blank or slide_2_fallback != blank %}
-            {% assign rendered_dot = rendered_dot | plus: 1 %}
-            <button class="home-hero__dot" type="button" aria-label="Show hero image {{ rendered_dot }}" aria-pressed="false" data-hero-dot></button>
-          {% endif %}
-          {% if section.settings.slide_image_3 != blank or slide_3_fallback != blank %}
-            {% assign rendered_dot = rendered_dot | plus: 1 %}
-            <button class="home-hero__dot" type="button" aria-label="Show hero image {{ rendered_dot }}" aria-pressed="false" data-hero-dot></button>
-          {% endif %}
+          {% for block in slide_blocks %}
+            {% if block.settings.image != blank or block.settings.external_image_url != blank %}
+              {% assign rendered_dot = rendered_dot | plus: 1 %}
+              {% assign dot_index = rendered_dot %}
+              {% assign dot_state = 'false' %}
+              {% if rendered_dot == 1 %}
+                {% assign dot_state = 'true' %}
+              {% endif %}
+              <button class="home-hero__dot{% if rendered_dot == 1 %} is-active{% endif %}" type="button" aria-label="Show hero image {{ dot_index }}" aria-pressed="{{ dot_state }}" data-hero-dot></button>
+            {% endif %}
+          {% endfor %}
         </div>
       {% endif %}
     </div>
@@ -447,10 +461,25 @@
   }
 
   .home-hero__card-stars {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.3rem;
+    color: rgba(255, 209, 102, 0.3);
+  }
+
+  .home-hero__card-stars-base,
+  .home-hero__card-stars-fill {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .home-hero__card-stars-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    overflow: hidden;
     color: #ffd166;
+    white-space: nowrap;
   }
 
   .home-hero__card-stars svg {
@@ -640,44 +669,42 @@
 
 {% javascript %}
   (() => {
-    const initialized = new WeakSet();
+    const instances = new WeakMap();
 
-    const setupHero = (hero) => {
-      if (!hero || initialized.has(hero) || hero.dataset.autoplay !== 'true') {
-        return;
-      }
+    const initializeHero = (hero) => {
+      if (!hero || instances.has(hero) || hero.dataset.autoplay !== 'true') return;
 
       const slides = Array.from(hero.querySelectorAll('[data-hero-slide]'));
       const dots = Array.from(hero.querySelectorAll('[data-hero-dot]'));
+      if (slides.length < 2 || dots.length !== slides.length) return;
 
-      if (slides.length < 2 || dots.length !== slides.length) {
-        return;
-      }
-
-      initialized.add(hero);
-
+      const controller = new AbortController();
       let activeIndex = 0;
       let intervalId = null;
+      let pausedByEditor = false;
+
+      const stopAutoplay = () => {
+        window.clearInterval(intervalId);
+        intervalId = null;
+      };
 
       const setActiveSlide = (index) => {
-        activeIndex = index;
-
+        activeIndex = Math.max(0, Math.min(index, slides.length - 1));
         slides.forEach((slide, slideIndex) => {
-          slide.classList.toggle('is-active', slideIndex === index);
+          slide.classList.toggle('is-active', slideIndex === activeIndex);
         });
-
         dots.forEach((dot, dotIndex) => {
-          const isActive = dotIndex === index;
+          const isActive = dotIndex === activeIndex;
           dot.classList.toggle('is-active', isActive);
           dot.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
       };
 
       const startAutoplay = () => {
-        window.clearInterval(intervalId);
+        stopAutoplay();
+        if (pausedByEditor) return;
         intervalId = window.setInterval(() => {
-          const nextIndex = activeIndex === slides.length - 1 ? 0 : activeIndex + 1;
-          setActiveSlide(nextIndex);
+          setActiveSlide(activeIndex === slides.length - 1 ? 0 : activeIndex + 1);
         }, 4500);
       };
 
@@ -685,27 +712,65 @@
         dot.addEventListener('click', () => {
           setActiveSlide(dotIndex);
           startAutoplay();
-        });
+        }, { signal: controller.signal });
       });
 
-      hero.addEventListener('mouseenter', () => window.clearInterval(intervalId));
-      hero.addEventListener('mouseleave', startAutoplay);
+      hero.addEventListener('mouseenter', stopAutoplay, { signal: controller.signal });
+      hero.addEventListener('mouseleave', startAutoplay, { signal: controller.signal });
+      hero.addEventListener('focusin', stopAutoplay, { signal: controller.signal });
+      hero.addEventListener('focusout', (event) => {
+        if (!hero.contains(event.relatedTarget)) startAutoplay();
+      }, { signal: controller.signal });
 
+      const instance = {
+        selectBlock: (target) => {
+          const slide = target.closest?.('[data-hero-slide]');
+          const selectedIndex = slides.indexOf(slide);
+          if (selectedIndex < 0) return;
+          pausedByEditor = true;
+          stopAutoplay();
+          setActiveSlide(selectedIndex);
+        },
+        deselectBlock: () => {
+          pausedByEditor = false;
+          startAutoplay();
+        },
+        destroy: () => {
+          stopAutoplay();
+          controller.abort();
+          instances.delete(hero);
+        },
+      };
+
+      instances.set(hero, instance);
       setActiveSlide(0);
       startAutoplay();
     };
 
-    const initAllHeroes = () => {
-      document.querySelectorAll('[data-hero-slider]').forEach(setupHero);
+    const forEachHero = (scope, callback) => {
+      if (scope?.matches?.('[data-hero-slider]')) callback(scope);
+      scope?.querySelectorAll?.('[data-hero-slider]').forEach(callback);
     };
 
+    const initializeHeroes = (scope = document) => forEachHero(scope, initializeHero);
+    const destroyHeroes = (scope) => forEachHero(scope, (hero) => instances.get(hero)?.destroy());
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initAllHeroes);
+      document.addEventListener('DOMContentLoaded', () => initializeHeroes(), { once: true });
     } else {
-      initAllHeroes();
+      initializeHeroes();
     }
 
-    document.addEventListener('shopify:section:load', initAllHeroes);
+    document.addEventListener('shopify:section:load', (event) => initializeHeroes(event.target));
+    document.addEventListener('shopify:section:unload', (event) => destroyHeroes(event.target));
+    document.addEventListener('shopify:block:select', (event) => {
+      const hero = event.target.closest?.('[data-hero-slider]');
+      if (hero) instances.get(hero)?.selectBlock(event.target);
+    });
+    document.addEventListener('shopify:block:deselect', (event) => {
+      const hero = event.target.closest?.('[data-hero-slider]');
+      if (hero) instances.get(hero)?.deselectBlock();
+    });
   })();
 {% endjavascript %}
 
@@ -714,10 +779,10 @@
   "name": "Home hero",
   "settings": [
     {
-      "type": "text",
-      "id": "rating_text",
-      "label": "Rating pill",
-      "default": "4.9 out of 5 stars based on customer reviews"
+      "type": "product",
+      "id": "review_product",
+      "label": "Product for review rating",
+      "info": "The current homepage featured-product fallback is TXP1. Select the same product as the Home main product section if that product changes. Ratings and counts come from its review metafields."
     },
     {
       "type": "text",
@@ -758,46 +823,17 @@
       "type": "url",
       "id": "secondary_link",
       "label": "Secondary button link"
-    },
-    {
-      "type": "paragraph",
-      "content": "Use uploaded slide images when available. The external URL fields below let the theme mirror the design reference without requiring asset uploads first."
-    },
-    {
-      "type": "image_picker",
-      "id": "slide_image_1",
-      "label": "Slide image 1"
-    },
-    {
-      "type": "text",
-      "id": "slide_1_external",
-      "label": "Slide image 1 external URL",
-      "default": "https://ipadkeyboard.shop/cdn/shop/files/8_282bf360-c999-4b07-8095-796b982106bd.jpg?v=1741923254&width=1800"
-    },
-    {
-      "type": "image_picker",
-      "id": "slide_image_2",
-      "label": "Slide image 2"
-    },
-    {
-      "type": "text",
-      "id": "slide_2_external",
-      "label": "Slide image 2 external URL",
-      "default": "https://ipadkeyboard.shop/cdn/shop/files/9_2b41a72b-d950-47aa-a84d-c916aacf5f73.jpg?v=1741844115&width=1800"
-    },
-    {
-      "type": "image_picker",
-      "id": "slide_image_3",
-      "label": "Slide image 3"
-    },
-    {
-      "type": "text",
-      "id": "slide_3_external",
-      "label": "Slide image 3 external URL",
-      "default": "https://ipadkeyboard.shop/cdn/shop/files/11_77953d2a-beb8-447a-a8c5-72bcb3e57687.jpg?v=1741844336&width=1800"
     }
   ],
   "blocks": [
+    {
+      "type": "slide",
+      "name": "Hero slide",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Slide image" },
+        { "type": "text", "id": "external_image_url", "label": "External image URL", "info": "Optional. Used only when no Shopify image is selected." }
+      ]
+    },
     {
       "type": "card",
       "name": "Card",
@@ -883,11 +919,29 @@
       ]
     }
   ],
-  "max_blocks": 3,
+  "max_blocks": 20,
   "presets": [
     {
       "name": "Home hero",
       "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "external_image_url": "https://ipadkeyboard.shop/cdn/shop/files/8_282bf360-c999-4b07-8095-796b982106bd.jpg?v=1741923254&width=1800"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "external_image_url": "https://ipadkeyboard.shop/cdn/shop/files/9_2b41a72b-d950-47aa-a84d-c916aacf5f73.jpg?v=1741844115&width=1800"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "external_image_url": "https://ipadkeyboard.shop/cdn/shop/files/11_77953d2a-beb8-447a-a8c5-72bcb3e57687.jpg?v=1741844336&width=1800"
+          }
+        },
         {
           "type": "card",
           "settings": {
@@ -903,8 +957,7 @@
           "settings": {
             "card_style": "reviews",
             "label": "Reviews",
-            "heading": "4.91 / 5",
-            "text": "Verified shoppers rate the keyboard case for sturdy protection, smooth typing, and everyday iPad use."
+            "text": ""
           }
         },
         {

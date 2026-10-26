@@ -1,7 +1,12 @@
+{% assign model_guide_url = section.settings.fit_guide_link | default: settings.global_model_guide_url | default: '/pages/find-your-ipad-model' %}
+
 <aside
   class="cart-drawer"
   data-cart-drawer
   data-section-id="{{ section.id }}"
+  data-add-to-cart-response="{{ section.settings.add_to_cart_response | default: 'open_drawer' }}"
+  data-cart-url="{{ routes.cart_url }}"
+  style="--cart-drawer-width: {{ section.settings.drawer_width | default: '29rem' }};"
   role="dialog"
   aria-modal="true"
   aria-labelledby="CartDrawerTitle"
@@ -36,7 +41,7 @@
           <p>{{ 'noxrev_cart.empty_body' | t }}</p>
           <div class="cart-drawer__empty-actions">
             <a class="button button--primary" href="{{ section.settings.shopping_link | default: routes.all_products_collection_url | escape }}">{{ 'cart.continue_shopping' | t }}</a>
-            <a class="cart-drawer__text-link" href="{{ section.settings.fit_guide_link | default: '/pages/find-your-ipad-model' | escape }}">{{ 'noxrev_cart.find_model' | t }}</a>
+            <a class="cart-drawer__text-link" href="{{ model_guide_url | escape }}">{{ 'noxrev_cart.find_model' | t }}</a>
           </div>
         </div>
       {% else %}
@@ -206,7 +211,7 @@
     bottom: 0;
     display: grid;
     grid-template-rows: auto auto minmax(0, 1fr) auto;
-    width: min(100vw, 29rem);
+    width: min(100vw, var(--cart-drawer-width, 29rem));
     overflow: hidden;
     border: 0;
     border-left: 1px solid rgba(56, 221, 255, 0.22);
@@ -860,6 +865,9 @@ body.noxrev-cart-open .klaviyo-form {
     };
 
     const handleProductAdd = async (form) => {
+      if (form.dataset.cartAddPending === 'true') return;
+      form.dataset.cartAddPending = 'true';
+
       const submitButton = form.querySelector('[type="submit"]');
       const originalText = submitButton?.textContent;
       const originalDisabled = submitButton?.disabled;
@@ -902,8 +910,6 @@ body.noxrev-cart-open .klaviyo-form {
           );
         }
 
-        await refreshDrawer();
-
         const cartResponse = await fetch(
           `${rootPath()}cart.js`,
           {
@@ -918,7 +924,18 @@ body.noxrev-cart-open .klaviyo-form {
         updateHeaderCartCount(cart.item_count || 0);
         publishCartUpdate(cart);
 
-        openDrawer();
+        const responseBehavior = getDrawer()?.dataset.addToCartResponse || 'open_drawer';
+
+        if (responseBehavior === 'navigate_cart') {
+          window.location.assign(getDrawer()?.dataset.cartUrl || `${rootPath()}cart`);
+          return;
+        }
+
+        await refreshDrawer();
+
+        if (responseBehavior === 'open_drawer') {
+          openDrawer();
+        }
       } catch (error) {
         showDrawerError(
           error.message ||
@@ -927,6 +944,8 @@ body.noxrev-cart-open .klaviyo-form {
 
         openDrawer();
       } finally {
+        delete form.dataset.cartAddPending;
+
         if (submitButton) {
           submitButton.disabled = originalDisabled;
           submitButton.classList.remove('is-loading');
@@ -1035,6 +1054,26 @@ body.noxrev-cart-open .klaviyo-form {
         }
       }
     );
+
+    const eventTargetsCartDrawer = (target) =>
+      target?.matches?.('[data-cart-drawer]') ||
+      Boolean(target?.querySelector?.('[data-cart-drawer]'));
+
+    document.addEventListener('shopify:section:select', (event) => {
+      if (eventTargetsCartDrawer(event.target)) openDrawer();
+    });
+
+    document.addEventListener('shopify:section:deselect', (event) => {
+      if (eventTargetsCartDrawer(event.target)) closeDrawer();
+    });
+
+    document.addEventListener('shopify:section:unload', (event) => {
+      if (!eventTargetsCartDrawer(event.target)) return;
+      drawerRequestSequence += 1;
+      drawerController?.abort();
+      drawerController = null;
+      closeDrawer();
+    });
   })();
 {% endjavascript %}
 
@@ -1042,6 +1081,27 @@ body.noxrev-cart-open .klaviyo-form {
 {
   "name": "Cart drawer",
   "settings": [
+    {
+      "type": "select",
+      "id": "drawer_width",
+      "label": "Cart drawer width",
+      "default": "29rem",
+      "options": [
+        { "value": "29rem", "label": "Standard" },
+        { "value": "36rem", "label": "Wide" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "add_to_cart_response",
+      "label": "After adding to cart",
+      "default": "open_drawer",
+      "options": [
+        { "value": "open_drawer", "label": "Open cart drawer" },
+        { "value": "stay", "label": "Stay on product page" },
+        { "value": "navigate_cart", "label": "Go to cart page" }
+      ]
+    },
     {
       "type": "header",
       "content": "Cart destinations"

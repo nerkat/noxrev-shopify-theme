@@ -381,9 +381,11 @@
 
 {% javascript %}
   (() => {
-    const roots = document.querySelectorAll('[data-faq-page]');
+    const instances = new WeakMap();
 
-    roots.forEach((root) => {
+    const initializeFaq = (root) => {
+      if (!root || instances.has(root)) return;
+      const controller = new AbortController();
       const search = root.querySelector('[data-faq-search]');
       const noResults = root.querySelector('[data-faq-no-results]');
 
@@ -407,7 +409,7 @@
 
         toggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
         if (answer) answer.hidden = isOpen;
-      });
+      }, { signal: controller.signal });
 
       search?.addEventListener('input', () => {
         const query = search.value.trim().toLowerCase();
@@ -428,7 +430,48 @@
         if (noResults) {
           noResults.hidden = visibleItems > 0;
         }
+      }, { signal: controller.signal });
+
+      instances.set(root, {
+        destroy: () => {
+          controller.abort();
+          instances.delete(root);
+        },
       });
+    };
+
+    const forEachFaq = (scope, callback) => {
+      if (scope.matches?.('[data-faq-page]')) callback(scope);
+      scope.querySelectorAll?.('[data-faq-page]').forEach(callback);
+    };
+
+    const initializeFaqs = (scope = document) => forEachFaq(scope, initializeFaq);
+    const unloadFaqs = (scope) => forEachFaq(scope, (root) => instances.get(root)?.destroy());
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => initializeFaqs(), { once: true });
+    } else {
+      initializeFaqs();
+    }
+    document.addEventListener('shopify:section:load', (event) => initializeFaqs(event.target));
+    document.addEventListener('shopify:section:unload', (event) => unloadFaqs(event.target));
+    document.addEventListener('shopify:block:select', (event) => {
+      const toggle = event.target.closest?.('[data-faq-toggle]') || event.target.querySelector?.('[data-faq-toggle]');
+      const root = toggle?.closest('[data-faq-page]');
+      if (!toggle || !root) return;
+
+      if (root.dataset.allowMultiple !== 'true') {
+        toggle.closest('[data-faq-group]')?.querySelectorAll('[data-faq-toggle][aria-expanded="true"]').forEach((openToggle) => {
+          if (openToggle === toggle) return;
+          openToggle.setAttribute('aria-expanded', 'false');
+          const openAnswer = openToggle.closest('[data-faq-item]')?.querySelector('[data-faq-answer]');
+          if (openAnswer) openAnswer.hidden = true;
+        });
+      }
+
+      toggle.setAttribute('aria-expanded', 'true');
+      const answer = toggle.closest('[data-faq-item]')?.querySelector('[data-faq-answer]');
+      if (answer) answer.hidden = false;
     });
   })();
 {% endjavascript %}

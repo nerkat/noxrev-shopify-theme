@@ -164,6 +164,9 @@
           const isActive = slideIndex === activeIndex;
           slide.classList.toggle('is-active', isActive);
           slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+          if (!isActive) {
+            slide.querySelectorAll('video').forEach((video) => video.pause());
+          }
         });
 
         dots.forEach((dot, dotIndex) => {
@@ -605,5 +608,18 @@
       initGalleriesInScope(event.target);
       initMainProductBehaviors(event.target);
       event.target.querySelectorAll?.('[data-main-product-section]').forEach(initVariantLinks);
+    });
+
+    document.addEventListener('shopify:section:unload', (event) => {
+      const scope = event.target;
+      const productSection = scope.matches?.('[data-main-product-section]')
+        ? scope
+        : scope.querySelector?.('[data-main-product-section]');
+      if (!productSection) return;
+
+      variantRequestSequence += 1;
+      variantRequestController?.abort();
+      variantRequestController = null;
+      productSection.querySelectorAll('[data-product-gallery] video').forEach((video) => video.pause());
     });
   })();

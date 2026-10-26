@@ -130,13 +130,13 @@
   </article>
 </section>
 
-<script>
+{% javascript %}
   (() => {
-    const sections = document.querySelectorAll('[data-real-life-videos]');
+    const instances = new WeakMap();
 
-    sections.forEach((section) => {
-      if (section.dataset.realLifeVideosReady === 'true') return;
-      section.dataset.realLifeVideosReady = 'true';
+    const initializeSection = (section) => {
+      if (!section || instances.has(section)) return;
+      const controller = new AbortController();
 
       const videoShells = section.querySelectorAll('[data-real-life-video-shell]');
       const loadPoster = (video) => {
@@ -158,6 +158,8 @@
             { rootMargin: '900px 500px' }
           )
         : null;
+
+      const abortSignal = controller.signal;
 
       videoShells.forEach((shell) => {
         const video = shell.querySelector('video');
@@ -189,18 +191,42 @@
         toggle.addEventListener('click', (event) => {
           event.preventDefault();
           togglePlayback();
-        });
+        }, { signal: abortSignal });
 
-        video.addEventListener('click', togglePlayback);
-        video.addEventListener('play', updateState);
-        video.addEventListener('pause', updateState);
-        video.addEventListener('ended', updateState);
+        video.addEventListener('click', togglePlayback, { signal: abortSignal });
+        video.addEventListener('play', updateState, { signal: abortSignal });
+        video.addEventListener('pause', updateState, { signal: abortSignal });
+        video.addEventListener('ended', updateState, { signal: abortSignal });
         updateState();
       });
 
-    });
+      instances.set(section, {
+        destroy: () => {
+          posterObserver?.disconnect();
+          controller.abort();
+          videoShells.forEach((shell) => shell.querySelector('video')?.pause());
+          instances.delete(section);
+        },
+      });
+    };
+
+    const forEachSection = (scope, callback) => {
+      if (scope.matches?.('[data-real-life-videos]')) callback(scope);
+      scope.querySelectorAll?.('[data-real-life-videos]').forEach(callback);
+    };
+
+    const initializeSections = (scope = document) => forEachSection(scope, initializeSection);
+    const unloadSections = (scope) => forEachSection(scope, (section) => instances.get(section)?.destroy());
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => initializeSections(), { once: true });
+    } else {
+      initializeSections();
+    }
+    document.addEventListener('shopify:section:load', (event) => initializeSections(event.target));
+    document.addEventListener('shopify:section:unload', (event) => unloadSections(event.target));
   })();
-</script>
+{% endjavascript %}
 
 
 

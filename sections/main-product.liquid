@@ -48,28 +48,7 @@
                   data-media-id="{{ media.id }}"
                   aria-hidden="{% if is_active_media %}false{% else %}true{% endif %}"
                 >
-                  {% if slide_image != blank %}
-                    <img
-                      class="main-product__gallery-image"
-                      src="{{ slide_image | image_url: width: 640 }}"
-                      srcset="
-                        {{ slide_image | image_url: width: 320 }} 320w,
-                        {{ slide_image | image_url: width: 480 }} 480w,
-                        {{ slide_image | image_url: width: 640 }} 640w,
-                        {{ slide_image | image_url: width: 800 }} 800w,
-                        {{ slide_image | image_url: width: 960 }} 960w,
-                        {{ slide_image | image_url: width: 1200 }} 1200w
-                      "
-                      sizes="(min-width: 861px) 55vw, 50vw"
-                      alt="{{ slide_alt | escape }}"
-                      width="{{ slide_image.width }}"
-                      height="{{ slide_image.height }}"
-                      loading="{% if is_active_media %}eager{% else %}lazy{% endif %}"
-                      fetchpriority="{% if is_active_media %}high{% else %}low{% endif %}"
-                    >
-                  {% else %}
-                    {{ 'image' | placeholder_svg_tag: 'main-product__gallery-placeholder' }}
-                  {% endif %}
+                  {% render 'main-product-media', media: media, slide_image: slide_image, slide_alt: slide_alt, is_active_media: is_active_media %}
                 </div>
               {% endfor %}
             {% else %}

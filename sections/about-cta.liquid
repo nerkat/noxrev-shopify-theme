@@ -1,5 +1,7 @@
 {{ 'about-noxrev.css' | asset_url | stylesheet_tag }}
 
+{% assign model_guide_url = section.settings.secondary_link | default: settings.global_model_guide_url | default: '/pages/find-your-ipad-model' %}
+
 <section class="about-noxrev about-noxrev--tight">
   <div class="container">
     <div class="about-noxrev__grid about-noxrev__grid--split">
@@ -7,7 +9,7 @@
         <h2 class="about-noxrev__heading">{{ section.settings.heading }}</h2>
         <div class="about-noxrev__actions">
           <a class="button button--primary" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">{{ section.settings.primary_label }}</a>
-          <a class="about-noxrev__secondary" href="{{ section.settings.secondary_link | default: '/pages/find-your-ipad-model' }}">{{ section.settings.secondary_label }}</a>
+          <a class="about-noxrev__secondary" href="{{ model_guide_url | escape }}">{{ section.settings.secondary_label }}</a>
         </div>
       </div>
       <div class="about-noxrev__media-card">

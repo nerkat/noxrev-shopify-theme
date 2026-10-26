@@ -24,6 +24,44 @@
     ]
   },
   {
+    "name": "Shared NOXREV content",
+    "settings": [
+      {
+        "type": "text",
+        "id": "global_support_email",
+        "label": "Support email",
+        "default": "support@noxrev.com",
+        "info": "Used when a section's own support email is blank."
+      },
+      {
+        "type": "url",
+        "id": "global_model_guide_url",
+        "label": "Find your iPad model guide",
+        "info": "Used when a section's own model guide link is blank."
+      },
+      {
+        "type": "url",
+        "id": "global_social_tiktok_url",
+        "label": "TikTok profile"
+      },
+      {
+        "type": "url",
+        "id": "global_social_instagram_url",
+        "label": "Instagram profile"
+      },
+      {
+        "type": "url",
+        "id": "global_social_facebook_url",
+        "label": "Facebook profile"
+      },
+      {
+        "type": "url",
+        "id": "global_social_youtube_url",
+        "label": "YouTube profile"
+      }
+    ]
+  },
+  {
     "name": "Catalog search",
     "settings": [
       {

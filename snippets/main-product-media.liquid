@@ -1,0 +1,27 @@
+{% case media.media_type %}
+  {% when 'image' %}
+    <img
+      class="main-product__gallery-image"
+      src="{{ slide_image | image_url: width: 640 }}"
+      srcset="
+        {{ slide_image | image_url: width: 320 }} 320w,
+        {{ slide_image | image_url: width: 480 }} 480w,
+        {{ slide_image | image_url: width: 640 }} 640w,
+        {{ slide_image | image_url: width: 800 }} 800w,
+        {{ slide_image | image_url: width: 960 }} 960w,
+        {{ slide_image | image_url: width: 1200 }} 1200w
+      "
+      sizes="(min-width: 861px) 55vw, 50vw"
+      alt="{{ slide_alt | escape }}"
+      width="{{ slide_image.width }}"
+      height="{{ slide_image.height }}"
+      loading="{% if is_active_media %}eager{% else %}lazy{% endif %}"
+      fetchpriority="{% if is_active_media %}high{% else %}low{% endif %}"
+    >
+  {% when 'video' %}
+    {{ media | media_tag: image_size: '1200x', controls: true, preload: 'none', class: 'main-product__gallery-video' }}
+  {% when 'external_video' %}
+    {{ media | external_video_tag: class: 'main-product__gallery-external-video', loading: 'lazy' }}
+  {% when 'model' %}
+    {{ media | model_viewer_tag: image_size: '800x', interaction-policy: 'allow-when-focused', reveal: 'interaction', class: 'main-product__gallery-model-viewer', tabindex: '0' }}
+{% endcase %}

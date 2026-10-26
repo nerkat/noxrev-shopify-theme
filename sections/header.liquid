@@ -6,6 +6,11 @@
   assign utility_link = section.settings.utility_link
   assign has_utility = false
   assign mobile_drawer_brand_text = section.settings.mobile_drawer_brand_text | default: brand_text
+  assign mobile_drawer_support_email = section.settings.mobile_drawer_contact_email | default: settings.global_support_email
+  assign mobile_drawer_social_tiktok = section.settings.mobile_drawer_social_tiktok | default: settings.global_social_tiktok_url
+  assign mobile_drawer_social_instagram = section.settings.mobile_drawer_social_instagram | default: settings.global_social_instagram_url
+  assign mobile_drawer_social_facebook = section.settings.mobile_drawer_social_facebook | default: settings.global_social_facebook_url
+  assign mobile_drawer_social_youtube = section.settings.mobile_drawer_social_youtube | default: settings.global_social_youtube_url
   assign has_mobile_drawer_social_links = false
   assign has_mobile_drawer_help_menu = false
 
@@ -21,19 +26,19 @@
     assign has_utility = true
   endif
 
-  if section.settings.mobile_drawer_social_tiktok != blank
+  if mobile_drawer_social_tiktok != blank
     assign has_mobile_drawer_social_links = true
   endif
 
-  if section.settings.mobile_drawer_social_instagram != blank
+  if mobile_drawer_social_instagram != blank
     assign has_mobile_drawer_social_links = true
   endif
 
-  if section.settings.mobile_drawer_social_facebook != blank
+  if mobile_drawer_social_facebook != blank
     assign has_mobile_drawer_social_links = true
   endif
 
-  if section.settings.mobile_drawer_social_youtube != blank
+  if mobile_drawer_social_youtube != blank
     assign has_mobile_drawer_social_links = true
   endif
 
@@ -126,9 +131,9 @@
               {% endif %}
 
               <div class="header__mobile-footer-contact">
-                {% if section.settings.mobile_drawer_contact_email != blank %}
-                  <a href="mailto:{{ section.settings.mobile_drawer_contact_email }}">
-                    {{- section.settings.mobile_drawer_contact_email -}}
+                {% if mobile_drawer_support_email != blank %}
+                  <a href="mailto:{{ mobile_drawer_support_email | escape }}">
+                    {{- mobile_drawer_support_email | escape -}}
                   </a>
                 {% endif %}
                 {% if section.settings.mobile_drawer_contact_phone != blank %}
@@ -140,10 +145,10 @@
 
               {% if section.settings.mobile_drawer_show_social_links and has_mobile_drawer_social_links %}
                 <div class="header__mobile-footer-social" aria-label="Social links">
-                  {% if section.settings.mobile_drawer_social_tiktok != blank %}
+                  {% if mobile_drawer_social_tiktok != blank %}
                     <a
                       class="header__mobile-footer-social-link"
-                      href="{{ section.settings.mobile_drawer_social_tiktok }}"
+                      href="{{ mobile_drawer_social_tiktok }}"
                       aria-label="TikTok"
                     >
                       <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
@@ -152,10 +157,10 @@
                       </svg>
                     </a>
                   {% endif %}
-                  {% if section.settings.mobile_drawer_social_instagram != blank %}
+                  {% if mobile_drawer_social_instagram != blank %}
                     <a
                       class="header__mobile-footer-social-link"
-                      href="{{ section.settings.mobile_drawer_social_instagram }}"
+                      href="{{ mobile_drawer_social_instagram }}"
                       aria-label="Instagram"
                     >
                       <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
@@ -165,10 +170,10 @@
                       </svg>
                     </a>
                   {% endif %}
-                  {% if section.settings.mobile_drawer_social_facebook != blank %}
+                  {% if mobile_drawer_social_facebook != blank %}
                     <a
                       class="header__mobile-footer-social-link"
-                      href="{{ section.settings.mobile_drawer_social_facebook }}"
+                      href="{{ mobile_drawer_social_facebook }}"
                       aria-label="Facebook"
                     >
                       <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
@@ -176,10 +181,10 @@
                       </svg>
                     </a>
                   {% endif %}
-                  {% if section.settings.mobile_drawer_social_youtube != blank %}
+                  {% if mobile_drawer_social_youtube != blank %}
                     <a
                       class="header__mobile-footer-social-link"
-                      href="{{ section.settings.mobile_drawer_social_youtube }}"
+                      href="{{ mobile_drawer_social_youtube }}"
                       aria-label="YouTube"
                     >
                       <svg viewBox="0 0 24 24" fill="none" focusable="false" aria-hidden="true">
