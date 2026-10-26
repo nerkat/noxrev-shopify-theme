@@ -62,15 +62,35 @@
   }
 
   .product-reviews-rating__stars {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  .product-reviews-rating__stars-base,
+  .product-reviews-rating__stars-fill {
     display: flex;
     gap: 0.22rem;
     align-items: center;
+  }
+
+  .product-reviews-rating__stars-base {
+    color: rgba(255, 210, 77, 0.28);
+  }
+
+  .product-reviews-rating__stars-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    overflow: hidden;
     color: #ffd24d;
+    white-space: nowrap;
   }
 
   .product-reviews-rating__stars svg {
     width: 1.35rem;
     height: 1.35rem;
+    flex: 0 0 1.35rem;
   }
 
   .product-reviews-rating__subtitle {
@@ -83,6 +103,10 @@
   .product-reviews-rating__bars {
     display: grid;
     gap: 0.7rem;
+  }
+
+  .product-reviews-rating__bars[hidden] {
+    display: none;
   }
 
   .product-reviews-rating__row {

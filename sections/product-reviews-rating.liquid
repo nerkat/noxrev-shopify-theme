@@ -1,5 +1,19 @@
 {% liquid
-  assign rating_value = section.settings.rating_value
+  assign rating_metafield = product.metafields.reviews.rating
+  assign rating_average = rating_metafield.value.rating | plus: 0
+  assign rating_value = rating_average | round: 1
+  assign rating_scale_max = rating_metafield.value.scale_max | default: 5 | plus: 0
+  assign review_count = product.metafields.reviews.rating_count.value | default: 0 | plus: 0
+  assign has_review_summary = false
+  assign rating_fill_percent = 0
+
+  if review_count > 0 and rating_metafield.value.rating != blank and rating_scale_max > 0 and rating_average > 0 and rating_average <= rating_scale_max
+    assign has_review_summary = true
+    assign rating_fill_percent = rating_average | times: 100.0 | divided_by: rating_scale_max
+  endif
+
+  assign review_distribution_metafield = product.metafields['app--2519111--reviews']['review_totals']
+  assign review_distribution = review_distribution_metafield.value
   assign judge_me_widget = product.metafields.judgeme.widget
   assign has_legacy_judgeme_widget = false
 
@@ -7,36 +21,6 @@
     assign has_legacy_judgeme_widget = true
   endif
 
-  if product.metafields.reviews.rating.value != blank
-    assign rating_value = product.metafields.reviews.rating.value.rating | round: 1
-  endif
-
-  assign review_total = section.settings.review_total | plus: 0
-  assign review_5 = section.settings.review_5 | plus: 0
-  assign review_4 = section.settings.review_4 | plus: 0
-  assign review_3 = section.settings.review_3 | plus: 0
-  assign review_2 = section.settings.review_2 | plus: 0
-  assign review_1 = section.settings.review_1 | plus: 0
-
-  if review_total <= 0
-    assign review_total = review_5 | plus: review_4 | plus: review_3 | plus: review_2 | plus: review_1
-  endif
-
-  assign p5 = 0
-  assign p4 = 0
-  assign p3 = 0
-  assign p2 = 0
-  assign p1 = 0
-
-  if review_total > 0
-    assign p5 = review_5 | times: 100.0 | divided_by: review_total
-    assign p4 = review_4 | times: 100.0 | divided_by: review_total
-    assign p3 = review_3 | times: 100.0 | divided_by: review_total
-    assign p2 = review_2 | times: 100.0 | divided_by: review_total
-    assign p1 = review_1 | times: 100.0 | divided_by: review_total
-  endif
-
-  assign subtitle = section.settings.subtitle
 %}
 
 {% if section.settings.show_reviews_rating_section %}
@@ -48,49 +32,52 @@
         <h2 class="product-reviews-rating__title">{{ section.settings.title }}</h2>
       </div>
 
-      <div class="product-reviews-rating__summary">
-        <div class="product-reviews-rating__score">
-          <div class="product-reviews-rating__value">{{ rating_value }}</div>
-          <div>
-            <div class="product-reviews-rating__stars" role="img" aria-label="{{ rating_value }} out of 5 stars">
-              {% for star in (1..5) %}
-                <svg viewBox="0 0 20 20" fill="currentColor" focusable="false" aria-hidden="true">
-                  <path d="m10 2.6 2.25 4.56 5.04.73-3.65 3.56.86 5.03L10 14.12 5.5 16.48l.86-5.03L2.7 7.89l5.04-.73L10 2.6Z"></path>
-                </svg>
-              {% endfor %}
+      {% if has_review_summary %}
+        <div class="product-reviews-rating__summary">
+          <div class="product-reviews-rating__score">
+            <div class="product-reviews-rating__value">{{ rating_value }}</div>
+            <div>
+              <div class="product-reviews-rating__stars" role="img" aria-label="{{ rating_value }} out of {{ rating_scale_max }} stars">
+                <span class="product-reviews-rating__stars-base" aria-hidden="true">
+                  {% for star in (1..5) %}
+                    <svg viewBox="0 0 20 20" fill="currentColor" focusable="false" aria-hidden="true">
+                      <path d="m10 2.6 2.25 4.56 5.04.73-3.65 3.56.86 5.03L10 14.12 5.5 16.48l.86-5.03L2.7 7.89l5.04-.73L10 2.6Z"></path>
+                    </svg>
+                  {% endfor %}
+                </span>
+                <span class="product-reviews-rating__stars-fill" style="width: {{ rating_fill_percent }}%;" aria-hidden="true">
+                  {% for star in (1..5) %}
+                    <svg viewBox="0 0 20 20" fill="currentColor" focusable="false" aria-hidden="true">
+                      <path d="m10 2.6 2.25 4.56 5.04.73-3.65 3.56.86 5.03L10 14.12 5.5 16.48l.86-5.03L2.7 7.89l5.04-.73L10 2.6Z"></path>
+                    </svg>
+                  {% endfor %}
+                </span>
+              </div>
+              <p class="product-reviews-rating__subtitle">
+                Based on {{ review_count }}
+                {% if review_count == 1 %}review{% else %}reviews{% endif %}
+              </p>
             </div>
-            <p class="product-reviews-rating__subtitle">{{ subtitle }}</p>
           </div>
-        </div>
 
-        <div class="product-reviews-rating__bars" aria-label="Rating distribution" data-judgeme-rating-bars>
-          <div class="product-reviews-rating__row" data-rating-row="5">
-            <span>5 Stars</span>
-            <span class="product-reviews-rating__bar"><span style="width: {{ p5 }}%;" data-rating-bar></span></span>
-            <strong data-rating-count>{{ review_5 }}</strong>
-          </div>
-          <div class="product-reviews-rating__row" data-rating-row="4">
-            <span>4 Stars</span>
-            <span class="product-reviews-rating__bar"><span style="width: {{ p4 }}%;" data-rating-bar></span></span>
-            <strong data-rating-count>{{ review_4 }}</strong>
-          </div>
-          <div class="product-reviews-rating__row" data-rating-row="3">
-            <span>3 Stars</span>
-            <span class="product-reviews-rating__bar"><span style="width: {{ p3 }}%;" data-rating-bar></span></span>
-            <strong data-rating-count>{{ review_3 }}</strong>
-          </div>
-          <div class="product-reviews-rating__row" data-rating-row="2">
-            <span>2 Stars</span>
-            <span class="product-reviews-rating__bar"><span style="width: {{ p2 }}%;" data-rating-bar></span></span>
-            <strong data-rating-count>{{ review_2 }}</strong>
-          </div>
-          <div class="product-reviews-rating__row" data-rating-row="1">
-            <span>1 Star</span>
-            <span class="product-reviews-rating__bar"><span style="width: {{ p1 }}%;" data-rating-bar></span></span>
-            <strong data-rating-count>{{ review_1 }}</strong>
+          <div
+            class="product-reviews-rating__bars"
+            aria-label="Rating distribution"
+            data-judgeme-rating-bars
+            data-review-count="{{ review_count }}"
+            data-review-distribution="{{ review_distribution | json | escape }}"
+            hidden
+          >
+            {% for star in (1..5) reversed %}
+              <div class="product-reviews-rating__row" data-rating-row="{{ star }}">
+                <span>{{ star }} {% if star == 1 %}Star{% else %}Stars{% endif %}</span>
+                <span class="product-reviews-rating__bar"><span data-rating-bar></span></span>
+                <strong data-rating-count></strong>
+              </div>
+            {% endfor %}
           </div>
         </div>
-      </div>
+      {% endif %}
 
       {% if section.settings.button_label != blank or section.settings.write_button_label != blank %}
         <div class="product-reviews-rating__actions">
@@ -160,56 +147,59 @@
     const viewReviewsTrigger = section?.querySelector('[data-judgeme-view-reviews]');
     const viewReviewsLabel = section?.querySelector('[data-judgeme-view-reviews-label]');
     const viewReviewsIcon = section?.querySelector('[data-judgeme-view-reviews-icon]');
-    const customRows = Array.from(section?.querySelectorAll('[data-rating-row]') || []);
+    const ratingBars = section?.querySelector('[data-judgeme-rating-bars]');
     const widget = section?.querySelector('[data-judgeme-reviews-panel]');
     const panelBody = section?.querySelector('[data-judgeme-panel-body]');
     const viewReviewsOpenLabel = 'Close';
     const viewReviewsClosedLabel = viewReviewsLabel?.textContent || 'View All Reviews';
     const viewReviewsClosedIcon = viewReviewsIcon?.innerHTML || '&rsaquo;';
 
-    const parseCount = (text) => {
-      const match = text?.replace(/,/g, '').match(/\d+/);
-      return match ? Number(match[0]) : 0;
-    };
+    const renderRatingBars = () => {
+      if (!ratingBars) return;
 
-    const syncRatingBars = () => {
-      if (!widget || !customRows.length) return false;
+      let distribution;
+      try {
+        distribution = JSON.parse(ratingBars.dataset.reviewDistribution || 'null');
+        if (typeof distribution === 'string') distribution = JSON.parse(distribution);
+      } catch {
+        return;
+      }
+
+      if (!distribution || typeof distribution !== 'object' || Array.isArray(distribution)) return;
 
       const counts = {};
+      const distributionKeys = {
+        1: 'one_star',
+        2: 'two_stars',
+        3: 'three_stars',
+        4: 'four_stars',
+        5: 'five_stars',
+      };
 
-      widget.querySelectorAll('.jdgm-histogram__row').forEach((row) => {
-        const rating = row.getAttribute('data-rating') || row.textContent?.match(/[1-5]/)?.[0];
-        const count = parseCount(
-          row.querySelector('.jdgm-histogram__frequency, .jdgm-histogram__count')?.textContent || row.textContent
-        );
+      for (const star of [1, 2, 3, 4, 5]) {
+        const key = distributionKeys[star];
+        if (!Object.prototype.hasOwnProperty.call(distribution, key)) return;
 
-        if (rating) counts[rating] = count;
-      });
+        const rawCount = distribution[key];
+        if (rawCount === null || rawCount === '' || typeof rawCount === 'object') return;
+
+        const count = Number(rawCount);
+        if (!Number.isSafeInteger(count) || count < 0) return;
+        counts[star] = count;
+      }
 
       const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
-      if (!total) return false;
+      const reviewCount = Number(ratingBars.dataset.reviewCount);
+      if (total <= 0 || total !== reviewCount) return;
 
-      customRows.forEach((row) => {
-        const rating = row.dataset.ratingRow;
-        const count = counts[rating] || 0;
-        const percent = Math.round((count / total) * 1000) / 10;
-
+      ratingBars.querySelectorAll('[data-rating-row]').forEach((row) => {
+        const count = counts[row.dataset.ratingRow];
+        const percent = (count / total) * 100;
         row.querySelector('[data-rating-count]').textContent = count.toLocaleString();
         row.querySelector('[data-rating-bar]').style.width = `${percent}%`;
       });
 
-      return true;
-    };
-
-    const watchJudgeMe = () => {
-      if (syncRatingBars() || !widget) return;
-
-      const observer = new MutationObserver(() => {
-        if (syncRatingBars()) observer.disconnect();
-      });
-
-      observer.observe(widget, { childList: true, subtree: true });
-      window.setTimeout(() => observer.disconnect(), 10000);
+      ratingBars.hidden = false;
     };
 
     const adoptExternalJudgeMeWidget = () => {
@@ -234,7 +224,6 @@
         originalWrapper.style.display = 'none';
       }
 
-      syncRatingBars();
       return true;
     };
 
@@ -250,7 +239,7 @@
     };
 
     watchExternalJudgeMeWidget();
-    watchJudgeMe();
+    renderRatingBars();
 
     const showReviews = () => {
       if (!widget) return;
@@ -311,14 +300,6 @@
     { "type": "checkbox", "id": "show_reviews_rating_section", "label": "Show reviews rating section", "default": true },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Customer Reviews" },
     { "type": "text", "id": "title", "label": "Title", "default": "Trusted by real customers." },
-    { "type": "text", "id": "rating_value", "label": "Rating value", "default": "4.9" },
-    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Based on 3,672 reviews" },
-    { "type": "text", "id": "review_total", "label": "Review total", "default": "3672" },
-    { "type": "text", "id": "review_5", "label": "5 star count", "default": "3182" },
-    { "type": "text", "id": "review_4", "label": "4 star count", "default": "362" },
-    { "type": "text", "id": "review_3", "label": "3 star count", "default": "74" },
-    { "type": "text", "id": "review_2", "label": "2 star count", "default": "28" },
-    { "type": "text", "id": "review_1", "label": "1 star count", "default": "26" },
     { "type": "text", "id": "write_button_label", "label": "Write review button label", "default": "Write A Review" },
     { "type": "url", "id": "write_button_link", "label": "Write review button link" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "View All Reviews" },
