@@ -128,7 +128,12 @@
               assign card_contact_value_1 = block.settings.contact_value_1
               assign card_contact_link_1 = block.settings.contact_link_1
               assign card_contact_label_1 = block.settings.contact_label_1 | downcase
-              if card_contact_value_1 == blank and card_contact_label_1 contains 'email'
+              if card_contact_label_1 contains 'email' and block.settings.use_global_support_email
+                if settings.global_support_email != blank
+                  assign card_contact_value_1 = settings.global_support_email
+                  assign card_contact_link_1 = 'mailto:' | append: settings.global_support_email
+                endif
+              elsif card_contact_value_1 == blank and card_contact_label_1 contains 'email'
                 assign card_contact_value_1 = settings.global_support_email | default: 'support@noxrev.com'
               endif
               if card_contact_link_1 == blank and card_contact_value_1 contains '@'
@@ -900,6 +905,13 @@
           "type": "url",
           "id": "contact_link_1",
           "label": "Contact link 1"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_global_support_email",
+          "label": "Use global support email for contact 1",
+          "default": true,
+          "info": "Applies when Contact label 1 is Email. Turn off to keep this block's contact value and link."
         },
         {
           "type": "text",

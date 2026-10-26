@@ -31,13 +31,19 @@
         "id": "global_support_email",
         "label": "Support email",
         "default": "support@noxrev.com",
-        "info": "Used when a section's own support email is blank."
+        "info": "Shared by the header drawer, footer, contact page, and homepage support card when global contact is enabled. Sections can keep their own contact details."
+      },
+      {
+        "type": "text",
+        "id": "global_support_phone",
+        "label": "Support phone",
+        "info": "Optional shared phone number for the header drawer and footer. Leave blank if you do not offer phone support."
       },
       {
         "type": "url",
         "id": "global_model_guide_url",
         "label": "Find your iPad model guide",
-        "info": "Used when a section's own model guide link is blank."
+        "info": "Shared fallback for the homepage feature, About CTA, contact page, cart, and cart drawer. A section-specific link takes priority."
       },
       {
         "type": "url",
@@ -58,6 +64,55 @@
         "type": "url",
         "id": "global_social_youtube_url",
         "label": "YouTube profile"
+      },
+      {
+        "type": "header",
+        "content": "Product service benefit defaults. Existing local product messages and icons remain editable and can override these shared values."
+      },
+      {
+        "type": "text",
+        "id": "global_shipping_trust_text",
+        "label": "Product shipping message",
+        "default": "Free 3–5 day U.S. shipping"
+      },
+      {
+        "type": "image_picker",
+        "id": "global_shipping_trust_icon",
+        "label": "Product shipping icon"
+      },
+      {
+        "type": "text",
+        "id": "global_guarantee_trust_text",
+        "label": "Product guarantee message",
+        "default": "Money-back guarantee"
+      },
+      {
+        "type": "image_picker",
+        "id": "global_guarantee_trust_icon",
+        "label": "Product guarantee icon"
+      },
+      {
+        "type": "text",
+        "id": "global_returns_trust_text",
+        "label": "Product returns message",
+        "default": "30-day returns"
+      },
+      {
+        "type": "image_picker",
+        "id": "global_returns_trust_icon",
+        "label": "Product returns icon"
+      }
+    ]
+  },
+  {
+    "name": "Breadcrumbs",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_breadcrumbs",
+        "label": "Show breadcrumbs",
+        "default": true,
+        "info": "Breadcrumbs remain hidden on the homepage, password, and gift-card pages. Product breadcrumbs stay hidden on mobile to preserve the current layout."
       }
     ]
   },

@@ -1,4 +1,13 @@
-{% assign support_email = section.settings.support_email | default: settings.global_support_email | default: 'support@noxrev.com' %}
+{% liquid
+  assign support_email = section.settings.support_email
+  if section.settings.use_global_support_email
+    assign support_email = settings.global_support_email | default: support_email
+  else
+    assign support_email = support_email | default: settings.global_support_email
+  endif
+  assign support_email = support_email | default: 'support@noxrev.com'
+  assign model_guide_url = section.settings.guide_link | default: settings.global_model_guide_url | default: '#'
+%}
 
 <section class="contact-page section">
   <div class="container">
@@ -128,7 +137,7 @@
         </dl>
 
         {% if section.settings.guide_label != blank %}
-          <a class="contact-page__guide-link" href="{{ section.settings.guide_link | default: '#' }}">
+          <a class="contact-page__guide-link" href="{{ model_guide_url }}">
             {{ section.settings.guide_label }}
             <span aria-hidden="true">-&gt;</span>
           </a>
@@ -411,6 +420,13 @@
       "default": "If you're not sure which model you have, include a photo of your iPad model number or tell us what appears under Settings > General > About."
     },
     { "type": "text", "id": "support_email", "label": "Support email", "default": "support@noxrev.com" },
+    {
+      "type": "checkbox",
+      "id": "use_global_support_email",
+      "label": "Use global support email",
+      "default": true,
+      "info": "Turn off to use the support email above as this page's override."
+    },
     {
       "type": "text",
       "id": "response_time",

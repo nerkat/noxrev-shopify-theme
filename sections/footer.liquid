@@ -3,11 +3,30 @@
   assign has_primary_menu = false
   assign has_secondary_menu = false
   assign has_social_links = false
-  assign footer_support_email = section.settings.contact_email | default: settings.global_support_email
-  assign footer_social_tiktok = section.settings.social_tiktok | default: settings.global_social_tiktok_url
-  assign footer_social_instagram = section.settings.social_instagram | default: settings.global_social_instagram_url
-  assign footer_social_facebook = section.settings.social_facebook | default: settings.global_social_facebook_url
-  assign footer_social_youtube = section.settings.social_youtube | default: settings.global_social_youtube_url
+  assign footer_support_email = section.settings.contact_email
+  assign footer_support_phone = section.settings.contact_phone
+  assign footer_social_tiktok = section.settings.social_tiktok
+  assign footer_social_instagram = section.settings.social_instagram
+  assign footer_social_facebook = section.settings.social_facebook
+  assign footer_social_youtube = section.settings.social_youtube
+  if section.settings.use_global_support_contact
+    assign footer_support_email = settings.global_support_email | default: footer_support_email
+    assign footer_support_phone = settings.global_support_phone | default: footer_support_phone
+  else
+    assign footer_support_email = footer_support_email | default: settings.global_support_email
+    assign footer_support_phone = footer_support_phone | default: settings.global_support_phone
+  endif
+  if section.settings.use_global_social_profiles
+    assign footer_social_tiktok = settings.global_social_tiktok_url | default: footer_social_tiktok
+    assign footer_social_instagram = settings.global_social_instagram_url | default: footer_social_instagram
+    assign footer_social_facebook = settings.global_social_facebook_url | default: footer_social_facebook
+    assign footer_social_youtube = settings.global_social_youtube_url | default: footer_social_youtube
+  else
+    assign footer_social_tiktok = footer_social_tiktok | default: settings.global_social_tiktok_url
+    assign footer_social_instagram = footer_social_instagram | default: settings.global_social_instagram_url
+    assign footer_social_facebook = footer_social_facebook | default: settings.global_social_facebook_url
+    assign footer_social_youtube = footer_social_youtube | default: settings.global_social_youtube_url
+  endif
 
   if section.settings.primary_menu != blank
     for link in section.settings.primary_menu.links
@@ -65,9 +84,9 @@
             {% if footer_support_email != blank %}
               <a href="mailto:{{ footer_support_email | escape }}">{{ footer_support_email | escape }}</a>
             {% endif %}
-            {% if section.settings.contact_phone != blank %}
-              <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">
-                {{- section.settings.contact_phone -}}
+            {% if footer_support_phone != blank %}
+              <a href="tel:{{ footer_support_phone | replace: ' ', '' }}">
+                {{- footer_support_phone -}}
               </a>
             {% endif %}
             {% if section.settings.contact_info != blank %}
@@ -508,6 +527,13 @@
       "label": "Contact email"
     },
     {
+      "type": "checkbox",
+      "id": "use_global_support_contact",
+      "label": "Use global support email and phone",
+      "default": true,
+      "info": "Turn off to use the contact values above as this footer's overrides."
+    },
+    {
       "type": "text",
       "id": "contact_phone",
       "label": "Contact phone"
@@ -522,6 +548,13 @@
       "id": "show_social_links",
       "label": "Show social links",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "use_global_social_profiles",
+      "label": "Use global social profiles",
+      "default": true,
+      "info": "Turn off to use the social URLs below as this footer's overrides."
     },
     {
       "type": "url",

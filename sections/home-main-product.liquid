@@ -1,6 +1,7 @@
 {% liquid
   assign featured_product = section.settings.product | default: all_products['transparent-core-keyboard-case-ipad']
   assign product_url = section.settings.button_link
+  assign model_guide_url = section.settings.secondary_link | default: settings.global_model_guide_url | default: '/pages/find-your-model'
   assign product_image = section.settings.image
 
   if featured_product != blank
@@ -52,7 +53,7 @@
             </a>
           {% endif %}
           {% if section.settings.secondary_label != blank %}
-            <a class="home-main-product__secondary" href="{{ section.settings.secondary_link | default: '/pages/find-your-model' }}">
+            <a class="home-main-product__secondary" href="{{ model_guide_url }}">
               {{ section.settings.secondary_label }}
               <span aria-hidden="true">-&gt;</span>
             </a>

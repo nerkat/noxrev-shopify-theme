@@ -78,6 +78,7 @@
             "contact_label_1": "Email",
             "contact_value_1": "support@noxrev.com",
             "contact_link_1": "mailto:support@noxrev.com",
+            "use_global_support_email": true,
             "contact_label_2": "",
             "contact_value_2": "",
             "contact_link_2": "https://wa.me/8613610355551"

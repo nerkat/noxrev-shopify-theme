@@ -6,11 +6,30 @@
   assign utility_link = section.settings.utility_link
   assign has_utility = false
   assign mobile_drawer_brand_text = section.settings.mobile_drawer_brand_text | default: brand_text
-  assign mobile_drawer_support_email = section.settings.mobile_drawer_contact_email | default: settings.global_support_email
-  assign mobile_drawer_social_tiktok = section.settings.mobile_drawer_social_tiktok | default: settings.global_social_tiktok_url
-  assign mobile_drawer_social_instagram = section.settings.mobile_drawer_social_instagram | default: settings.global_social_instagram_url
-  assign mobile_drawer_social_facebook = section.settings.mobile_drawer_social_facebook | default: settings.global_social_facebook_url
-  assign mobile_drawer_social_youtube = section.settings.mobile_drawer_social_youtube | default: settings.global_social_youtube_url
+  assign mobile_drawer_support_email = section.settings.mobile_drawer_contact_email
+  assign mobile_drawer_support_phone = section.settings.mobile_drawer_contact_phone
+  assign mobile_drawer_social_tiktok = section.settings.mobile_drawer_social_tiktok
+  assign mobile_drawer_social_instagram = section.settings.mobile_drawer_social_instagram
+  assign mobile_drawer_social_facebook = section.settings.mobile_drawer_social_facebook
+  assign mobile_drawer_social_youtube = section.settings.mobile_drawer_social_youtube
+  if section.settings.use_global_support_contact
+    assign mobile_drawer_support_email = settings.global_support_email | default: mobile_drawer_support_email
+    assign mobile_drawer_support_phone = settings.global_support_phone | default: mobile_drawer_support_phone
+  else
+    assign mobile_drawer_support_email = mobile_drawer_support_email | default: settings.global_support_email
+    assign mobile_drawer_support_phone = mobile_drawer_support_phone | default: settings.global_support_phone
+  endif
+  if section.settings.use_global_social_profiles
+    assign mobile_drawer_social_tiktok = settings.global_social_tiktok_url | default: mobile_drawer_social_tiktok
+    assign mobile_drawer_social_instagram = settings.global_social_instagram_url | default: mobile_drawer_social_instagram
+    assign mobile_drawer_social_facebook = settings.global_social_facebook_url | default: mobile_drawer_social_facebook
+    assign mobile_drawer_social_youtube = settings.global_social_youtube_url | default: mobile_drawer_social_youtube
+  else
+    assign mobile_drawer_social_tiktok = mobile_drawer_social_tiktok | default: settings.global_social_tiktok_url
+    assign mobile_drawer_social_instagram = mobile_drawer_social_instagram | default: settings.global_social_instagram_url
+    assign mobile_drawer_social_facebook = mobile_drawer_social_facebook | default: settings.global_social_facebook_url
+    assign mobile_drawer_social_youtube = mobile_drawer_social_youtube | default: settings.global_social_youtube_url
+  endif
   assign has_mobile_drawer_social_links = false
   assign has_mobile_drawer_help_menu = false
 
@@ -136,9 +155,9 @@
                     {{- mobile_drawer_support_email | escape -}}
                   </a>
                 {% endif %}
-                {% if section.settings.mobile_drawer_contact_phone != blank %}
-                  <a href="tel:{{ section.settings.mobile_drawer_contact_phone | replace: ' ', '' }}">
-                    {{- section.settings.mobile_drawer_contact_phone -}}
+                {% if mobile_drawer_support_phone != blank %}
+                  <a href="tel:{{ mobile_drawer_support_phone | replace: ' ', '' }}">
+                    {{- mobile_drawer_support_phone -}}
                   </a>
                 {% endif %}
               </div>
@@ -1434,16 +1453,29 @@
       "default": "support@noxrev.com"
     },
     {
+      "type": "checkbox",
+      "id": "use_global_support_contact",
+      "label": "Use global support email and phone",
+      "default": true,
+      "info": "Turn off to use the contact values below as this header's overrides."
+    },
+    {
       "type": "text",
       "id": "mobile_drawer_contact_phone",
-      "label": "Mobile drawer contact phone",
-      "default": "+4893720484"
+      "label": "Mobile drawer contact phone"
     },
     {
       "type": "checkbox",
       "id": "mobile_drawer_show_social_links",
       "label": "Show mobile drawer social links",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "use_global_social_profiles",
+      "label": "Use global social profiles",
+      "default": true,
+      "info": "Turn off to use the social URLs below as this header's overrides."
     },
     {
       "type": "url",

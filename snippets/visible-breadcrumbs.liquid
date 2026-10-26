@@ -4,13 +4,22 @@
   assign parent_label = ''
   assign parent_url = ''
 
+  if settings.show_breadcrumbs == false
+    assign show_breadcrumbs = false
+  endif
+
   case request.page_type
     when 'index', 'password', 'gift_card'
       assign show_breadcrumbs = false
     when 'product'
       assign current_label = product.title
-      assign parent_label = 'Products'
-      assign parent_url = routes.all_products_collection_url
+      if collection != blank
+        assign parent_label = collection.title
+        assign parent_url = collection.url
+      else
+        assign parent_label = 'Products'
+        assign parent_url = routes.all_products_collection_url
+      endif
     when 'collection'
       assign current_label = collection.title
       assign parent_label = 'Collections'

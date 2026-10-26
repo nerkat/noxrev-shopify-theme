@@ -5,6 +5,31 @@
   assign current_variant = product.selected_variant | default: product.selected_or_first_available_variant
   assign current_media = current_variant.featured_media | default: product.featured_media | default: product.media.first
   assign current_media_index = 0
+  assign shipping_trust_text = section.settings.shipping_trust_text
+  assign shipping_trust_icon = section.settings.shipping_trust_icon
+  assign guarantee_trust_text = section.settings.guarantee_trust_text
+  assign guarantee_trust_icon = section.settings.guarantee_trust_icon
+  assign returns_trust_text = section.settings.returns_trust_text
+  assign returns_trust_icon = section.settings.returns_trust_icon
+  if section.settings.inherit_global_trust_cues
+    if shipping_trust_text == 'Free 3–5 day U.S. shipping'
+      assign shipping_trust_text = ''
+    endif
+    if guarantee_trust_text == 'Money-back guarantee'
+      assign guarantee_trust_text = ''
+    endif
+    if returns_trust_text == '30-day returns'
+      assign returns_trust_text = ''
+    endif
+  endif
+
+  assign shipping_trust_text = shipping_trust_text | default: settings.global_shipping_trust_text | default: 'Free 3–5 day U.S. shipping'
+  assign shipping_trust_icon = shipping_trust_icon | default: settings.global_shipping_trust_icon
+  assign guarantee_trust_text = guarantee_trust_text | default: settings.global_guarantee_trust_text | default: 'Money-back guarantee'
+  assign guarantee_trust_icon = guarantee_trust_icon | default: settings.global_guarantee_trust_icon
+  assign returns_trust_text = returns_trust_text | default: settings.global_returns_trust_text | default: '30-day returns'
+  assign returns_trust_icon = returns_trust_icon | default: settings.global_returns_trust_icon
+
   for media in product.media
     if current_media and media.id == current_media.id
       assign current_media_index = forloop.index0
@@ -587,40 +612,40 @@
 
           {% if section.settings.show_trust_cues != false %}
             <div class="main-product__trust-cues" aria-label="After-sales benefits">
-              {% if section.settings.shipping_trust_text != blank %}
+              {% if shipping_trust_text != blank %}
                 <div class="main-product__trust-cue">
-                  {% if section.settings.shipping_trust_icon != blank %}
+                  {% if shipping_trust_icon != blank %}
                     <span class="main-product__trust-cue-icon main-product__trust-cue-icon--image" aria-hidden="true">
-                      {{ section.settings.shipping_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
+                      {{ shipping_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
                     </span>
                   {% else %}
                     <span class="main-product__trust-cue-icon main-product__trust-cue-icon--shipping" aria-hidden="true"></span>
                   {% endif %}
-                  <span>{{ section.settings.shipping_trust_text | escape }}</span>
+                  <span>{{ shipping_trust_text | escape }}</span>
                 </div>
               {% endif %}
-              {% if section.settings.guarantee_trust_text != blank %}
+              {% if guarantee_trust_text != blank %}
                 <div class="main-product__trust-cue">
-                  {% if section.settings.guarantee_trust_icon != blank %}
+                  {% if guarantee_trust_icon != blank %}
                     <span class="main-product__trust-cue-icon main-product__trust-cue-icon--image" aria-hidden="true">
-                      {{ section.settings.guarantee_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
+                      {{ guarantee_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
                     </span>
                   {% else %}
                     <span class="main-product__trust-cue-icon main-product__trust-cue-icon--guarantee" aria-hidden="true"></span>
                   {% endif %}
-                  <span>{{ section.settings.guarantee_trust_text | escape }}</span>
+                  <span>{{ guarantee_trust_text | escape }}</span>
                 </div>
               {% endif %}
-              {% if section.settings.returns_trust_text != blank %}
+              {% if returns_trust_text != blank %}
                 <div class="main-product__trust-cue">
-                  {% if section.settings.returns_trust_icon != blank %}
+                  {% if returns_trust_icon != blank %}
                     <span class="main-product__trust-cue-icon main-product__trust-cue-icon--image" aria-hidden="true">
-                      {{ section.settings.returns_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
+                      {{ returns_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
                     </span>
                   {% else %}
                     <span class="main-product__trust-cue-icon main-product__trust-cue-icon--returns" aria-hidden="true"></span>
                   {% endif %}
-                  <span>{{ section.settings.returns_trust_text | escape }}</span>
+                  <span>{{ returns_trust_text | escape }}</span>
                 </div>
               {% endif %}
             </div>
@@ -669,10 +694,16 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "inherit_global_trust_cues",
+      "label": "Inherit unchanged service messages from global settings",
+      "default": true,
+      "info": "Original default messages inherit the global values. Edited messages remain local overrides, and selected local icons take precedence over global icons. Turn off to keep the original default messages local."
+    },
+    {
       "type": "text",
       "id": "shipping_trust_text",
-      "label": "Shipping message",
-      "default": "Free 3–5 day U.S. shipping"
+      "label": "Shipping message"
     },
     {
       "type": "image_picker",
@@ -682,8 +713,7 @@
     {
       "type": "text",
       "id": "guarantee_trust_text",
-      "label": "Guarantee message",
-      "default": "Money-back guarantee"
+      "label": "Guarantee message"
     },
     {
       "type": "image_picker",
@@ -693,8 +723,7 @@
     {
       "type": "text",
       "id": "returns_trust_text",
-      "label": "Returns message",
-      "default": "30-day returns"
+      "label": "Returns message"
     },
     {
       "type": "image_picker",
