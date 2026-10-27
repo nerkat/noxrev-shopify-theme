@@ -147,7 +147,7 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-size: 0.78rem;
+    font-size: calc(0.78rem * var(--body-scale, 1));
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -157,7 +157,7 @@
     margin: 0;
     color: var(--theme-color-text);
     font-family: var(--theme-font-display);
-    font-size: clamp(2.55rem, 10vw, 5rem);
+    font-size: calc(clamp(2.55rem, 10vw, 5rem) * var(--heading-scale, 1));
     font-weight: 800;
     line-height: 0.98;
     letter-spacing: -0.045em;
@@ -166,7 +166,7 @@
   .search__subtitle {
     margin: 0;
     color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
-    font-size: 1.05rem;
+    font-size: calc(1.05rem * var(--body-scale, 1));
     line-height: 1.6;
   }
 
@@ -261,14 +261,14 @@
       color-mix(in srgb, var(--theme-color-text) 4%, transparent);
     color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
     font-family: var(--theme-font-display);
-    font-size: 3rem;
+    font-size: calc(3rem * var(--body-scale, 1));
     font-weight: 800;
   }
 
   .search-result__title {
     margin: 0;
     color: var(--theme-color-text);
-    font-size: 1rem;
+    font-size: calc(1rem * var(--heading-scale, 1));
     line-height: 1.35;
   }
 
@@ -290,7 +290,7 @@
   .search__empty h2 {
     color: var(--theme-color-text);
     font-family: var(--theme-font-display);
-    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    font-size: calc(clamp(1.6rem, 6vw, 2.4rem) * var(--heading-scale, 1));
     letter-spacing: -0.03em;
   }
 

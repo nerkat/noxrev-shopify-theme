@@ -240,7 +240,7 @@
 
   .footer__brand-text {
     font-family: var(--theme-font-display);
-    font-size: clamp(1.35rem, 2vw, 2rem);
+    font-size: calc(clamp(1.35rem, 2vw, 2rem) * var(--body-scale, 1));
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -265,14 +265,14 @@
   .footer__contact,
   .footer__contact a {
     color: var(--theme-color-text-muted);
-    font-size: 0.95rem;
+    font-size: calc(0.95rem * var(--body-scale, 1));
   }
 
   .footer__heading {
     grid-column: span 2;
     margin: 0;
     color: var(--theme-color-secondary);
-    font-size: 0.78rem;
+    font-size: calc(0.78rem * var(--heading-scale, 1));
     font-weight: 700;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -292,7 +292,7 @@
 
   .footer__link {
     color: var(--theme-color-text-muted);
-    font-size: 0.95rem;
+    font-size: calc(0.95rem * var(--body-scale, 1));
   }
 
   .footer__social {
@@ -348,7 +348,7 @@
     min-height: 3.35rem;
     padding: 0.75rem 1rem;
     color: var(--theme-color-text-muted);
-    font-size: 0.86rem;
+    font-size: calc(0.86rem * var(--body-scale, 1));
     font-weight: 600;
     transition: color var(--transition-base), background-color var(--transition-base);
   }
@@ -391,7 +391,7 @@
     padding-top: 1rem;
     border-top: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     color: var(--theme-color-text-soft);
-    font-size: 0.82rem;
+    font-size: calc(0.82rem * var(--body-scale, 1));
   }
 
   .footer__payments {

@@ -125,7 +125,7 @@ endif
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-size: var(--product-accessory-details-eyebrow-size-desktop, 0.78rem);
+    font-size: calc(var(--product-accessory-details-eyebrow-size-desktop, 0.78rem) * var(--body-scale, 1));
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -141,11 +141,11 @@ endif
     margin: 0;
     color: var(--theme-color-text);
     font-family: var(--theme-font-display);
-    font-size: clamp(
+    font-size: calc(clamp(
       var(--product-accessory-details-title-size-mobile, 2rem),
       7vw,
       var(--product-accessory-details-title-size-desktop, 3.4rem)
-    );
+    ) * var(--heading-scale, 1));
     font-weight: 600;
     line-height: 1.02;
     letter-spacing: -0.04em;
@@ -155,7 +155,7 @@ endif
     max-width: 40rem;
     margin-top: 0.85rem;
     color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
-    font-size: var(--product-accessory-details-text-size-desktop, 1rem);
+    font-size: calc(var(--product-accessory-details-text-size-desktop, 1rem) * var(--body-scale, 1));
     line-height: 1.6;
   }
 
@@ -224,7 +224,7 @@ endif
   .product-accessory-details__card h3 {
     margin: 0;
     color: var(--theme-color-text);
-    font-size: 1rem;
+    font-size: calc(1rem * var(--heading-scale, 1));
     font-weight: 800;
     line-height: 1.2;
   }
@@ -232,7 +232,7 @@ endif
   .product-accessory-details__card p {
     margin: 0.35rem 0 0;
     color: color-mix(in srgb, var(--theme-color-text) 68%, transparent);
-    font-size: 0.92rem;
+    font-size: calc(0.92rem * var(--body-scale, 1));
     line-height: 1.5;
   }
 
@@ -250,7 +250,7 @@ endif
 
   @media (max-width: 749px) {
     .product-accessory-details__eyebrow {
-      font-size: var(--product-accessory-details-eyebrow-size-mobile, 0.78rem);
+      font-size: calc(var(--product-accessory-details-eyebrow-size-mobile, 0.78rem) * var(--body-scale, 1));
     }
 
     .product-accessory-details__copy {
@@ -259,7 +259,7 @@ endif
     }
 
     .product-accessory-details__text {
-      font-size: var(--product-accessory-details-text-size-mobile, 1rem);
+      font-size: calc(var(--product-accessory-details-text-size-mobile, 1rem) * var(--body-scale, 1));
     }
 
     .product-accessory-details .container {

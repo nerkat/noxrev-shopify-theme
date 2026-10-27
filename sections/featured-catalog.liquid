@@ -67,14 +67,14 @@
   .featured-catalog__title {
     max-width: 42rem;
     margin-top: 0.75rem;
-    font-size: clamp(2rem, 6vw, 3rem);
+    font-size: calc(clamp(2rem, 6vw, 3rem) * var(--heading-scale, 1));
     line-height: 1.04;
   }
 
   .featured-catalog__text {
     max-width: 34rem;
     color: var(--theme-color-text-muted);
-    font-size: 0.95rem;
+    font-size: calc(0.95rem * var(--body-scale, 1));
     line-height: 1.7;
   }
 
