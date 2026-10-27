@@ -1,0 +1,35 @@
+{% doc %}
+Displays one shared benefit and an optional explicit local override.
+@param {string} record - shipping, guarantee, returns or none.
+@param {section} [section] - Section with existing override controls.
+{% enddoc %}
+{% unless record == 'none' or record == blank %}
+{% liquid
+assign title_key = 'global_' | append: record | append: '_trust_text'
+assign icon_key = 'global_' | append: record | append: '_trust_icon'
+assign explanation_key = 'global_' | append: record | append: '_explanation'
+assign link_key = 'global_' | append: record | append: '_link'
+assign market_key = 'global_' | append: record | append: '_international'
+assign icon_type_key = 'global_' | append: record | append: '_icon_type'
+assign local_key = record | append: '_trust_text'
+assign local_icon_key = record | append: '_trust_icon'
+assign title = settings[title_key]
+assign image = settings[icon_key]
+assign link = settings[link_key]
+if record == 'shipping' and link == blank
+assign link = settings.global_shipping_link
+endif
+if localization.country.iso_code != 'US' and settings[market_key] != blank
+assign title = settings[market_key]
+endif
+if section.settings[local_key] != blank
+assign title = section.settings[local_key]
+endif
+if section.settings[local_icon_key] != blank
+assign image = section.settings[local_icon_key]
+endif
+%}
+{% if title != blank %}<div class="store-benefit">
+<span class="store-benefit__icon" aria-hidden="true">{% if image != blank %}{{ image | image_url: width: 64 | image_tag: loading: 'lazy', alt: '' }}{% else %}{% render 'product-marketing-icon', icon: settings[icon_type_key] %}{% endif %}</span>
+<div>{% if link != blank %}<a href="{{ link }}">{{ title | escape }}</a>{% else %}<span>{{ title | escape }}</span>{% endif %}{{ settings[explanation_key] }}</div>
+</div>{% endif %}{% endunless %}

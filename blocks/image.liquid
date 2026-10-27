@@ -1,0 +1,36 @@
+{% doc %}
+Image content block.
+{% enddoc %}
+<div {{ block.shopify_attributes }} style="max-width:{{ block.settings.width }}%;margin-inline:auto">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1600 | image_tag: loading: 'lazy', alt: block.settings.alt }}{% elsif request.design_mode %}{{ 'image' | placeholder_svg_tag }}{% endif %}</div>
+{% schema %}
+{
+  "name": "Image",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "alt",
+      "label": "Image description"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Width",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image"
+    }
+  ]
+}
+{% endschema %}

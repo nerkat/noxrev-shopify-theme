@@ -25,7 +25,7 @@
   endif
 -%}
 
-<article class="product-card card panel link-surface">
+<article class="product-card card panel link-surface" style="--card-image-ratio:{{ settings.card_image_ratio }};--card-image-fit:{{ settings.card_image_fit }}">
   <div class="product-card__badges">
     {% unless product.available %}
       <span class="badge badge--secondary">Sold out</span>
@@ -57,16 +57,16 @@
     <div class="product-card__content card__content">
       <h3 class="product-card__title">{{ product.title | escape }}</h3>
 
-      {% if show_vendor and product.vendor != blank %}
+      {% if show_vendor or settings.card_show_vendor %}{% if product.vendor != blank %}
         <p class="product-card__vendor">{{ product.vendor | escape }}</p>
-      {% endif %}
+      {% endif %}{% endif %}
 
       <div class="product-card__footer">
         <div>
-          <div class="product-card__price" aria-label="Product price">
+          {% if settings.card_show_price %}<div class="product-card__price" aria-label="Product price">
             <p class="product-card__price-current">{% render 'price', amount: price %}</p>
 
-            {% if on_sale %}
+            {% if on_sale and settings.card_show_compare %}
               <p class="product-card__price-compare">
                 <span class="visually-hidden">Regular price</span>
                 {% render 'price', amount: compare_at_price %}
@@ -74,6 +74,7 @@
             {% endif %}
           </div>
 
+          {% endif %}
           {% if option_count > 1 %}
             <p class="product-card__status">{{ option_count }} options</p>
           {% endif %}
@@ -88,3 +89,4 @@
     </div>
   </a>
 </article>
+

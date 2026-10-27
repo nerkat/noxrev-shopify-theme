@@ -1,8 +1,8 @@
   (() => {
+    if (window.noxrevMainProductReady) return;
+    window.noxrevMainProductReady = true;
     const FRAGMENT_SELECTORS = [
       '[data-product-gallery-region]',
-      '[data-product-price-region]',
-      '[data-product-options-region]',
       '[data-product-form-region]',
     ];
     const PENDING_CLASS = 'is-pending';
@@ -19,6 +19,11 @@
         return;
       }
 
+      if (selector.dataset.selectorStyle === 'columns') {
+        selector.querySelectorAll('[data-model-panel]').forEach(panel => { panel.hidden = false; panel.classList.add('is-active'); });
+        selector.querySelectorAll('[data-model-tab]').forEach(tab => { tab.removeAttribute('role'); tab.tabIndex = -1; });
+        return;
+      }
       const tabs = Array.from(selector.querySelectorAll('[data-model-tab]'));
       const panels = Array.from(selector.querySelectorAll('[data-model-panel]'));
       const shouldOpen = family && tabs.some((tab) => tab.dataset.modelTab === family);
@@ -53,6 +58,12 @@
           return;
         }
 
+        (selector.dataset.familyOrder || '').split(',').forEach((family, i) => {
+          const tab = tabs.find(tab => tab.dataset.modelTab === family);
+          const panel = panels.find(panel => panel.dataset.modelPanel === family);
+          if (tab) tab.style.order = i;
+          if (panel) panel.style.order = i;
+        });
         const setActiveFamily = (family) => {
           applyModelFamilyState(selector, family);
           activeModelFamilies.set(productHandle, family || '');
@@ -285,6 +296,23 @@
 
       setActiveSlide(activeIndex);
       jumpToSlide(activeIndex);
+      if (gallery.dataset.zoom === 'true') {
+        slides.forEach(slide => {
+          const img = slide.querySelector('img');
+          if (!img || slide.querySelector('video,iframe,model-viewer')) return;
+          img.tabIndex = 0; img.setAttribute('role','button');
+          img.setAttribute('aria-label', window.noxrevEditorLabels?.zoom || 'Zoom image');
+          const zoom = () => {
+            const dialog = document.createElement('dialog'); dialog.className = 'product-image-zoom';
+            const close = document.createElement('button'); close.type='button'; close.textContent=window.noxrevEditorLabels?.close || 'Close';
+            const large = img.cloneNode(); large.removeAttribute('role'); large.removeAttribute('tabindex');
+            dialog.append(close,large); document.body.append(dialog); dialog.showModal();
+            close.addEventListener('click',()=>dialog.close()); dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+            dialog.addEventListener('close',()=>{dialog.remove(); img.focus()},{once:true});
+          };
+          img.addEventListener('click',zoom); img.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoom()}});
+        });
+      }
       gallery.noxrevGallery = {
         goToMediaId,
         waitForMediaId,
@@ -343,7 +371,7 @@
     const moveGalleryToVariantMedia = (section, mediaId, behavior = 'smooth') => {
       const gallery = getCurrentGallery(section);
 
-      if (!gallery) {
+      if (section?.dataset.variantMedia === 'false' || !gallery) {
         return false;
       }
 
@@ -369,6 +397,8 @@
     };
 
     const replaceVariantFragments = (currentSection, nextSection, preferredMediaId = '') => {
+      const quantity = currentSection.querySelector('[name=quantity]')?.value || '1';
+      const previousMedia = currentSection.dataset.variantMedia === 'false' ? getCurrentGallery(currentSection)?.noxrevGallery?.getActiveMediaId() : '';
       FRAGMENT_SELECTORS.forEach((selector) => {
         const currentFragment = currentSection.querySelector(selector);
         const nextFragment = nextSection.querySelector(selector);
@@ -382,10 +412,15 @@
             applyModelFamilyState(nextFragmentClone.querySelector('[data-model-tabs]'), storedFamily);
           }
 
+          if (selector === '[data-product-form-region]') {
+            const input = nextFragmentClone.querySelector('[name=quantity]');
+            if(input) input.value = quantity;
+          }
           currentFragment.replaceWith(nextFragmentClone);
         }
       });
 
+      preferredMediaId = previousMedia || preferredMediaId;
       if (preferredMediaId) {
         const nextGallery = getCurrentGallery(currentSection);
         initGallery(nextGallery);
@@ -499,6 +534,7 @@
       applyPendingVariantState(trigger);
       moveGalleryToVariantMedia(currentSection, preferredMediaId, 'smooth');
       currentSection.setAttribute('aria-busy', 'true');
+      currentSection.querySelectorAll('[type=submit]').forEach(button => {button.dataset.wasDisabled = String(button.disabled); button.disabled = true;});
       const submitLoadingState = setTemporarySubmitLoadingState(currentSection);
 
       try {
@@ -555,6 +591,7 @@
         if (requestId === variantRequestSequence) {
           clearPendingVariantState(currentSection);
           currentSection.removeAttribute('aria-busy');
+          currentSection.querySelectorAll('[data-was-disabled]').forEach(button => {button.disabled = button.dataset.wasDisabled === 'true'; delete button.dataset.wasDisabled;});
           variantRequestController = null;
         }
       }
@@ -623,3 +660,4 @@
       productSection.querySelectorAll('[data-product-gallery] video').forEach((video) => video.pause());
     });
   })();
+

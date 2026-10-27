@@ -1,0 +1,41 @@
+{% doc %}
+Single product form linked to an external quantity input.
+@param {product} product - Product.
+@param {variant} current_variant - Selected variant.
+@param {section} section - Product section.
+@param {block} [block] - Purchase block.
+{% enddoc %}
+{% assign product_form_id = 'ProductForm-' | append: section.id %}
+{% form 'product', product, id: product_form_id %}
+<input type="hidden" name="id" value="{{ current_variant.id }}">
+          <div class="main-product__purchase-actions" data-button-layout="{{ block.settings.button_layout | default: 'row' }}">
+            {% if block.settings.show_buy_now != false %}
+            <button
+              class="main-product__buy-now"
+              type="submit"
+              name="return_to"
+              value="/checkout"
+              {% if current_variant == null or current_variant.available == false %}
+                disabled
+              {% endif %}
+            >
+              {{ 'editor.buy_now' | t }}
+            </button>
+            {% endif %}
+
+            <button
+              class="main-product__submit btn btn--primary"
+              type="submit"
+              {% if current_variant == null or current_variant.available == false %}
+                disabled
+              {% endif %}
+            >
+              {% if current_variant and current_variant.available %}
+                {{ 'product.add_to_cart' | t }}
+              {% else %}
+                {{ 'product.sold_out' | t }}
+              {% endif %}
+            </button>
+          </div>
+
+{% endform %}

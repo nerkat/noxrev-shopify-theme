@@ -17,34 +17,34 @@
   --button-padding-block: 0.75rem;
   --card-padding: var(--spacing-md);
   --transition-base: 160ms ease;
-  --theme-color-background: #040b18;
-  --theme-color-background-alt: #071525;
-  --theme-color-surface: rgba(11, 25, 43, 0.82);
-  --theme-color-surface-strong: rgba(7, 21, 37, 0.94);
+  --theme-color-background: var(--brand-background);
+  --theme-color-background-alt: var(--brand-background-alt);
+  --theme-color-surface: var(--brand-surface);
+  --theme-color-surface-strong: var(--brand-surface-strong);
   --theme-color-surface-soft: rgba(255, 255, 255, 0.045);
-  --theme-color-text: #ffffff;
-  --theme-color-text-muted: rgba(255, 255, 255, 0.68);
+  --theme-color-text: var(--brand-text);
+  --theme-color-text-muted: var(--brand-text-muted);
   --theme-color-text-soft: rgba(255, 255, 255, 0.48);
   --theme-color-border: rgba(255, 255, 255, 0.1);
   --theme-color-border-strong: rgba(255, 255, 255, 0.16);
-  --theme-color-primary: #00ffb0;
-  --theme-color-secondary: #00e5ff;
-  --theme-color-accent: #ff2d78;
-  --theme-color-accent-alt: #9b00ff;
+  --theme-color-primary: var(--brand-primary);
+  --theme-color-secondary: var(--brand-secondary);
+  --theme-color-accent: var(--brand-accent);
+  --theme-color-accent-alt: var(--brand-accent-alt);
   --theme-gradient-page: radial-gradient(circle at top right, rgba(0, 229, 255, 0.16), transparent 30%),
     radial-gradient(circle at 18% 34%, rgba(0, 255, 176, 0.09), transparent 26%),
     radial-gradient(circle at bottom left, rgba(255, 45, 120, 0.12), transparent 32%),
     linear-gradient(180deg, var(--theme-color-background) 0%, var(--theme-color-background-alt) 55%, var(--theme-color-background) 100%);
-  --theme-gradient-heading: linear-gradient(135deg, var(--theme-color-accent) 0%, #c084fc 48%, var(--theme-color-secondary) 100%);
-  --theme-gradient-cta: linear-gradient(135deg, var(--theme-color-primary) 0%, var(--theme-color-secondary) 100%);
+  --theme-gradient-heading: var(--brand-heading-gradient);
+  --theme-gradient-cta: var(--brand-cta-gradient);
   --theme-gradient-panel: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)),
     linear-gradient(135deg, rgba(255, 45, 120, 0.1), rgba(155, 0, 255, 0.055) 48%, rgba(0, 229, 255, 0.06) 100%);
-  --theme-font-display: 'Oxanium', var(--font-primary--family);
-  --theme-radius-sm: 0.75rem;
-  --theme-radius-md: 1rem;
-  --theme-radius-lg: 1.25rem;
-  --theme-radius-xl: 1.6rem;
-  --theme-radius-pill: 7px;
+  --theme-font-display: var(--brand-heading-font);
+  --theme-radius-sm: calc(var(--brand-card-radius) * 0.6);
+  --theme-radius-md: calc(var(--brand-card-radius) * 0.8);
+  --theme-radius-lg: calc(var(--brand-card-radius) * 1);
+  --theme-radius-xl: calc(var(--brand-card-radius) * 1.28);
+  --theme-radius-pill: var(--brand-button-radius);
   --theme-shadow-sm: 0 14px 30px rgba(0, 0, 0, 0.28);
   --theme-shadow-md: 0 20px 50px rgba(0, 0, 0, 0.34);
   --theme-shadow-lg: 0 26px 70px rgba(0, 0, 0, 0.42);
@@ -77,7 +77,7 @@ html {
 
 *::-webkit-scrollbar-track {
   background:
-    linear-gradient(180deg, rgba(255, 45, 120, 0.04), rgba(0, 229, 255, 0.035)),
+    linear-gradient(180deg, color-mix(in srgb, var(--theme-color-accent) 4%, transparent), color-mix(in srgb, var(--theme-color-secondary) 3.5%, transparent)),
     var(--scrollbar-track);
 }
 
@@ -86,7 +86,7 @@ html {
   border-radius: 999px;
   background:
     linear-gradient(180deg, rgba(255, 77, 166, 0.46), rgba(37, 237, 255, 0.58));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-color-text) 8%, transparent);
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -113,8 +113,8 @@ html {
   pointer-events: none;
   opacity: 0.24;
   background-image:
-    linear-gradient(rgba(255, 45, 120, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 229, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--theme-color-accent) 2.5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--theme-color-secondary) 2.5%, transparent) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(circle at center, black, transparent 82%);
 }
@@ -135,11 +135,11 @@ html {
 }
 
 .site-header-shell.is-scrolled {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
   background: rgba(4, 11, 24, 0.72);
   box-shadow:
     0 18px 60px rgba(0, 0, 0, 0.52),
-    0 0 24px rgba(0, 229, 255, 0.08);
+    0 0 24px color-mix(in srgb, var(--theme-color-secondary) 8%, transparent);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
 }
@@ -173,7 +173,7 @@ html {
   overflow-x: auto;
   padding-block: 0.55rem;
   color: var(--theme-color-text-soft);
-  font-size: 0.78rem;
+  font-size: calc(0.78rem * var(--body-scale, 1));
   scrollbar-width: none;
   padding: 0;
   padding-top: 35px;
@@ -222,7 +222,7 @@ html {
 }
 
 .visible-breadcrumbs__link:focus-visible {
-  outline: 2px solid rgba(0, 229, 255, 0.82);
+  outline: 2px solid color-mix(in srgb, var(--theme-color-secondary) 82%, transparent);
   outline-offset: 3px;
 }
 
@@ -264,16 +264,16 @@ html {
   gap: var(--spacing-xs);
   min-height: 2.75rem;
   padding: var(--button-padding-block) var(--button-padding-inline);
-  border: var(--border-width) solid rgba(0, 229, 255, 0.2);
+  border: var(--border-width) solid color-mix(in srgb, var(--theme-color-secondary) 20%, transparent);
   border-radius: var(--theme-radius-pill);
   background: var(--theme-gradient-cta);
   color: var(--theme-color-background);
   text-decoration: none;
   cursor: pointer;
   box-shadow:
-    0 14px 34px rgba(0, 229, 255, 0.18),
-    0 0 20px rgba(0, 255, 176, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    0 14px 34px color-mix(in srgb, var(--theme-color-secondary) 18%, transparent),
+    0 0 20px color-mix(in srgb, var(--theme-color-primary) 14%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 28%, transparent);
   transition:
     background-color var(--transition-base),
     color var(--transition-base),
@@ -303,29 +303,29 @@ html {
 
 .button--secondary,
 .btn--secondary {
-  border-color: rgba(0, 229, 255, 0.3);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  border-color: color-mix(in srgb, var(--theme-color-secondary) 30%, transparent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--theme-color-text) 4%, transparent), color-mix(in srgb, var(--theme-color-text) 2%, transparent));
   color: var(--theme-color-text);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 5%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
 .button--secondary:hover,
 .btn--secondary:hover {
-  border-color: rgba(0, 229, 255, 0.52);
+  border-color: color-mix(in srgb, var(--theme-color-secondary) 52%, transparent);
   box-shadow:
-    0 0 24px rgba(0, 229, 255, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 0 24px color-mix(in srgb, var(--theme-color-secondary) 12%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 8%, transparent);
 }
 
 .kicker {
   color: var(--theme-color-accent);
-  font-size: 0.72rem;
+  font-size: calc(0.72rem * var(--body-scale, 1));
   font-weight: 700;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  text-shadow: 0 0 14px rgba(255, 45, 120, 0.3);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--theme-color-accent) 30%, transparent);
 }
 
 .heading-gradient {
@@ -341,7 +341,7 @@ html {
   box-shadow:
     var(--theme-shadow-lg),
     var(--theme-glow-primary),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 5%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -349,13 +349,13 @@ html {
 .panel--strong {
   border-color: var(--theme-color-border-strong);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02)),
-    linear-gradient(135deg, rgba(255, 45, 120, 0.13), rgba(155, 0, 255, 0.065) 50%, rgba(0, 229, 255, 0.06) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--theme-color-text) 5.5%, transparent), color-mix(in srgb, var(--theme-color-text) 2%, transparent)),
+    linear-gradient(135deg, color-mix(in srgb, var(--theme-color-accent) 13%, transparent), color-mix(in srgb, var(--theme-color-accent-alt) 6.5%, transparent) 50%, color-mix(in srgb, var(--theme-color-secondary) 6%, transparent) 100%),
     var(--theme-color-surface-strong);
   box-shadow:
     0 34px 98px rgba(0, 0, 0, 0.48),
     var(--theme-glow-accent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 4%, transparent);
 }
 
 .hero-shell {
@@ -377,9 +377,9 @@ html {
 
 .hero-overlay--accent {
   background:
-    radial-gradient(circle at top right, rgba(0, 229, 255, 0.24), transparent 30%),
-    radial-gradient(circle at left center, rgba(0, 255, 176, 0.18), transparent 28%),
-    radial-gradient(circle at bottom left, rgba(255, 45, 120, 0.18), transparent 32%);
+    radial-gradient(circle at top right, color-mix(in srgb, var(--theme-color-secondary) 24%, transparent), transparent 30%),
+    radial-gradient(circle at left center, color-mix(in srgb, var(--theme-color-primary) 18%, transparent), transparent 28%),
+    radial-gradient(circle at bottom left, color-mix(in srgb, var(--theme-color-accent) 18%, transparent), transparent 32%);
 }
 
 .hero-grid {
@@ -387,8 +387,8 @@ html {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 45, 120, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--theme-color-accent) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--theme-color-secondary) 5%, transparent) 1px, transparent 1px);
   background-size: 46px 46px;
   opacity: 0.22;
   mask-image: radial-gradient(circle at center, black, transparent 78%);
@@ -403,11 +403,11 @@ html {
 
 .link-surface:hover {
   transform: translateY(-4px);
-  border-color: rgba(0, 229, 255, 0.28);
+  border-color: color-mix(in srgb, var(--theme-color-secondary) 28%, transparent);
   box-shadow:
     0 34px 90px rgba(0, 0, 0, 0.48),
-    0 0 34px rgba(0, 229, 255, 0.1),
-    0 0 28px rgba(255, 45, 120, 0.08);
+    0 0 34px color-mix(in srgb, var(--theme-color-secondary) 10%, transparent),
+    0 0 28px color-mix(in srgb, var(--theme-color-accent) 8%, transparent);
 }
 
 .chip {
@@ -418,19 +418,19 @@ html {
   padding: 0.35rem 0.75rem;
   border: 1px solid var(--theme-color-border);
   border-radius: var(--theme-radius-pill);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--theme-color-text) 6%, transparent), color-mix(in srgb, var(--theme-color-text) 2.5%, transparent));
   color: var(--theme-color-text-muted);
-  font-size: 0.72rem;
+  font-size: calc(0.72rem * var(--body-scale, 1));
   letter-spacing: 0.12em;
   text-transform: uppercase;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 0 18px rgba(0, 229, 255, 0.05);
+    inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 4%, transparent),
+    0 0 18px color-mix(in srgb, var(--theme-color-secondary) 5%, transparent);
 }
 
 .price-accent {
   color: var(--theme-color-primary);
-  text-shadow: 0 0 14px rgba(0, 255, 176, 0.18);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--theme-color-primary) 18%, transparent);
 }
 
 .card {
@@ -455,20 +455,20 @@ html {
   justify-content: center;
   min-height: 1.75rem;
   padding: 0.25rem 0.6rem;
-  border: 1px solid rgba(0, 255, 176, 0.34);
+  border: 1px solid color-mix(in srgb, var(--theme-color-primary) 34%, transparent);
   border-radius: var(--theme-radius-pill);
   background: rgba(4, 11, 24, 0.78);
   color: var(--theme-color-primary);
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--body-scale, 1));
   line-height: 1;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  box-shadow: 0 0 18px rgba(0, 255, 176, 0.12);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--theme-color-primary) 12%, transparent);
 }
 
 .badge--secondary {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border-color: color-mix(in srgb, var(--theme-color-text) 12%, transparent);
+  background: color-mix(in srgb, var(--theme-color-text) 6%, transparent);
   color: var(--theme-color-text-muted);
   box-shadow: none;
 }
@@ -573,7 +573,7 @@ html {
 }
 
 .product-card__title {
-  font-size: 1.05rem;
+  font-size: calc(1.05rem * var(--heading-scale, 1));
   line-height: 1.35;
   margin: 0;
   color: var(--theme-color-text);
@@ -583,7 +583,7 @@ html {
 .product-card__status {
   margin: 0;
   color: var(--theme-color-text-muted);
-  font-size: 0.9rem;
+  font-size: calc(0.9rem * var(--body-scale, 1));
 }
 
 .product-card__price {
@@ -600,9 +600,9 @@ html {
 
 .product-card__price-current {
   color: var(--theme-color-primary);
-  font-size: 1.05rem;
+  font-size: calc(1.05rem * var(--body-scale, 1));
   font-weight: 700;
-  text-shadow: 0 0 14px rgba(0, 255, 176, 0.18);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--theme-color-primary) 18%, transparent);
 }
 
 .product-card__price-compare {
@@ -622,7 +622,7 @@ html {
 
 .product-card__cta {
   color: var(--theme-color-secondary);
-  font-size: 0.85rem;
+  font-size: calc(0.85rem * var(--body-scale, 1));
   font-weight: 600;
   white-space: nowrap;
 }
@@ -640,7 +640,7 @@ html {
   height: 3rem;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid color-mix(in srgb, var(--theme-color-text) 18%, transparent);
   border-radius: 999px;
   color: var(--theme-color-text);
   background: rgba(4, 11, 24, 0.72);
@@ -699,49 +699,8 @@ html {
     padding-block: var(--spacing-xl);
   }
 
-  .template-product #MainContent>.shopify-section:not(:first-child) .container {
-    width: 100%;
-    margin-inline: 0;
-  }
-
-  .template-product #MainContent>.shopify-section:not(:first-child) :is(.product-mode-showcase__panel,
-    .product-battery-showcase__panel,
-    .product-unique-modes-strip__panel,
-    .product-real-life-videos__panel,
-    .product-accessory-bundle__panel,
-    .product-reviews-rating__panel) {
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-  .template-product #MainContent>.shopify-section:not(:first-child) :is(.product-feature-detail-grid__card,
-    .product-typing-feature__panel,
-    .product-precision-feature__panel,
-    .product-feature-icon-strip__panel) {
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
   .product-feature-icon-strip__panel {
     padding-inline: 1rem;
-  }
-
-  .product-feature-detail-grid__card:nth-child(1) {
-    border-radius: 0 8px 8px 0 !important;
-  }
-
-  .product-feature-detail-grid__card:nth-child(2) {
-    border-radius: 8px 0 0 8px !important;
-  }
-
-  .product-feature-detail-grid__card:nth-child(3) {
-    border-radius: 0 8px 8px 0 !important;
-  }
-
-  .product-feature-detail-grid__card:nth-child(4) {
-    border-radius: 8px 0 0 8px !important;
   }
 
 
@@ -764,16 +723,16 @@ html {
     grid-column: 1 / -1;
   }
 
-  .template-product #MainContent>[id$="__product_typing_feature"] {
+  .template-product #MainContent>:has(> [data-paired-feature="left"]) {
     grid-column: 2;
   }
 
-  .template-product #MainContent>[id$="__product_precision_feature"] {
+  .template-product #MainContent>:has(> [data-paired-feature="right"]) {
     grid-column: 3;
   }
 
-  .template-product #MainContent>[id$="__product_typing_feature"] .container,
-  .template-product #MainContent>[id$="__product_precision_feature"] .container {
+  .template-product #MainContent>:has(> [data-paired-feature="left"]) .container,
+  .template-product #MainContent>:has(> [data-paired-feature="right"]) .container {
     width: 100%;
     margin-inline: 0;
   }
@@ -783,3 +742,4 @@ html {
 a[aria-label^='Created with Klaviyo'][href*='utm_source=plgform'] {
   display: none !important;
 }
+

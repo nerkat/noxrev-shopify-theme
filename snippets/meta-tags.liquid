@@ -6,57 +6,9 @@
   assign seo_title = page_title | default: shop.name
 
   case request.page_type
-    when 'index'
-      if page_title == blank or page_title == shop.name
-        assign seo_title = 'iPad Keyboard Cases for Work, Study & Travel | NoxRev'
-      endif
-    when 'cart'
-      assign seo_title = 'NoxRev Shopping Cart | Review Your iPad Setup & Fit'
-    when 'search'
-      if search.performed and search.terms != blank
-        capture seo_title
-          echo 'Search results for “'
-          echo search.terms
-          echo '” | NoxRev'
-        endcapture
-      else
-        assign seo_title = 'Search NoxRev | iPad Keyboard Cases & Accessories'
-      endif
-    when 'list-collections'
-      assign seo_title = 'Shop iPad Keyboard Cases & Accessories | NoxRev'
-    when 'page'
-      if page_title == page.title
-        case template.suffix
-          when 'about'
-            assign seo_title = 'About NoxRev | Premium iPad Keyboard Cases & Accessories'
-          when 'contact'
-            assign seo_title = 'Contact NoxRev | iPad Keyboard Case Fit & Order Support'
-          when 'faq'
-            assign seo_title = 'NoxRev FAQ | iPad Keyboard Case Help, Fit & Support'
-          when 'find-ipad-model'
-            assign seo_title = 'Find Your iPad Model | NoxRev Keyboard Case Guide'
-        endcase
-      endif
-    when 'blog'
-      if page_title == blog.title
-        capture seo_title
-          echo blog.title
-          echo ' | iPad Tips & Guides | NoxRev'
-        endcapture
-      endif
-    when 'article'
-      if page_title == article.title
-        capture seo_title
-          echo article.title
-          echo ' | NoxRev'
-        endcapture
-      endif
-    when '404'
-      assign seo_title = 'Page Not Found | Shop NoxRev iPad Keyboard Cases'
-    when 'password'
-      assign seo_title = 'NoxRev Store Opening Soon | iPad Keyboard Cases'
-    when 'gift_card'
-      assign seo_title = 'NoxRev Gift Card Balance'
+    when 'cart', 'search', 'list-collections', '404', 'password', 'gift_card'
+      assign title_key = 'seo.' | append: request.page_type | replace: '-', '_' | append: '_title'
+      assign seo_title = title_key | t: shop: shop.name, terms: search.terms
   endcase
 
   assign seo_title_downcase = seo_title | downcase
@@ -73,78 +25,23 @@
 
   if seo_description == blank
     case request.page_type
-      when 'index'
-        assign seo_description = 'Shop NoxRev iPad keyboard cases with backlit keys, precision trackpads, protective designs, and flexible modes for work, study, travel, and more.'
       when 'product'
-        if product.description != blank
-          assign seo_description = product.description
-        else
-          capture seo_description
-            echo 'Shop '
-            echo product.title
-            echo ' from NoxRev. Explore compatibility, features, colors, pricing, and accessories to build the right iPad setup for your day.'
-          endcapture
-        endif
+        assign seo_description = product.description
       when 'collection'
-        if collection.description != blank
-          assign seo_description = collection.description
-        else
-          capture seo_description
-            echo 'Shop the '
-            echo collection.title
-            echo ' collection from NoxRev for iPad keyboard cases and accessories designed for compatibility, protection, work, study, and travel.'
-          endcapture
-        endif
-      when 'list-collections'
-        assign seo_description = 'Browse NoxRev iPad keyboard cases and accessories designed for precise compatibility, comfortable typing, everyday protection, work, study, and travel.'
-      when 'search'
-        if search.performed and search.terms != blank
-          capture seo_description
-            echo 'View NoxRev search results for “'
-            echo search.terms
-            echo '” across iPad keyboard cases, compatible accessories, model-fit guidance, and product support.'
-          endcapture
-        else
-          assign seo_description = 'Search NoxRev for iPad keyboard cases, compatible accessories, model-fit guidance, order help, and product support for your ideal setup in one place.'
-        endif
-      when 'cart'
-        assign seo_description = 'Review your NoxRev cart, confirm the right iPad model and accessories, and complete your order for a keyboard case setup built around your day.'
+        assign seo_description = collection.description
       when 'page'
-        case template.suffix
-          when 'about'
-            assign seo_description = 'Learn how NoxRev designs premium iPad keyboard cases around precise fit, versatile modes, dependable protection, and comfortable everyday use.'
-          when 'contact'
-            assign seo_description = 'Contact NoxRev for help with iPad model compatibility, keyboard case selection, orders, shipping, returns, warranty questions, and product support.'
-          when 'faq'
-            assign seo_description = 'Get clear answers about NoxRev iPad keyboard case compatibility, shipping, returns, warranties, battery life, setup, trackpads, and product support.'
-          when 'find-ipad-model'
-            assign seo_description = 'Identify your exact iPad model, compare compatible sizes and generations, and choose the right NoxRev keyboard case fit without the guesswork.'
-          else
-            assign seo_description = page.content
-        endcase
-      when 'blog'
-        assign seo_description = 'Explore NoxRev guides, product tips, iPad compatibility advice, setup ideas, and practical help for getting more from your keyboard case and accessories.'
+        assign seo_description = page.content
       when 'article'
         assign seo_description = article.excerpt_or_content
-      when '404'
-        assign seo_description = 'The page you requested could not be found. Browse NoxRev iPad keyboard cases and accessories, find your model, or contact our support team for help.'
       when 'policy'
         assign seo_description = policy.body
-      when 'password'
-        assign seo_description = 'The NoxRev store is opening soon. Check back for premium iPad keyboard cases, compatible accessories, model-fit guidance, and helpful product support.'
-      when 'gift_card'
-        assign seo_description = 'View the balance and details for your NoxRev gift card and use it toward eligible products when you complete your purchase at checkout.'
       else
-        assign seo_description = shop.description | default: shop.name
+        assign description_key = 'seo.' | append: request.page_type | replace: '-', '_' | append: '_description'
+        assign seo_description = description_key | t: shop: shop.name
     endcase
   endif
-
-  if seo_description == blank
-    capture seo_description
-      echo 'Learn more about '
-      echo page_title | default: seo_title
-      echo ' from NoxRev. Explore iPad keyboard case details, compatibility guidance, accessories, ordering information, and support.'
-    endcapture
+  if seo_description == blank or seo_description contains 'Translation missing'
+    assign seo_description = 'seo.default_description' | t: shop: shop.name, title: page_title
   endif
 
   assign seo_description = seo_description | strip_html | strip_newlines | strip | truncate: 160
@@ -320,3 +217,4 @@
       }
     </script>
 {%- endcase -%}
+

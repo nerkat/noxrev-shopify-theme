@@ -15,4 +15,44 @@
     --color-foreground: {{ settings.foreground_color }};
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
   }
+
+  {{ settings.type_heading_font | font_face: font_display: 'swap' }}
+  :root {
+    --brand-background: {{ settings.background_color }};
+    --brand-background-alt: {{ settings.brand_background_alt }};
+    --brand-text: {{ settings.foreground_color }};
+    --brand-text-muted: {{ settings.brand_muted }};
+    --brand-primary: {{ settings.brand_primary }};
+    --brand-secondary: {{ settings.brand_secondary }};
+    --brand-accent: {{ settings.brand_accent }};
+    --brand-accent-alt: {{ settings.brand_accent_alt }};
+    --brand-surface: {{ settings.brand_surface | color_modify: 'alpha', 0.82 }};
+    --brand-surface-strong: {{ settings.brand_background_alt | color_modify: 'alpha', 0.94 }};
+    --brand-heading-font: {% if settings.use_original_heading_font %}'Oxanium'{% else %}{{ settings.type_heading_font.family }}{% endif %}, var(--font-primary--family);
+    --brand-heading-gradient: {% if settings.use_heading_gradient %}{{ settings.heading_gradient }}{% else %}linear-gradient(var(--brand-text), var(--brand-text)){% endif %};
+    --brand-cta-gradient: {% if settings.use_cta_gradient %}{{ settings.cta_gradient }}{% else %}linear-gradient(var(--brand-primary), var(--brand-primary)){% endif %};
+    --brand-button-text: {{ settings.brand_button_text }};
+    --brand-button-radius: {{ settings.button_radius }}px;
+    --brand-card-radius: {{ settings.card_radius }}px;
+    --body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+    --heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+  }
+  {% for scheme in settings.color_schemes %}
+    .color-{{ scheme.id }} {
+      --theme-color-background: {{ scheme.settings.background }};
+      --theme-color-background-alt: {{ scheme.settings.background }};
+      --theme-color-surface: {{ scheme.settings.background }};
+      --theme-color-surface-strong: {{ scheme.settings.background }};
+      --theme-color-text: {{ scheme.settings.text }};
+      --theme-color-text-muted: {{ scheme.settings.text | color_modify: 'alpha', 0.68 }};
+      --theme-color-secondary: {{ scheme.settings.accent }};
+      --theme-color-primary: {{ scheme.settings.button }};
+      --theme-color-border: {{ scheme.settings.border }};
+      --brand-button-text: {{ scheme.settings.button_label }};
+      --theme-gradient-cta: linear-gradient({{ scheme.settings.button }}, {{ scheme.settings.button }});
+      color: var(--theme-color-text);
+      background-color: var(--theme-color-background);
+    }
+  {% endfor %}
 {% endstyle %}
+

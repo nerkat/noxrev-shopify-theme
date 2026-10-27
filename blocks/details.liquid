@@ -1,0 +1,33 @@
+{% doc %}
+FAQ / details content block.
+{% enddoc %}
+<details {{ block.shopify_attributes }} {% if block.settings.open %}open{% endif %}><summary>{{ block.settings.heading | escape }}</summary><div class="rte">{{ block.settings.content }}</div></details>
+{% schema %}
+{
+  "name": "FAQ / details",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Question or heading",
+      "default": "Details"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Answer or content"
+    },
+    {
+      "type": "checkbox",
+      "id": "open",
+      "label": "Open by default",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ / details"
+    }
+  ]
+}
+{% endschema %}

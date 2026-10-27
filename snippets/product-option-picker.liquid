@@ -1,0 +1,391 @@
+{% doc %}
+Product option links using actual variants and their model family data.
+@param {product} product - Product.
+@param {variant} current_variant - Selected variant.
+@param {section} section - Product section.
+{% enddoc %}
+      {% unless product.has_only_default_variant %}
+        <div class="main-product__options" data-product-options-region>
+          {% for option in product.options_with_values %}
+            {% liquid
+              assign option_name_downcase = option.name | downcase
+              assign is_color_option = false
+              assign is_model_option = false
+              if option_name_downcase == 'color' or option_name_downcase == 'colour'
+                assign is_color_option = true
+              endif
+              if option_name_downcase contains 'model'
+                assign is_model_option = true
+              endif
+              assign current_option_selected_value = option.selected_value
+              if current_variant
+                case option.position
+                  when 1
+                    assign current_option_selected_value = current_variant.option1
+                  when 2
+                    assign current_option_selected_value = current_variant.option2
+                  when 3
+                    assign current_option_selected_value = current_variant.option3
+                endcase
+              endif
+            %}
+            <fieldset class="main-product__option">
+              <legend class="main-product__option-label{% if is_color_option or is_model_option %} main-product__step-label{% endif %}">
+                {{ option.name }}
+              </legend>
+
+              {% if is_model_option %}
+                {% liquid
+                  assign pro_items = ''
+                  assign air_items = ''
+                  assign ipad_items = ''
+                  assign pro_count = 0
+                  assign air_count = 0
+                  assign ipad_count = 0
+                  assign unmapped_items = ''
+                %}
+
+                {% for value in option.values %}
+                  {% liquid
+                    assign option_variant = null
+
+                    for variant in product.variants
+                      assign matches_option = false
+
+                      case option.position
+                        when 1
+                          if variant.option1 == value.name
+                            assign matches_option = true
+                          endif
+                        when 2
+                          if variant.option2 == value.name
+                            assign matches_option = true
+                          endif
+                        when 3
+                          if variant.option3 == value.name
+                            assign matches_option = true
+                          endif
+                      endcase
+
+                      if matches_option
+                        assign matches_other_options = true
+
+                        for product_option in product.options_with_values
+                          if product_option.position != option.position
+                            assign selected_value = product_option.selected_value
+                            if current_variant
+                              case product_option.position
+                                when 1
+                                  assign selected_value = current_variant.option1
+                                when 2
+                                  assign selected_value = current_variant.option2
+                                when 3
+                                  assign selected_value = current_variant.option3
+                              endcase
+                            endif
+
+                            case product_option.position
+                              when 1
+                                if variant.option1 != selected_value
+                                  assign matches_other_options = false
+                                  break
+                                endif
+                              when 2
+                                if variant.option2 != selected_value
+                                  assign matches_other_options = false
+                                  break
+                                endif
+                              when 3
+                                if variant.option3 != selected_value
+                                  assign matches_other_options = false
+                                  break
+                                endif
+                            endcase
+                          endif
+                        endfor
+
+                        if matches_other_options
+                          assign option_variant = variant
+                          break
+                        elsif option_variant == null
+                          assign option_variant = variant
+                        endif
+                      endif
+                    endfor
+                  %}
+                  {% if option_variant %}
+                    {% liquid
+                      assign family_key = option_variant.metafields.custom.model_family.value | default: 'unmapped'
+                    %}
+
+                    {% capture model_item %}
+                      <li class="main-product__model-item">
+                        {% liquid
+                          assign option_url = value.url
+                          if option_url == blank and option_variant
+                            assign option_url = product.url | append: '?variant=' | append: option_variant.id
+                          endif
+                        %}
+                        <a
+                          class="main-product__model-link{% unless option_variant.available %} is-unavailable{% endunless %}"
+                          href="{{ option_url }}"
+                          data-variant-link
+                          data-variant-id="{{ option_variant.id }}"
+                          {% if option_variant.featured_media %}
+                            data-variant-media-id="{{ option_variant.featured_media.id }}"
+                          {% endif %}
+                          aria-label="Choose {{ option.name | escape }}: {{ value.name | escape }}{% unless option_variant.available %} unavailable{% endunless %}"
+                          {% if value.name == current_option_selected_value %}
+                            aria-current="true"
+                          {% endif %}
+                        >
+                          <span class="main-product__model-radio" aria-hidden="true">
+                            <span class="main-product__model-radio-dot"></span>
+                          </span>
+                          <span class="main-product__model-name">{{ value.name }}</span>
+                        </a>
+                      </li>
+                    {% endcapture %}
+
+                    {% if family_key == 'pro' %}
+                      {% assign pro_items = pro_items | append: model_item %}
+                      {% assign pro_count = pro_count | plus: 1 %}
+                    {% elsif family_key == 'air' %}
+                      {% assign air_items = air_items | append: model_item %}
+                      {% assign air_count = air_count | plus: 1 %}
+                    {% elsif family_key == 'ipad' %}
+                      {% assign ipad_items = ipad_items | append: model_item %}
+                      {% assign ipad_count = ipad_count | plus: 1 %}
+                    {% else %}
+                      {% assign unmapped_items = unmapped_items | append: model_item %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+
+                <div
+                  class="main-product__model-selector"
+                  data-model-tabs data-selector-style="{{ section.settings.selector_style }}" data-family-order="{{ settings.model_family_order }}"
+                >
+                  <div class="main-product__model-tablist" role="tablist" aria-label="Choose iPad model family">
+                    {% if pro_count > 0 %}
+                      <button
+                        class="main-product__model-tab"
+                        type="button"
+                        role="tab"
+                        id="ModelTab-Pro-{{ section.id }}"
+                        aria-selected="false"
+                        aria-controls="ModelPanel-Pro-{{ section.id }}"
+                        data-model-tab="pro"
+                      >
+                        <img
+                          class="main-product__model-tab-image"
+                          src="{% if settings.family_pro_image != blank %}{{ settings.family_pro_image | image_url: width: 240 }}{% else %}{{ 'ipad-pro-space-black.png' | asset_img_url: '240x' }}{% endif %}"
+                          alt=""
+                          loading="lazy"
+                          width="240"
+                          height="173"
+                        >
+                        <span class="main-product__model-tab-title">{{ settings.family_pro_label | escape }}</span>
+                      </button>
+                    {% endif %}
+
+                    {% if air_count > 0 %}
+                      <button
+                        class="main-product__model-tab"
+                        type="button"
+                        role="tab"
+                        id="ModelTab-Air-{{ section.id }}"
+                        aria-selected="false"
+                        aria-controls="ModelPanel-Air-{{ section.id }}"
+                        data-model-tab="air"
+                      >
+                        <img
+                          class="main-product__model-tab-image"
+                          src="{% if settings.family_air_image != blank %}{{ settings.family_air_image | image_url: width: 240 }}{% else %}{{ 'ipad-air-style-fill.png' | asset_img_url: '240x' }}{% endif %}"
+                          alt=""
+                          loading="lazy"
+                          width="240"
+                          height="173"
+                        >
+                        <span class="main-product__model-tab-title">{{ settings.family_air_label | escape }}</span>
+                      </button>
+                    {% endif %}
+
+                    {% if ipad_count > 0 %}
+                      <button
+                        class="main-product__model-tab"
+                        type="button"
+                        role="tab"
+                        id="ModelTab-Ipad-{{ section.id }}"
+                        aria-selected="false"
+                        aria-controls="ModelPanel-Ipad-{{ section.id }}"
+                        data-model-tab="ipad"
+                      >
+                        <img
+                          class="main-product__model-tab-image"
+                          src="{% if settings.family_ipad_image != blank %}{{ settings.family_ipad_image | image_url: width: 240 }}{% else %}{{ 'ipad-purple.png' | asset_img_url: '240x' }}{% endif %}"
+                          alt=""
+                          loading="lazy"
+                          width="240"
+                          height="166"
+                        >
+                        <span class="main-product__model-tab-title">{{ settings.family_ipad_label | escape }}</span>
+                      </button>
+                    {% endif %}
+                  </div>
+
+                  {% if pro_count > 0 %}
+                    <div
+                      class="main-product__model-panel panel"
+                      id="ModelPanel-Pro-{{ section.id }}"
+                      role="tabpanel"
+                      aria-labelledby="ModelTab-Pro-{{ section.id }}"
+                      data-model-panel="pro"
+                      hidden
+                    >
+                      <div class="main-product__model-panel-inner">
+                        <ul class="main-product__model-list" role="list">
+                          {{ pro_items }}
+                        </ul>
+                      </div>
+                    </div>
+                  {% endif %}
+
+                  {% if air_count > 0 %}
+                    <div
+                      class="main-product__model-panel panel"
+                      id="ModelPanel-Air-{{ section.id }}"
+                      role="tabpanel"
+                      aria-labelledby="ModelTab-Air-{{ section.id }}"
+                      data-model-panel="air"
+                      hidden
+                    >
+                      <div class="main-product__model-panel-inner">
+                        <ul class="main-product__model-list" role="list">
+                          {{ air_items }}
+                        </ul>
+                      </div>
+                    </div>
+                  {% endif %}
+
+                  {% if ipad_count > 0 %}
+                    <div
+                      class="main-product__model-panel panel"
+                      id="ModelPanel-Ipad-{{ section.id }}"
+                      role="tabpanel"
+                      aria-labelledby="ModelTab-Ipad-{{ section.id }}"
+                      data-model-panel="ipad"
+                      hidden
+                    >
+                      <div class="main-product__model-panel-inner">
+                        <ul class="main-product__model-list" role="list">
+                          {{ ipad_items }}
+                        </ul>
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+                {% if unmapped_items != blank %}<ul class="main-product__model-list" role="list">{{ unmapped_items }}</ul>{% endif %}
+                <p class="main-product__fit-confirmation" aria-live="polite">{{ 'editor.selected_fit' | t }}: {{ current_option_selected_value | escape }}</p>
+                <div class="main-product__help-links">
+                  <a href="{{ settings.global_model_guide_url | default: '/pages/find-your-model' }}">{{ section.settings.model_guide_label | escape }}</a>
+                  {% if settings.global_support_email != blank %}<a href="mailto:{{ settings.global_support_email | escape }}">{{ section.settings.model_help_label | escape }}</a>{% endif %}
+                </div>
+              {% else %}
+                <div class="main-product__option-values{% if is_color_option %} main-product__option-values--swatches{% endif %}">
+                  {% for value in option.values %}
+                    {% assign option_variant = value.variant %}
+
+                    {% if option_variant %}
+                      {% liquid
+                        assign swatch_image = value.swatch.image
+                        assign swatch_color = value.swatch.color
+                      %}
+
+                      {% if is_color_option %}
+                        {% liquid
+                          assign option_url = value.url
+                          if option_url == blank and option_variant
+                            assign option_url = product.url | append: '?variant=' | append: option_variant.id
+                          endif
+                        %}
+                        {% capture swatch_style %}
+                          {% if swatch_color != blank %}--swatch-color: {{ swatch_color }};{% endif %}
+                          {% if swatch_image != blank %}--swatch-image: url('{{ swatch_image | image_url: width: 128 }}');{% endif %}
+                          {% if swatch_color != blank %}--swatch-ring-color: {{ swatch_color }};{% endif %}
+                        {% endcapture %}
+                        {% assign has_native_swatch = false %}
+                        {% if swatch_color != blank or swatch_image != blank %}
+                          {% assign has_native_swatch = true %}
+                        {% endif %}
+
+                        {% if value.available %}
+                          <a
+                            class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
+                            href="{{ option_url }}"
+                            data-variant-link
+                            data-variant-id="{{ option_variant.id }}"
+                            {% if option_variant.featured_media %}
+                              data-variant-media-id="{{ option_variant.featured_media.id }}"
+                            {% endif %}
+                            aria-label="Choose color: {{ value.name | escape }}"
+                            style="{{ swatch_style | strip }}"
+                            {% if value.name == current_option_selected_value %}
+                              aria-current="true"
+                            {% endif %}
+                          >
+                            <span class="main-product__swatch-fill" aria-hidden="true">
+                              {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
+                            </span>
+                            <span class="visually-hidden">
+                              {{ value.name }}
+                              {% if value.name == current_option_selected_value %} selected{% endif %}
+                            </span>
+                          </a>
+                        {% else %}
+                          <span
+                            class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
+                            aria-disabled="true"
+                            aria-label="Choose color: {{ value.name | escape }} unavailable"
+                            style="{{ swatch_style | strip }}"
+                            {% if value.name == current_option_selected_value %}
+                              aria-current="true"
+                            {% endif %}
+                          >
+                            <span class="main-product__swatch-fill" aria-hidden="true">
+                              {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
+                            </span>
+                            <span class="visually-hidden">{{ value.name }} unavailable</span>
+                          </span>
+                        {% endif %}
+                      {% else %}
+                        {% if value.available %}
+                          <a
+                            class="main-product__option-value"
+                            href="{{ product.url }}?variant={{ option_variant.id }}"
+                            {% if value.name == current_option_selected_value %}
+                              aria-current="true"
+                            {% endif %}
+                          >
+                            {{ value.name }}
+                          </a>
+                        {% else %}
+                          <span
+                            class="main-product__option-value"
+                            aria-disabled="true"
+                            {% if value.name == current_option_selected_value %}
+                              aria-current="true"
+                            {% endif %}
+                          >
+                            {{ value.name }}
+                          </span>
+                        {% endif %}
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </fieldset>
+          {% endfor %}
+        </div>
+      {% endunless %}
