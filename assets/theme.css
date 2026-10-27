@@ -723,16 +723,16 @@ html {
     grid-column: 1 / -1;
   }
 
-  .template-product #MainContent>:has(> [data-paired-feature="left"]) {
+  .template-product #MainContent>:has(> [data-paired-feature="left"]):has(+ .shopify-section > [data-paired-feature="right"]) {
     grid-column: 2;
   }
 
-  .template-product #MainContent>:has(> [data-paired-feature="right"]) {
+  .template-product #MainContent>:has(> [data-paired-feature="left"]) + .shopify-section:has(> [data-paired-feature="right"]) {
     grid-column: 3;
   }
 
-  .template-product #MainContent>:has(> [data-paired-feature="left"]) .container,
-  .template-product #MainContent>:has(> [data-paired-feature="right"]) .container {
+  .template-product #MainContent>:has(> [data-paired-feature="left"]):has(+ .shopify-section > [data-paired-feature="right"]) .container,
+  .template-product #MainContent>:has(> [data-paired-feature="left"]) + .shopify-section:has(> [data-paired-feature="right"]) .container {
     width: 100%;
     margin-inline: 0;
   }
