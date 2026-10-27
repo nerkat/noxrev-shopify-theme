@@ -163,7 +163,7 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-size: 0.78rem;
+    font-size: calc(0.78rem * var(--body-scale, 1));
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -178,7 +178,7 @@
     color: #ff4da6;
     -webkit-text-fill-color: transparent;
     font-family: var(--theme-font-display);
-    font-size: clamp(3rem, 13vw, 5.8rem);
+    font-size: calc(clamp(3rem, 13vw, 5.8rem) * var(--heading-scale, 1));
     font-weight: 800;
     line-height: 0.94;
     letter-spacing: -0.055em;
@@ -188,7 +188,7 @@
     max-width: 42rem;
     margin: 1rem 0 0;
     color: color-mix(in srgb, var(--theme-color-text) 74%, transparent);
-    font-size: 1rem;
+    font-size: calc(1rem * var(--body-scale, 1));
     line-height: 1.6;
   }
 
@@ -222,7 +222,7 @@
 
   .contact-page__field label {
     color: #25edff;
-    font-size: 0.72rem;
+    font-size: calc(0.72rem * var(--body-scale, 1));
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -270,7 +270,7 @@
     gap: 0.2rem;
     border-radius: 0.9rem;
     padding: 0.85rem 1rem;
-    font-size: 0.9rem;
+    font-size: calc(0.9rem * var(--body-scale, 1));
     line-height: 1.45;
   }
 
@@ -317,7 +317,7 @@
     margin: 1rem 0 0;
     color: var(--theme-color-text);
     font-family: var(--theme-font-display);
-    font-size: 1.65rem;
+    font-size: calc(1.65rem * var(--heading-scale, 1));
     line-height: 1.05;
   }
 
@@ -340,7 +340,7 @@
 
   .contact-page__support-list dt {
     color: #25edff;
-    font-size: 0.7rem;
+    font-size: calc(0.7rem * var(--body-scale, 1));
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -366,7 +366,7 @@
     align-items: center;
     margin-top: 1.15rem;
     color: #25edff;
-    font-size: 0.78rem;
+    font-size: calc(0.78rem * var(--body-scale, 1));
     font-weight: 800;
     letter-spacing: 0.12em;
     text-decoration: none;
