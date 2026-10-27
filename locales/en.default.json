@@ -113,5 +113,46 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "editor": {
+    "buy_now": "Buy now",
+    "selected_fit": "Selected fit",
+    "save_percent": "SAVE {{ percent }}%",
+    "zoom_image": "Zoom image",
+    "close": "Close",
+    "model_help": "Help me identify my model",
+    "read_more": "Read more",
+    "no_reviews": "No reviews yet.",
+    "choose_product": "Select a product in this section’s settings.",
+    "previous": "Previous slide",
+    "next": "Next slide",
+    "play": "Play video",
+    "pause": "Pause video"
+  },
+  "seo": {
+    "default_description": "Explore {{ title }} from {{ shop }}. Find product details, iPad compatibility guidance, accessories and support.",
+    "cart_title": "Your cart | {{ shop }}",
+    "search_title": "Search | {{ shop }}",
+    "list_collections_title": "Collections | {{ shop }}",
+    "404_title": "Page not found | {{ shop }}",
+    "password_title": "Opening soon | {{ shop }}",
+    "gift_card_title": "Gift card balance | {{ shop }}",
+    "index_description": "Explore {{ shop }} iPad keyboard cases, accessories, model-fit guidance and product support.",
+    "blog_description": "Explore {{ shop }} iPad keyboard cases, accessories, model-fit guidance and product support.",
+    "search_description": "Explore {{ shop }} iPad keyboard cases, accessories, model-fit guidance and product support.",
+    "cart_description": "Explore {{ shop }} iPad keyboard cases, accessories, model-fit guidance and product support.",
+    "list_collections_description": "Explore {{ shop }} iPad keyboard cases, accessories, model-fit guidance and product support.",
+    "404_description": "Explore {{ shop }} iPad keyboard cases, accessories, model-fit guidance and product support.",
+    "password_description": "Explore {{ shop }} iPad keyboard cases, accessories, model-fit guidance and product support.",
+    "gift_card_description": "Explore {{ shop }} iPad keyboard cases, accessories, model-fit guidance and product support."
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "products": "Products",
+    "collections": "Collections",
+    "search": "Search",
+    "cart": "Cart",
+    "not_found": "Page not found",
+    "label": "Breadcrumb"
   }
 }

@@ -1,0 +1,26 @@
+{% doc %}
+Spacer content block.
+{% enddoc %}
+<div aria-hidden="true" style="height:{{ block.settings.height }}px" {{ block.shopify_attributes }}></div>
+{% schema %}
+{
+  "name": "Spacer",
+  "settings": [
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Height",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spacer"
+    }
+  ]
+}
+{% endschema %}

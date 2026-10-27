@@ -1,0 +1,33 @@
+{% doc %}
+Video content block.
+{% enddoc %}
+<div {{ block.shopify_attributes }}>{% if block.settings.video != blank %}{{ block.settings.video | video_tag: controls: true, loop: block.settings.loop, muted: block.settings.muted, autoplay: false, preload: 'none', image_size: '1000x' }}{% endif %}</div>
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Mute video",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+{% endschema %}

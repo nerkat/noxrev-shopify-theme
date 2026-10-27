@@ -101,6 +101,132 @@
         "type": "image_picker",
         "id": "global_returns_trust_icon",
         "label": "Product returns icon"
+      },
+      {
+        "type": "text",
+        "id": "global_response_time",
+        "label": "Support response time",
+        "info": "Leave blank unless the response time is approved."
+      },
+      {
+        "type": "url",
+        "id": "global_shipping_link",
+        "label": "Shipping policy link"
+      },
+      {
+        "type": "richtext",
+        "id": "global_shipping_explanation",
+        "label": "Shipping explanation"
+      },
+      {
+        "type": "text",
+        "id": "global_shipping_international",
+        "label": "Shipping wording outside the US",
+        "info": "Optional market wording. Does not change store policies or rates."
+      },
+      {
+        "type": "select",
+        "id": "global_shipping_icon_type",
+        "label": "Shipping icon",
+        "options": [
+          {
+            "value": "shipping",
+            "label": "Shipping"
+          },
+          {
+            "value": "shield",
+            "label": "Shield"
+          },
+          {
+            "value": "return",
+            "label": "Return"
+          },
+          {
+            "value": "check",
+            "label": "Check"
+          }
+        ],
+        "default": "shipping"
+      },
+      {
+        "type": "richtext",
+        "id": "global_guarantee_explanation",
+        "label": "Guarantee explanation"
+      },
+      {
+        "type": "url",
+        "id": "global_guarantee_link",
+        "label": "Guarantee policy link"
+      },
+      {
+        "type": "text",
+        "id": "global_guarantee_international",
+        "label": "Guarantee wording outside the US",
+        "info": "Optional market wording. Does not change store policies or rates."
+      },
+      {
+        "type": "select",
+        "id": "global_guarantee_icon_type",
+        "label": "Guarantee icon",
+        "options": [
+          {
+            "value": "shipping",
+            "label": "Shipping"
+          },
+          {
+            "value": "shield",
+            "label": "Shield"
+          },
+          {
+            "value": "return",
+            "label": "Return"
+          },
+          {
+            "value": "check",
+            "label": "Check"
+          }
+        ],
+        "default": "shield"
+      },
+      {
+        "type": "richtext",
+        "id": "global_returns_explanation",
+        "label": "Returns explanation"
+      },
+      {
+        "type": "url",
+        "id": "global_returns_link",
+        "label": "Returns policy link"
+      },
+      {
+        "type": "text",
+        "id": "global_returns_international",
+        "label": "Returns wording outside the US",
+        "info": "Optional market wording. Does not change store policies or rates."
+      },
+      {
+        "type": "select",
+        "id": "global_returns_icon_type",
+        "label": "Returns icon",
+        "options": [
+          {
+            "value": "shipping",
+            "label": "Shipping"
+          },
+          {
+            "value": "shield",
+            "label": "Shield"
+          },
+          {
+            "value": "return",
+            "label": "Return"
+          },
+          {
+            "value": "check",
+            "label": "Check"
+          }
+        ],
+        "default": "return"
       }
     ]
   },
@@ -112,7 +238,55 @@
         "id": "show_breadcrumbs",
         "label": "Show breadcrumbs",
         "default": true,
-        "info": "Breadcrumbs remain hidden on the homepage, password, and gift-card pages. Product breadcrumbs stay hidden on mobile to preserve the current layout."
+        "info": "Set page and device visibility below."
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_mobile",
+        "label": "Show on mobile",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_desktop",
+        "label": "Show on desktop",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_product",
+        "label": "Show on product pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_collection",
+        "label": "Show on collection pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_page",
+        "label": "Show on page pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_blog",
+        "label": "Show on blog pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_article",
+        "label": "Show on article pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_search",
+        "label": "Show on search pages",
+        "default": true
       }
     ]
   },
@@ -152,6 +326,39 @@
         "id": "type_primary_font",
         "default": "work_sans_n4",
         "label": "t:general.primary"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_original_heading_font",
+        "label": "Use NOXREV Oxanium heading font",
+        "default": true
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Alternative heading font",
+        "info": "Used when the Oxanium option above is off.",
+        "default": "work_sans_n4"
+      },
+      {
+        "type": "range",
+        "id": "body_scale",
+        "label": "Body text scale",
+        "min": 80,
+        "max": 150,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "label": "Heading text scale",
+        "min": 80,
+        "max": 150,
+        "step": 5,
+        "unit": "%",
+        "default": 100
       }
     ]
   },
@@ -192,13 +399,13 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#FFFFFF",
+        "default": "#040b18",
         "label": "t:labels.background"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
+        "default": "#ffffff",
         "label": "t:labels.foreground"
       },
       {
@@ -210,6 +417,278 @@
         "unit": "px",
         "label": "t:labels.input_corner_radius",
         "default": 4
+      },
+      {
+        "type": "color",
+        "id": "brand_background_alt",
+        "label": "Alternate background",
+        "default": "#071525"
+      },
+      {
+        "type": "color",
+        "id": "brand_surface",
+        "label": "Surface",
+        "default": "#0b192b"
+      },
+      {
+        "type": "color",
+        "id": "brand_muted",
+        "label": "Muted text",
+        "default": "#b5b8bd"
+      },
+      {
+        "type": "color",
+        "id": "brand_primary",
+        "label": "Primary",
+        "default": "#00ffb0"
+      },
+      {
+        "type": "color",
+        "id": "brand_secondary",
+        "label": "Secondary",
+        "default": "#00e5ff"
+      },
+      {
+        "type": "color",
+        "id": "brand_accent",
+        "label": "Accent",
+        "default": "#ff2d78"
+      },
+      {
+        "type": "color",
+        "id": "brand_accent_alt",
+        "label": "Secondary accent",
+        "default": "#9b00ff"
+      },
+      {
+        "type": "color",
+        "id": "brand_button_text",
+        "label": "Button text",
+        "default": "#041323"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_heading_gradient",
+        "label": "Use heading gradient",
+        "default": true
+      },
+      {
+        "type": "color_background",
+        "id": "heading_gradient",
+        "label": "Heading gradient",
+        "default": "linear-gradient(135deg, #ff2d78 0%, #c084fc 48%, #00e5ff 100%)"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_cta_gradient",
+        "label": "Use button gradient",
+        "default": true
+      },
+      {
+        "type": "color_background",
+        "id": "cta_gradient",
+        "label": "Button gradient",
+        "default": "linear-gradient(135deg, #00ffb0 0%, #00e5ff 100%)"
+      },
+      {
+        "type": "range",
+        "id": "button_radius",
+        "label": "Button corner radius",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 7
+      },
+      {
+        "type": "range",
+        "id": "card_radius",
+        "label": "Card corner radius",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "card_show_price",
+        "label": "Show price",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_compare",
+        "label": "Show compare-at price",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "label": "Show vendor",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "card_image_ratio",
+        "label": "Image ratio",
+        "options": [
+          {
+            "value": "1",
+            "label": "Square"
+          },
+          {
+            "value": "0.8",
+            "label": "Portrait"
+          },
+          {
+            "value": "1.333",
+            "label": "Landscape"
+          }
+        ],
+        "default": "1"
+      },
+      {
+        "type": "select",
+        "id": "card_image_fit",
+        "label": "Image fit",
+        "options": [
+          {
+            "value": "contain",
+            "label": "Fit entire image"
+          },
+          {
+            "value": "cover",
+            "label": "Fill frame"
+          }
+        ],
+        "default": "cover"
+      }
+    ]
+  },
+  {
+    "name": "iPad model families",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Variant metafield custom.model_family selects the display family: pro, air or ipad. Model option names and A-numbers remain product data. Unmapped options are shown without an inferred family."
+      },
+      {
+        "type": "text",
+        "id": "family_pro_label",
+        "label": "iPad Pro display name",
+        "default": "iPad Pro"
+      },
+      {
+        "type": "image_picker",
+        "id": "family_pro_image",
+        "label": "iPad Pro image"
+      },
+      {
+        "type": "text",
+        "id": "family_air_label",
+        "label": "iPad Air display name",
+        "default": "iPad Air"
+      },
+      {
+        "type": "image_picker",
+        "id": "family_air_image",
+        "label": "iPad Air image"
+      },
+      {
+        "type": "text",
+        "id": "family_ipad_label",
+        "label": "iPad / Mini display name",
+        "default": "iPad / Mini"
+      },
+      {
+        "type": "image_picker",
+        "id": "family_ipad_image",
+        "label": "iPad / Mini image"
+      },
+      {
+        "type": "select",
+        "id": "model_family_order",
+        "label": "Family order",
+        "options": [
+          {
+            "value": "pro,air,ipad",
+            "label": "Pro / Air / Ipad"
+          },
+          {
+            "value": "air,pro,ipad",
+            "label": "Air / Pro / Ipad"
+          },
+          {
+            "value": "ipad,pro,air",
+            "label": "Ipad / Pro / Air"
+          }
+        ],
+        "default": "pro,air,ipad"
+      }
+    ]
+  },
+  {
+    "name": "Section color schemes",
+    "settings": [
+      {
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#071525"
+          },
+          {
+            "type": "color",
+            "id": "text",
+            "label": "Text",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "accent",
+            "label": "Accent",
+            "default": "#00e5ff"
+          },
+          {
+            "type": "color",
+            "id": "button",
+            "label": "Button",
+            "default": "#00ffb0"
+          },
+          {
+            "type": "color",
+            "id": "button_label",
+            "label": "Button text",
+            "default": "#041323"
+          },
+          {
+            "type": "color",
+            "id": "border",
+            "label": "Border",
+            "default": "#273342"
+          }
+        ],
+        "role": {
+          "text": "text",
+          "background": "background",
+          "primary_button": "button",
+          "on_primary_button": "button_label",
+          "links": "accent",
+          "icons": "text",
+          "secondary_button": "background",
+          "primary_button_border": "button",
+          "secondary_button_border": "border",
+          "on_secondary_button": "text"
+        }
       }
     ]
   }

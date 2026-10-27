@@ -10,8 +10,8 @@
 {
   "current": {
     "social_share_image": "shopify://shop_images/Product_Visual_005acb76-8109-4542-ae51-82ceae6497a2.jpg",
-    "global_social_tiktok_url": "https://www.tiktok.com/@noxrev_official",
-    "global_social_instagram_url": "https://www.instagram.com/noxrev_official/",
+    "global_social_tiktok_url": "https://www.tiktok.com/@noxrev_us",
+    "global_social_instagram_url": "https://www.instagram.com/noxrev_us/",
     "global_social_facebook_url": "https://www.facebook.com/profile.php?id=61591097743393",
     "catalog_search_keyboard_product": "tpx1",
     "catalog_search_model_option_name": "Model",
@@ -33,6 +33,23 @@
         "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
         "disabled": false,
         "settings": {}
+      }
+    },
+    "global_model_guide_url": "/pages/find-your-model",
+    "global_shipping_trust_text": "Free U.S. shipping",
+    "global_shipping_link": "/policies/shipping-policy",
+    "background_color": "#040b18",
+    "foreground_color": "#ffffff",
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#071525",
+          "text": "#ffffff",
+          "accent": "#00e5ff",
+          "button": "#00ffb0",
+          "button_label": "#041323",
+          "border": "#273342"
+        }
       }
     }
   }

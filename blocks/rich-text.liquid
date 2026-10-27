@@ -1,0 +1,22 @@
+{% doc %}
+Rich text content block.
+{% enddoc %}
+<div class="rte" {{ block.shopify_attributes }}>{{ block.settings.content }}</div>
+{% schema %}
+{
+  "name": "Rich text",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>Add your content here.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text"
+    }
+  ]
+}
+{% endschema %}
