@@ -295,9 +295,9 @@
     border-radius: 1.25rem;
     background:
       radial-gradient(circle at top right, rgba(192, 108, 255, 0.12), transparent 30%),
-      radial-gradient(circle at bottom left, rgba(0, 229, 255, 0.1), transparent 28%),
+      radial-gradient(circle at bottom left, color-mix(in srgb, var(--theme-color-secondary) 10%, transparent), transparent 28%),
       linear-gradient(180deg, rgba(5, 13, 26, 0.94), rgba(3, 10, 22, 0.98));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 18px 42px rgba(0, 0, 0, 0.18);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 4%, transparent), 0 18px 42px rgba(0, 0, 0, 0.18);
   }
 
   .product-marketing-story__panel {
@@ -370,11 +370,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(0, 229, 255, 0.42);
+    border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 42%, transparent);
     border-radius: 999px;
     color: #27efff;
     background: rgba(3, 12, 24, 0.64);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-color-text) 4%, transparent);
   }
 
   .product-marketing-story__icon {
@@ -407,7 +407,7 @@
     min-height: 14rem;
     border-radius: 1rem;
     overflow: hidden;
-    background: radial-gradient(circle at 55% 50%, rgba(0, 229, 255, 0.16), transparent 38%);
+    background: radial-gradient(circle at 55% 50%, color-mix(in srgb, var(--theme-color-secondary) 16%, transparent), transparent 38%);
   }
 
   .product-marketing-story__image,
@@ -421,7 +421,7 @@
 
   .product-marketing-story__placeholder {
     min-height: 14rem;
-    background: linear-gradient(135deg, rgba(0, 229, 255, 0.16), rgba(214, 101, 255, 0.1));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--theme-color-secondary) 16%, transparent), rgba(214, 101, 255, 0.1));
   }
 
   .product-marketing-story__stat {
@@ -429,7 +429,7 @@
     grid-template-columns: auto minmax(0, 1fr);
     gap: 0.65rem;
     align-items: center;
-    color: rgba(255, 255, 255, 0.72);
+    color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
     font-size: 0.85rem;
   }
 
@@ -455,7 +455,7 @@
     grid-template-columns: minmax(6.6rem, 1fr) minmax(5rem, 1fr) auto;
     gap: 0.65rem;
     align-items: center;
-    color: rgba(255, 255, 255, 0.82);
+    color: color-mix(in srgb, var(--theme-color-text) 82%, transparent);
     font-size: 0.78rem;
   }
 
@@ -468,7 +468,7 @@
     height: 0.42rem;
     overflow: hidden;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.13);
+    background: color-mix(in srgb, var(--theme-color-text) 13%, transparent);
   }
 
   .product-marketing-story__bar span {
@@ -479,7 +479,7 @@
   }
 
   .product-marketing-story__bar--muted span {
-    background: rgba(255, 255, 255, 0.55);
+    background: color-mix(in srgb, var(--theme-color-text) 55%, transparent);
   }
 
   .product-marketing-story__detail-grid,
@@ -530,7 +530,7 @@
     display: grid;
     gap: 0.6rem;
     text-align: center;
-    color: rgba(255, 255, 255, 0.86);
+    color: color-mix(in srgb, var(--theme-color-text) 86%, transparent);
     font-size: 0.78rem;
   }
 
@@ -538,7 +538,7 @@
     aspect-ratio: 1.25;
     overflow: hidden;
     border-radius: 0.65rem;
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--theme-color-text) 4%, transparent);
   }
 
   .product-marketing-story__panel--lower-card {
@@ -828,3 +828,4 @@
   ]
 }
 {% endschema %}
+

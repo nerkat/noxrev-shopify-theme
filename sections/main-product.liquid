@@ -1,55 +1,27 @@
 {{ 'main-product.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'main-product.js' | asset_url }}" defer="defer"></script>
-
+<script src="{{ 'main-product.js' | asset_url }}" defer></script>
 {% liquid
-  assign current_variant = product.selected_variant | default: product.selected_or_first_available_variant
-  assign current_media = current_variant.featured_media | default: product.featured_media | default: product.media.first
-  assign current_media_index = 0
-  assign shipping_trust_text = section.settings.shipping_trust_text
-  assign shipping_trust_icon = section.settings.shipping_trust_icon
-  assign guarantee_trust_text = section.settings.guarantee_trust_text
-  assign guarantee_trust_icon = section.settings.guarantee_trust_icon
-  assign returns_trust_text = section.settings.returns_trust_text
-  assign returns_trust_icon = section.settings.returns_trust_icon
-  if section.settings.inherit_global_trust_cues
-    if shipping_trust_text == 'Free 3–5 day U.S. shipping'
-      assign shipping_trust_text = ''
-    endif
-    if guarantee_trust_text == 'Money-back guarantee'
-      assign guarantee_trust_text = ''
-    endif
-    if returns_trust_text == '30-day returns'
-      assign returns_trust_text = ''
-    endif
-  endif
-
-  assign shipping_trust_text = shipping_trust_text | default: settings.global_shipping_trust_text | default: 'Free 3–5 day U.S. shipping'
-  assign shipping_trust_icon = shipping_trust_icon | default: settings.global_shipping_trust_icon
-  assign guarantee_trust_text = guarantee_trust_text | default: settings.global_guarantee_trust_text | default: 'Money-back guarantee'
-  assign guarantee_trust_icon = guarantee_trust_icon | default: settings.global_guarantee_trust_icon
-  assign returns_trust_text = returns_trust_text | default: settings.global_returns_trust_text | default: '30-day returns'
-  assign returns_trust_icon = returns_trust_icon | default: settings.global_returns_trust_icon
-
-  for media in product.media
-    if current_media and media.id == current_media.id
-      assign current_media_index = forloop.index0
-      break
-    endif
-  endfor
+assign current_variant = product.selected_variant | default: product.selected_or_first_available_variant
+assign current_media = product.featured_media | default: product.media.first
+if section.settings.variant_media
+assign current_media = current_variant.featured_media | default: current_media
+endif
+assign current_media_index = 0
+for media in product.media
+if media.id == current_media.id
+assign current_media_index = forloop.index0
+break
+endif
+endfor
+assign has_picker = false
+assign has_buttons = false
 %}
-
-<div
-  class="page-width main-product"
-  data-main-product-section
-  data-section-id="{{ section.id }}"
-  data-product-handle="{{ product.handle }}"
-  style="--main-product-gallery-image-fit: {{ section.settings.gallery_image_fit | default: 'cover' }};"
->
-  <div class="main-product__main">
-    <div class="main-product__media-column" data-product-gallery-region>
+<div class="page-width main-product" data-main-product-section data-section-id="{{ section.id }}" data-product-handle="{{ product.handle }}" data-variant-media="{{ section.settings.variant_media }}" style="--main-product-gallery-image-fit: {{ section.settings.gallery_image_fit }}; --gallery-ratio: {{ section.settings.gallery_ratio }}; --gallery-column-width: {{ section.settings.gallery_width }}%;">
+<div class="main-product__main">
+    <div class="main-product__media-column" data-desktop-nav="{{ section.settings.gallery_desktop_navigation }}" data-mobile-nav="{{ section.settings.gallery_mobile_navigation }}" data-product-gallery-region>
       <div
         class="main-product__gallery"
-        data-product-gallery
+        data-product-gallery data-zoom="{{ section.settings.gallery_zoom }}"
         {% if current_media %}
           data-active-media-id="{{ current_media.id }}"
         {% endif %}
@@ -118,7 +90,7 @@
                   data-gallery-index="{{ forloop.index0 }}"
                   aria-label="Go to media {{ forloop.index }}"
                   aria-current="{% if is_active_media %}true{% else %}false{% endif %}"
-                ></button>
+                >{% if section.settings.gallery_desktop_navigation == 'thumbnails' %}{{ media.preview_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: slide_alt }}{% endif %}</button>
               {% endfor %}
             </div>
           {% endif %}
@@ -126,406 +98,15 @@
       </div>
     </div>
 
-    <div class="main-product__content">
-      <h1 class="main-product__title heading-gradient">{{ product.title }}</h1>
 
-      {% comment %}
-        {% if excerpt != blank %}
-          <p class="main-product__excerpt">{{ excerpt }}</p>
-        {% endif %}
-      {% endcomment %}
-
-      {% unless product.has_only_default_variant %}
-        <div class="main-product__options" data-product-options-region>
-          {% for option in product.options_with_values %}
-            {% liquid
-              assign option_name_downcase = option.name | downcase
-              assign is_color_option = false
-              assign is_model_option = false
-              if option_name_downcase == 'color' or option_name_downcase == 'colour'
-                assign is_color_option = true
-              endif
-              if option_name_downcase contains 'model'
-                assign is_model_option = true
-              endif
-              assign current_option_selected_value = option.selected_value
-              if current_variant
-                case option.position
-                  when 1
-                    assign current_option_selected_value = current_variant.option1
-                  when 2
-                    assign current_option_selected_value = current_variant.option2
-                  when 3
-                    assign current_option_selected_value = current_variant.option3
-                endcase
-              endif
-            %}
-            <fieldset class="main-product__option">
-              <legend class="main-product__option-label{% if is_color_option or is_model_option %} main-product__step-label{% endif %}">
-                {{ option.name }}
-              </legend>
-
-              {% if is_model_option %}
-                {% liquid
-                  assign pro_items = ''
-                  assign air_items = ''
-                  assign ipad_items = ''
-                  assign pro_count = 0
-                  assign air_count = 0
-                  assign ipad_count = 0
-                %}
-
-                {% for value in option.values %}
-                  {% liquid
-                    assign option_variant = null
-
-                    for variant in product.variants
-                      assign matches_option = false
-
-                      case option.position
-                        when 1
-                          if variant.option1 == value.name
-                            assign matches_option = true
-                          endif
-                        when 2
-                          if variant.option2 == value.name
-                            assign matches_option = true
-                          endif
-                        when 3
-                          if variant.option3 == value.name
-                            assign matches_option = true
-                          endif
-                      endcase
-
-                      if matches_option
-                        assign matches_other_options = true
-
-                        for product_option in product.options_with_values
-                          if product_option.position != option.position
-                            assign selected_value = product_option.selected_value
-                            if current_variant
-                              case product_option.position
-                                when 1
-                                  assign selected_value = current_variant.option1
-                                when 2
-                                  assign selected_value = current_variant.option2
-                                when 3
-                                  assign selected_value = current_variant.option3
-                              endcase
-                            endif
-
-                            case product_option.position
-                              when 1
-                                if variant.option1 != selected_value
-                                  assign matches_other_options = false
-                                  break
-                                endif
-                              when 2
-                                if variant.option2 != selected_value
-                                  assign matches_other_options = false
-                                  break
-                                endif
-                              when 3
-                                if variant.option3 != selected_value
-                                  assign matches_other_options = false
-                                  break
-                                endif
-                            endcase
-                          endif
-                        endfor
-
-                        if matches_other_options
-                          assign option_variant = variant
-                          break
-                        elsif option_variant == null
-                          assign option_variant = variant
-                        endif
-                      endif
-                    endfor
-                  %}
-                  {% if option_variant %}
-                    {% liquid
-                      assign value_name_downcase = value.name | downcase
-                      assign family_key = 'ipad'
-
-                      if value_name_downcase contains 'ipad pro'
-                        assign family_key = 'pro'
-                      elsif value_name_downcase contains 'ipad air'
-                        assign family_key = 'air'
-                      endif
-                    %}
-
-                    {% capture model_item %}
-                      <li class="main-product__model-item">
-                        {% liquid
-                          assign option_url = value.url
-                          if option_url == blank and option_variant
-                            assign option_url = product.url | append: '?variant=' | append: option_variant.id
-                          endif
-                        %}
-                        <a
-                          class="main-product__model-link{% unless option_variant.available %} is-unavailable{% endunless %}"
-                          href="{{ option_url }}"
-                          data-variant-link
-                          data-variant-id="{{ option_variant.id }}"
-                          {% if option_variant.featured_media %}
-                            data-variant-media-id="{{ option_variant.featured_media.id }}"
-                          {% endif %}
-                          aria-label="Choose {{ option.name | escape }}: {{ value.name | escape }}{% unless option_variant.available %} unavailable{% endunless %}"
-                          {% if value.name == current_option_selected_value %}
-                            aria-current="true"
-                          {% endif %}
-                        >
-                          <span class="main-product__model-radio" aria-hidden="true">
-                            <span class="main-product__model-radio-dot"></span>
-                          </span>
-                          <span class="main-product__model-name">{{ value.name }}</span>
-                        </a>
-                      </li>
-                    {% endcapture %}
-
-                    {% if family_key == 'pro' %}
-                      {% assign pro_items = pro_items | append: model_item %}
-                      {% assign pro_count = pro_count | plus: 1 %}
-                    {% elsif family_key == 'air' %}
-                      {% assign air_items = air_items | append: model_item %}
-                      {% assign air_count = air_count | plus: 1 %}
-                    {% else %}
-                      {% assign ipad_items = ipad_items | append: model_item %}
-                      {% assign ipad_count = ipad_count | plus: 1 %}
-                    {% endif %}
-                  {% endif %}
-                {% endfor %}
-
-                <div
-                  class="main-product__model-selector"
-                  data-model-tabs
-                >
-                  <div class="main-product__model-tablist" role="tablist" aria-label="Choose iPad model family">
-                    {% if pro_count > 0 %}
-                      <button
-                        class="main-product__model-tab"
-                        type="button"
-                        role="tab"
-                        id="ModelTab-Pro-{{ section.id }}"
-                        aria-selected="false"
-                        aria-controls="ModelPanel-Pro-{{ section.id }}"
-                        data-model-tab="pro"
-                      >
-                        <img
-                          class="main-product__model-tab-image"
-                          src="{{ 'ipad-pro-space-black.png' | asset_img_url: '240x' }}"
-                          alt=""
-                          loading="lazy"
-                          width="240"
-                          height="173"
-                        >
-                        <span class="main-product__model-tab-title">iPad Pro</span>
-                      </button>
-                    {% endif %}
-
-                    {% if air_count > 0 %}
-                      <button
-                        class="main-product__model-tab"
-                        type="button"
-                        role="tab"
-                        id="ModelTab-Air-{{ section.id }}"
-                        aria-selected="false"
-                        aria-controls="ModelPanel-Air-{{ section.id }}"
-                        data-model-tab="air"
-                      >
-                        <img
-                          class="main-product__model-tab-image"
-                          src="{{ 'ipad-air-style-fill.png' | asset_img_url: '240x' }}"
-                          alt=""
-                          loading="lazy"
-                          width="240"
-                          height="173"
-                        >
-                        <span class="main-product__model-tab-title">iPad Air</span>
-                      </button>
-                    {% endif %}
-
-                    {% if ipad_count > 0 %}
-                      <button
-                        class="main-product__model-tab"
-                        type="button"
-                        role="tab"
-                        id="ModelTab-Ipad-{{ section.id }}"
-                        aria-selected="false"
-                        aria-controls="ModelPanel-Ipad-{{ section.id }}"
-                        data-model-tab="ipad"
-                      >
-                        <img
-                          class="main-product__model-tab-image"
-                          src="{{ 'ipad-purple.png' | asset_img_url: '240x' }}"
-                          alt=""
-                          loading="lazy"
-                          width="240"
-                          height="166"
-                        >
-                        <span class="main-product__model-tab-title">iPad/Mini</span>
-                      </button>
-                    {% endif %}
-                  </div>
-
-                  {% if pro_count > 0 %}
-                    <div
-                      class="main-product__model-panel panel"
-                      id="ModelPanel-Pro-{{ section.id }}"
-                      role="tabpanel"
-                      aria-labelledby="ModelTab-Pro-{{ section.id }}"
-                      data-model-panel="pro"
-                      hidden
-                    >
-                      <div class="main-product__model-panel-inner">
-                        <ul class="main-product__model-list" role="list">
-                          {{ pro_items }}
-                        </ul>
-                      </div>
-                    </div>
-                  {% endif %}
-
-                  {% if air_count > 0 %}
-                    <div
-                      class="main-product__model-panel panel"
-                      id="ModelPanel-Air-{{ section.id }}"
-                      role="tabpanel"
-                      aria-labelledby="ModelTab-Air-{{ section.id }}"
-                      data-model-panel="air"
-                      hidden
-                    >
-                      <div class="main-product__model-panel-inner">
-                        <ul class="main-product__model-list" role="list">
-                          {{ air_items }}
-                        </ul>
-                      </div>
-                    </div>
-                  {% endif %}
-
-                  {% if ipad_count > 0 %}
-                    <div
-                      class="main-product__model-panel panel"
-                      id="ModelPanel-Ipad-{{ section.id }}"
-                      role="tabpanel"
-                      aria-labelledby="ModelTab-Ipad-{{ section.id }}"
-                      data-model-panel="ipad"
-                      hidden
-                    >
-                      <div class="main-product__model-panel-inner">
-                        <ul class="main-product__model-list" role="list">
-                          {{ ipad_items }}
-                        </ul>
-                      </div>
-                    </div>
-                  {% endif %}
-                </div>
-              {% else %}
-                <div class="main-product__option-values{% if is_color_option %} main-product__option-values--swatches{% endif %}">
-                  {% for value in option.values %}
-                    {% assign option_variant = value.variant %}
-
-                    {% if option_variant %}
-                      {% liquid
-                        assign swatch_image = value.swatch.image
-                        assign swatch_color = value.swatch.color
-                      %}
-
-                      {% if is_color_option %}
-                        {% liquid
-                          assign option_url = value.url
-                          if option_url == blank and option_variant
-                            assign option_url = product.url | append: '?variant=' | append: option_variant.id
-                          endif
-                        %}
-                        {% capture swatch_style %}
-                          {% if swatch_color != blank %}--swatch-color: {{ swatch_color }};{% endif %}
-                          {% if swatch_image != blank %}--swatch-image: url('{{ swatch_image | image_url: width: 128 }}');{% endif %}
-                          {% if swatch_color != blank %}--swatch-ring-color: {{ swatch_color }};{% endif %}
-                        {% endcapture %}
-                        {% assign has_native_swatch = false %}
-                        {% if swatch_color != blank or swatch_image != blank %}
-                          {% assign has_native_swatch = true %}
-                        {% endif %}
-
-                        {% if value.available %}
-                          <a
-                            class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
-                            href="{{ option_url }}"
-                            data-variant-link
-                            data-variant-id="{{ option_variant.id }}"
-                            {% if option_variant.featured_media %}
-                              data-variant-media-id="{{ option_variant.featured_media.id }}"
-                            {% endif %}
-                            aria-label="Choose color: {{ value.name | escape }}"
-                            style="{{ swatch_style | strip }}"
-                            {% if value.name == current_option_selected_value %}
-                              aria-current="true"
-                            {% endif %}
-                          >
-                            <span class="main-product__swatch-fill" aria-hidden="true">
-                              {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
-                            </span>
-                            <span class="visually-hidden">
-                              {{ value.name }}
-                              {% if value.name == current_option_selected_value %} selected{% endif %}
-                            </span>
-                          </a>
-                        {% else %}
-                          <span
-                            class="main-product__option-value main-product__swatch{% unless has_native_swatch %} main-product__swatch--fallback{% endunless %}"
-                            aria-disabled="true"
-                            aria-label="Choose color: {{ value.name | escape }} unavailable"
-                            style="{{ swatch_style | strip }}"
-                            {% if value.name == current_option_selected_value %}
-                              aria-current="true"
-                            {% endif %}
-                          >
-                            <span class="main-product__swatch-fill" aria-hidden="true">
-                              {% unless has_native_swatch %}{{ value.name | slice: 0, 2 }}{% endunless %}
-                            </span>
-                            <span class="visually-hidden">{{ value.name }} unavailable</span>
-                          </span>
-                        {% endif %}
-                      {% else %}
-                        {% if value.available %}
-                          <a
-                            class="main-product__option-value"
-                            href="{{ product.url }}?variant={{ option_variant.id }}"
-                            {% if value.name == current_option_selected_value %}
-                              aria-current="true"
-                            {% endif %}
-                          >
-                            {{ value.name }}
-                          </a>
-                        {% else %}
-                          <span
-                            class="main-product__option-value"
-                            aria-disabled="true"
-                            {% if value.name == current_option_selected_value %}
-                              aria-current="true"
-                            {% endif %}
-                          >
-                            {{ value.name }}
-                          </span>
-                        {% endif %}
-                      {% endif %}
-                    {% endif %}
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </fieldset>
-          {% endfor %}
-        </div>
-      {% endunless %}
-
-      <div data-product-form-region>
-        {% form 'product', product %}
-          {% if current_variant %}
-            <input type="hidden" name="id" value="{{ current_variant.id }}">
-          {% endif %}
-
-          <div class="main-product__quantity">
+<div class="main-product__content" data-product-form-region>
+{% for block in section.blocks %}
+<div class="main-product__block main-product__block--{{ block.type }}" {{ block.shopify_attributes }}>
+{% case block.type %}
+{% when '@app' %}{% render block %}
+{% when 'title' %}<h1 class="main-product__title heading-gradient">{{ product.title | escape }}</h1>
+{% when 'variant_picker' %}{% assign has_picker = true %}{% render 'product-option-picker', product: product, current_variant: current_variant, section: section %}
+{% when 'price' %}
             <div data-product-price-region>
               {% if current_variant %}
                 {% liquid
@@ -547,11 +128,13 @@
 
                   {% if has_compare_price %}
                     <p class="main-product__price-compare">{% render 'price', amount: compare_at_price %}</p>
-                    <p class="main-product__price-discount-badge">SAVE {{ discount_percentage }}%</p>
+                    <p class="main-product__price-discount-badge">{{ 'editor.save_percent' | t: percent: discount_percentage }}</p>
                   {% endif %}
                 </div>
               {% endif %}
             </div>
+
+{% when 'quantity' %}
             <div class="main-product__quantity-control" data-quantity-control>
               <label class="visually-hidden" for="Quantity-{{ section.id }}">Quantity</label>
               <button
@@ -566,7 +149,7 @@
                 id="Quantity-{{ section.id }}"
                 class="main-product__quantity-input"
                 type="number"
-                name="quantity"
+                name="quantity" form="ProductForm-{{ section.id }}"
                 min="1"
                 value="1"
                 inputmode="numeric"
@@ -580,93 +163,36 @@
                 <span aria-hidden="true">+</span>
               </button>
             </div>
-          </div>
 
-          <div class="main-product__purchase-actions">
-            <button
-              class="main-product__buy-now"
-              type="submit"
-              name="return_to"
-              value="/checkout"
-              {% if current_variant == null or current_variant.available == false %}
-                disabled
-              {% endif %}
-            >
-              Buy Now
-            </button>
-
-            <button
-              class="main-product__submit btn btn--primary"
-              type="submit"
-              {% if current_variant == null or current_variant.available == false %}
-                disabled
-              {% endif %}
-            >
-              {% if current_variant and current_variant.available %}
-                {{ 'product.add_to_cart' | t }}
-              {% else %}
-                {{ 'product.sold_out' | t }}
-              {% endif %}
-            </button>
-          </div>
-
-          {% if section.settings.show_trust_cues != false %}
-            <div class="main-product__trust-cues" aria-label="After-sales benefits">
-              {% if shipping_trust_text != blank %}
-                <div class="main-product__trust-cue">
-                  {% if shipping_trust_icon != blank %}
-                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--image" aria-hidden="true">
-                      {{ shipping_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
-                    </span>
-                  {% else %}
-                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--shipping" aria-hidden="true"></span>
-                  {% endif %}
-                  <span>{{ shipping_trust_text | escape }}</span>
-                </div>
-              {% endif %}
-              {% if guarantee_trust_text != blank %}
-                <div class="main-product__trust-cue">
-                  {% if guarantee_trust_icon != blank %}
-                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--image" aria-hidden="true">
-                      {{ guarantee_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
-                    </span>
-                  {% else %}
-                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--guarantee" aria-hidden="true"></span>
-                  {% endif %}
-                  <span>{{ guarantee_trust_text | escape }}</span>
-                </div>
-              {% endif %}
-              {% if returns_trust_text != blank %}
-                <div class="main-product__trust-cue">
-                  {% if returns_trust_icon != blank %}
-                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--image" aria-hidden="true">
-                      {{ returns_trust_icon | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', class: 'main-product__trust-cue-icon-image' }}
-                    </span>
-                  {% else %}
-                    <span class="main-product__trust-cue-icon main-product__trust-cue-icon--returns" aria-hidden="true"></span>
-                  {% endif %}
-                  <span>{{ returns_trust_text | escape }}</span>
-                </div>
-              {% endif %}
-            </div>
-          {% endif %}
-
-          {% comment %} <p class="main-product__help-text">{{ 'product.help_text' | t }}</p> {% endcomment %}
-        {% endform %}
-      </div>
-    </div>
-  </div>
-
-  {% if section.settings.show_product_description and product.description != blank %}
-    <div class="main-product__details">
-      <h2 class="main-product__details-title">{{ 'product.details' | t }}</h2>
-      <div class="main-product__details-content">{{ product.description }}</div>
-    </div>
-  {% endif %}
+{% when 'purchase_buttons' %}{% assign has_buttons = true %}{% render 'product-purchase-buttons', product: product, current_variant: current_variant, section: section, block: block %}
+{% when 'trust' %}
+{% if section.settings.show_trust_cues %}<div class="main-product__trust-cues">{% for i in (1..3) %}{% assign key = 'benefit_' | append: i %}{% render 'store-benefit', record: block.settings[key], section: section %}{% endfor %}</div>{% endif %}
+{% when 'short_description' %}{% assign excerpt = block.settings.content | default: product.description %}{% if excerpt != blank %}<div class="main-product__excerpt">{{ excerpt | strip_html | truncatewords: block.settings.word_limit }}</div>{% endif %}
+{% when 'full_description' %}<div class="rte">{{ block.settings.content | default: product.description }}</div>
+{% when 'detail' %}
+{% liquid
+assign detail = blank
+case block.settings.source
+when 'description'
+assign detail = product.description
+when 'custom'
+assign detail = block.settings.content
+else
+assign field = product.metafields.custom[block.settings.source]
+if field != blank
+assign detail = field | metafield_tag
+endif
+endcase
+%}
+{% if detail != blank or block.settings.link != blank %}<details {% if block.settings.open %}open{% endif %}><summary>{{ block.settings.heading | escape }}</summary><div class="rte">{{ detail }}{% if block.settings.link != blank %}<p><a href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a></p>{% endif %}</div></details>{% endif %}
+{% endcase %}
 </div>
-
-
-
+{% endfor %}
+{% unless has_picker %}{% render 'product-option-picker', product: product, current_variant: current_variant, section: section %}{% endunless %}
+{% unless has_buttons %}{% render 'product-purchase-buttons', product: product, current_variant: current_variant, section: section %}{% endunless %}
+</div></div>
+{% if section.settings.show_product_description and product.description != blank %}<div class="main-product__details rte">{{ product.description }}</div>{% endif %}
+</div>
 {% schema %}
 {
   "name": "t:general.product",
@@ -682,8 +208,14 @@
       "id": "gallery_image_fit",
       "label": "Product gallery image fit",
       "options": [
-        { "value": "cover", "label": "Fill frame (crop)" },
-        { "value": "contain", "label": "Fit entire image" }
+        {
+          "value": "cover",
+          "label": "Fill frame (crop)"
+        },
+        {
+          "value": "contain",
+          "label": "Fit entire image"
+        }
       ],
       "default": "cover"
     },
@@ -729,10 +261,380 @@
       "type": "image_picker",
       "id": "returns_trust_icon",
       "label": "Returns message icon"
+    },
+    {
+      "type": "header",
+      "content": "Model selector"
+    },
+    {
+      "type": "select",
+      "id": "selector_style",
+      "label": "Model selector style",
+      "options": [
+        {
+          "value": "tabs",
+          "label": "Family tabs"
+        },
+        {
+          "value": "columns",
+          "label": "All families in columns"
+        }
+      ],
+      "default": "tabs"
+    },
+    {
+      "type": "text",
+      "id": "model_guide_label",
+      "label": "Model guide label",
+      "default": "Find your iPad model"
+    },
+    {
+      "type": "text",
+      "id": "model_help_label",
+      "label": "Help label",
+      "default": "Help me identify my model"
+    },
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "paragraph",
+      "content": "Upload, sort, label and assign media to variants in Shopify Products. These settings change presentation only."
+    },
+    {
+      "type": "range",
+      "id": "gallery_width",
+      "label": "Media column width",
+      "min": 35,
+      "max": 65,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "gallery_ratio",
+      "label": "Media aspect ratio",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Original"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.333",
+          "label": "Landscape"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "select",
+      "id": "gallery_desktop_navigation",
+      "label": "Desktop navigation",
+      "options": [
+        {
+          "value": "dots",
+          "label": "Dots"
+        },
+        {
+          "value": "thumbnails",
+          "label": "Thumbnails"
+        },
+        {
+          "value": "arrows",
+          "label": "Arrows only"
+        }
+      ],
+      "default": "dots"
+    },
+    {
+      "type": "select",
+      "id": "gallery_mobile_navigation",
+      "label": "Mobile navigation",
+      "options": [
+        {
+          "value": "dots",
+          "label": "Dots"
+        },
+        {
+          "value": "arrows",
+          "label": "Arrows only"
+        }
+      ],
+      "default": "dots"
+    },
+    {
+      "type": "checkbox",
+      "id": "gallery_zoom",
+      "label": "Enable image zoom",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "variant_media",
+      "label": "Show selected variant media",
+      "default": true
     }
   ],
   "disabled_on": {
-    "groups": ["header", "footer"]
-  }
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "variant_picker",
+      "name": "Model and color picker",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "quantity",
+      "name": "Quantity",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "purchase_buttons",
+      "name": "Purchase buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_buy_now",
+          "label": "Show Buy Now",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "button_layout",
+          "label": "Button layout",
+          "options": [
+            {
+              "value": "row",
+              "label": "Side by side"
+            },
+            {
+              "value": "stack",
+              "label": "Stacked"
+            }
+          ],
+          "default": "row"
+        }
+      ]
+    },
+    {
+      "type": "trust",
+      "name": "Store benefits",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "benefit_1",
+          "label": "Benefit 1",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "shipping",
+              "label": "Shipping"
+            },
+            {
+              "value": "guarantee",
+              "label": "Guarantee"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            }
+          ],
+          "default": "shipping"
+        },
+        {
+          "type": "select",
+          "id": "benefit_2",
+          "label": "Benefit 2",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "shipping",
+              "label": "Shipping"
+            },
+            {
+              "value": "guarantee",
+              "label": "Guarantee"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            }
+          ],
+          "default": "guarantee"
+        },
+        {
+          "type": "select",
+          "id": "benefit_3",
+          "label": "Benefit 3",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "shipping",
+              "label": "Shipping"
+            },
+            {
+              "value": "guarantee",
+              "label": "Guarantee"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            }
+          ],
+          "default": "returns"
+        }
+      ]
+    },
+    {
+      "type": "short_description",
+      "name": "Short description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Product-specific content",
+          "info": "Connect a product metafield using the dynamic source button. Blank uses the normal Shopify product description."
+        },
+        {
+          "type": "range",
+          "id": "word_limit",
+          "label": "Excerpt words",
+          "min": 10,
+          "max": 100,
+          "step": 5,
+          "default": 30
+        }
+      ]
+    },
+    {
+      "type": "full_description",
+      "name": "Full description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Product-specific content",
+          "info": "Connect a product metafield using the dynamic source button. Blank uses the normal Shopify product description."
+        }
+      ]
+    },
+    {
+      "type": "detail",
+      "name": "Product detail",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Details"
+        },
+        {
+          "type": "select",
+          "id": "source",
+          "label": "Content source",
+          "options": [
+            {
+              "value": "description",
+              "label": "Description"
+            },
+            {
+              "value": "specifications",
+              "label": "Specifications"
+            },
+            {
+              "value": "included_items",
+              "label": "Included Items"
+            },
+            {
+              "value": "setup",
+              "label": "Setup"
+            },
+            {
+              "value": "compatibility",
+              "label": "Compatibility"
+            },
+            {
+              "value": "warranty",
+              "label": "Warranty"
+            },
+            {
+              "value": "custom",
+              "label": "Custom"
+            }
+          ],
+          "default": "description"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Custom or dynamic content",
+          "info": "For Custom source. Connect product data with the dynamic source button."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Optional supporting link"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "Learn more"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "limit": 1
 }
 {% endschema %}

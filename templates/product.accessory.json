@@ -11,7 +11,41 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity": {
+          "type": "quantity",
+          "settings": {}
+        },
+        "purchase_buttons": {
+          "type": "purchase_buttons",
+          "settings": {}
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "title",
+        "variant_picker",
+        "price",
+        "quantity",
+        "purchase_buttons",
+        "trust"
+      ]
     },
     "accessory_details": {
       "type": "product-accessory-details",
@@ -51,7 +85,8 @@
         "title": "Small upgrades. Big daily difference.",
         "text": "<p>Complete your iPad setup with accessories selected for everyday work, study, charging, travel, and protection.</p>",
         "image": "",
-        "image_alt": "NoxRev accessory beside an iPad workspace"
+        "image_alt": "NoxRev accessory beside an iPad workspace",
+        "content_source": "product"
       }
     },
     "product_reviews_rating": {

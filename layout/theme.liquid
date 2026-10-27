@@ -4,8 +4,9 @@
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 
-    {% if settings.favicon != blank %}
-      <link rel="icon" href="{{ settings.favicon | image_url: width: 32 }}">
+    {% assign browser_icon = settings.favicon | default: shop.brand.square_logo %}
+    {% if browser_icon != blank %}
+      <link rel="icon" href="{{ browser_icon | image_url: width: 32 }}">
     {% endif %}
 
     {% comment %}Self-host Oxanium to remove the external Google Fonts request chain.{% endcomment %}
@@ -56,6 +57,9 @@
       </script>
     {% endif %}
 
+    {{ 'editor-completion.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'editor-completion.js' | asset_url }}" defer></script>
+    <script>window.noxrevEditorLabels = {zoom: {{ 'editor.zoom_image' | t | json }}, close: {{ 'editor.close' | t | json }}};</script>
     {{ content_for_header }}
 
     {% if request.page_type == 'product' %}
@@ -146,3 +150,4 @@
     {% render 'catalog-search-index' %}
   </body>
 </html>
+

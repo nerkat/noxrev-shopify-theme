@@ -1,0 +1,624 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {},
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity": {
+          "type": "quantity",
+          "settings": {}
+        },
+        "purchase_buttons": {
+          "type": "purchase_buttons",
+          "settings": {}
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "title",
+        "variant_picker",
+        "price",
+        "quantity",
+        "purchase_buttons",
+        "trust"
+      ]
+    },
+    "product_reviews_rating": {
+      "type": "product-reviews-rating",
+      "settings": {
+        "show_reviews_rating_section": true,
+        "eyebrow": "Customer Reviews",
+        "title": "Trusted by real customers.",
+        "write_button_label": "Write A Review",
+        "write_button_link": "",
+        "button_label": "View All Reviews",
+        "button_link": ""
+      }
+    },
+    "product_accessory_bundle": {
+      "type": "product-accessory-bundle",
+      "blocks": {
+        "accessory_stylus": {
+          "type": "accessory",
+          "settings": {
+            "product": "txp1-pencil",
+            "image_alt": "NoxRev Precision Stylus for iPad",
+            "title": "NoxRev Precision Stylus",
+            "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
+            "price": "$59.00",
+            "compare_price": "$79.00",
+            "savings_label": "Save 25%",
+            "link": "",
+            "badge": "Best Add-On",
+            "button_label": "Add",
+            "highlight": false
+          }
+        },
+        "accessory_mouse": {
+          "type": "accessory",
+          "settings": {
+            "product": "txp1-mouse",
+            "image_alt": "NoxRev Wireless Mouse for an iPad setup",
+            "title": "NoxRev Wireless Mouse",
+            "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.",
+            "price": "$39.00",
+            "compare_price": "$59.00",
+            "savings_label": "Save 34%",
+            "link": "",
+            "badge": "",
+            "button_label": "Add",
+            "highlight": false
+          }
+        },
+        "accessory_sleeve": {
+          "type": "accessory",
+          "settings": {
+            "product": "txp1-case",
+            "image_alt": "NoxRev Urban Sleeve for iPad",
+            "title": "NoxRev Urban Sleeve",
+            "text": "Premium protection. Slim profile. Built for life on the move.",
+            "price": "$49.00",
+            "compare_price": "$69.00",
+            "savings_label": "Save 29%",
+            "link": "",
+            "badge": "Popular",
+            "button_label": "Add",
+            "highlight": false
+          }
+        },
+        "accessory_cable": {
+          "type": "accessory",
+          "settings": {
+            "product": "txp1-charger",
+            "image_alt": "NOXREV charger",
+            "title": "NoxRev USB-C Cable",
+            "text": "65W GaN Fast Charging. Runs cooler with greater efficiency in a smaller charger.",
+            "price": "$24.00",
+            "compare_price": "$34.00",
+            "savings_label": "Save 29%",
+            "link": "",
+            "badge": "",
+            "button_label": "Add",
+            "highlight": false
+          }
+        },
+        "accessory_PWPzn8": {
+          "type": "accessory",
+          "settings": {
+            "product": "tpx1-cable",
+            "image_alt": "NOXREV USB-C cable",
+            "title": "NoxRev Precision Stylus",
+            "text": "",
+            "price": "$59.00",
+            "compare_price": "$79.00",
+            "savings_label": "Save 25%",
+            "link": "",
+            "badge": "",
+            "button_label": "Add",
+            "highlight": false
+          }
+        }
+      },
+      "block_order": [
+        "accessory_stylus",
+        "accessory_mouse",
+        "accessory_sleeve",
+        "accessory_cable",
+        "accessory_PWPzn8"
+      ],
+      "settings": {
+        "eyebrow": "Complete Your Setup",
+        "title": "Bundle with accessories and save more.",
+        "text": "Level up your setup with hand-picked accessories built to protect, power, and perform anywhere.",
+        "pill_label": "Bundle & Save",
+        "pill_text": "Save up to 20% when you bundle."
+      }
+    },
+    "product_real_life_videos": {
+      "type": "product-real-life-videos",
+      "blocks": {
+        "real_life_typing": {
+          "type": "video_card",
+          "settings": {
+            "video": "shopify://files/videos/AQPDxtVL8JCIC0-knDBe14QBlzD-egPPeWQaNKgTbkWHQE0kGkc5ogTSeu63o8UuEWdDw0FkqZHbeUwaSbwrsHVzmhTdCtWFQqrORAc.mp4",
+            "poster_alt": "Customer typing on a NoxRev iPad keyboard case",
+            "title": "Typing setup",
+            "text": "Backlit keys in action",
+            "duration": "0:18"
+          }
+        },
+        "real_life_study": {
+          "type": "video_card",
+          "settings": {
+            "video": "shopify://files/videos/AQOb6ujANAO380jx1S_5dTp9fBDtwnjrY7Iadzwww2fTe9Ojrs9n-gfcXMvM50WKRQVx_FDvZOQEBeH3c7XlMgp4.mp4",
+            "poster_alt": "Student using a NoxRev iPad keyboard case",
+            "title": "Study session",
+            "text": "Notes, docs and more",
+            "duration": "0:24"
+          }
+        },
+        "real_life_pairing": {
+          "type": "video_card",
+          "settings": {
+            "video": "shopify://files/videos/3.mp4",
+            "poster_alt": "Pairing a NoxRev keyboard case with an iPad",
+            "title": "Bluetooth pairing",
+            "text": "Fast and effortless",
+            "duration": "0:15"
+          }
+        },
+        "real_life_kitchen": {
+          "type": "video_card",
+          "settings": {
+            "video": "shopify://files/videos/AQM-13B2b45Yg55A4AiT1Gh1fdPYpiHI0iVbvRv4xojOlRwQ9ls_eVPu5Ln6-t2hDnN2YsDvEeoRdfiOKuZ4G2_CZ-FC7z7JCy86JoI.mp4",
+            "poster_alt": "NoxRev iPad keyboard case used in a kitchen",
+            "title": "Kitchen workflow",
+            "text": "Recipes, shows, multitask",
+            "duration": "0:20"
+          }
+        },
+        "video_card_fe4A7V": {
+          "type": "video_card",
+          "settings": {
+            "video": "shopify://files/videos/Whisper-Quiet_Typing!_Experience_the_magic_of_iMac-style_scissor_keys_on_your_iPad,_in_stunning_pink-20260917_135325.mp4",
+            "poster_alt": "Customer typing on a NoxRev iPad keyboard case",
+            "title": "Typing setup",
+            "text": "Backlit keys in action",
+            "duration": "0:18"
+          }
+        },
+        "video_card_JCahVH": {
+          "type": "video_card",
+          "settings": {
+            "video": "shopify://files/videos/6.mp4",
+            "poster_alt": "NoxRev iPad keyboard case in a typing setup",
+            "title": "Typing setup",
+            "text": "Backlit keys in action",
+            "duration": "0:18"
+          }
+        }
+      },
+      "block_order": [
+        "real_life_typing",
+        "real_life_study",
+        "real_life_pairing",
+        "real_life_kitchen",
+        "video_card_fe4A7V",
+        "video_card_JCahVH"
+      ],
+      "settings": {
+        "eyebrow": "Real People. Real Setups.",
+        "title": "See It In Real Life",
+        "text": "Few quick videos showing how people actually use NoxRev.",
+        "stat_text": "100,487+ Happy Users",
+        "cta_label": "View More Real Setups",
+        "cta_url": "",
+        "show_social_proof": false
+      }
+    },
+    "product_mode_showcase": {
+      "type": "product-mode-showcase",
+      "blocks": {
+        "mode_type": {
+          "type": "mode_chip",
+          "settings": {
+            "label": "Type",
+            "icon": "type"
+          }
+        },
+        "mode_draw": {
+          "type": "mode_chip",
+          "settings": {
+            "label": "Draw",
+            "icon": "draw"
+          }
+        },
+        "mode_watch": {
+          "type": "mode_chip",
+          "settings": {
+            "label": "Watch",
+            "icon": "watch"
+          }
+        },
+        "mode_present": {
+          "type": "mode_chip",
+          "settings": {
+            "label": "Present",
+            "icon": "present"
+          }
+        }
+      },
+      "block_order": [
+        "mode_type",
+        "mode_draw",
+        "mode_watch",
+        "mode_present"
+      ],
+      "settings": {
+        "eyebrow": "Designed For Every Mode",
+        "title": "One Case. Every Angle. Endless Possibilities.",
+        "text": "Rotate, flip, and adjust with ease. Whether you're working, creating, or streaming, find the perfect angle for every task.",
+        "image": "shopify://shop_images/7_Unique_Modes_2_1_5831c898-f9c3-4efd-8dcd-7ce2fc4c1925.jpg",
+        "image_alt": "Keyboard case shown in multiple modes"
+      }
+    },
+    "product_battery_showcase": {
+      "type": "product-battery-showcase",
+      "settings": {
+        "eyebrow": "Power That Keeps Up",
+        "title": "2-Hour Charge. 30-Day Power.",
+        "text": "Stay productive longer with ultra-efficient power. Less charging, more creating.",
+        "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_18_19_PM_1.jpg",
+        "image_alt": "Keyboard case with glowing power rings",
+        "fast_charge_value": "2-Hour",
+        "fast_charge_label": "Fast Charge",
+        "battery_life_value": "30-Day",
+        "battery_life_label": "Battery Life",
+        "comparison_label": "Battery life comparison",
+        "primary_label": "NoxRev Keyboard Case",
+        "primary_value": "30 Days",
+        "primary_percent": 100,
+        "secondary_label": "Others",
+        "secondary_value": "7 Days",
+        "secondary_percent": 24
+      }
+    },
+    "product_feature_detail_grid": {
+      "type": "product-feature-detail-grid",
+      "blocks": {
+        "detail_protection": {
+          "type": "detail_card",
+          "settings": {
+            "title": "Secure, Form-Fit Protection",
+            "text": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches.",
+            "image": "shopify://shop_images/ChatGPT_Image_Jun_18_2026_01_25_07_PM.png",
+            "image_alt": "NoxRev keyboard case with form-fit iPad protection",
+            "icon": "shield"
+          }
+        },
+        "detail_pencil": {
+          "type": "detail_card",
+          "settings": {
+            "title": "Pencil Storage",
+            "text": "Built-in drawer keeps your Apple Pencil safe and always within reach.",
+            "image": "shopify://shop_images/image_1_ebd306ef-7f36-48c0-9093-5d82c42ee0b3.jpg",
+            "image_alt": "Built-in Apple Pencil storage on a NoxRev keyboard case",
+            "icon": "draw"
+          }
+        },
+        "detail_mute": {
+          "type": "detail_card",
+          "settings": {
+            "title": "Mute Button",
+            "text": "Instant mute for quiet focus anytime, anywhere.",
+            "image": "shopify://shop_images/image_2_1.jpg",
+            "image_alt": "Mute button on a NoxRev iPad keyboard case",
+            "icon": "type"
+          }
+        },
+        "detail_charge": {
+          "type": "detail_card",
+          "settings": {
+            "title": "Fast Charging",
+            "text": "USB-C fast charging for uninterrupted productivity.",
+            "image": "shopify://shop_images/image_1_7cb9a7cd-4b94-497d-ac8e-a95dfbf304d8.jpg",
+            "image_alt": "USB-C charging port on a NoxRev iPad keyboard case",
+            "icon": "bolt"
+          }
+        }
+      },
+      "block_order": [
+        "detail_protection",
+        "detail_pencil",
+        "detail_mute",
+        "detail_charge"
+      ],
+      "settings": {}
+    },
+    "product_unique_modes_strip": {
+      "type": "product-unique-modes-strip",
+      "blocks": {
+        "unique_laptop": {
+          "type": "mode",
+          "settings": {
+            "label": "Laptop Mode",
+            "image": "shopify://shop_images/edited-photo_0bba9500-568a-4002-9e71-43b6466a81f4.png",
+            "image_alt": "NoxRev iPad keyboard case in laptop mode"
+          }
+        },
+        "unique_stand": {
+          "type": "mode",
+          "settings": {
+            "label": "Stand Mode",
+            "image": "shopify://shop_images/edited-photo_2_3e75043f-3a4a-4c66-9444-ded0faa57b2b.png",
+            "image_alt": "NoxRev iPad keyboard case in stand mode"
+          }
+        },
+        "unique_tent": {
+          "type": "mode",
+          "settings": {
+            "label": "Tent Mode",
+            "image": "shopify://shop_images/edited-photo_1_e992bbb0-8710-4767-8359-e597c3f593ff.png",
+            "image_alt": "NoxRev iPad keyboard case in tent mode"
+          }
+        },
+        "unique_tablet": {
+          "type": "mode",
+          "settings": {
+            "label": "Tablet Mode",
+            "image": "shopify://shop_images/edited-photo_cd87a57f-f53f-410e-abd2-fbb64380c51a.png",
+            "image_alt": "NoxRev iPad keyboard case in tablet mode"
+          }
+        },
+        "unique_drawing": {
+          "type": "mode",
+          "settings": {
+            "label": "Drawing Mode",
+            "image": "shopify://shop_images/edited-photo_2_427eb45e-bd68-4edd-ad97-ea0f822f98ba.png",
+            "image_alt": "NoxRev iPad keyboard case in drawing mode"
+          }
+        },
+        "unique_viewing": {
+          "type": "mode",
+          "settings": {
+            "label": "Viewing Mode",
+            "image": "shopify://shop_images/edited-photo_1_7c5018e1-30e8-46e1-858f-9849165f8301.png",
+            "image_alt": "NoxRev iPad keyboard case in viewing mode"
+          }
+        },
+        "unique_presentation": {
+          "type": "mode",
+          "settings": {
+            "label": "Presentation Mode",
+            "image": "shopify://shop_images/edited-photo_9ee8a1d0-6c95-45e6-a01b-339386591f59.png",
+            "image_alt": "NoxRev iPad keyboard case in presentation mode"
+          }
+        }
+      },
+      "block_order": [
+        "unique_laptop",
+        "unique_stand",
+        "unique_tent",
+        "unique_tablet",
+        "unique_drawing",
+        "unique_viewing",
+        "unique_presentation"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "7 Unique Modes",
+        "text": "360 swivel. 180 flip. Infinite possibilities."
+      }
+    },
+    "product_typing_feature": {
+      "type": "product-typing-feature",
+      "blocks": {
+        "typing_keys": {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Scissor-Switch Keys",
+            "icon": "keyboard"
+          }
+        },
+        "typing_trackpad": {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Large Precision Trackpad",
+            "icon": "trackpad"
+          }
+        },
+        "typing_gestures": {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Multi-Touch Gestures",
+            "icon": "tap"
+          }
+        },
+        "typing_backlit": {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Backlit Keyboard",
+            "icon": "keyboard"
+          }
+        }
+      },
+      "block_order": [
+        "typing_keys",
+        "typing_trackpad",
+        "typing_gestures",
+        "typing_backlit"
+      ],
+      "settings": {
+        "eyebrow": "Next-Gen Typing Experience",
+        "title": "Built For Speed, Accuracy, And Comfort.",
+        "text": "Scissor-switch keys, responsive tracking pad, and smart gestures built for speed, accuracy, and comfort.",
+        "image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_02_05_30_PM.png",
+        "image_alt": "Hands typing on keyboard case"
+      }
+    },
+    "product_precision_feature": {
+      "type": "product-precision-feature",
+      "blocks": {
+        "precision_tap": {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Tap",
+            "icon": "tap"
+          }
+        },
+        "precision_swipe": {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Swipe",
+            "icon": "swipe"
+          }
+        },
+        "precision_scroll": {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Scroll",
+            "icon": "swipe"
+          }
+        },
+        "precision_zoom": {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Zoom",
+            "icon": "zoom"
+          }
+        },
+        "precision_apps": {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Switch Apps",
+            "icon": "apps"
+          }
+        }
+      },
+      "block_order": [
+        "precision_tap",
+        "precision_swipe",
+        "precision_scroll",
+        "precision_zoom",
+        "precision_apps"
+      ],
+      "settings": {
+        "eyebrow": "Stunning Precision And Control",
+        "title": "Trackpad Gestures That Feel Natural.",
+        "text": "The precision trackpad supports all the multi-touch gestures you already know.",
+        "image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_01_54_11_PM_1.jpg",
+        "image_alt": "Close-up of precision trackpad and keyboard"
+      }
+    },
+    "product_feature_icon_strip": {
+      "type": "product-feature-icon-strip",
+      "blocks": {
+        "strip_rotation": {
+          "type": "feature_item",
+          "settings": {
+            "title": "360 Degree Rotation",
+            "subtitle": "Smooth and flexible",
+            "icon": "rotation"
+          }
+        },
+        "strip_keyboard": {
+          "type": "feature_item",
+          "settings": {
+            "title": "Backlit Keyboard",
+            "subtitle": "7 colors, 3 brightness levels",
+            "icon": "keyboard"
+          }
+        },
+        "strip_trackpad": {
+          "type": "feature_item",
+          "settings": {
+            "title": "Precision Trackpad",
+            "subtitle": "Multi-touch and gestures",
+            "icon": "trackpad"
+          }
+        },
+        "strip_magnet": {
+          "type": "feature_item",
+          "settings": {
+            "title": "Magnetic Attachment",
+            "subtitle": "Strong hold, easy detach",
+            "icon": "magnet"
+          }
+        },
+        "strip_materials": {
+          "type": "feature_item",
+          "settings": {
+            "title": "Premium Materials",
+            "subtitle": "Aluminum alloy and PU leather",
+            "icon": "shield"
+          }
+        }
+      },
+      "block_order": [
+        "strip_rotation",
+        "strip_keyboard",
+        "strip_trackpad",
+        "strip_magnet",
+        "strip_materials"
+      ],
+      "settings": {}
+    },
+    "1783425997ca25e2c8": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_axCXAD": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_axCXAD"
+      ],
+      "disabled": true,
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "product_reviews_rating",
+    "product_accessory_bundle",
+    "product_real_life_videos",
+    "product_mode_showcase",
+    "product_battery_showcase",
+    "product_feature_detail_grid",
+    "product_unique_modes_strip",
+    "product_typing_feature",
+    "product_precision_feature",
+    "product_feature_icon_strip",
+    "1783425997ca25e2c8"
+  ]
+}

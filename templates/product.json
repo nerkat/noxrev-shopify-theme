@@ -11,7 +11,41 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "quantity": {
+          "type": "quantity",
+          "settings": {}
+        },
+        "purchase_buttons": {
+          "type": "purchase_buttons",
+          "settings": {}
+        },
+        "trust": {
+          "type": "trust",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "title",
+        "variant_picker",
+        "price",
+        "quantity",
+        "purchase_buttons",
+        "trust"
+      ]
     },
     "product_reviews_rating": {
       "type": "product-reviews-rating",
@@ -80,7 +114,7 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-charger",
-            "image_alt": "NoxRev USB-C charging cable",
+            "image_alt": "NOXREV charger",
             "title": "NoxRev USB-C Cable",
             "text": "65W GaN Fast Charging. Runs cooler with greater efficiency in a smaller charger.",
             "price": "$24.00",
@@ -96,9 +130,9 @@
           "type": "accessory",
           "settings": {
             "product": "tpx1-cable",
-            "image_alt": "NoxRev Precision Stylus accessory",
+            "image_alt": "NOXREV USB-C cable",
             "title": "NoxRev Precision Stylus",
-            "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
+            "text": "",
             "price": "$59.00",
             "compare_price": "$79.00",
             "savings_label": "Save 25%",
@@ -202,7 +236,8 @@
         "text": "Few quick videos showing how people actually use NoxRev.",
         "stat_text": "100,487+ Happy Users",
         "cta_label": "View More Real Setups",
-        "cta_url": ""
+        "cta_url": "",
+        "show_social_proof": false
       }
     },
     "product_mode_showcase": {

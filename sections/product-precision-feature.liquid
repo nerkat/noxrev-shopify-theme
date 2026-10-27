@@ -1,8 +1,10 @@
+{% style %}{% unless section.settings.layout_media_fit == 'inherit' %}#shopify-section-{{ section.id }} .product-precision-feature__media img{object-fit:{{ section.settings.layout_media_fit }}}{% endunless %}{% unless section.settings.layout_media_ratio == 'inherit' %}#shopify-section-{{ section.id }} .product-precision-feature__media img{aspect-ratio:{{ section.settings.layout_media_ratio }};height:auto}{% endunless %}@media(min-width:750px){ {% unless section.settings.layout_media_order == 'inherit' %}#shopify-section-{{ section.id }} .product-precision-feature__media{order:{% if section.settings.layout_media_order == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_media_order_mobile == 'inherit' %}#shopify-section-{{ section.id }} .product-precision-feature__media{order:{% if section.settings.layout_media_order_mobile == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}{% endstyle %}
+{% render 'section-layout', section: section %}
 {% liquid
   assign feature_image = section.settings.image | default: product.featured_media.preview_image
 %}
 
-<section class="product-precision-feature section">
+<section data-paired-feature="{{ section.settings.paired_feature }}" class="product-precision-feature section">
   <div class="container">
     <article class="product-precision-feature__panel">
       <div class="product-precision-feature__copy">
@@ -55,20 +57,268 @@
 {
   "name": "PDP Precision Feature",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Stunning Precision And Control" },
-    { "type": "text", "id": "title", "label": "Title", "default": "Trackpad Gestures That Feel Natural." },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Stunning Precision And Control"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Trackpad Gestures That Feel Natural."
+    },
     {
       "type": "textarea",
       "id": "text",
       "label": "Text",
       "default": "The precision trackpad supports all the multi-touch gestures you already know."
     },
-    { "type": "image_picker", "id": "image", "label": "Image" },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
     {
       "type": "text",
       "id": "image_alt",
       "label": "Image alt text",
       "default": "Close-up of precision trackpad and keyboard"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "select",
+      "id": "paired_feature",
+      "label": "Desktop width",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full width"
+        },
+        {
+          "value": "left",
+          "label": "Paired left"
+        },
+        {
+          "value": "right",
+          "label": "Paired right"
+        }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current fit"
+        },
+        {
+          "value": "cover",
+          "label": "Fill frame"
+        },
+        {
+          "value": "contain",
+          "label": "Entire image"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current ratio"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order",
+      "label": "Desktop media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order_mobile",
+      "label": "Mobile media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
     }
   ],
   "blocks": [
@@ -77,20 +327,41 @@
       "name": "Gesture icon",
       "limit": 8,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label", "default": "Tap" },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Tap"
+        },
         {
           "type": "select",
           "id": "icon",
           "label": "Fallback icon",
           "default": "tap",
           "options": [
-            { "value": "tap", "label": "Tap" },
-            { "value": "swipe", "label": "Swipe" },
-            { "value": "zoom", "label": "Zoom" },
-            { "value": "apps", "label": "Apps" }
+            {
+              "value": "tap",
+              "label": "Tap"
+            },
+            {
+              "value": "swipe",
+              "label": "Swipe"
+            },
+            {
+              "value": "zoom",
+              "label": "Zoom"
+            },
+            {
+              "value": "apps",
+              "label": "Apps"
+            }
           ]
         },
-        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon image"
+        }
       ]
     }
   ],
@@ -98,13 +369,44 @@
     {
       "name": "PDP Precision Feature",
       "blocks": [
-        { "type": "feature_icon", "settings": { "label": "Tap", "icon": "tap" } },
-        { "type": "feature_icon", "settings": { "label": "Swipe", "icon": "swipe" } },
-        { "type": "feature_icon", "settings": { "label": "Scroll", "icon": "swipe" } },
-        { "type": "feature_icon", "settings": { "label": "Zoom", "icon": "zoom" } },
-        { "type": "feature_icon", "settings": { "label": "Switch Apps", "icon": "apps" } }
+        {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Tap",
+            "icon": "tap"
+          }
+        },
+        {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Swipe",
+            "icon": "swipe"
+          }
+        },
+        {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Scroll",
+            "icon": "swipe"
+          }
+        },
+        {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Zoom",
+            "icon": "zoom"
+          }
+        },
+        {
+          "type": "feature_icon",
+          "settings": {
+            "label": "Switch Apps",
+            "icon": "apps"
+          }
+        }
       ]
     }
   ]
 }
 {% endschema %}
+

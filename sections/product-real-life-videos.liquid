@@ -1,8 +1,10 @@
+{% style %}{% unless section.settings.layout_media_fit == 'inherit' %}#shopify-section-{{ section.id }} .product-real-life-videos__media img{object-fit:{{ section.settings.layout_media_fit }}}{% endunless %}{% unless section.settings.layout_media_ratio == 'inherit' %}#shopify-section-{{ section.id }} .product-real-life-videos__media img{aspect-ratio:{{ section.settings.layout_media_ratio }};height:auto}{% endunless %}@media(min-width:750px){ {% unless section.settings.layout_media_order == 'inherit' %}#shopify-section-{{ section.id }} .product-real-life-videos__media{order:{% if section.settings.layout_media_order == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_media_order_mobile == 'inherit' %}#shopify-section-{{ section.id }} .product-real-life-videos__media{order:{% if section.settings.layout_media_order_mobile == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}{% endstyle %}
+{% render 'section-layout', section: section %}
 <section
   class="product-real-life-videos section"
   style="--product-real-life-video-fit: {{ section.settings.video_fit | default: 'cover' }};"
 >
-  <article class="product-real-life-videos__panel" data-real-life-videos>
+  <article class="product-real-life-videos__panel" data-real-life-videos data-autoplay="{{ section.settings.video_autoplay }}" data-video-layout="{{ section.settings.video_layout }}" style="--video-columns:{{ section.settings.video_columns }};--video-ratio:{{ section.settings.video_ratio }}">
     <div class="product-real-life-videos__header container">
       <div class="product-real-life-videos__copy">
         <p class="product-real-life-videos__eyebrow">{{ section.settings.eyebrow }}</p>
@@ -10,7 +12,7 @@
         <p class="product-real-life-videos__text">{{ section.settings.text }}</p>
       </div>
 
-      {% if section.settings.stat_text != blank %}
+      {% if section.settings.stat_text != blank and section.settings.show_social_proof %}
         <div class="product-real-life-videos__stat">
           <span class="product-real-life-videos__stat-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" focusable="false">
@@ -48,7 +50,9 @@
                       data-poster-src="{{ video_poster_image | image_url: width: 420 }}"
                     {% endif %}
                     playsinline
-                    muted
+                    {% if section.settings.video_muted or section.settings.video_autoplay %}muted{% endif %}
+                    {% if section.settings.video_loop %}loop{% endif %}
+                    {% if section.settings.video_controls %}controls{% endif %}
                     preload="none"
                   >
                     {% for source in block.settings.video.sources %}
@@ -87,7 +91,7 @@
                 <h3 class="product-real-life-videos__card-title">{{ block.settings.title }}</h3>
                 <p class="product-real-life-videos__card-text">{{ block.settings.text }}</p>
               </div>
-              {% if block.settings.duration != blank %}
+              {% if block.settings.duration != blank and section.settings.show_duration %}
                 <span class="product-real-life-videos__duration">{{ block.settings.duration }}</span>
               {% endif %}
             </div>
@@ -115,9 +119,9 @@
       </button>
     </div>
 
-    {% if section.settings.cta_label != blank %}
+    {% if section.settings.cta_label != blank and section.settings.cta_url != blank and section.settings.cta_url != '#' %}
       <div class="product-real-life-videos__footer">
-        <a class="product-real-life-videos__cta" href="{{ section.settings.cta_url | default: '#' }}">
+        <a class="product-real-life-videos__cta" href="{{ section.settings.cta_url }}">
           <span>{{ section.settings.cta_label }}</span>
           <span class="product-real-life-videos__cta-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" focusable="false">
@@ -133,11 +137,20 @@
 {% javascript %}
   (() => {
     const instances = new WeakMap();
+    document.addEventListener('shopify:block:select',event=>{
+      const card=event.target.closest?.('.product-real-life-videos__card');
+      if(card){card.scrollIntoView({block:'nearest',inline:'center'});card.closest('[data-real-life-videos]')?.querySelectorAll('video').forEach(v=>v.pause());}
+    });
 
     const initializeSection = (section) => {
       if (!section || instances.has(section)) return;
       const controller = new AbortController();
 
+      if (section.dataset.autoplay === 'true' && !window.Shopify?.designMode && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const observer = new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.muted=true;entry.target.play().catch(()=>{})}else entry.target.pause()}),{threshold:.6});
+        section.querySelectorAll('video').forEach(v=>observer.observe(v));
+        controller.signal.addEventListener('abort',()=>observer.disconnect(),{once:true});
+      }
       const videoShells = section.querySelectorAll('[data-real-life-video-shell]');
       const loadPoster = (video) => {
         const posterUrl = video.dataset.posterSrc;
@@ -239,22 +252,351 @@
       "id": "video_fit",
       "label": "Video and poster fit",
       "options": [
-        { "value": "cover", "label": "Fill frame (crop)" },
-        { "value": "contain", "label": "Fit entire video/poster" }
+        {
+          "value": "cover",
+          "label": "Fill frame (crop)"
+        },
+        {
+          "value": "contain",
+          "label": "Fit entire video/poster"
+        }
       ],
       "default": "cover"
     },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Real People. Real Setups." },
-    { "type": "text", "id": "title", "label": "Title", "default": "See It In Real Life" },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Real People. Real Setups."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "See It In Real Life"
+    },
     {
       "type": "textarea",
       "id": "text",
       "label": "Text",
       "default": "5 quick videos showing how people actually use NoxRev."
     },
-    { "type": "text", "id": "stat_text", "label": "Stat pill text", "default": "100,487+ Happy Users" },
-    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "View More Real Setups" },
-    { "type": "url", "id": "cta_url", "label": "CTA link" }
+    {
+      "type": "text",
+      "id": "stat_text",
+      "label": "Stat pill text",
+      "default": "100,487+ Happy Users"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "View More Real Setups"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "header",
+      "content": "Playback and cards"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay muted video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "video_muted",
+      "label": "Mute video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "video_controls",
+      "label": "Show native playback controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_duration",
+      "label": "Show duration",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_proof",
+      "label": "Show approved social proof",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "video_layout",
+      "label": "Presentation",
+      "options": [
+        {
+          "value": "slider",
+          "label": "Slider"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "default": "slider"
+    },
+    {
+      "type": "range",
+      "id": "video_columns",
+      "label": "Cards per desktop row",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "video_ratio",
+      "label": "Media ratio",
+      "options": [
+        {
+          "value": "0.5625",
+          "label": "Vertical 9:16"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide 16:9"
+        }
+      ],
+      "default": "0.5625"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current fit"
+        },
+        {
+          "value": "cover",
+          "label": "Fill frame"
+        },
+        {
+          "value": "contain",
+          "label": "Entire image"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current ratio"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order",
+      "label": "Desktop media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order_mobile",
+      "label": "Mobile media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    }
   ],
   "blocks": [
     {
@@ -262,12 +604,39 @@
       "name": "Video card",
       "limit": 12,
       "settings": [
-        { "type": "video", "id": "video", "label": "Shopify-hosted video" },
-        { "type": "image_picker", "id": "poster", "label": "Poster image" },
-        { "type": "text", "id": "poster_alt", "label": "Poster alt text" },
-        { "type": "text", "id": "title", "label": "Title", "default": "Typing setup" },
-        { "type": "text", "id": "text", "label": "Subtitle", "default": "Backlit keys in action" },
-        { "type": "text", "id": "duration", "label": "Duration", "default": "0:18" }
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify-hosted video"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Poster image"
+        },
+        {
+          "type": "text",
+          "id": "poster_alt",
+          "label": "Poster alt text"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Typing setup"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Subtitle",
+          "default": "Backlit keys in action"
+        },
+        {
+          "type": "text",
+          "id": "duration",
+          "label": "Duration",
+          "default": "0:18"
+        }
       ]
     }
   ],
@@ -277,26 +646,47 @@
       "blocks": [
         {
           "type": "video_card",
-          "settings": { "title": "Typing setup", "text": "Backlit keys in action", "duration": "0:18" }
+          "settings": {
+            "title": "Typing setup",
+            "text": "Backlit keys in action",
+            "duration": "0:18"
+          }
         },
         {
           "type": "video_card",
-          "settings": { "title": "Study session", "text": "Notes, docs and more", "duration": "0:24" }
+          "settings": {
+            "title": "Study session",
+            "text": "Notes, docs and more",
+            "duration": "0:24"
+          }
         },
         {
           "type": "video_card",
-          "settings": { "title": "Bluetooth pairing", "text": "Fast and effortless", "duration": "0:15" }
+          "settings": {
+            "title": "Bluetooth pairing",
+            "text": "Fast and effortless",
+            "duration": "0:15"
+          }
         },
         {
           "type": "video_card",
-          "settings": { "title": "Kitchen workflow", "text": "Recipes, shows, multitask", "duration": "0:20" }
+          "settings": {
+            "title": "Kitchen workflow",
+            "text": "Recipes, shows, multitask",
+            "duration": "0:20"
+          }
         },
         {
           "type": "video_card",
-          "settings": { "title": "Desk productivity", "text": "From tasks to content", "duration": "0:22" }
+          "settings": {
+            "title": "Desk productivity",
+            "text": "From tasks to content",
+            "duration": "0:22"
+          }
         }
       ]
     }
   ]
 }
 {% endschema %}
+

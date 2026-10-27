@@ -99,7 +99,7 @@
         "heading": "Turn your iPad into a laptop-style workspace.",
         "text": "Shop protective keyboard cases with backlit keys, precision trackpads, magnetic attachment, and flexible viewing modes for work, study, travel, and streaming.",
         "button_label": "Shop NoxRev TXP1",
-        "button_link": "",
+        "button_link": "/products/tpx1",
         "secondary_label": "Browse collections",
         "secondary_link": ""
       }
@@ -187,13 +187,13 @@
       ],
       "name": "Home Main Product",
       "settings": {
-        "product": "",
+        "product": "tpx1",
         "eyebrow": "Meet NoxRev TXP1",
         "heading": "The iPad case that turns work mode on.",
         "text": "A protective keyboard case with a precision trackpad, backlit keys, and flexible viewing modes for writing, studying, creating, and travel.",
         "badge": "7 iPad fits",
         "button_label": "Shop TXP1",
-        "button_link": "",
+        "button_link": "/products/tpx1",
         "secondary_label": "Find your iPad model",
         "secondary_link": "",
         "image": "shopify://shop_images/ChatGPT_Image_Jul_8_2026_01_47_32_PM.png",

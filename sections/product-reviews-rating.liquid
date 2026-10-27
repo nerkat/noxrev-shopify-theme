@@ -26,13 +26,13 @@
 {% if section.settings.show_reviews_rating_section %}
 <section
   class="product-reviews-rating section"
-  data-close-reviews-label="{{ section.settings.close_button_label | default: 'Close' | escape }}"
+  data-review-section data-show-histogram="{{ section.settings.show_histogram }}" data-close-reviews-label="{{ section.settings.close_button_label | default: 'Close' | escape }}"
 >
   <div class="container">
     <article class="product-reviews-rating__panel">
       <div class="product-reviews-rating__header">
         <p class="product-reviews-rating__eyebrow">{{ section.settings.eyebrow }}</p>
-        <h2 class="product-reviews-rating__title">{{ section.settings.title }}</h2>
+        <h2 class="product-reviews-rating__title">{{ section.settings.title }}</h2>{% if section.settings.subtitle != blank %}<div class="rte">{{ section.settings.subtitle }}</div>{% endif %}
       </div>
 
       {% if has_review_summary and section.settings.show_rating_summary != false %}
@@ -56,10 +56,10 @@
                   {% endfor %}
                 </span>
               </div>
-              <p class="product-reviews-rating__subtitle">
+              {% if section.settings.show_count %}<p class="product-reviews-rating__subtitle">
                 Based on {{ review_count }}
                 {% if review_count == 1 %}review{% else %}reviews{% endif %}
-              </p>
+              </p>{% endif %}
             </div>
           </div>
 
@@ -82,7 +82,8 @@
         </div>
       {% endif %}
 
-      {% if section.settings.button_label != blank or section.settings.write_button_label != blank %}
+      {% unless has_review_summary %}<p>{{ section.settings.empty_state | escape }}</p>{% endunless %}
+      {% if section.settings.show_actions %}{% if section.settings.button_label != blank or section.settings.write_button_label != blank %}
         <div class="product-reviews-rating__actions">
           {% if section.settings.write_button_label != blank %}
             <a class="product-reviews-rating__button product-reviews-rating__button--primary" href="{{ section.settings.write_button_link | default: '#judgeme_reviews_panel' }}" data-judgeme-write-review>
@@ -100,6 +101,7 @@
         </div>
       {% endif %}
 
+      {% endif %}
       <div id="judgeme_reviews_panel" class="product-reviews-rating__judgeme" data-judgeme-reviews-panel aria-hidden="true">
         <div class="product-reviews-rating__judgeme-header">
           <div>
@@ -143,9 +145,15 @@
 </section>
 {% endif %}
 
-<script>
-  (() => {
-    const section = document.currentScript.previousElementSibling;
+{% javascript %}
+(() => {
+const initialized=new WeakMap();
+const init=(section)=>{
+if(initialized.has(section))return;
+const controller=new AbortController();
+const observers=[];
+const timers=[];
+initialized.set(section,()=>{controller.abort();observers.forEach(o=>o.disconnect());timers.forEach(t=>clearTimeout(t));initialized.delete(section)});
     const trigger = section?.querySelector('[data-judgeme-write-review]');
     const viewReviewsTrigger = section?.querySelector('[data-judgeme-view-reviews]');
     const viewReviewsLabel = section?.querySelector('[data-judgeme-view-reviews-label]');
@@ -158,7 +166,7 @@
     const viewReviewsClosedIcon = viewReviewsIcon?.innerHTML || '&rsaquo;';
 
     const renderRatingBars = () => {
-      if (!ratingBars) return;
+      if (!ratingBars || section.dataset.showHistogram === 'false') return;
 
       let distribution;
       try {
@@ -237,8 +245,9 @@
         if (adoptExternalJudgeMeWidget()) observer.disconnect();
       });
 
+      observers.push(observer);
       observer.observe(document.body, { childList: true, subtree: true });
-      window.setTimeout(() => observer.disconnect(), 10000);
+      timers.push(window.setTimeout(() => observer.disconnect(), 10000));
     };
 
     watchExternalJudgeMeWidget();
@@ -277,7 +286,7 @@
       }
 
       showReviews();
-    });
+    }, {signal:controller.signal});
 
     if (!trigger) return;
 
@@ -285,14 +294,19 @@
       event.preventDefault();
       showReviews();
       window.setTimeout(() => {
-        document
+        section
           .querySelector('.jm-button--primary, .jdgm-write-rev-link, .jdgm-write-rev-link a, .jdgm-write-rev-link button, [data-judgeme-open-review-form]')
           ?.click();
       }, 450);
-    });
+    }, {signal:controller.signal});
 
-  })();
-</script>
+};
+const each=(root,fn)=>{if(root.matches?.('[data-review-section]'))fn(root);root.querySelectorAll?.('[data-review-section]').forEach(fn)};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>each(document,init),{once:true});else each(document,init);
+document.addEventListener('shopify:section:load',e=>each(e.target,init));
+document.addEventListener('shopify:section:unload',e=>each(e.target,s=>initialized.get(s)?.()));
+})();
+{% endjavascript %}
 
 
 
@@ -300,22 +314,106 @@
 {
   "name": "PDP Reviews Rating",
   "settings": [
-    { "type": "checkbox", "id": "show_reviews_rating_section", "label": "Show reviews rating section", "default": true },
-    { "type": "checkbox", "id": "show_rating_summary", "label": "Show rating and review summary", "default": true },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Customer Reviews" },
-    { "type": "text", "id": "title", "label": "Title", "default": "Trusted by real customers." },
-    { "type": "text", "id": "widget_eyebrow", "label": "Review widget eyebrow", "default": "All Reviews" },
-    { "type": "text", "id": "widget_title", "label": "Review widget heading", "default": "What customers are saying" },
-    { "type": "text", "id": "write_button_label", "label": "Write review button label", "default": "Write A Review" },
-    { "type": "url", "id": "write_button_link", "label": "Write review button link" },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "View All Reviews" },
-    { "type": "url", "id": "button_link", "label": "Button link" },
-    { "type": "text", "id": "close_button_label", "label": "Close reviews button label", "default": "Close" }
+    {
+      "type": "checkbox",
+      "id": "show_reviews_rating_section",
+      "label": "Show reviews rating section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating_summary",
+      "label": "Show rating and review summary",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Trusted by real customers."
+    },
+    {
+      "type": "text",
+      "id": "widget_eyebrow",
+      "label": "Review widget eyebrow",
+      "default": "All Reviews"
+    },
+    {
+      "type": "text",
+      "id": "widget_title",
+      "label": "Review widget heading",
+      "default": "What customers are saying"
+    },
+    {
+      "type": "text",
+      "id": "write_button_label",
+      "label": "Write review button label",
+      "default": "Write A Review"
+    },
+    {
+      "type": "url",
+      "id": "write_button_link",
+      "label": "Write review button link"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "View All Reviews"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "close_button_label",
+      "label": "Close reviews button label",
+      "default": "Close"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show review count",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_histogram",
+      "label": "Show verified rating histogram",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_actions",
+      "label": "Show review buttons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "empty_state",
+      "label": "Empty state",
+      "default": "No reviews yet."
+    }
   ],
   "presets": [
     {
       "name": "PDP Reviews Rating"
     }
-  ]
+  ],
+  "limit": 1
 }
 {% endschema %}
+
