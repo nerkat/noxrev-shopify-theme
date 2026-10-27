@@ -76,7 +76,7 @@
   }
 
   .main-collection__title {
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-size: calc(clamp(1.75rem, 3vw, 2.5rem) * var(--heading-scale, 1));
   }
 
   .main-collection__description {
@@ -194,3 +194,4 @@
   }
 }
 {% endschema %}
+

@@ -55,7 +55,7 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-size: 0.78rem;
+    font-size: calc(0.78rem * var(--body-scale, 1));
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -65,7 +65,7 @@
     margin: 0;
     color: var(--theme-color-text);
     font-family: var(--theme-font-display);
-    font-size: clamp(2.5rem, 10vw, 4.8rem);
+    font-size: calc(clamp(2.5rem, 10vw, 4.8rem) * var(--heading-scale, 1));
     font-weight: 800;
     line-height: 0.98;
     letter-spacing: -0.045em;
@@ -74,14 +74,14 @@
   .main-policy__intro {
     margin: 1rem 0 0;
     color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
-    font-size: 1.05rem;
+    font-size: calc(1.05rem * var(--body-scale, 1));
     line-height: 1.6;
   }
 
   .main-policy__body {
     max-width: 46rem;
     color: color-mix(in srgb, var(--theme-color-text) 76%, transparent);
-    font-size: 0.98rem;
+    font-size: calc(0.98rem * var(--body-scale, 1));
     line-height: 1.75;
     overflow-wrap: anywhere;
   }
@@ -102,15 +102,15 @@
   }
 
   .main-policy__body h2 {
-    font-size: clamp(1.55rem, 4vw, 2.15rem);
+    font-size: calc(clamp(1.55rem, 4vw, 2.15rem) * var(--heading-scale, 1));
   }
 
   .main-policy__body h3 {
-    font-size: clamp(1.25rem, 3vw, 1.55rem);
+    font-size: calc(clamp(1.25rem, 3vw, 1.55rem) * var(--heading-scale, 1));
   }
 
   .main-policy__body h4 {
-    font-size: 1.05rem;
+    font-size: calc(1.05rem * var(--heading-scale, 1));
   }
 
   .main-policy__body p,
