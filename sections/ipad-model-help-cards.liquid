@@ -1,3 +1,5 @@
+{% style %}{% if section.settings.layout_gap > 0 %}#shopify-section-{{ section.id }} .ipad-model-help__cards{gap:{{ section.settings.layout_gap }}px}{% endif %}@media(min-width:750px){ {% unless section.settings.layout_columns == 'inherit' %}#shopify-section-{{ section.id }} .ipad-model-help__cards{display:grid;grid-template-columns:repeat({{ section.settings.layout_columns }},minmax(0,1fr))}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_mobile_columns == 'inherit' %}#shopify-section-{{ section.id }} .ipad-model-help__cards{display:grid;grid-template-columns:repeat({{ section.settings.layout_mobile_columns }},minmax(0,1fr))}{% endunless %}}{% endstyle %}
+{% render 'section-layout', section: section %}
 <section class="ipad-model-help section">
   <div class="container">
     <div class="ipad-model-help__header">
@@ -73,7 +75,7 @@
     border-radius: 1.1rem;
     padding: 1rem;
     background:
-      radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.12), transparent 36%),
+      radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-color-secondary) 12%, transparent), transparent 36%),
       radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%),
       rgba(4, 13, 25, 0.92);
   }
@@ -84,7 +86,7 @@
     height: 2.85rem;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(0, 229, 255, 0.36);
+    border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 36%, transparent);
     border-radius: 999px;
     color: #27efff;
     background: rgba(3, 12, 24, 0.72);
@@ -107,7 +109,7 @@
 
   .ipad-model-help__card p {
     margin: 0.55rem 0 0;
-    color: rgba(255, 255, 255, 0.7);
+    color: color-mix(in srgb, var(--theme-color-text) 70%, transparent);
     font-size: 0.94rem;
     line-height: 1.5;
   }
@@ -136,8 +138,202 @@
 {
   "name": "iPad Model Help Cards",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Need Help?" },
-    { "type": "text", "id": "title", "label": "Title", "default": "Still not sure? Here's how to check." }
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Need Help?"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Still not sure? Here's how to check."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "range",
+      "id": "layout_gap",
+      "label": "Grid gap (0 keeps current)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "layout_columns",
+      "label": "Desktop columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        },
+        {
+          "value": "3",
+          "label": "Three"
+        },
+        {
+          "value": "4",
+          "label": "Four"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ],
+      "default": "inherit"
+    }
   ],
   "blocks": [
     {
@@ -145,22 +341,54 @@
       "name": "Help card",
       "limit": 3,
       "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "Still not sure?" },
-        { "type": "textarea", "id": "text", "label": "Text", "default": "We're here to help you find the right model in seconds." },
-        { "type": "text", "id": "cta_label", "label": "CTA label", "default": "View Help Guide" },
-        { "type": "url", "id": "link", "label": "Link" },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Still not sure?"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "We're here to help you find the right model in seconds."
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "CTA label",
+          "default": "View Help Guide"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
         {
           "type": "select",
           "id": "icon",
           "label": "Fallback icon",
           "default": "zoom",
           "options": [
-            { "value": "zoom", "label": "Search" },
-            { "value": "apps", "label": "Apps" },
-            { "value": "watch", "label": "Watch" }
+            {
+              "value": "zoom",
+              "label": "Search"
+            },
+            {
+              "value": "apps",
+              "label": "Apps"
+            },
+            {
+              "value": "watch",
+              "label": "Watch"
+            }
           ]
         },
-        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon image"
+        }
       ]
     }
   ],
@@ -168,11 +396,36 @@
     {
       "name": "iPad Model Help Cards",
       "blocks": [
-        { "type": "help_card", "settings": { "title": "Still not sure?", "text": "We're here to help you find the right model in seconds.", "cta_label": "View Help Guide", "icon": "zoom" } },
-        { "type": "help_card", "settings": { "title": "Check Settings", "text": "Settings > General > About. Look for Model Name.", "cta_label": "Open Settings Guide", "icon": "apps" } },
-        { "type": "help_card", "settings": { "title": "Compare screen size", "text": "Match your iPad's screen size with the options above.", "cta_label": "View Size Comparison", "icon": "watch" } }
+        {
+          "type": "help_card",
+          "settings": {
+            "title": "Still not sure?",
+            "text": "We're here to help you find the right model in seconds.",
+            "cta_label": "View Help Guide",
+            "icon": "zoom"
+          }
+        },
+        {
+          "type": "help_card",
+          "settings": {
+            "title": "Check Settings",
+            "text": "Settings > General > About. Look for Model Name.",
+            "cta_label": "Open Settings Guide",
+            "icon": "apps"
+          }
+        },
+        {
+          "type": "help_card",
+          "settings": {
+            "title": "Compare screen size",
+            "text": "Match your iPad's screen size with the options above.",
+            "cta_label": "View Size Comparison",
+            "icon": "watch"
+          }
+        }
       ]
     }
   ]
 }
 {% endschema %}
+

@@ -1,3 +1,5 @@
+{% style %}{% if section.settings.layout_gap > 0 %}#shopify-section-{{ section.id }} .product-feature-detail-grid__grid{gap:{{ section.settings.layout_gap }}px}{% endif %}@media(min-width:750px){ {% unless section.settings.layout_columns == 'inherit' %}#shopify-section-{{ section.id }} .product-feature-detail-grid__grid{display:grid;grid-template-columns:repeat({{ section.settings.layout_columns }},minmax(0,1fr))}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_mobile_columns == 'inherit' %}#shopify-section-{{ section.id }} .product-feature-detail-grid__grid{display:grid;grid-template-columns:repeat({{ section.settings.layout_mobile_columns }},minmax(0,1fr))}{% endunless %}}{% unless section.settings.layout_media_fit == 'inherit' %}#shopify-section-{{ section.id }} .product-feature-detail-grid__media img{object-fit:{{ section.settings.layout_media_fit }}}{% endunless %}{% unless section.settings.layout_media_ratio == 'inherit' %}#shopify-section-{{ section.id }} .product-feature-detail-grid__media img{aspect-ratio:{{ section.settings.layout_media_ratio }};height:auto}{% endunless %}@media(min-width:750px){ {% unless section.settings.layout_media_order == 'inherit' %}#shopify-section-{{ section.id }} .product-feature-detail-grid__media{order:{% if section.settings.layout_media_order == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_media_order_mobile == 'inherit' %}#shopify-section-{{ section.id }} .product-feature-detail-grid__media{order:{% if section.settings.layout_media_order_mobile == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}{% endstyle %}
+{% render 'section-layout', section: section %}
 <section class="product-feature-detail-grid section">
   <div class="container">
     <div class="product-feature-detail-grid__grid">
@@ -52,19 +54,65 @@
       "name": "Feature card",
       "limit": 8,
       "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "Secure, Form-Fit Protection" },
-        { "type": "textarea", "id": "text", "label": "Text", "default": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches." },
-        { "type": "image_picker", "id": "image", "label": "Image" },
-        { "type": "text", "id": "image_alt", "label": "Image alt text" },
-        { "type": "select", "id": "icon", "label": "Fallback icon", "default": "shield", "options": [
-          { "value": "shield", "label": "Shield" },
-          { "value": "draw", "label": "Pencil" },
-          { "value": "type", "label": "Keyboard" },
-          { "value": "bolt", "label": "Bolt" },
-          { "value": "magnet", "label": "Magnet" },
-          { "value": "trackpad", "label": "Trackpad" }
-        ] },
-        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Secure, Form-Fit Protection"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Fallback icon",
+          "default": "shield",
+          "options": [
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "draw",
+              "label": "Pencil"
+            },
+            {
+              "value": "type",
+              "label": "Keyboard"
+            },
+            {
+              "value": "bolt",
+              "label": "Bolt"
+            },
+            {
+              "value": "magnet",
+              "label": "Magnet"
+            },
+            {
+              "value": "trackpad",
+              "label": "Trackpad"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon image"
+        }
       ]
     }
   ],
@@ -72,12 +120,311 @@
     {
       "name": "PDP Feature Grid",
       "blocks": [
-        { "type": "detail_card", "settings": { "title": "Secure, Form-Fit Protection", "text": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches.", "icon": "shield" } },
-        { "type": "detail_card", "settings": { "title": "Pencil Storage", "text": "Built-in drawer keeps your Apple Pencil safe and always within reach.", "icon": "draw" } },
-        { "type": "detail_card", "settings": { "title": "Mute Button", "text": "Instant mute for quiet focus anytime, anywhere.", "icon": "type" } },
-        { "type": "detail_card", "settings": { "title": "Fast Charging", "text": "USB-C fast charging for uninterrupted productivity.", "icon": "bolt" } }
+        {
+          "type": "detail_card",
+          "settings": {
+            "title": "Secure, Form-Fit Protection",
+            "text": "Durable and precise. Protects your iPad from everyday bumps, drops, and scratches.",
+            "icon": "shield"
+          }
+        },
+        {
+          "type": "detail_card",
+          "settings": {
+            "title": "Pencil Storage",
+            "text": "Built-in drawer keeps your Apple Pencil safe and always within reach.",
+            "icon": "draw"
+          }
+        },
+        {
+          "type": "detail_card",
+          "settings": {
+            "title": "Mute Button",
+            "text": "Instant mute for quiet focus anytime, anywhere.",
+            "icon": "type"
+          }
+        },
+        {
+          "type": "detail_card",
+          "settings": {
+            "title": "Fast Charging",
+            "text": "USB-C fast charging for uninterrupted productivity.",
+            "icon": "bolt"
+          }
+        }
       ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "range",
+      "id": "layout_gap",
+      "label": "Grid gap (0 keeps current)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "layout_columns",
+      "label": "Desktop columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        },
+        {
+          "value": "3",
+          "label": "Three"
+        },
+        {
+          "value": "4",
+          "label": "Four"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current fit"
+        },
+        {
+          "value": "cover",
+          "label": "Fill frame"
+        },
+        {
+          "value": "contain",
+          "label": "Entire image"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current ratio"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order",
+      "label": "Desktop media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order_mobile",
+      "label": "Mobile media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
     }
   ]
 }
 {% endschema %}
+

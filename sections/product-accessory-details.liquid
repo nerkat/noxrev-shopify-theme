@@ -1,6 +1,20 @@
+{% style %}{% if section.settings.layout_gap > 0 %}#shopify-section-{{ section.id }} .product-accessory-details__grid{gap:{{ section.settings.layout_gap }}px}{% endif %}@media(min-width:750px){ {% unless section.settings.layout_columns == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-details__grid{display:grid;grid-template-columns:repeat({{ section.settings.layout_columns }},minmax(0,1fr))}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_mobile_columns == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-details__grid{display:grid;grid-template-columns:repeat({{ section.settings.layout_mobile_columns }},minmax(0,1fr))}{% endunless %}}{% unless section.settings.layout_media_fit == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-details__media img{object-fit:{{ section.settings.layout_media_fit }}}{% endunless %}{% unless section.settings.layout_media_ratio == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-details__media img{aspect-ratio:{{ section.settings.layout_media_ratio }};height:auto}{% endunless %}@media(min-width:750px){ {% unless section.settings.layout_media_order == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-details__media{order:{% if section.settings.layout_media_order == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_media_order_mobile == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-details__media{order:{% if section.settings.layout_media_order_mobile == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}{% endstyle %}
+{% render 'section-layout', section: section %}
 {% liquid
   assign accessory_section_image = product.metafields.accessory.section_image.value
   assign hero_image = accessory_section_image | default: section.settings.image | default: product.featured_media.preview_image
+  if section.settings.image_source == 'section'
+    assign hero_image = section.settings.image | default: accessory_section_image | default: product.featured_media.preview_image
+  endif
+  assign detail_title = product.metafields.custom.detail_title.value | default: product.title
+  assign detail_copy = product.description
+  if product.metafields.custom.detail_copy != blank
+    assign detail_copy = product.metafields.custom.detail_copy | metafield_tag
+  endif
+  if section.settings.content_source == 'template'
+    assign detail_title = section.settings.title
+    assign detail_copy = section.settings.text
+  endif
 %}
 
 <section
@@ -20,21 +34,21 @@
 >
   <div class="container">
     <article class="product-accessory-details__panel">
-      <div class="product-accessory-details__copy">
+      {% if section.settings.show_copy %}<div class="product-accessory-details__copy">
         {% if section.settings.eyebrow != blank %}
           <p class="product-accessory-details__eyebrow">{{ section.settings.eyebrow }}</p>
         {% endif %}
 
-        {% if section.settings.title != blank %}
-          <h2 class="product-accessory-details__title">{{ section.settings.title }}</h2>
+        {% if detail_title != blank %}
+          <h2 class="product-accessory-details__title">{{ detail_title | escape }}</h2>
         {% endif %}
 
-        {% if section.settings.text != blank %}
-          <div class="product-accessory-details__text">{{ section.settings.text }}</div>
+        {% if detail_copy != blank %}
+          <div class="product-accessory-details__text">{{ detail_copy }}</div>
         {% endif %}
       </div>
 
-      <div class="product-accessory-details__media">
+      {% endif %}<div class="product-accessory-details__media">
         {% if hero_image != blank %}
           {% render 'responsive-image', image: hero_image, alt: section.settings.image_alt, default: product.title, class: 'product-accessory-details__image', loading: 'lazy', sizes: '(min-width: 900px) 45vw, 100vw', widths: '420, 640, 860, 1100, 1400' %}
         {% else %}
@@ -46,9 +60,20 @@
     {% if section.blocks.size > 0 %}
       <div class="product-accessory-details__grid">
         {% for block in section.blocks %}
-          <article class="product-accessory-details__card" {{ block.shopify_attributes }}>
+          {% liquid
+assign feature_title = block.settings.title
+assign feature_text = block.settings.text
+if block.settings.source != 'shared'
+assign feature = product.metafields.custom[block.settings.source]
+assign feature_text = blank
+if feature != blank
+assign feature_text = feature | metafield_tag
+endif
+endif
+%}
+{% if feature_text != blank %}<article class="product-accessory-details__card" {{ block.shopify_attributes }}>
             <span class="product-accessory-details__icon" aria-hidden="true">
-              {% case block.settings.icon %}
+              {% if block.settings.icon_image != blank %}{{ block.settings.icon_image | image_url: width: 80 | image_tag: loading: 'lazy', alt: '' }}{% else %}{% case block.settings.icon %}
                 {% when 'shield' %}
                   <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M12 3 19 6v5.2c0 4.2-2.7 7.8-7 9.8-4.3-2-7-5.6-7-9.8V6l7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 {% when 'bolt' %}
@@ -57,14 +82,14 @@
                   <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M12 3l1.4 5.2L19 10l-5.6 1.8L12 17l-1.4-5.2L5 10l5.6-1.8L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M19 15v4M21 17h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                 {% else %}
                   <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-              {% endcase %}
+              {% endcase %}{% endif %}
             </span>
 
             <div>
-              <h3>{{ block.settings.title }}</h3>
-              <p>{{ block.settings.text }}</p>
+              <h3>{{ feature_title | escape }}</h3>
+              <div>{{ feature_text }}</div>
             </div>
-          </article>
+          </article>{% endif %}
         {% endfor %}
       </div>
     {% endif %}
@@ -78,12 +103,12 @@
 
   .product-accessory-details__panel,
   .product-accessory-details__card {
-    border: 1px solid rgba(0, 229, 255, 0.18);
+    border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 18%, transparent);
     background:
-      radial-gradient(circle at 100% 0%, rgba(0, 229, 255, 0.12), transparent 32%),
+      radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--theme-color-secondary) 12%, transparent), transparent 32%),
       radial-gradient(circle at 0% 0%, rgba(255, 45, 180, 0.1), transparent 30%),
       linear-gradient(180deg, rgba(7, 14, 30, 0.96), rgba(3, 10, 22, 0.98));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 70px rgba(0, 0, 0, 0.22);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 4%, transparent), 0 24px 70px rgba(0, 0, 0, 0.22);
   }
 
   .product-accessory-details__panel {
@@ -129,7 +154,7 @@
   .product-accessory-details__text {
     max-width: 40rem;
     margin-top: 0.85rem;
-    color: rgba(255, 255, 255, 0.72);
+    color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
     font-size: var(--product-accessory-details-text-size-desktop, 1rem);
     line-height: 1.6;
   }
@@ -160,7 +185,7 @@
 
   .product-accessory-details__placeholder {
     background:
-      radial-gradient(circle at 50% 45%, rgba(0, 229, 255, 0.18), transparent 34%),
+      radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--theme-color-secondary) 18%, transparent), transparent 34%),
       linear-gradient(135deg, rgba(255, 45, 180, 0.12), rgba(2, 8, 18, 0.95));
   }
 
@@ -185,7 +210,7 @@
     height: 2.75rem;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(0, 229, 255, 0.28);
+    border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 28%, transparent);
     border-radius: 999px;
     color: #24e5ff;
     background: rgba(2, 12, 24, 0.74);
@@ -206,7 +231,7 @@
 
   .product-accessory-details__card p {
     margin: 0.35rem 0 0;
-    color: rgba(255, 255, 255, 0.68);
+    color: color-mix(in srgb, var(--theme-color-text) 68%, transparent);
     font-size: 0.92rem;
     line-height: 1.5;
   }
@@ -254,21 +279,440 @@
 {
   "name": "PDP Accessory Details",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Designed For Your Setup" },
-    { "type": "text", "id": "title", "label": "Title", "default": "Small upgrades. Big daily difference." },
-    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Accessory products get a lighter PDP story than the main keyboard case, while keeping the same premium NoxRev visual system.</p>" },
-    { "type": "range", "id": "copy_padding_desktop", "label": "Copy horizontal padding (desktop)", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 32 },
-    { "type": "range", "id": "copy_padding_mobile", "label": "Copy horizontal padding (mobile)", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 20 },
-    { "type": "range", "id": "copy_padding_block_desktop", "label": "Copy vertical padding (desktop)", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 24 },
-    { "type": "range", "id": "copy_padding_block_mobile", "label": "Copy vertical padding (mobile)", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 20 },
-    { "type": "range", "id": "eyebrow_size_desktop", "label": "Eyebrow font size (desktop)", "min": 8, "max": 24, "step": 1, "unit": "px", "default": 12 },
-    { "type": "range", "id": "eyebrow_size_mobile", "label": "Eyebrow font size (mobile)", "min": 8, "max": 24, "step": 1, "unit": "px", "default": 12 },
-    { "type": "range", "id": "title_size_desktop", "label": "Heading font size (desktop)", "min": 24, "max": 96, "step": 1, "unit": "px", "default": 54 },
-    { "type": "range", "id": "title_size_mobile", "label": "Heading font size (mobile)", "min": 20, "max": 64, "step": 1, "unit": "px", "default": 32 },
-    { "type": "range", "id": "text_size_desktop", "label": "Description font size (desktop)", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 16 },
-    { "type": "range", "id": "text_size_mobile", "label": "Description font size (mobile)", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 16 },
-    { "type": "image_picker", "id": "image", "label": "Feature image" },
-    { "type": "text", "id": "image_alt", "label": "Image alt text" }
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Designed For Your Setup"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Small upgrades. Big daily difference."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Accessory products get a lighter PDP story than the main keyboard case, while keeping the same premium NoxRev visual system.</p>"
+    },
+    {
+      "type": "range",
+      "id": "copy_padding_desktop",
+      "label": "Copy horizontal padding (desktop)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "copy_padding_mobile",
+      "label": "Copy horizontal padding (mobile)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "copy_padding_block_desktop",
+      "label": "Copy vertical padding (desktop)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "copy_padding_block_mobile",
+      "label": "Copy vertical padding (mobile)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_desktop",
+      "label": "Eyebrow font size (desktop)",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_mobile",
+      "label": "Eyebrow font size (mobile)",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "title_size_desktop",
+      "label": "Heading font size (desktop)",
+      "min": 24,
+      "max": 96,
+      "step": 1,
+      "unit": "px",
+      "default": 54
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "label": "Heading font size (mobile)",
+      "min": 20,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "text_size_desktop",
+      "label": "Description font size (desktop)",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "label": "Description font size (mobile)",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Feature image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_copy",
+      "label": "Show copy",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "content_source",
+      "label": "Copy source",
+      "options": [
+        {
+          "value": "product",
+          "label": "This product: fields / description"
+        },
+        {
+          "value": "template",
+          "label": "Shared template fallback"
+        }
+      ],
+      "default": "product"
+    },
+    {
+      "type": "select",
+      "id": "image_source",
+      "label": "Image source",
+      "options": [
+        {
+          "value": "product",
+          "label": "Product accessory.section_image first"
+        },
+        {
+          "value": "section",
+          "label": "Section image first"
+        }
+      ],
+      "default": "product"
+    },
+    {
+      "type": "range",
+      "id": "layout_gap",
+      "label": "Grid gap (0 keeps current)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "layout_columns",
+      "label": "Desktop columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        },
+        {
+          "value": "3",
+          "label": "Three"
+        },
+        {
+          "value": "4",
+          "label": "Four"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current fit"
+        },
+        {
+          "value": "cover",
+          "label": "Fill frame"
+        },
+        {
+          "value": "contain",
+          "label": "Entire image"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current ratio"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order",
+      "label": "Desktop media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order_mobile",
+      "label": "Mobile media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    }
   ],
   "blocks": [
     {
@@ -282,14 +726,77 @@
           "label": "Icon",
           "default": "spark",
           "options": [
-            { "value": "spark", "label": "Spark" },
-            { "value": "shield", "label": "Shield" },
-            { "value": "bolt", "label": "Bolt" },
-            { "value": "lines", "label": "Lines" }
+            {
+              "value": "spark",
+              "label": "Spark"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "bolt",
+              "label": "Bolt"
+            },
+            {
+              "value": "lines",
+              "label": "Lines"
+            }
           ]
         },
-        { "type": "text", "id": "title", "label": "Title", "default": "Built for daily use" },
-        { "type": "textarea", "id": "text", "label": "Text", "default": "A focused benefit card for accessory products." }
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Built for daily use"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "A focused benefit card for accessory products."
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon image"
+        },
+        {
+          "type": "paragraph",
+          "content": "These feature fields are shared unless connected to a product metafield using the dynamic source button."
+        },
+        {
+          "type": "select",
+          "id": "source",
+          "label": "Feature source",
+          "options": [
+            {
+              "value": "shared",
+              "label": "Shared"
+            },
+            {
+              "value": "specifications",
+              "label": "Specifications"
+            },
+            {
+              "value": "included_items",
+              "label": "Included Items"
+            },
+            {
+              "value": "setup",
+              "label": "Setup"
+            },
+            {
+              "value": "compatibility",
+              "label": "Compatibility"
+            },
+            {
+              "value": "warranty",
+              "label": "Warranty"
+            }
+          ],
+          "default": "shared"
+        }
       ]
     }
   ],
@@ -297,9 +804,30 @@
     {
       "name": "PDP Accessory Details",
       "blocks": [
-        { "type": "feature", "settings": { "icon": "spark", "title": "Premium finish", "text": "Clean materials and details designed to sit naturally beside your iPad setup." } },
-        { "type": "feature", "settings": { "icon": "shield", "title": "Everyday ready", "text": "Made for the small moments that matter: commuting, working, studying, and creating." } },
-        { "type": "feature", "settings": { "icon": "bolt", "title": "Simple compatibility", "text": "Keep the page focused, editable, and easy to adapt for each accessory." } }
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "spark",
+            "title": "Premium finish",
+            "text": "Clean materials and details designed to sit naturally beside your iPad setup."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "title": "Everyday ready",
+            "text": "Made for the small moments that matter: commuting, working, studying, and creating."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "bolt",
+            "title": "Simple compatibility",
+            "text": "Keep the page focused, editable, and easy to adapt for each accessory."
+          }
+        }
       ]
     }
   ]
@@ -325,3 +853,4 @@ Changes:
     sizes: '(min-width: 900px) 45vw, 100vw', widths: '420, 640, 860, 1100, 1400' %}"
   position: 1035..1280
 {% endcomment %}
+

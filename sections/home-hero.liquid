@@ -1,9 +1,12 @@
+{% style %}{% if section.settings.layout_gap > 0 %}#shopify-section-{{ section.id }} .home-hero__cards{gap:{{ section.settings.layout_gap }}px}{% endif %}@media(min-width:750px){ {% unless section.settings.layout_columns == 'inherit' %}#shopify-section-{{ section.id }} .home-hero__cards{display:grid;grid-template-columns:repeat({{ section.settings.layout_columns }},minmax(0,1fr))}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_mobile_columns == 'inherit' %}#shopify-section-{{ section.id }} .home-hero__cards{display:grid;grid-template-columns:repeat({{ section.settings.layout_mobile_columns }},minmax(0,1fr))}{% endunless %}}{% unless section.settings.layout_media_fit == 'inherit' %}#shopify-section-{{ section.id }} .home-hero__image{object-fit:{{ section.settings.layout_media_fit }}}{% endunless %}{% unless section.settings.layout_media_ratio == 'inherit' %}#shopify-section-{{ section.id }} .home-hero__image{aspect-ratio:{{ section.settings.layout_media_ratio }};height:auto}{% endunless %}{% endstyle %}
+{% style %}#shopify-section-{{ section.id }} .home-hero__inner{min-height:var(--hero-min-height)}#shopify-section-{{ section.id }} .hero-overlay{opacity:var(--hero-overlay-opacity)}{% unless section.settings.show_dots %}#shopify-section-{{ section.id }} .home-hero__dots{display:none}{% endunless %}{% endstyle %}
+{% render 'section-layout', section: section %}
 {% liquid
   assign hero_link = section.settings.button_link
   assign slide_blocks = section.blocks | where: 'type', 'slide'
   assign slide_count = 0
   assign card_count = 0
-  assign review_product = section.settings.review_product | default: all_products['tpx1']
+  assign review_product = section.settings.review_product
   assign review_rating = review_product.metafields.reviews.rating
   assign review_average = review_rating.value.rating | plus: 0
   assign review_scale = review_rating.value.scale_max | default: 5 | plus: 0
@@ -39,26 +42,27 @@
   endif
 %}
 
-<section class="home-hero full-width hero-shell" data-hero-slider data-autoplay="{% if has_multiple_slides %}true{% else %}false{% endif %}">
+<section class="home-hero full-width hero-shell" data-hero-slider data-interval="{{ section.settings.slide_interval | times: 1000 }}" style="--hero-min-height:{{ section.settings.hero_height }}vh;--hero-overlay-opacity:{{ section.settings.overlay_opacity | divided_by: 100.0 }}" data-autoplay="{% if has_multiple_slides and section.settings.autoplay %}true{% else %}false{% endif %}">
   <div class="home-hero__background">
     <div class="home-hero__slides">
       {% assign rendered_slide = 0 %}
       {% for block in slide_blocks %}
         {% if block.settings.image != blank or block.settings.external_image_url != blank %}
           {% liquid
-            assign slide_image_alt = block.settings.image.alt | default: section.settings.heading
+            assign slide_image_alt = block.settings.alt | default: block.settings.image.alt | default: section.settings.heading
             assign slide_loading = 'lazy'
             if rendered_slide == 0
               assign slide_loading = 'eager'
             endif
           %}
-          <div class="home-hero__slide{% if rendered_slide == 0 %} is-active{% endif %}" data-hero-slide {{ block.shopify_attributes }}>
+          <div class="home-hero__slide{% if rendered_slide == 0 %} is-active{% endif %}" data-hero-slide data-heading="{{ block.settings.heading | escape }}" data-text="{{ block.settings.text | escape }}" data-button-label="{{ block.settings.button_label | escape }}" data-button-url="{{ block.settings.button_url }}" {{ block.shopify_attributes }}>
             {% if block.settings.image != blank %}
+              <picture>{% if block.settings.mobile_image != blank %}<source media="(max-width:749px)" srcset="{{ block.settings.mobile_image | image_url: width: 900 }}">{% endif %}
               {{
                 block.settings.image
                 | image_url: width: 2200
                 | image_tag: class: 'home-hero__image', loading: slide_loading, alt: slide_image_alt
-              }}
+              }}</picture>
             {% else %}
               <img class="home-hero__image" src="{{ block.settings.external_image_url | escape }}" alt="{{ slide_image_alt | escape }}" loading="{{ slide_loading }}" width="1800" height="1200">
             {% endif %}
@@ -93,16 +97,16 @@
       {% endif %}
 
       {% if section.settings.heading != blank %}
-        <h1 class="home-hero__title heading-gradient">{{ section.settings.heading | escape }}</h1>
+        <h1 class="home-hero__title heading-gradient" data-hero-heading>{{ section.settings.heading | escape }}</h1>
       {% endif %}
 
       {% if section.settings.text != blank %}
-        <p class="home-hero__text">{{ section.settings.text | escape }}</p>
+        <p class="home-hero__text" data-hero-text>{{ section.settings.text | escape }}</p>
       {% endif %}
 
       <div class="home-hero__actions">
         {% if section.settings.button_label != blank and hero_link != blank %}
-          <a class="button home-hero__button" href="{{ hero_link }}">
+          <a data-hero-button class="button home-hero__button" href="{{ hero_link }}">
             <span class="button__content">
               <span>{{ section.settings.button_label | escape }}</span>
               <span class="button__icon" aria-hidden="true">&rarr;</span>
@@ -203,7 +207,7 @@
               {% endif %}
 
               {% if card_style == 'support' %}
-                <div class="home-hero__contact-list">
+                <div class="home-hero__contact-list">{% if settings.global_response_time != blank %}<p>{{ settings.global_response_time | escape }}</p>{% endif %}
                   {% if card_contact_value_1 != blank %}
                     <a class="home-hero__contact-item" href="{{ card_contact_link_1 | default: '#' | escape }}">
                       <span class="home-hero__contact-icon" aria-hidden="true">
@@ -271,6 +275,7 @@
       {% endif %}
     </div>
   </div>
+{% if has_multiple_slides and section.settings.show_arrows %}<div class="hero-manual-nav"><button type="button" data-hero-prev aria-label="{{ 'editor.previous' | t }}">&larr;</button><button type="button" data-hero-next aria-label="{{ 'editor.next' | t }}">&rarr;</button></div>{% endif %}
 </section>
 
 {% stylesheet %}
@@ -331,7 +336,7 @@
     height: 0.55rem;
     border-radius: 999px;
     background: var(--theme-color-secondary);
-    box-shadow: 0 0 16px rgba(0, 229, 255, 0.7);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--theme-color-secondary) 70%, transparent);
   }
 
   .home-hero__eyebrow {
@@ -381,15 +386,15 @@
   }
 
   .home-hero__card--promo {
-    background: linear-gradient(145deg, rgba(0, 255, 176, 0.16), rgba(0, 229, 255, 0.08));
+    background: linear-gradient(145deg, color-mix(in srgb, var(--theme-color-primary) 16%, transparent), color-mix(in srgb, var(--theme-color-secondary) 8%, transparent));
   }
 
   .home-hero__card--reviews {
-    background: linear-gradient(160deg, rgba(255, 45, 120, 0.16), rgba(155, 0, 255, 0.09));
+    background: linear-gradient(160deg, color-mix(in srgb, var(--theme-color-accent) 16%, transparent), color-mix(in srgb, var(--theme-color-accent-alt) 9%, transparent));
   }
 
   .home-hero__card--support {
-    background: linear-gradient(155deg, rgba(0, 229, 255, 0.14), rgba(255, 255, 255, 0.05));
+    background: linear-gradient(155deg, color-mix(in srgb, var(--theme-color-secondary) 14%, transparent), color-mix(in srgb, var(--theme-color-text) 5%, transparent));
   }
 
   .home-hero__card-top {
@@ -401,7 +406,7 @@
 
   .home-hero__card-label {
     margin: 0;
-    color: rgba(255, 255, 255, 0.45);
+    color: color-mix(in srgb, var(--theme-color-text) 45%, transparent);
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.24em;
@@ -417,7 +422,7 @@
     flex: 0 0 auto;
     border-radius: 1.5rem;
     background: rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-color-text) 8%, transparent);
   }
 
   .home-hero__card-icon svg {
@@ -428,22 +433,22 @@
   .home-hero__card--promo .home-hero__card-icon {
     color: var(--theme-color-primary);
     box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-      0 0 24px rgba(0, 255, 176, 0.18);
+      inset 0 0 0 1px color-mix(in srgb, var(--theme-color-text) 8%, transparent),
+      0 0 24px color-mix(in srgb, var(--theme-color-primary) 18%, transparent);
   }
 
   .home-hero__card--reviews .home-hero__card-icon {
     color: #ff9fbe;
     box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-      0 0 24px rgba(255, 45, 120, 0.2);
+      inset 0 0 0 1px color-mix(in srgb, var(--theme-color-text) 8%, transparent),
+      0 0 24px color-mix(in srgb, var(--theme-color-accent) 20%, transparent);
   }
 
   .home-hero__card--support .home-hero__card-icon {
     color: var(--theme-color-secondary);
     box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-      0 0 24px rgba(0, 229, 255, 0.2);
+      inset 0 0 0 1px color-mix(in srgb, var(--theme-color-text) 8%, transparent),
+      0 0 24px color-mix(in srgb, var(--theme-color-secondary) 20%, transparent);
   }
 
   .home-hero__card-heading {
@@ -460,7 +465,7 @@
 
   .home-hero__card-text {
     margin: 0;
-    color: rgba(255, 255, 255, 0.72);
+    color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
     font-size: 0.92rem;
     line-height: 1.75;
   }
@@ -501,7 +506,7 @@
     padding: 0.95rem 1.35rem;
     border-radius: var(--theme-radius-pill);
     background: rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-color-text) 12%, transparent);
     color: var(--theme-color-text);
     font-size: 0.8rem;
     font-weight: 700;
@@ -518,8 +523,8 @@
     color: var(--theme-color-primary);
     transform: translateY(-1px);
     box-shadow:
-      inset 0 0 0 1px rgba(0, 255, 176, 0.4),
-      0 0 24px rgba(0, 255, 176, 0.14);
+      inset 0 0 0 1px color-mix(in srgb, var(--theme-color-primary) 40%, transparent),
+      0 0 24px color-mix(in srgb, var(--theme-color-primary) 14%, transparent);
   }
 
   .home-hero__contact-list {
@@ -535,8 +540,8 @@
     padding: 0.95rem 1.05rem;
     border-radius: 1.4rem;
     background: rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.82);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-color-text) 8%, transparent);
+    color: color-mix(in srgb, var(--theme-color-text) 82%, transparent);
     text-decoration: none;
     transition:
       color var(--transition-base),
@@ -548,8 +553,8 @@
     color: var(--theme-color-text);
     transform: translateY(-1px);
     box-shadow:
-      inset 0 0 0 1px rgba(0, 229, 255, 0.32),
-      0 0 24px rgba(0, 229, 255, 0.1);
+      inset 0 0 0 1px color-mix(in srgb, var(--theme-color-secondary) 32%, transparent),
+      0 0 24px color-mix(in srgb, var(--theme-color-secondary) 10%, transparent);
   }
 
   .home-hero__contact-icon {
@@ -560,7 +565,7 @@
     height: 3.2rem;
     flex: 0 0 auto;
     border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.06);
+    background: color-mix(in srgb, var(--theme-color-text) 6%, transparent);
     color: var(--theme-color-secondary);
   }
 
@@ -575,7 +580,7 @@
   }
 
   .home-hero__contact-label {
-    color: rgba(255, 255, 255, 0.48);
+    color: color-mix(in srgb, var(--theme-color-text) 48%, transparent);
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.16em;
@@ -600,7 +605,7 @@
     height: 1.05rem;
     border: 0;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.35);
+    background: color-mix(in srgb, var(--theme-color-text) 35%, transparent);
     cursor: pointer;
     transition:
       width 180ms ease,
@@ -611,7 +616,7 @@
   .home-hero__dot.is-active {
     width: 3.5rem;
     background: var(--theme-color-secondary);
-    box-shadow: 0 0 16px rgba(0, 229, 255, 0.45);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--theme-color-secondary) 45%, transparent);
   }
 
   @media (max-width: 1100px) {
@@ -677,16 +682,22 @@
     const instances = new WeakMap();
 
     const initializeHero = (hero) => {
-      if (!hero || instances.has(hero) || hero.dataset.autoplay !== 'true') return;
+      if (!hero || instances.has(hero)) return;
 
       const slides = Array.from(hero.querySelectorAll('[data-hero-slide]'));
       const dots = Array.from(hero.querySelectorAll('[data-hero-dot]'));
-      if (slides.length < 2 || dots.length !== slides.length) return;
+      if (!slides.length) return;
 
       const controller = new AbortController();
       let activeIndex = 0;
       let intervalId = null;
       let pausedByEditor = false;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const heading = hero.querySelector('[data-hero-heading]');
+      const text = hero.querySelector('[data-hero-text]');
+      const button = hero.querySelector('[data-hero-button]');
+      const buttonLabel = button?.querySelector('.button__content > span');
+      const defaults = {heading:heading?.textContent,text:text?.textContent,label:buttonLabel?.textContent,url:button?.getAttribute('href')};
 
       const stopAutoplay = () => {
         window.clearInterval(intervalId);
@@ -695,6 +706,11 @@
 
       const setActiveSlide = (index) => {
         activeIndex = Math.max(0, Math.min(index, slides.length - 1));
+        const content = slides[activeIndex].dataset;
+        if(heading) heading.textContent=content.heading || defaults.heading;
+        if(text) text.textContent=content.text || defaults.text;
+        if(buttonLabel) buttonLabel.textContent=content.buttonLabel || defaults.label;
+        if(button) button.setAttribute('href', content.buttonUrl || defaults.url);
         slides.forEach((slide, slideIndex) => {
           slide.classList.toggle('is-active', slideIndex === activeIndex);
         });
@@ -707,10 +723,10 @@
 
       const startAutoplay = () => {
         stopAutoplay();
-        if (pausedByEditor) return;
+        if (pausedByEditor || window.Shopify?.designMode || reduceMotion.matches || hero.dataset.autoplay !== 'true' || slides.length < 2) return;
         intervalId = window.setInterval(() => {
           setActiveSlide(activeIndex === slides.length - 1 ? 0 : activeIndex + 1);
-        }, 4500);
+        }, Number(hero.dataset.interval) || 4500);
       };
 
       dots.forEach((dot, dotIndex) => {
@@ -720,6 +736,9 @@
         }, { signal: controller.signal });
       });
 
+      hero.querySelector('[data-hero-prev]')?.addEventListener('click',()=>{setActiveSlide((activeIndex-1+slides.length)%slides.length);startAutoplay()},{signal:controller.signal});
+      hero.querySelector('[data-hero-next]')?.addEventListener('click',()=>{setActiveSlide((activeIndex+1)%slides.length);startAutoplay()},{signal:controller.signal});
+      reduceMotion.addEventListener('change',startAutoplay,{signal:controller.signal});
       hero.addEventListener('mouseenter', stopAutoplay, { signal: controller.signal });
       hero.addEventListener('mouseleave', startAutoplay, { signal: controller.signal });
       hero.addEventListener('focusin', stopAutoplay, { signal: controller.signal });
@@ -828,6 +847,286 @@
       "type": "url",
       "id": "secondary_link",
       "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "header",
+      "content": "Slideshow"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "slide_interval",
+      "label": "Slide interval",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show dots",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "hero_height",
+      "label": "Hero minimum height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "layout_gap",
+      "label": "Grid gap (0 keeps current)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "layout_columns",
+      "label": "Desktop columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        },
+        {
+          "value": "3",
+          "label": "Three"
+        },
+        {
+          "value": "4",
+          "label": "Four"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current fit"
+        },
+        {
+          "value": "cover",
+          "label": "Fill frame"
+        },
+        {
+          "value": "contain",
+          "label": "Entire image"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current ratio"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide"
+        }
+      ],
+      "default": "inherit"
     }
   ],
   "blocks": [
@@ -835,8 +1134,47 @@
       "type": "slide",
       "name": "Hero slide",
       "settings": [
-        { "type": "image_picker", "id": "image", "label": "Slide image" },
-        { "type": "text", "id": "external_image_url", "label": "External image URL", "info": "Optional. Used only when no Shopify image is selected." }
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Slide image"
+        },
+        {
+          "type": "text",
+          "id": "external_image_url",
+          "label": "External image URL",
+          "info": "Optional. Used only when no Shopify image is selected."
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Image description"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading override"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text override"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label override"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button destination override"
+        }
       ]
     },
     {
@@ -990,3 +1328,4 @@
   ]
 }
 {% endschema %}
+

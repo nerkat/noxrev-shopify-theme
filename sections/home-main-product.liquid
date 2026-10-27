@@ -1,5 +1,8 @@
+{% if request.design_mode and section.settings.product == blank %}<p class="container">{{ 'editor.choose_product' | t }}</p>{% endif %}
+{% style %}{% unless section.settings.layout_media_fit == 'inherit' %}#shopify-section-{{ section.id }} .home-main-product__media img{object-fit:{{ section.settings.layout_media_fit }}}{% endunless %}{% unless section.settings.layout_media_ratio == 'inherit' %}#shopify-section-{{ section.id }} .home-main-product__media img{aspect-ratio:{{ section.settings.layout_media_ratio }};height:auto}{% endunless %}@media(min-width:750px){ {% unless section.settings.layout_media_order == 'inherit' %}#shopify-section-{{ section.id }} .home-main-product__media{order:{% if section.settings.layout_media_order == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_media_order_mobile == 'inherit' %}#shopify-section-{{ section.id }} .home-main-product__media{order:{% if section.settings.layout_media_order_mobile == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}{% endstyle %}
+{% render 'section-layout', section: section %}
 {% liquid
-  assign featured_product = section.settings.product | default: all_products['transparent-core-keyboard-case-ipad']
+  assign featured_product = section.settings.product
   assign product_url = section.settings.button_link
   assign model_guide_url = section.settings.secondary_link | default: settings.global_model_guide_url | default: '/pages/find-your-model'
   assign product_image = section.settings.image
@@ -97,7 +100,7 @@
       radial-gradient(circle at 82% 16%, rgba(36, 229, 255, 0.14), transparent 30%),
       radial-gradient(circle at 18% 88%, rgba(255, 77, 166, 0.16), transparent 34%),
       rgba(4, 13, 25, 0.94);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-color-text) 7%, transparent);
   }
 
   .home-main-product__copy {
@@ -132,7 +135,7 @@
   .home-main-product__text {
     max-width: 35rem;
     margin: 0;
-    color: rgba(255, 255, 255, 0.76);
+    color: color-mix(in srgb, var(--theme-color-text) 76%, transparent);
     font-size: 1rem;
     line-height: 1.6;
   }
@@ -182,10 +185,10 @@
     align-items: center;
     min-height: 3rem;
     padding: 0.55rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     border-radius: 8px;
-    color: rgba(255, 255, 255, 0.84);
-    background: rgba(255, 255, 255, 0.035);
+    color: color-mix(in srgb, var(--theme-color-text) 84%, transparent);
+    background: color-mix(in srgb, var(--theme-color-text) 3.5%, transparent);
     font-size: 0.82rem;
     line-height: 1.25;
   }
@@ -254,7 +257,7 @@
   .home-main-product__placeholder {
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--theme-color-text) 4%, transparent);
   }
 
   .home-main-product__placeholder-svg {
@@ -307,22 +310,282 @@
 {
   "name": "Home Main Product",
   "settings": [
-    { "type": "product", "id": "product", "label": "Product" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Meet NoxRev TXP1" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "The iPad case that turns work mode on." },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Meet NoxRev TXP1"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The iPad case that turns work mode on."
+    },
     {
       "type": "textarea",
       "id": "text",
       "label": "Text",
       "default": "A protective keyboard case with a precision trackpad, backlit keys, and flexible viewing modes for writing, studying, creating, and travel."
     },
-    { "type": "text", "id": "badge", "label": "Badge", "default": "7 iPad fits" },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop TXP1" },
-    { "type": "url", "id": "button_link", "label": "Button link" },
-    { "type": "text", "id": "secondary_label", "label": "Secondary label", "default": "Find your iPad model" },
-    { "type": "url", "id": "secondary_link", "label": "Secondary link" },
-    { "type": "image_picker", "id": "image", "label": "Override image" },
-    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "NoxRev TXP1 keyboard case for iPad" }
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge",
+      "default": "7 iPad fits"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop TXP1"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary label",
+      "default": "Find your iPad model"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Override image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "NoxRev TXP1 keyboard case for iPad"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current fit"
+        },
+        {
+          "value": "cover",
+          "label": "Fill frame"
+        },
+        {
+          "value": "contain",
+          "label": "Entire image"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current ratio"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order",
+      "label": "Desktop media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order_mobile",
+      "label": "Mobile media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    }
   ],
   "blocks": [
     {
@@ -330,15 +593,44 @@
       "name": "Feature",
       "limit": 4,
       "settings": [
-        { "type": "text", "id": "label", "label": "Label", "default": "Backlit keyboard" },
-        { "type": "select", "id": "icon", "label": "Icon", "default": "keyboard", "options": [
-          { "value": "keyboard", "label": "Keyboard" },
-          { "value": "trackpad", "label": "Trackpad" },
-          { "value": "rotation", "label": "Rotation" },
-          { "value": "shield", "label": "Shield" },
-          { "value": "magnet", "label": "Magnet" },
-          { "value": "apps", "label": "Apps" }
-        ] }
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Backlit keyboard"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "keyboard",
+          "options": [
+            {
+              "value": "keyboard",
+              "label": "Keyboard"
+            },
+            {
+              "value": "trackpad",
+              "label": "Trackpad"
+            },
+            {
+              "value": "rotation",
+              "label": "Rotation"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "magnet",
+              "label": "Magnet"
+            },
+            {
+              "value": "apps",
+              "label": "Apps"
+            }
+          ]
+        }
       ]
     }
   ],
@@ -346,12 +638,37 @@
     {
       "name": "Home Main Product",
       "blocks": [
-        { "type": "feature", "settings": { "label": "Backlit keyboard", "icon": "keyboard" } },
-        { "type": "feature", "settings": { "label": "Precision trackpad", "icon": "trackpad" } },
-        { "type": "feature", "settings": { "label": "Multi-angle modes", "icon": "rotation" } },
-        { "type": "feature", "settings": { "label": "Everyday protection", "icon": "shield" } }
+        {
+          "type": "feature",
+          "settings": {
+            "label": "Backlit keyboard",
+            "icon": "keyboard"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "label": "Precision trackpad",
+            "icon": "trackpad"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "label": "Multi-angle modes",
+            "icon": "rotation"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "label": "Everyday protection",
+            "icon": "shield"
+          }
+        }
       ]
     }
   ]
 }
 {% endschema %}
+

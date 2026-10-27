@@ -1,3 +1,5 @@
+{% style %}{% unless section.settings.layout_media_fit == 'inherit' %}#shopify-section-{{ section.id }} .product-battery-showcase__media img{object-fit:{{ section.settings.layout_media_fit }}}{% endunless %}{% unless section.settings.layout_media_ratio == 'inherit' %}#shopify-section-{{ section.id }} .product-battery-showcase__media img{aspect-ratio:{{ section.settings.layout_media_ratio }};height:auto}{% endunless %}@media(min-width:750px){ {% unless section.settings.layout_media_order == 'inherit' %}#shopify-section-{{ section.id }} .product-battery-showcase__media{order:{% if section.settings.layout_media_order == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_media_order_mobile == 'inherit' %}#shopify-section-{{ section.id }} .product-battery-showcase__media{order:{% if section.settings.layout_media_order_mobile == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}{% endstyle %}
+{% render 'section-layout', section: section %}
 {% liquid
   assign showcase_image = section.settings.image | default: product.featured_media.preview_image
 %}
@@ -60,22 +62,321 @@
 {
   "name": "Product Battery Showcase",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Power That Keeps Up" },
-    { "type": "text", "id": "title", "label": "Title", "default": "2-Hour Charge. 30-Day Power." },
-    { "type": "textarea", "id": "text", "label": "Text", "default": "Stay productive longer with ultra-efficient power. Less charging, more creating." },
-    { "type": "image_picker", "id": "image", "label": "Image" },
-    { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Keyboard case with glowing power rings" },
-    { "type": "text", "id": "fast_charge_value", "label": "Fast charge value", "default": "2-Hour" },
-    { "type": "text", "id": "fast_charge_label", "label": "Fast charge label", "default": "Fast Charge" },
-    { "type": "text", "id": "battery_life_value", "label": "Battery life value", "default": "30-Day" },
-    { "type": "text", "id": "battery_life_label", "label": "Battery life label", "default": "Battery Life" },
-    { "type": "text", "id": "comparison_label", "label": "Comparison accessible label", "default": "Battery life comparison" },
-    { "type": "text", "id": "primary_label", "label": "Primary comparison label", "default": "NoxRev Keyboard Case" },
-    { "type": "text", "id": "primary_value", "label": "Primary comparison value", "default": "30 Days" },
-    { "type": "range", "id": "primary_percent", "label": "Primary bar percent", "min": 0, "max": 100, "step": 1, "default": 100 },
-    { "type": "text", "id": "secondary_label", "label": "Secondary comparison label", "default": "Others" },
-    { "type": "text", "id": "secondary_value", "label": "Secondary comparison value", "default": "7 Days" },
-    { "type": "range", "id": "secondary_percent", "label": "Secondary bar percent", "min": 0, "max": 100, "step": 1, "default": 24 }
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Power That Keeps Up"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "2-Hour Charge. 30-Day Power."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Stay productive longer with ultra-efficient power. Less charging, more creating."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Keyboard case with glowing power rings"
+    },
+    {
+      "type": "text",
+      "id": "fast_charge_value",
+      "label": "Fast charge value",
+      "default": "2-Hour"
+    },
+    {
+      "type": "text",
+      "id": "fast_charge_label",
+      "label": "Fast charge label",
+      "default": "Fast Charge"
+    },
+    {
+      "type": "text",
+      "id": "battery_life_value",
+      "label": "Battery life value",
+      "default": "30-Day"
+    },
+    {
+      "type": "text",
+      "id": "battery_life_label",
+      "label": "Battery life label",
+      "default": "Battery Life"
+    },
+    {
+      "type": "text",
+      "id": "comparison_label",
+      "label": "Comparison accessible label",
+      "default": "Battery life comparison"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary comparison label",
+      "default": "NoxRev Keyboard Case"
+    },
+    {
+      "type": "text",
+      "id": "primary_value",
+      "label": "Primary comparison value",
+      "default": "30 Days"
+    },
+    {
+      "type": "range",
+      "id": "primary_percent",
+      "label": "Primary bar percent",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 100
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary comparison label",
+      "default": "Others"
+    },
+    {
+      "type": "text",
+      "id": "secondary_value",
+      "label": "Secondary comparison value",
+      "default": "7 Days"
+    },
+    {
+      "type": "range",
+      "id": "secondary_percent",
+      "label": "Secondary bar percent",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current fit"
+        },
+        {
+          "value": "cover",
+          "label": "Fill frame"
+        },
+        {
+          "value": "contain",
+          "label": "Entire image"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current ratio"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order",
+      "label": "Desktop media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order_mobile",
+      "label": "Mobile media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    }
   ],
   "presets": [
     {
@@ -84,3 +385,4 @@
   ]
 }
 {% endschema %}
+

@@ -1,3 +1,4 @@
+{% render 'section-layout', section: section %}
 <section class="ipad-model-trust section">
   <div class="container">
     <div class="ipad-model-trust__items" role="list">
@@ -39,7 +40,7 @@
     grid-template-columns: auto minmax(0, 1fr);
     gap: 0.75rem;
     align-items: center;
-    color: rgba(255, 255, 255, 0.74);
+    color: color-mix(in srgb, var(--theme-color-text) 74%, transparent);
   }
 
   .ipad-model-trust__icon {
@@ -48,7 +49,7 @@
     height: 2.8rem;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(0, 229, 255, 0.34);
+    border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 34%, transparent);
     border-radius: 999px;
     color: #27efff;
     background: rgba(3, 12, 24, 0.72);
@@ -91,7 +92,7 @@
 
     .ipad-model-trust__item {
       padding-right: 0.9rem;
-      border-right: 1px solid rgba(255, 255, 255, 0.09);
+      border-right: 1px solid color-mix(in srgb, var(--theme-color-text) 9%, transparent);
     }
 
     .ipad-model-trust__item:last-child {
@@ -109,21 +110,47 @@
       "name": "Trust item",
       "limit": 4,
       "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "Exact Model Matching" },
-        { "type": "text", "id": "text", "label": "Text", "default": "Tailored fit for every iPad." },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Exact Model Matching"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Tailored fit for every iPad."
+        },
         {
           "type": "select",
           "id": "icon",
           "label": "Fallback icon",
           "default": "shield",
           "options": [
-            { "value": "shield", "label": "Shield" },
-            { "value": "apps", "label": "Apps" },
-            { "value": "magnet", "label": "Magnet" },
-            { "value": "trackpad", "label": "Trackpad" }
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "apps",
+              "label": "Apps"
+            },
+            {
+              "value": "magnet",
+              "label": "Magnet"
+            },
+            {
+              "value": "trackpad",
+              "label": "Trackpad"
+            }
           ]
         },
-        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon image"
+        }
       ]
     }
   ],
@@ -131,12 +158,173 @@
     {
       "name": "iPad Model Trust Strip",
       "blocks": [
-        { "type": "trust_item", "settings": { "title": "Exact Model Matching", "text": "Tailored fit for every iPad.", "icon": "apps" } },
-        { "type": "trust_item", "settings": { "title": "Full Function Access", "text": "Ports, cameras and buttons stay fully accessible.", "icon": "trackpad" } },
-        { "type": "trust_item", "settings": { "title": "Secure & Protected", "text": "Built-in protection for everyday use.", "icon": "shield" } },
-        { "type": "trust_item", "settings": { "title": "Premium Materials", "text": "Crafted for durability and premium feel.", "icon": "magnet" } }
+        {
+          "type": "trust_item",
+          "settings": {
+            "title": "Exact Model Matching",
+            "text": "Tailored fit for every iPad.",
+            "icon": "apps"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "title": "Full Function Access",
+            "text": "Ports, cameras and buttons stay fully accessible.",
+            "icon": "trackpad"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "title": "Secure & Protected",
+            "text": "Built-in protection for everyday use.",
+            "icon": "shield"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "title": "Premium Materials",
+            "text": "Crafted for durability and premium feel.",
+            "icon": "magnet"
+          }
+        }
       ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
     }
   ]
 }
 {% endschema %}
+

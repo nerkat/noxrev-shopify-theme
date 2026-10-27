@@ -1,3 +1,5 @@
+{% style %}#shopify-section-{{ section.id }} .main-page__content{--main-page-width:{% case section.settings.layout_width %}{% when 'narrow' %}42rem{% when 'standard' %}var(--page-width){% when 'full' %}100%{% else %}54rem{% endcase %}}{% endstyle %}
+{% render 'section-layout', section: section %}
 <div class="page-width main-page">
   <article class="main-page__content{% if section.settings.card_style %} main-page__content--card{% endif %}">
     <header class="main-page__header">
@@ -51,10 +53,10 @@
     border-radius: 1.25rem;
     padding: 1.1rem;
     background:
-      radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.1), transparent 34%),
+      radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-color-secondary) 10%, transparent), transparent 34%),
       radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%),
       rgba(4, 13, 25, 0.94);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 54px rgba(0, 0, 0, 0.18);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 4%, transparent), 0 20px 54px rgba(0, 0, 0, 0.18);
   }
 
   .main-page__header {
@@ -85,14 +87,14 @@
 
   .main-page__intro {
     margin: 1rem 0 0;
-    color: rgba(255, 255, 255, 0.72);
+    color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
     font-size: 1.05rem;
     line-height: 1.6;
   }
 
   .main-page__body {
     max-width: 46rem;
-    color: rgba(255, 255, 255, 0.76);
+    color: color-mix(in srgb, var(--theme-color-text) 76%, transparent);
     font-size: 0.98rem;
     line-height: 1.75;
     overflow-wrap: anywhere;
@@ -164,7 +166,7 @@
     border-left: 2px solid rgba(37, 237, 255, 0.62);
     border-radius: 0.65rem;
     padding: 0.85rem 1rem;
-    color: rgba(255, 255, 255, 0.82);
+    color: color-mix(in srgb, var(--theme-color-text) 82%, transparent);
     background: rgba(3, 10, 22, 0.52);
   }
 
@@ -179,14 +181,14 @@
     width: 100%;
     overflow-x: auto;
     border-collapse: collapse;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid color-mix(in srgb, var(--theme-color-text) 10%, transparent);
     border-radius: 0.9rem;
   }
 
   .main-page__body th,
   .main-page__body td {
     padding: 0.75rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     text-align: left;
     vertical-align: top;
     white-space: normal;
@@ -194,7 +196,7 @@
 
   .main-page__body th {
     color: var(--theme-color-text);
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--theme-color-text) 4%, transparent);
   }
 
   @media (min-width: 860px) {
@@ -240,10 +242,124 @@
       "id": "card_style",
       "label": "Show glass card",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Desktop top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Desktop bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile top spacing",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile bottom spacing",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
     }
   ],
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   }
 }
 {% endschema %}
+

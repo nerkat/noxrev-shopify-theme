@@ -1,4 +1,4 @@
-{% assign model_guide_url = section.settings.fit_guide_link | default: settings.global_model_guide_url | default: '/pages/find-your-ipad-model' %}
+{% assign model_guide_url = section.settings.fit_guide_link | default: settings.global_model_guide_url | default: '/pages/find-your-model' %}
 
 <div
   class="page-width main-cart"
@@ -159,7 +159,7 @@
             <strong>{% render 'price', amount: cart.total_price %}</strong>
           </div>
 
-          <p class="main-cart__note">{{ 'noxrev_cart.checkout_note' | t }}</p>
+          <p class="main-cart__note">{% if section.settings.checkout_note == blank %}{{ 'noxrev_cart.checkout_note' | t }}{% endif %}</p>
 
           <form action="{{ routes.cart_url }}" method="post" class="main-cart__checkout-form">
             <button class="button button--primary main-cart__checkout" type="submit" name="checkout" data-cart-checkout>
@@ -172,7 +172,9 @@
       </aside>
     </div>
   {% endif %}
-</div>
+{% if section.settings.use_shared_shipping %}<div class="cart-shared-promise">{% render 'store-benefit', record: 'shipping' %}</div>{% endif %}
+{% if section.settings.checkout_note != blank %}<div class="rte">{{ section.settings.checkout_note }}</div>{% endif %}
+{% for block in section.blocks %}<div class="cart-notice" {{ block.shopify_attributes }}>{% if block.type == 'benefit' %}{% render 'store-benefit', record: block.settings.record %}{% else %}{{ block.settings.text }}{% endif %}</div>{% endfor %}</div>
 
 {% stylesheet %}
   .page-width.main-cart {
@@ -215,7 +217,7 @@
 
   .main-cart__text {
     margin: 1rem 0 0;
-    color: rgba(255, 255, 255, 0.72);
+    color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
     font-size: 1rem;
     line-height: 1.55;
   }
@@ -236,9 +238,9 @@
     position: relative;
     overflow: hidden;
     border-radius: 1.2rem;
-    background: radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.1), transparent 34%),
+    background: radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-color-secondary) 10%, transparent), transparent 34%),
       radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.1), transparent 34%), rgba(4, 13, 25, 0.94);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 54px rgba(0, 0, 0, 0.18);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 4%, transparent), 0 20px 54px rgba(0, 0, 0, 0.18);
   }
 
   .main-cart__item {
@@ -251,7 +253,7 @@
 
   .main-cart__item-media {
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     border-radius: 0.9rem;
     background: rgba(3, 10, 22, 0.72);
   }
@@ -290,7 +292,7 @@
   .main-cart__options,
   .main-cart__discounts {
     margin: 0.4rem 0 0;
-    color: rgba(255, 255, 255, 0.62);
+    color: color-mix(in srgb, var(--theme-color-text) 62%, transparent);
     font-size: 0.82rem;
     line-height: 1.35;
   }
@@ -329,8 +331,8 @@
   }
 
   .main-cart__item-price s {
-    color: rgba(255, 255, 255, 0.38);
-    -webkit-text-fill-color: rgba(255, 255, 255, 0.38);
+    color: color-mix(in srgb, var(--theme-color-text) 38%, transparent);
+    -webkit-text-fill-color: color-mix(in srgb, var(--theme-color-text) 38%, transparent);
     font-weight: 500;
   }
 
@@ -345,7 +347,7 @@
     display: grid;
     grid-template-columns: 2.4rem 3rem 2.4rem;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid color-mix(in srgb, var(--theme-color-text) 12%, transparent);
     border-radius: 999px;
     background: rgba(3, 10, 22, 0.72);
   }
@@ -370,12 +372,12 @@
 
   .main-cart__quantity-button:hover {
     color: #25edff;
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--theme-color-text) 4%, transparent);
   }
 
   .main-cart__quantity-value {
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     font-weight: 700;
   }
 
@@ -388,10 +390,10 @@
     justify-content: center;
     width: 2.35rem;
     height: 2.35rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid color-mix(in srgb, var(--theme-color-text) 12%, transparent);
     border-radius: 999px;
-    color: rgba(255, 255, 255, 0.62);
-    background: rgba(255, 255, 255, 0.035);
+    color: color-mix(in srgb, var(--theme-color-text) 62%, transparent);
+    background: color-mix(in srgb, var(--theme-color-text) 3.5%, transparent);
     transition: border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base),
       transform var(--transition-base);
   }
@@ -417,7 +419,7 @@
   }
 
   .main-cart__line-total span {
-    color: rgba(255, 255, 255, 0.52);
+    color: color-mix(in srgb, var(--theme-color-text) 52%, transparent);
     font-size: 0.68rem;
     font-weight: 800;
     letter-spacing: 0.1em;
@@ -446,9 +448,9 @@
     gap: 1rem;
     align-items: center;
     justify-content: space-between;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     padding: 0.9rem 0;
-    color: rgba(255, 255, 255, 0.74);
+    color: color-mix(in srgb, var(--theme-color-text) 74%, transparent);
   }
 
   .main-cart__summary-row strong {
@@ -475,7 +477,7 @@
 
   .main-cart__note {
     margin: 0 0 1rem;
-    color: rgba(255, 255, 255, 0.58);
+    color: color-mix(in srgb, var(--theme-color-text) 58%, transparent);
     font-size: 0.82rem;
     line-height: 1.45;
   }
@@ -514,7 +516,7 @@
 
   .main-cart__empty-card p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.72);
+    color: color-mix(in srgb, var(--theme-color-text) 72%, transparent);
     line-height: 1.55;
   }
 
@@ -743,10 +745,65 @@
       "type": "url",
       "id": "fit_guide_link",
       "label": "Find your iPad model link"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_shared_shipping",
+      "label": "Show shared shipping promise",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "checkout_note",
+      "label": "Checkout note",
+      "info": "Blank uses theme-language checkout wording. Does not change checkout rates."
     }
   ],
   "disabled_on": {
-    "groups": ["header", "footer"]
-  }
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "blocks": [
+    {
+      "type": "notice",
+      "name": "Policy or trust notice",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Notice"
+        }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Shared benefit",
+      "settings": [
+        {
+          "type": "select",
+          "id": "record",
+          "label": "Benefit",
+          "options": [
+            {
+              "value": "shipping",
+              "label": "Shipping"
+            },
+            {
+              "value": "guarantee",
+              "label": "Guarantee"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            }
+          ],
+          "default": "shipping"
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}
+

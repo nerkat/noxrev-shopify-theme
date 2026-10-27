@@ -1,3 +1,5 @@
+{% style %}{% if section.settings.layout_gap > 0 %}#shopify-section-{{ section.id }} .product-accessory-bundle__grid{gap:{{ section.settings.layout_gap }}px}{% endif %}@media(min-width:750px){ {% unless section.settings.layout_columns == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-bundle__grid{display:grid;grid-template-columns:repeat({{ section.settings.layout_columns }},minmax(0,1fr))}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_mobile_columns == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-bundle__grid{display:grid;grid-template-columns:repeat({{ section.settings.layout_mobile_columns }},minmax(0,1fr))}{% endunless %}}{% unless section.settings.layout_media_fit == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-bundle__media img{object-fit:{{ section.settings.layout_media_fit }}}{% endunless %}{% unless section.settings.layout_media_ratio == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-bundle__media img{aspect-ratio:{{ section.settings.layout_media_ratio }};height:auto}{% endunless %}@media(min-width:750px){ {% unless section.settings.layout_media_order == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-bundle__media{order:{% if section.settings.layout_media_order == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}@media(max-width:749px){ {% unless section.settings.layout_media_order_mobile == 'inherit' %}#shopify-section-{{ section.id }} .product-accessory-bundle__media{order:{% if section.settings.layout_media_order_mobile == 'first' %}-1{% else %}10{% endif %}}{% endunless %}}{% endstyle %}
+{% render 'section-layout', section: section %}
 <section class="product-accessory-bundle section">
   <article class="product-accessory-bundle__panel">
     <div class="product-accessory-bundle__header container">
@@ -52,7 +54,10 @@
                 assign accessory_variant = accessory_product.selected_or_first_available_variant
                 assign card_title = accessory_product.title
                 assign card_url = accessory_product.url
-                if card_image == blank
+                if block.settings.display_title != blank
+                assign card_title = block.settings.display_title
+              endif
+              if card_image == blank
                   assign card_image = accessory_product.featured_media.preview_image
                 endif
                 if accessory_variant != blank
@@ -477,16 +482,304 @@
 {
   "name": "PDP Accessory Bundle",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Complete Your Setup" },
-    { "type": "text", "id": "title", "label": "Title", "default": "Bundle with accessories and save more." },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Complete Your Setup"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Bundle with accessories and save more."
+    },
     {
       "type": "textarea",
       "id": "text",
       "label": "Text",
       "default": "Level up your setup with hand-picked accessories built to protect, power, and perform anywhere."
     },
-    { "type": "text", "id": "pill_label", "label": "Pill label", "default": "Bundle & Save" },
-    { "type": "text", "id": "pill_text", "label": "Pill text", "default": "Save up to 20% when you bundle." }
+    {
+      "type": "text",
+      "id": "pill_label",
+      "label": "Pill label",
+      "default": "Bundle & Save"
+    },
+    {
+      "type": "text",
+      "id": "pill_text",
+      "label": "Pill text",
+      "default": "Save up to 20% when you bundle."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "range",
+      "id": "layout_gap",
+      "label": "Grid gap (0 keeps current)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "layout_columns",
+      "label": "Desktop columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        },
+        {
+          "value": "3",
+          "label": "Three"
+        },
+        {
+          "value": "4",
+          "label": "Four"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current columns"
+        },
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current fit"
+        },
+        {
+          "value": "cover",
+          "label": "Fill frame"
+        },
+        {
+          "value": "contain",
+          "label": "Entire image"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current ratio"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order",
+      "label": "Desktop media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_media_order_mobile",
+      "label": "Mobile media order",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current order"
+        },
+        {
+          "value": "first",
+          "label": "Media first"
+        },
+        {
+          "value": "last",
+          "label": "Media last"
+        }
+      ],
+      "default": "inherit"
+    }
   ],
   "blocks": [
     {
@@ -494,23 +787,85 @@
       "name": "Accessory",
       "limit": 8,
       "settings": [
-        { "type": "product", "id": "product", "label": "Accessory product" },
-        { "type": "image_picker", "id": "image", "label": "Image override" },
-        { "type": "text", "id": "image_alt", "label": "Image alt text" },
-        { "type": "text", "id": "title", "label": "Fallback title", "default": "NoxRev Precision Stylus" },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Accessory product"
+        },
+        {
+          "type": "text",
+          "id": "display_title",
+          "label": "Display title override",
+          "info": "Optional. Overrides the product title on this card only."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Fallback title",
+          "default": "NoxRev Precision Stylus",
+          "info": "Fallback only when no product is selected. A selected product owns price, savings, stock and destination."
+        },
         {
           "type": "textarea",
           "id": "text",
           "label": "Description",
           "default": "Tilt sensitivity. Palm rejection. Pixel-perfect control."
         },
-        { "type": "text", "id": "price", "label": "Fallback price", "default": "$59.00" },
-        { "type": "text", "id": "compare_price", "label": "Fallback compare-at price", "default": "$79.00" },
-        { "type": "text", "id": "savings_label", "label": "Fallback savings label", "default": "Save 25%" },
-        { "type": "url", "id": "link", "label": "Fallback link" },
-        { "type": "text", "id": "badge", "label": "Badge", "default": "Best Add-On" },
-        { "type": "text", "id": "button_label", "label": "Button label", "default": "Add" },
-        { "type": "checkbox", "id": "highlight", "label": "Highlight card", "default": false }
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Fallback price",
+          "default": "$59.00",
+          "info": "Fallback only when no product is selected. A selected product owns price, savings, stock and destination."
+        },
+        {
+          "type": "text",
+          "id": "compare_price",
+          "label": "Fallback compare-at price",
+          "default": "$79.00",
+          "info": "Fallback only when no product is selected. A selected product owns price, savings, stock and destination."
+        },
+        {
+          "type": "text",
+          "id": "savings_label",
+          "label": "Fallback savings label",
+          "default": "Save 25%",
+          "info": "Fallback only when no product is selected. A selected product owns price, savings, stock and destination."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Fallback link",
+          "info": "Fallback only when no product is selected. A selected product owns price, savings, stock and destination."
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "default": "Best Add-On"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Add"
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight",
+          "label": "Highlight card",
+          "default": false
+        }
       ]
     }
   ],
@@ -589,3 +944,4 @@ Changes:
     sizes: '(min-width: 900px) 24vw, 45vw', widths: '240, 360, 520, 720' %}"
   position: 5948..6179
 {% endcomment %}
+
