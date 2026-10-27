@@ -1,3 +1,10 @@
+{% style %}
+{% if section.settings.sticky_mode == 'none' %}.site-header-shell:has(#shopify-section-{{ section.id }}){position:relative}body:has(#shopify-section-{{ section.id }}) #MainContent{padding-top:0}{% endif %}
+@media(max-width:749px){#shopify-section-{{ section.id }} .header__logo{max-width:{{ section.settings.mobile_logo_width }}px}}
+{% if section.settings.cta_visibility == 'none' %}#shopify-section-{{ section.id }} .header__button{display:none}{% endif %}
+{% if section.settings.cta_visibility == 'desktop' %}@media(max-width:749px){#shopify-section-{{ section.id }} .header__button{display:none}}{% endif %}
+{% if section.settings.cta_visibility == 'mobile' %}@media(min-width:750px){#shopify-section-{{ section.id }} .header__button{display:none}}{% endif %}
+{% endstyle %}
 {% liquid
   assign brand_text = section.settings.brand_text | default: shop.name
   assign has_primary_nav = false
@@ -70,8 +77,8 @@
 -%}
 
 <header
-  class="header"
-  data-site-header
+  class="header{% if section.settings.use_section_scheme %} color-{{ section.settings.color_scheme }}{% endif %}"
+  data-site-header data-sticky-mode="{{ section.settings.sticky_mode }}"
   style="--header-logo-max-width: {{ section.settings.logo_max_width | default: 196 }}px; --header-mobile-logo-max-height: {{ section.settings.mobile_logo_max_height | default: 16 }}px;"
 >
   <div class="header__inner container">
@@ -113,7 +120,7 @@
           {% endif %}
 
           {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
-            <a class="button" href="{{ section.settings.cta_link }}">
+            <a class="button header__button" href="{{ section.settings.cta_link }}">
               <span class="button__content">
                 <span>{{ section.settings.cta_label | escape }}</span>
                 <span class="button__icon" aria-hidden="true">&rarr;</span>
@@ -271,7 +278,7 @@
       {% endif %}
 
       {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
-        <a class="button hidden-mobile" href="{{ section.settings.cta_link }}">
+        <a class="button hidden-mobile header__button" href="{{ section.settings.cta_link }}">
           <span class="button__content">
             <span>{{ section.settings.cta_label | escape }}</span>
             <span class="button__icon" aria-hidden="true">&rarr;</span>
@@ -279,7 +286,7 @@
         </a>
       {% endif %}
 
-      {% if shop.customer_accounts_enabled %}
+      {% if shop.customer_accounts_enabled and section.settings.show_account %}
         <shopify-account
           class="header__account"
           menu="{{ section.settings.customer_account_menu | default: 'customer-account-main-menu' }}"
@@ -358,28 +365,28 @@
         {% render 'catalog-search-interface',
           mode: 'header',
           instance_id: section.id,
-          heading: 'Search',
+          heading: section.settings.search_heading,
           heading_tag: 'h2',
           placeholder: section.settings.search_placeholder,
-          keyboard_heading: 'Keyboard Cases',
-          accessories_heading: 'Accessories & Bundles',
-          keyboard_empty_title: 'No matching keyboard',
-          keyboard_empty_text: 'Try another iPad model or A-number.',
-          accessories_empty_title: 'No matching accessories',
-          accessories_empty_text: 'Try another product name or search term.',
+          keyboard_heading: section.settings.search_keyboard_heading,
+          accessories_heading: section.settings.search_accessories_heading,
+          keyboard_empty_title: section.settings.search_keyboard_empty_title,
+          keyboard_empty_text: section.settings.search_keyboard_empty_text,
+          accessories_empty_title: section.settings.search_accessories_empty_title,
+          accessories_empty_text: section.settings.search_accessories_empty_text,
           initial_query: '',
           initial_results: 'hidden',
           keyboard_limit: section.settings.search_keyboard_limit,
           accessory_limit: section.settings.search_accessory_limit,
-          show_descriptions: false,
-          show_prices: true,
-          show_keyboard: true,
-          show_accessories: true,
+          show_descriptions: section.settings.search_show_descriptions,
+          show_prices: section.settings.search_show_prices,
+          show_keyboard: section.settings.search_show_keyboard,
+          show_accessories: section.settings.search_show_accessories,
           submit_destination: routes.search_url,
-          empty_prompt: section.settings.search_placeholder,
-          no_results_text: 'No matching products. Try another model or A-number.',
+          empty_prompt: section.settings.search_helper,
+          no_results_text: section.settings.search_no_results_text,
           view_all_label: section.settings.search_view_all_label
-        %}
+        %}<p class="header-search-help"><a href="{{ settings.global_model_guide_url | default: '/pages/find-your-model' }}">{{ 'editor.model_help' | t }}</a></p>
       </div>
     </div>
   {% endif %}
@@ -468,17 +475,17 @@
   }
 
   .header__nav-link:hover {
-    border-color: rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.05);
+    border-color: color-mix(in srgb, var(--theme-color-text) 8%, transparent);
+    background: color-mix(in srgb, var(--theme-color-text) 5%, transparent);
     color: var(--theme-color-secondary);
-    box-shadow: 0 0 22px rgba(0, 229, 255, 0.08);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--theme-color-secondary) 8%, transparent);
   }
 
   .header__nav-link.is-active {
     border-color: var(--theme-color-border);
-    background: linear-gradient(135deg, rgba(255, 45, 120, 0.16), rgba(155, 0, 255, 0.12), rgba(0, 229, 255, 0.12));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--theme-color-accent) 16%, transparent), color-mix(in srgb, var(--theme-color-accent-alt) 12%, transparent), color-mix(in srgb, var(--theme-color-secondary) 12%, transparent));
     color: var(--theme-color-text);
-    box-shadow: 0 0 22px rgba(255, 45, 120, 0.12);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--theme-color-accent) 12%, transparent);
   }
 
   .header__actions {
@@ -490,7 +497,7 @@
 
   .header__utility {
     margin: 0;
-    color: rgba(255, 255, 255, 0.55);
+    color: color-mix(in srgb, var(--theme-color-text) 55%, transparent);
     font-size: 0.86rem;
     letter-spacing: 0;
     text-decoration: none;
@@ -518,7 +525,7 @@
     min-width: 2.5rem;
     min-height: 2.5rem;
     border-radius: var(--theme-radius-pill);
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--theme-color-text) 4%, transparent);
     color: var(--theme-color-text);
     transition: color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   }
@@ -530,7 +537,7 @@
   shopify-account.header__account {
     --shopify-account-avatar-size: 2.5rem;
     --shopify-account-signed-in-avatar-size: 2.5rem;
-    --shopify-account-signed-in-avatar-color-background: rgba(255, 255, 255, 0.04);
+    --shopify-account-signed-in-avatar-color-background: color-mix(in srgb, var(--theme-color-text) 4%, transparent);
     --shopify-account-signed-in-avatar-color-text: var(--theme-color-text);
     --shopify-account-color-accent: var(--theme-color-secondary);
   }
@@ -572,20 +579,20 @@
   .header__search:hover,
   .header__search:focus-visible,
   .header__cart:hover {
-    border-color: rgba(0, 229, 255, 0.42);
+    border-color: color-mix(in srgb, var(--theme-color-secondary) 42%, transparent);
     color: var(--theme-color-secondary);
-    box-shadow: 0 0 22px rgba(0, 229, 255, 0.1);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--theme-color-secondary) 10%, transparent);
   }
 
   .header__account:focus-visible,
   .header__account:focus-within,
   .header__account::part(signed-out-avatar):focus-visible {
-    outline: 2px solid rgba(0, 229, 255, 0.82);
+    outline: 2px solid color-mix(in srgb, var(--theme-color-secondary) 82%, transparent);
     outline-offset: 3px;
   }
 
   .header__search:focus-visible {
-    outline: 2px solid rgba(0, 229, 255, 0.82);
+    outline: 2px solid color-mix(in srgb, var(--theme-color-secondary) 82%, transparent);
     outline-offset: 3px;
   }
 
@@ -620,9 +627,9 @@
     place-items: left;
     width: 2.5rem;
     height: 2.5rem;
-    border: 1px solid rgba(0, 229, 255, 0.3);
+    border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 30%, transparent);
     border-radius: var(--theme-radius-pill);
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--theme-color-text) 4%, transparent);
     cursor: pointer;
     list-style: none;
   }
@@ -674,7 +681,7 @@
     border: none;
     border-radius: 999px;
     color: var(--theme-color-text);
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--theme-color-text) 4%, transparent);
     cursor: pointer;
     transition: color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
     -webkit-tap-highlight-color: transparent;
@@ -682,9 +689,9 @@
 
   .header__mobile-close:hover,
   .header__mobile-close:focus-visible {
-    border-color: rgba(0, 229, 255, 0.48);
+    border-color: color-mix(in srgb, var(--theme-color-secondary) 48%, transparent);
     color: var(--theme-color-secondary);
-    box-shadow: 0 0 22px rgba(0, 229, 255, 0.1);
+    box-shadow: 0 0 22px color-mix(in srgb, var(--theme-color-secondary) 10%, transparent);
   }
 
   .header__mobile-close svg {
@@ -704,12 +711,12 @@
   }
 
   .header__mobile-link:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: color-mix(in srgb, var(--theme-color-text) 5%, transparent);
     color: var(--theme-color-secondary);
   }
 
   .header__mobile-link.is-active {
-    background: linear-gradient(135deg, rgba(255, 45, 120, 0.16), rgba(155, 0, 255, 0.12), rgba(0, 229, 255, 0.12));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--theme-color-accent) 16%, transparent), color-mix(in srgb, var(--theme-color-accent-alt) 12%, transparent), color-mix(in srgb, var(--theme-color-secondary) 12%, transparent));
     color: var(--theme-color-text);
   }
 
@@ -793,11 +800,11 @@
     height: 2.75rem;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(0, 229, 255, 0.24);
+    border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 24%, transparent);
     border-radius: 12px;
     color: var(--theme-color-secondary);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--theme-color-text) 5.5%, transparent), color-mix(in srgb, var(--theme-color-text) 1.8%, transparent));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 5%, transparent);
     transition: border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base),
       transform var(--transition-base);
   }
@@ -818,10 +825,10 @@
 
   .header__mobile-footer-social-link:hover,
   .header__mobile-footer-social-link:focus-visible {
-    border-color: rgba(0, 229, 255, 0.68);
+    border-color: color-mix(in srgb, var(--theme-color-secondary) 68%, transparent);
     color: var(--theme-color-accent);
-    box-shadow: 0 0 24px rgba(0, 229, 255, 0.18), 0 0 18px rgba(255, 77, 166, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--theme-color-secondary) 18%, transparent), 0 0 18px rgba(255, 77, 166, 0.12),
+      inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     transform: translateY(-1px) scale(1.05);
   }
 
@@ -900,7 +907,7 @@
 
     .header__mobile-toggle span {
       width: 1rem;
-      background: rgba(255, 255, 255, 0.75);
+      background: color-mix(in srgb, var(--theme-color-text) 75%, transparent);
     }
 
     .header__account,
@@ -947,12 +954,12 @@
       align-items: stretch;
       gap: 1rem;
       padding: 1.15rem;
-      border: 1px solid rgba(0, 229, 255, 0.18);
+      border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 18%, transparent);
       border-left: 0;
       border-radius: 0 1.25rem 1.25rem 0;
-      background: radial-gradient(circle at 0% 0%, rgba(0, 229, 255, 0.16), transparent 34%),
-        radial-gradient(circle at 100% 20%, rgba(255, 45, 120, 0.12), transparent 34%), rgba(4, 13, 25, 0.97);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 80px rgba(0, 0, 0, 0.48);
+      background: radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--theme-color-secondary) 16%, transparent), transparent 34%),
+        radial-gradient(circle at 100% 20%, color-mix(in srgb, var(--theme-color-accent) 12%, transparent), transparent 34%), rgba(4, 13, 25, 0.97);
+      box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 5%, transparent), 0 24px 80px rgba(0, 0, 0, 0.48);
       transform: translateX(-100%);
       visibility: hidden;
       pointer-events: none;
@@ -1501,7 +1508,158 @@
       "type": "link_list",
       "id": "mobile_drawer_help_menu",
       "label": "Mobile drawer help menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account link",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "sticky_mode",
+      "label": "Sticky header",
+      "options": [
+        {
+          "value": "always",
+          "label": "Always"
+        },
+        {
+          "value": "none",
+          "label": "Off"
+        }
+      ],
+      "default": "always"
+    },
+    {
+      "type": "select",
+      "id": "cta_visibility",
+      "label": "CTA visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both devices"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "none",
+          "label": "Hidden"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_width",
+      "label": "Mobile logo max width",
+      "min": 60,
+      "max": 260,
+      "step": 4,
+      "unit": "px",
+      "default": 196
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_heading",
+      "label": "Heading",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_keyboard_heading",
+      "label": "Keyboard Heading",
+      "default": "Keyboard Cases"
+    },
+    {
+      "type": "text",
+      "id": "search_accessories_heading",
+      "label": "Accessories Heading",
+      "default": "Accessories & Bundles"
+    },
+    {
+      "type": "text",
+      "id": "search_keyboard_empty_title",
+      "label": "Keyboard Empty Title",
+      "default": "No matching keyboard"
+    },
+    {
+      "type": "text",
+      "id": "search_keyboard_empty_text",
+      "label": "Keyboard Empty Text",
+      "default": "Try another iPad model or A-number."
+    },
+    {
+      "type": "text",
+      "id": "search_accessories_empty_title",
+      "label": "Accessories Empty Title",
+      "default": "No matching accessories"
+    },
+    {
+      "type": "text",
+      "id": "search_accessories_empty_text",
+      "label": "Accessories Empty Text",
+      "default": "Try another product name or search term."
+    },
+    {
+      "type": "text",
+      "id": "search_no_results_text",
+      "label": "No Results Text",
+      "default": "No matching products. Try another model or A-number."
+    },
+    {
+      "type": "checkbox",
+      "id": "search_show_descriptions",
+      "label": "Show Descriptions",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "search_show_prices",
+      "label": "Show Prices",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "search_show_keyboard",
+      "label": "Show Keyboard",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "search_show_accessories",
+      "label": "Show Accessories",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_helper",
+      "label": "Search helper text",
+      "default": "Search by iPad model, A-number or product name"
     }
   ]
 }
 {% endschema %}
+

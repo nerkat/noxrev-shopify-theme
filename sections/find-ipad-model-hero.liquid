@@ -1,3 +1,11 @@
+{% style %}#shopify-section-{{ section.id }} .find-model-hero__video-media{aspect-ratio:{{ section.settings.video_ratio }}}{% endstyle %}
+{% liquid
+assign muted_video = section.settings.video_muted
+if section.settings.video_autoplay
+assign muted_video = true
+endif
+%}
+{% render 'section-layout', section: section %}
 {% liquid
   assign video_link = section.settings.video_link
   assign video_link_label = section.settings.video_title | default: section.settings.video_eyebrow | default: 'Open video guide'
@@ -14,7 +22,7 @@
 %}
 
 <section
-  class="find-model-hero section"
+  data-guide-autoplay="{{ section.settings.video_autoplay }}" class="find-model-hero section"
   style="--find-model-hero-video-fit: {{ section.settings.video_fit | default: 'cover' }};"
 >
   <div class="container">
@@ -75,9 +83,9 @@
                 class: 'find-model-hero__video-element',
                 image_size: '1100x',
                 poster: video_poster_url,
-                autoplay: section.settings.video_autoplay,
-                loop: true,
-                muted: true,
+                autoplay: false,
+                loop: section.settings.video_loop,
+                muted: muted_video,
                 controls: section.settings.show_video_controls,
                 playsinline: true
             }}
@@ -133,10 +141,10 @@
     border-radius: 1.35rem;
     padding: 1rem;
     background:
-      radial-gradient(circle at 10% 10%, rgba(0, 229, 255, 0.14), transparent 32%),
+      radial-gradient(circle at 10% 10%, color-mix(in srgb, var(--theme-color-secondary) 14%, transparent), transparent 32%),
       radial-gradient(circle at 90% 18%, rgba(255, 77, 166, 0.14), transparent 34%),
       linear-gradient(135deg, rgba(8, 18, 36, 0.96), rgba(2, 8, 18, 0.98));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 60px rgba(0, 0, 0, 0.28);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 4%, transparent), 0 24px 60px rgba(0, 0, 0, 0.28);
   }
 
   .find-model-hero__copy,
@@ -178,7 +186,7 @@
   .find-model-hero__benefit {
     max-width: 37rem;
     margin: 1rem 0 0;
-    color: rgba(255, 255, 255, 0.78);
+    color: color-mix(in srgb, var(--theme-color-text) 78%, transparent);
     font-size: 1rem;
     line-height: 1.55;
   }
@@ -219,7 +227,7 @@
     height: 2.65rem;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(0, 229, 255, 0.36);
+    border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 36%, transparent);
     border-radius: 999px;
     color: #27efff;
     background: rgba(3, 12, 24, 0.78);
@@ -245,7 +253,7 @@
   .find-model-hero__guide-card p {
     grid-column: 1 / -1;
     margin: 0.25rem 0 0;
-    color: rgba(255, 255, 255, 0.68);
+    color: color-mix(in srgb, var(--theme-color-text) 68%, transparent);
     font-size: 0.82rem;
     line-height: 1.4;
   }
@@ -278,8 +286,8 @@
 
   .find-model-hero__video-placeholder {
     background:
-      linear-gradient(135deg, rgba(0, 229, 255, 0.18), rgba(214, 101, 255, 0.12)),
-      radial-gradient(circle at 60% 38%, rgba(255, 255, 255, 0.14), transparent 24%),
+      linear-gradient(135deg, color-mix(in srgb, var(--theme-color-secondary) 18%, transparent), rgba(214, 101, 255, 0.12)),
+      radial-gradient(circle at 60% 38%, color-mix(in srgb, var(--theme-color-text) 14%, transparent), transparent 24%),
       rgba(4, 13, 25, 0.9);
   }
 
@@ -314,7 +322,7 @@
     height: 4.6rem;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid color-mix(in srgb, var(--theme-color-text) 20%, transparent);
     border-radius: 999px;
     color: #101927;
     background: linear-gradient(135deg, #00f5c8, #27d6ff);
@@ -345,7 +353,7 @@
     margin-top: 1rem;
     overflow: hidden;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
+    background: color-mix(in srgb, var(--theme-color-text) 12%, transparent);
   }
 
   .find-model-hero__progress span {
@@ -388,35 +396,264 @@
 {
   "name": "Find Model Hero",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "NoxRev Fit Guide" },
-    { "type": "text", "id": "title", "label": "Title", "default": "Find Your iPad Model" },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "NoxRev Fit Guide"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Find Your iPad Model"
+    },
     {
       "type": "textarea",
       "id": "text",
       "label": "Text",
       "default": "Identify your iPad in seconds and choose the exact compatible fit for the NoxRev TXP1 Keyboard Case."
     },
-    { "type": "text", "id": "benefit_text", "label": "Benefit line", "default": "Perfect alignment. Full access. Zero guesswork." },
-    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Browse All Compatible Models" },
-    { "type": "url", "id": "cta_link", "label": "CTA link" },
-    { "type": "text", "id": "video_eyebrow", "label": "Video eyebrow", "default": "Quick Guide" },
-    { "type": "text", "id": "video_title", "label": "Video title", "default": "How to identify your iPad in 30 seconds" },
-    { "type": "checkbox", "id": "video_autoplay", "label": "Autoplay video", "default": true },
-    { "type": "checkbox", "id": "show_video_controls", "label": "Show video controls", "default": false },
+    {
+      "type": "text",
+      "id": "benefit_text",
+      "label": "Benefit line",
+      "default": "Perfect alignment. Full access. Zero guesswork."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "Browse All Compatible Models"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA link"
+    },
+    {
+      "type": "text",
+      "id": "video_eyebrow",
+      "label": "Video eyebrow",
+      "default": "Quick Guide"
+    },
+    {
+      "type": "text",
+      "id": "video_title",
+      "label": "Video title",
+      "default": "How to identify your iPad in 30 seconds"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video_controls",
+      "label": "Show video controls",
+      "default": false
+    },
     {
       "type": "select",
       "id": "video_fit",
       "label": "Video and thumbnail fit",
       "options": [
-        { "value": "cover", "label": "Fill frame (crop)" },
-        { "value": "contain", "label": "Fit entire video/image" }
+        {
+          "value": "cover",
+          "label": "Fill frame (crop)"
+        },
+        {
+          "value": "contain",
+          "label": "Fit entire video/image"
+        }
       ],
       "default": "cover"
     },
-    { "type": "video", "id": "video", "label": "Shopify-hosted video" },
-    { "type": "image_picker", "id": "video_image", "label": "Video thumbnail image" },
-    { "type": "text", "id": "video_image_alt", "label": "Video image alt text", "default": "iPad model identification guide" },
-    { "type": "url", "id": "video_link", "label": "Video or guide link" }
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Shopify-hosted video"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_image",
+      "label": "Video thumbnail image"
+    },
+    {
+      "type": "text",
+      "id": "video_image_alt",
+      "label": "Video image alt text",
+      "default": "iPad model identification guide"
+    },
+    {
+      "type": "url",
+      "id": "video_link",
+      "label": "Video or guide link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current width"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Current alignment"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Use custom section spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing desktop",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom spacing mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use section color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "device_visibility",
+      "label": "Device visibility",
+      "options": [
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_muted",
+      "label": "Mute video",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "video_ratio",
+      "label": "Video ratio",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Original"
+        },
+        {
+          "value": "1.7778",
+          "label": "Wide 16:9"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        }
+      ],
+      "default": "auto"
+    }
   ],
   "blocks": [
     {
@@ -424,20 +661,43 @@
       "name": "Guide card",
       "limit": 3,
       "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "Check the back model number" },
-        { "type": "textarea", "id": "text", "label": "Text", "default": "Look for the small model number printed near the bottom of your iPad." },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Check the back model number"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Look for the small model number printed near the bottom of your iPad."
+        },
         {
           "type": "select",
           "id": "icon",
           "label": "Fallback icon",
           "default": "apps",
           "options": [
-            { "value": "apps", "label": "Grid" },
-            { "value": "zoom", "label": "Search" },
-            { "value": "shield", "label": "Shield" }
+            {
+              "value": "apps",
+              "label": "Grid"
+            },
+            {
+              "value": "zoom",
+              "label": "Search"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            }
           ]
         },
-        { "type": "image_picker", "id": "icon_image", "label": "Custom icon image" }
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom icon image"
+        }
       ]
     }
   ],
@@ -445,11 +705,33 @@
     {
       "name": "Find Model Hero",
       "blocks": [
-        { "type": "guide_card", "settings": { "title": "Check the back model number", "text": "Look for the small model number printed near the bottom of your iPad.", "icon": "zoom" } },
-        { "type": "guide_card", "settings": { "title": "Check in Settings", "text": "Open Settings > General > About and look for Model Name.", "icon": "apps" } },
-        { "type": "guide_card", "settings": { "title": "Match size and generation", "text": "Compare your iPad size and generation with the exact fit cards below.", "icon": "shield" } }
+        {
+          "type": "guide_card",
+          "settings": {
+            "title": "Check the back model number",
+            "text": "Look for the small model number printed near the bottom of your iPad.",
+            "icon": "zoom"
+          }
+        },
+        {
+          "type": "guide_card",
+          "settings": {
+            "title": "Check in Settings",
+            "text": "Open Settings > General > About and look for Model Name.",
+            "icon": "apps"
+          }
+        },
+        {
+          "type": "guide_card",
+          "settings": {
+            "title": "Match size and generation",
+            "text": "Compare your iPad size and generation with the exact fit cards below.",
+            "icon": "shield"
+          }
+        }
       ]
     }
   ]
 }
 {% endschema %}
+

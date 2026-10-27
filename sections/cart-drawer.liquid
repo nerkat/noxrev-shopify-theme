@@ -1,4 +1,4 @@
-{% assign model_guide_url = section.settings.fit_guide_link | default: settings.global_model_guide_url | default: '/pages/find-your-ipad-model' %}
+{% assign model_guide_url = section.settings.fit_guide_link | default: settings.global_model_guide_url | default: '/pages/find-your-model' %}
 
 <aside
   class="cart-drawer"
@@ -164,7 +164,10 @@
           </div>
         {% endif %}
 
-        <p class="cart-drawer__note">{{ 'noxrev_cart.checkout_note' | t }}</p>
+{% if section.settings.use_shared_shipping %}<div class="cart-shared-promise">{% render 'store-benefit', record: 'shipping' %}</div>{% endif %}
+{% if section.settings.checkout_note != blank %}<div class="rte">{{ section.settings.checkout_note }}</div>{% endif %}
+{% for block in section.blocks %}<div class="cart-notice" {{ block.shopify_attributes }}>{% if block.type == 'benefit' %}{% render 'store-benefit', record: block.settings.record %}{% else %}{{ block.settings.text }}{% endif %}</div>{% endfor %}
+        <p class="cart-drawer__note">{% if section.settings.checkout_note == blank %}{{ 'noxrev_cart.checkout_note' | t }}{% endif %}</p>
 
         <a class="button button--primary cart-drawer__checkout" href="/checkout" data-cart-drawer-checkout>
           {{ 'cart.checkout' | t }}
@@ -217,10 +220,10 @@
     border-left: 1px solid rgba(56, 221, 255, 0.22);
     border-radius: 1.35rem 0 0 1.35rem;
     background:
-      radial-gradient(circle at 0% 0%, rgba(0, 229, 255, 0.12), transparent 34%),
+      radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--theme-color-secondary) 12%, transparent), transparent 34%),
       radial-gradient(circle at 100% 100%, rgba(255, 77, 166, 0.12), transparent 36%),
       rgba(4, 13, 25, 0.96);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 80px rgba(0, 0, 0, 0.48);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 5%, transparent), 0 24px 80px rgba(0, 0, 0, 0.48);
     transform: translateX(100%);
     transition: transform 280ms ease;
   }
@@ -239,7 +242,7 @@
     gap: 1rem;
     align-items: start;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
   }
 
   .cart-drawer__eyebrow,
@@ -270,7 +273,7 @@
   }
 
   .cart-drawer__count {
-    color: rgba(255, 255, 255, 0.66);
+    color: color-mix(in srgb, var(--theme-color-text) 66%, transparent);
     font-size: 0.78rem;
     font-weight: 800;
     letter-spacing: 0.08em;
@@ -285,7 +288,7 @@
     border: none;
     border-radius: 999px;
     color: var(--theme-color-text);
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--theme-color-text) 4%, transparent);
     cursor: pointer;
   }
 
@@ -318,7 +321,7 @@
   .cart-drawer__empty {
     border-radius: 1rem;
     background: rgba(2, 9, 20, 0.62);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 4%, transparent);
   }
 
   .cart-drawer__item {
@@ -331,7 +334,7 @@
 
   .cart-drawer__item-media {
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     border-radius: 0.8rem;
     background: rgba(3, 10, 22, 0.72);
     aspect-ratio: 1/1;
@@ -393,8 +396,8 @@
   }
 
   .cart-drawer__item-price s {
-    color: rgba(255, 255, 255, 0.38);
-    -webkit-text-fill-color: rgba(255, 255, 255, 0.38);
+    color: color-mix(in srgb, var(--theme-color-text) 38%, transparent);
+    -webkit-text-fill-color: color-mix(in srgb, var(--theme-color-text) 38%, transparent);
     font-weight: 500;
   }
 
@@ -403,7 +406,7 @@
   .cart-drawer__discounts,
   .cart-drawer__note {
     margin: 0;
-    color: rgba(255, 255, 255, 0.62);
+    color: color-mix(in srgb, var(--theme-color-text) 62%, transparent);
     font-size: 0.75rem;
     line-height: 1.35;
   }
@@ -431,7 +434,7 @@
     display: grid;
     grid-template-columns: 2.1rem 2.7rem 2.1rem;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid color-mix(in srgb, var(--theme-color-text) 12%, transparent);
     border-radius: 999px;
     background: rgba(3, 10, 22, 0.74);
   }
@@ -454,8 +457,8 @@
   }
 
   .cart-drawer__quantity-value {
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     font-weight: 800;
   }
 
@@ -463,7 +466,7 @@
   .cart-drawer__continue {
     border: 0;
     padding: 0;
-    color: rgba(255, 255, 255, 0.62);
+    color: color-mix(in srgb, var(--theme-color-text) 62%, transparent);
     background: transparent;
     cursor: pointer;
     font: inherit;
@@ -483,8 +486,8 @@
     width: 2.1rem;
     height: 2.1rem;
     border-radius: 999px;
-    color: rgba(255, 255, 255, 0.62);
-    background: rgba(255, 255, 255, 0.035);
+    color: color-mix(in srgb, var(--theme-color-text) 62%, transparent);
+    background: color-mix(in srgb, var(--theme-color-text) 3.5%, transparent);
     transition: border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base),
       transform var(--transition-base);
   }
@@ -510,7 +513,7 @@
 
   .cart-drawer__line-total span {
     display: block;
-    color: rgba(255, 255, 255, 0.52);
+    color: color-mix(in srgb, var(--theme-color-text) 52%, transparent);
     font-size: 0.64rem;
     font-weight: 800;
     letter-spacing: 0.1em;
@@ -530,7 +533,7 @@
   }
 
   .cart-drawer__summary {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     background: rgba(2, 9, 20, 0.68);
   }
 
@@ -538,7 +541,7 @@
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    color: rgba(255, 255, 255, 0.76);
+    color: color-mix(in srgb, var(--theme-color-text) 76%, transparent);
     font-weight: 800;
   }
 
@@ -864,11 +867,11 @@ body.noxrev-cart-open .klaviyo-form {
       return replaceDrawer(await response.text());
     };
 
-    const handleProductAdd = async (form) => {
+    const handleProductAdd = async (form, submitter) => {
       if (form.dataset.cartAddPending === 'true') return;
       form.dataset.cartAddPending = 'true';
 
-      const submitButton = form.querySelector('[type="submit"]');
+      const submitButton = submitter || form.querySelector('.main-product__submit, [type="submit"]');
       const originalText = submitButton?.textContent;
       const originalDisabled = submitButton?.disabled;
 
@@ -976,7 +979,7 @@ body.noxrev-cart-open .klaviyo-form {
       }
 
       event.preventDefault();
-      handleProductAdd(form);
+      handleProductAdd(form, submitter);
     });
 
     document.addEventListener('click', (event) => {
@@ -1087,8 +1090,14 @@ body.noxrev-cart-open .klaviyo-form {
       "label": "Cart drawer width",
       "default": "29rem",
       "options": [
-        { "value": "29rem", "label": "Standard" },
-        { "value": "36rem", "label": "Wide" }
+        {
+          "value": "29rem",
+          "label": "Standard"
+        },
+        {
+          "value": "36rem",
+          "label": "Wide"
+        }
       ]
     },
     {
@@ -1097,9 +1106,18 @@ body.noxrev-cart-open .klaviyo-form {
       "label": "After adding to cart",
       "default": "open_drawer",
       "options": [
-        { "value": "open_drawer", "label": "Open cart drawer" },
-        { "value": "stay", "label": "Stay on product page" },
-        { "value": "navigate_cart", "label": "Go to cart page" }
+        {
+          "value": "open_drawer",
+          "label": "Open cart drawer"
+        },
+        {
+          "value": "stay",
+          "label": "Stay on product page"
+        },
+        {
+          "value": "navigate_cart",
+          "label": "Go to cart page"
+        }
       ]
     },
     {
@@ -1115,10 +1133,65 @@ body.noxrev-cart-open .klaviyo-form {
       "type": "url",
       "id": "fit_guide_link",
       "label": "Find your iPad model link"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_shared_shipping",
+      "label": "Show shared shipping promise",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "checkout_note",
+      "label": "Checkout note",
+      "info": "Blank uses theme-language checkout wording. Does not change checkout rates."
     }
   ],
   "disabled_on": {
-    "groups": ["header", "footer"]
-  }
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "blocks": [
+    {
+      "type": "notice",
+      "name": "Policy or trust notice",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Notice"
+        }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Shared benefit",
+      "settings": [
+        {
+          "type": "select",
+          "id": "record",
+          "label": "Benefit",
+          "options": [
+            {
+              "value": "shipping",
+              "label": "Shipping"
+            },
+            {
+              "value": "guarantee",
+              "label": "Guarantee"
+            },
+            {
+              "value": "returns",
+              "label": "Returns"
+            }
+          ],
+          "default": "shipping"
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}
+

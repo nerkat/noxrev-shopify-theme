@@ -1,3 +1,4 @@
+{% style %}@media(max-width:749px){#shopify-section-{{ section.id }} .footer__logo{max-width:{{ section.settings.mobile_logo_width }}px}}{% if section.settings.footer_layout == 'stack' %}#shopify-section-{{ section.id }} .footer__top{grid-template-columns:1fr}{% endif %}{% endstyle %}
 {% liquid
   assign brand_text = section.settings.brand_text | default: shop.name
   assign has_primary_menu = false
@@ -59,7 +60,7 @@
   endif
 -%}
 
-<footer class="footer" style="--footer-logo-max-width: {{ section.settings.logo_max_width | default: 190 }}px;">
+<footer class="footer{% if section.settings.use_section_scheme %} color-{{ section.settings.color_scheme }}{% endif %}" style="--footer-logo-max-width: {{ section.settings.logo_max_width | default: 190 }}px;">
   <div class="section footer__inner">
     <div class="footer__shell container">
       <div class="footer__top">
@@ -80,7 +81,7 @@
             <p class="footer__text">{{ section.settings.text | escape }}</p>
           {% endif %}
 
-          <div class="footer__contact">
+          <div class="footer__contact">{% if settings.global_response_time != blank %}<p>{{ settings.global_response_time | escape }}</p>{% endif %}
             {% if footer_support_email != blank %}
               <a href="mailto:{{ footer_support_email | escape }}">{{ footer_support_email | escape }}</a>
             {% endif %}
@@ -153,38 +154,7 @@
         </div>
       </div>
 
-      {% if section.settings.show_trust_row %}
-        <div class="footer__trust" aria-label="Store benefits">
-          <div class="footer__trust-item">
-            <span class="footer__trust-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" focusable="false">
-                <path d="M12 3 5 6v5.5c0 4.1 2.8 7.7 7 9 4.2-1.3 7-4.9 7-9V6l-7-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
-                <path d="m9.2 12.2 1.8 1.8 3.9-4.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-            </span>
-            <span>Secure Checkout</span>
-          </div>
-          <div class="footer__trust-item">
-            <span class="footer__trust-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" focusable="false">
-                <path d="M4 7h10v9H4zM14 10h3l3 3v3h-6v-6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
-                <path d="M7 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM17 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" stroke="currentColor" stroke-width="1.6"></path>
-              </svg>
-            </span>
-            <span>Fast Shipping</span>
-          </div>
-          <div class="footer__trust-item">
-            <span class="footer__trust-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" focusable="false">
-                <path d="M6 8h9.5a4.5 4.5 0 1 1 0 9H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
-                <path d="m8 5-3 3 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-            </span>
-            <span>30-Day Returns</span>
-          </div>
-        </div>
-      {% endif %}
-
+      {% if section.settings.show_trust_row %}<div class="footer__trust">{% for i in (1..3) %}{% assign key = 'benefit_' | append: i %}{% render 'store-benefit', record: section.settings[key] %}{% endfor %}</div>{% endif %}
       <div class="footer__bottom">
         {% if shop.enabled_payment_types.size > 0 %}
           {% if section.settings.show_payment_icons != false %}
@@ -208,8 +178,8 @@
 {% stylesheet %}
   .footer {
     display: grid;
-    border-top: 1px solid rgba(0, 229, 255, 0.14);
-    background: radial-gradient(circle at 12% 0%, rgba(0, 229, 255, 0.12), transparent 34rem),
+    border-top: 1px solid color-mix(in srgb, var(--theme-color-secondary) 14%, transparent);
+    background: radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-color-secondary) 12%, transparent), transparent 34rem),
       radial-gradient(circle at 88% 0%, rgba(255, 77, 166, 0.1), transparent 30rem),
       linear-gradient(180deg, rgba(2, 8, 20, 0.76), rgba(2, 8, 20, 0.98));
   }
@@ -252,7 +222,7 @@
   .footer__link:focus-visible,
   .footer__contact a:focus-visible,
   .footer__social-link:focus-visible {
-    outline: 2px solid rgba(0, 229, 255, 0.72);
+    outline: 2px solid color-mix(in srgb, var(--theme-color-secondary) 72%, transparent);
     outline-offset: 4px;
   }
 
@@ -261,7 +231,7 @@
   .footer__contact a:hover,
   .footer__social-link:hover {
     color: var(--theme-color-secondary);
-    text-shadow: 0 0 14px rgba(0, 229, 255, 0.18);
+    text-shadow: 0 0 14px color-mix(in srgb, var(--theme-color-secondary) 18%, transparent);
   }
 
   .footer__brand {
@@ -275,7 +245,7 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--theme-color-text);
-    text-shadow: 0 0 22px rgba(0, 229, 255, 0.16);
+    text-shadow: 0 0 22px color-mix(in srgb, var(--theme-color-secondary) 16%, transparent);
   }
 
   .footer__logo {
@@ -338,12 +308,12 @@
     justify-content: center;
     width: 2.65rem;
     height: 2.65rem;
-    border: 1px solid rgba(0, 229, 255, 0.24);
+    border: 1px solid color-mix(in srgb, var(--theme-color-secondary) 24%, transparent);
     border-radius: 12px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
+    background: linear-gradient(180deg, color-mix(in srgb, var(--theme-color-text) 5.5%, transparent), color-mix(in srgb, var(--theme-color-text) 1.8%, transparent));
     color: var(--theme-color-secondary);
     text-decoration: none;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 5%, transparent);
     transition: border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base),
       transform var(--transition-base);
   }
@@ -355,10 +325,10 @@
 
   .footer__social-link:hover,
   .footer__social-link:focus-visible {
-    border-color: rgba(0, 229, 255, 0.68);
+    border-color: color-mix(in srgb, var(--theme-color-secondary) 68%, transparent);
     color: var(--theme-color-accent);
-    box-shadow: 0 0 24px rgba(0, 229, 255, 0.18), 0 0 18px rgba(255, 77, 166, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--theme-color-secondary) 18%, transparent), 0 0 18px rgba(255, 77, 166, 0.12),
+      inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     transform: translateY(-1px) scale(1.05);
   }
 
@@ -385,11 +355,11 @@
 
   .footer__trust-item:hover {
     color: var(--theme-color-text);
-    background: rgba(255, 255, 255, 0.018);
+    background: color-mix(in srgb, var(--theme-color-text) 1.8%, transparent);
   }
 
   .footer__trust-item + .footer__trust-item {
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
   }
 
   .footer__trust-icon {
@@ -409,7 +379,7 @@
 
   .footer__trust-item:hover .footer__trust-icon {
     color: var(--theme-color-secondary);
-    filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.2));
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--theme-color-secondary) 20%, transparent));
     transform: translateY(-1px);
   }
 
@@ -419,7 +389,7 @@
     justify-content: space-between;
     gap: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     color: var(--theme-color-text-soft);
     font-size: 0.82rem;
   }
@@ -435,10 +405,10 @@
     width: 2.35rem;
     height: auto;
     padding: 0.18rem 0.28rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     border-radius: 0.35rem;
-    background: rgba(255, 255, 255, 0.055);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--theme-color-text) 5.5%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-color-text) 4%, transparent);
   }
 
   .footer__payment-text,
@@ -459,7 +429,7 @@
 
     .footer__trust-item + .footer__trust-item {
       border-left: 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     }
 
     .footer__bottom {
@@ -599,7 +569,122 @@
       "id": "copyright_text",
       "label": "Copyright text",
       "default": "© 2026 NoxRev. All rights reserved."
+    },
+    {
+      "type": "header",
+      "content": "Benefits"
+    },
+    {
+      "type": "select",
+      "id": "benefit_1",
+      "label": "Benefit 1",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "shipping",
+          "label": "Shipping"
+        },
+        {
+          "value": "guarantee",
+          "label": "Guarantee"
+        },
+        {
+          "value": "returns",
+          "label": "Returns"
+        }
+      ],
+      "default": "shipping"
+    },
+    {
+      "type": "select",
+      "id": "benefit_2",
+      "label": "Benefit 2",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "shipping",
+          "label": "Shipping"
+        },
+        {
+          "value": "guarantee",
+          "label": "Guarantee"
+        },
+        {
+          "value": "returns",
+          "label": "Returns"
+        }
+      ],
+      "default": "guarantee"
+    },
+    {
+      "type": "select",
+      "id": "benefit_3",
+      "label": "Benefit 3",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "shipping",
+          "label": "Shipping"
+        },
+        {
+          "value": "guarantee",
+          "label": "Guarantee"
+        },
+        {
+          "value": "returns",
+          "label": "Returns"
+        }
+      ],
+      "default": "returns"
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_width",
+      "label": "Mobile logo width",
+      "min": 60,
+      "max": 260,
+      "step": 4,
+      "unit": "px",
+      "default": 180
+    },
+    {
+      "type": "select",
+      "id": "footer_layout",
+      "label": "Footer layout",
+      "options": [
+        {
+          "value": "split",
+          "label": "Brand and menus"
+        },
+        {
+          "value": "stack",
+          "label": "Stacked"
+        }
+      ],
+      "default": "split"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
     }
   ]
 }
 {% endschema %}
+

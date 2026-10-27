@@ -1,16 +1,28 @@
-{% if section.settings.text != blank %}
-  <div class="announcement-bar{% if section.settings.show_secondary_on_mobile and section.settings.secondary_text != blank %} announcement-bar--secondary-mobile{% endif %}">
+{% style %}#shopify-section-{{ section.id }} .announcement-bar__inner{justify-content:{% case section.settings.alignment %}{% when 'center' %}center{% when 'right' %}flex-end{% else %}space-between{% endcase %}}{% endstyle %}
+{% liquid
+assign announcement_text = section.settings.text
+assign announcement_link = section.settings.link
+if section.settings.use_shared_shipping
+assign announcement_text = settings.global_shipping_trust_text
+assign announcement_link = settings.global_shipping_link
+if localization.country.iso_code != 'US' and settings.global_shipping_international != blank
+assign announcement_text = settings.global_shipping_international
+endif
+endif
+%}
+{% if announcement_text != blank %}
+  <div class="announcement-bar{% if section.settings.use_section_scheme %} color-{{ section.settings.color_scheme }}{% endif %}{% if section.settings.show_secondary_on_mobile and section.settings.secondary_text != blank %} announcement-bar--secondary-mobile{% endif %}">
     <div class="announcement-bar__inner container">
       <div class="announcement-bar__primary">
-        {% if section.settings.link != blank %}
-          <a class="announcement-bar__link" href="{{ section.settings.link }}">
+        {% if announcement_link != blank %}
+          <a class="announcement-bar__link" href="{{ announcement_link }}">
             <span class="announcement-bar__dot"></span>
-            <span>{{ section.settings.text | escape }}</span>
+            <span>{{ announcement_text | escape }}</span>
           </a>
         {% else %}
           <p class="announcement-bar__text">
             <span class="announcement-bar__dot"></span>
-            <span>{{ section.settings.text | escape }}</span>
+            <span>{{ announcement_text | escape }}</span>
           </p>
         {% endif %}
       </div>
@@ -38,7 +50,7 @@
     position: relative;
     top: auto;
     z-index: auto;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid color-mix(in srgb, var(--theme-color-text) 8%, transparent);
     background: transparent;
     color: var(--theme-color-text-muted);
     backdrop-filter: blur(0);
@@ -107,7 +119,7 @@
     height: 0.45rem;
     border-radius: 999px;
     background: var(--theme-color-primary);
-    box-shadow: 0 0 14px rgba(0, 255, 176, 0.65);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--theme-color-primary) 65%, transparent);
     flex: 0 0 auto;
   }
 
@@ -170,7 +182,46 @@
       "id": "show_secondary_on_mobile",
       "label": "Show secondary message on mobile",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "use_shared_shipping",
+      "label": "Use shared shipping promise",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_section_scheme",
+      "label": "Use color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
     }
   ]
 }
 {% endschema %}
+
