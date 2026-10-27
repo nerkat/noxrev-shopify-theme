@@ -161,7 +161,7 @@ endif
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-size: 0.76rem;
+    font-size: calc(0.76rem * var(--body-scale, 1));
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -176,7 +176,7 @@ endif
     color: #ff4da6;
     -webkit-text-fill-color: transparent;
     font-family: var(--theme-font-display);
-    font-size: clamp(3rem, 16vw, 5.6rem);
+    font-size: calc(clamp(3rem, 16vw, 5.6rem) * var(--heading-scale, 1));
     font-weight: 800;
     line-height: 0.92;
     letter-spacing: -0.055em;
@@ -187,7 +187,7 @@ endif
     max-width: 37rem;
     margin: 1rem 0 0;
     color: color-mix(in srgb, var(--theme-color-text) 78%, transparent);
-    font-size: 1rem;
+    font-size: calc(1rem * var(--body-scale, 1));
     line-height: 1.55;
   }
 
@@ -244,7 +244,7 @@ endif
     min-width: 0;
     margin: 0;
     color: var(--theme-color-text);
-    font-size: 0.95rem;
+    font-size: calc(0.95rem * var(--heading-scale, 1));
     line-height: 1.2;
     overflow-wrap: normal;
     word-break: normal;
@@ -254,7 +254,7 @@ endif
     grid-column: 1 / -1;
     margin: 0.25rem 0 0;
     color: color-mix(in srgb, var(--theme-color-text) 68%, transparent);
-    font-size: 0.82rem;
+    font-size: calc(0.82rem * var(--body-scale, 1));
     line-height: 1.4;
   }
 
@@ -343,7 +343,7 @@ endif
     margin: 0;
     color: var(--theme-color-text);
     font-family: var(--theme-font-display);
-    font-size: 1.4rem;
+    font-size: calc(1.4rem * var(--heading-scale, 1));
     line-height: 1.08;
   }
 
