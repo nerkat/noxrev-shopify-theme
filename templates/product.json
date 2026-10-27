@@ -11,7 +11,11 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": {},
+      "settings": {
+        "selector_style": "columns",
+        "gallery_desktop_navigation": "thumbnails",
+        "gallery_zoom": true
+      },
       "blocks": {
         "title": {
           "type": "title",
@@ -40,8 +44,8 @@
       },
       "block_order": [
         "title",
-        "variant_picker",
         "price",
+        "variant_picker",
         "quantity",
         "purchase_buttons",
         "trust"
