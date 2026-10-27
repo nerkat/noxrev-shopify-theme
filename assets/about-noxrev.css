@@ -35,12 +35,12 @@
 
 .about-noxrev__title {
   max-width: 12ch;
-  font-size: clamp(3rem, 12vw, 6.2rem);
+  font-size: calc(clamp(3rem, 12vw, 6.2rem) * var(--heading-scale, 1));
 }
 
 .about-noxrev__heading {
   max-width: 13ch;
-  font-size: clamp(2.3rem, 7vw, 4.6rem);
+  font-size: calc(clamp(2.3rem, 7vw, 4.6rem) * var(--heading-scale, 1));
 }
 
 .about-noxrev__text,
@@ -171,7 +171,7 @@
   color: #ff4da6;
   -webkit-text-fill-color: transparent;
   font-family: var(--theme-font-display);
-  font-size: clamp(2rem, 8vw, 3.6rem);
+  font-size: calc(clamp(2rem, 8vw, 3.6rem) * var(--body-scale, 1));
   line-height: 0.95;
   letter-spacing: -0.05em;
 }
@@ -191,7 +191,7 @@
   margin: 0;
   color: var(--theme-color-text);
   font-family: var(--theme-font-display);
-  font-size: clamp(2rem, 8vw, 4.5rem);
+  font-size: calc(clamp(2rem, 8vw, 4.5rem) * var(--body-scale, 1));
   line-height: 1;
   letter-spacing: -0.045em;
 }

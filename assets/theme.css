@@ -297,7 +297,7 @@ html {
 }
 
 .button__icon {
-  font-size: 0.95em;
+  font-size: calc(0.95em * var(--body-scale, 1));
   line-height: 1;
 }
 

@@ -11,7 +11,7 @@
     .main-product__title {
       margin: 0;
       font-family: var(--theme-font-display);
-      font-size: clamp(2.1rem, 8vw, 4.75rem);
+      font-size: calc(clamp(2.1rem, 8vw, 4.75rem) * var(--heading-scale, 1));
       font-weight: 600;
       line-height: 0.96;
       letter-spacing: -0.035em;
@@ -226,7 +226,7 @@
 
     .main-product__price {
       margin: 0;
-      font-size: clamp(1.6rem, 4.9vw, 2.2rem);
+      font-size: calc(clamp(1.6rem, 4.9vw, 2.2rem) * var(--body-scale, 1));
       font-weight: 500;
       line-height: 1;
       letter-spacing: -0.03em;
@@ -405,7 +405,7 @@
       bottom: 0.7rem;
       z-index: 2;
       font-family: var(--theme-font-display);
-      font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+      font-size: calc(clamp(0.9rem, 1.8vw, 1.2rem) * var(--body-scale, 1));
       font-weight: 600;
       line-height: 1;
       letter-spacing: -0.03em;
@@ -875,7 +875,7 @@
 
     .main-product__details-title {
       margin-bottom: 1rem;
-      font-size: clamp(1.35rem, 2vw, 1.75rem);
+      font-size: calc(clamp(1.35rem, 2vw, 1.75rem) * var(--body-scale, 1));
     }
 
     @media (min-width: 861px) {
@@ -901,7 +901,7 @@
       }
 
       .main-product__title {
-        font-size: clamp(2.4rem, 4.6vw, 4.2rem);
+        font-size: calc(clamp(2.4rem, 4.6vw, 4.2rem) * var(--heading-scale, 1));
       }
 
       .main-product__gallery-nav {

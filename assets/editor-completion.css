@@ -17,10 +17,10 @@
 .main-product__model-selector[data-selector-style="columns"] .main-product__model-panel-inner {padding:.5rem;}
 .main-product__model-selector[data-selector-style="columns"] .main-product__model-list {display:block;}
 .main-product__model-selector[data-selector-style="columns"] .main-product__model-link {padding:.6rem .25rem;}
-.main-product__model-selector[data-selector-style="columns"] .main-product__model-name {font-size:.78rem;}
-.main-product__model-selector[data-selector-style="columns"] .main-product__model-tab-title {font-size:.9rem;}
+.main-product__model-selector[data-selector-style="columns"] .main-product__model-name {font-size: calc(.78rem * var(--body-scale, 1));}
+.main-product__model-selector[data-selector-style="columns"] .main-product__model-tab-title {font-size: calc(.9rem * var(--body-scale, 1));}
 .main-product__trust-cues { display:flex; flex-wrap:wrap; gap:1rem; }
-.store-benefit { display:flex; align-items:flex-start; gap:.5rem; font-size:.8rem; color:var(--theme-color-text-muted); }
+.store-benefit { display:flex; align-items:flex-start; gap:.5rem; font-size: calc(.8rem * var(--body-scale, 1)); color:var(--theme-color-text-muted); }
 .store-benefit__icon {width:24px;height:24px;flex-shrink:0;}
 .store-benefit__icon svg,.store-benefit__icon img {width:100%;height:100%;object-fit:contain;}
 .store-benefit p {margin:.3rem 0 0;}
