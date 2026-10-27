@@ -49,7 +49,7 @@
   color: #ff4da6;
   -webkit-text-fill-color: transparent;
   font-family: var(--theme-font-display);
-  font-size: clamp(3rem, 16vw, 5.6rem);
+  font-size: calc(clamp(3rem, 16vw, 5.6rem) * var(--heading-scale, 1));
   font-weight: 800;
   line-height: .92;
   letter-spacing: -.055em;
@@ -67,7 +67,7 @@
 .catalog-search__supporting-text {
   max-width: 48rem;
   color: var(--theme-color-text-muted);
-  font-size: clamp(1rem, 2vw, 1.12rem);
+  font-size: calc(clamp(1rem, 2vw, 1.12rem) * var(--body-scale, 1));
   line-height: 1.65;
 }
 
@@ -141,7 +141,7 @@
   background: transparent;
   color: var(--theme-color-text);
   font: inherit;
-  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  font-size: calc(clamp(1rem, 2.2vw, 1.2rem) * var(--body-scale, 1));
   appearance: none;
 }
 
@@ -220,7 +220,7 @@
   margin: 0;
   color: var(--theme-color-text);
   font-family: var(--theme-font-display);
-  font-size: clamp(1.55rem, 4vw, 2.35rem);
+  font-size: calc(clamp(1.55rem, 4vw, 2.35rem) * var(--body-scale, 1));
   font-weight: 700;
   letter-spacing: -0.035em;
 }
@@ -304,7 +304,7 @@
     color-mix(in srgb, var(--theme-color-text) 2.5%, transparent);
   color: color-mix(in srgb, var(--theme-color-text) 35%, transparent);
   font-family: var(--theme-font-display);
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-size: calc(clamp(2.5rem, 8vw, 4.5rem) * var(--body-scale, 1));
   font-weight: 800;
 }
 
@@ -476,7 +476,7 @@
 
 .catalog-search--header .catalog-search__title,
 .catalog-search--section .catalog-search__title {
-  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-size: calc(clamp(2rem, 5vw, 3.4rem) * var(--heading-scale, 1));
 }
 
 .catalog-search-section {
@@ -731,7 +731,7 @@
 }
 
 .catalog-search--header .catalog-search__title {
-  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-size: calc(clamp(1.45rem, 3vw, 2rem) * var(--heading-scale, 1));
   line-height: 1;
   letter-spacing: -0.035em;
 }
