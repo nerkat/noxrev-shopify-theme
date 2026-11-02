@@ -24,7 +24,7 @@
           "type": "purchase_buttons",
           "settings": {
             "show_buy_now": true,
-            "button_layout": "row"
+            "button_layout": "stack"
           }
         },
         "variant_picker": {
