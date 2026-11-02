@@ -11,52 +11,85 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": {},
       "blocks": {
         "title": {
           "type": "title",
-          "settings": {}
-        },
-        "variant_picker": {
-          "type": "variant_picker",
           "settings": {}
         },
         "price": {
           "type": "price",
           "settings": {}
         },
+        "purchase_buttons": {
+          "type": "purchase_buttons",
+          "settings": {
+            "show_buy_now": true,
+            "button_layout": "row"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {}
+        },
         "quantity": {
           "type": "quantity",
           "settings": {}
         },
-        "purchase_buttons": {
-          "type": "purchase_buttons",
-          "settings": {}
-        },
         "trust": {
           "type": "trust",
-          "settings": {}
+          "settings": {
+            "benefit_1": "shipping",
+            "benefit_2": "guarantee",
+            "benefit_3": "returns"
+          }
         }
       },
       "block_order": [
         "title",
-        "variant_picker",
         "price",
-        "quantity",
         "purchase_buttons",
+        "variant_picker",
+        "quantity",
         "trust"
-      ]
+      ],
+      "settings": {
+        "show_product_description": false,
+        "gallery_image_fit": "cover",
+        "show_trust_cues": true,
+        "inherit_global_trust_cues": true,
+        "shipping_trust_text": "",
+        "guarantee_trust_text": "",
+        "returns_trust_text": "",
+        "selector_style": "tabs",
+        "model_guide_label": "Find your iPad model",
+        "model_help_label": "Help me identify my model",
+        "gallery_width": 50,
+        "gallery_ratio": "auto",
+        "gallery_desktop_navigation": "dots",
+        "gallery_mobile_navigation": "dots",
+        "gallery_zoom": false,
+        "variant_media": true
+      }
     },
     "product_reviews_rating": {
       "type": "product-reviews-rating",
       "settings": {
         "show_reviews_rating_section": true,
+        "show_rating_summary": true,
         "eyebrow": "Customer Reviews",
         "title": "Trusted by real customers.",
+        "widget_eyebrow": "All Reviews",
+        "widget_title": "What customers are saying",
         "write_button_label": "Write A Review",
         "write_button_link": "",
         "button_label": "View All Reviews",
-        "button_link": ""
+        "button_link": "",
+        "close_button_label": "Close",
+        "subtitle": "",
+        "show_count": true,
+        "show_histogram": true,
+        "show_actions": true,
+        "empty_state": "No reviews yet."
       }
     },
     "product_accessory_bundle": {
@@ -66,6 +99,7 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-pencil",
+            "display_title": "",
             "image_alt": "NoxRev Precision Stylus for iPad",
             "title": "NoxRev Precision Stylus",
             "text": "Tilt sensitivity. Palm rejection. Pixel-perfect control.",
@@ -82,6 +116,7 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-mouse",
+            "display_title": "",
             "image_alt": "NoxRev Wireless Mouse for an iPad setup",
             "title": "NoxRev Wireless Mouse",
             "text": "Ultra-smooth tracking. Silent clicks. All-day comfort.",
@@ -98,6 +133,7 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-case",
+            "display_title": "",
             "image_alt": "NoxRev Urban Sleeve for iPad",
             "title": "NoxRev Urban Sleeve",
             "text": "Premium protection. Slim profile. Built for life on the move.",
@@ -114,6 +150,7 @@
           "type": "accessory",
           "settings": {
             "product": "txp1-charger",
+            "display_title": "",
             "image_alt": "NOXREV charger",
             "title": "NoxRev USB-C Cable",
             "text": "65W GaN Fast Charging. Runs cooler with greater efficiency in a smaller charger.",
@@ -130,6 +167,7 @@
           "type": "accessory",
           "settings": {
             "product": "tpx1-cable",
+            "display_title": "",
             "image_alt": "NOXREV USB-C cable",
             "title": "NoxRev Precision Stylus",
             "text": "",
@@ -155,7 +193,24 @@
         "title": "Bundle with accessories and save more.",
         "text": "Level up your setup with hand-picked accessories built to protect, power, and perform anywhere.",
         "pill_label": "Bundle & Save",
-        "pill_text": "Save up to 20% when you bundle."
+        "pill_text": "Save up to 20% when you bundle.",
+        "layout_width": "inherit",
+        "layout_alignment": "inherit",
+        "custom_spacing": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "use_section_scheme": false,
+        "color_scheme": "",
+        "device_visibility": "both",
+        "layout_gap": 0,
+        "layout_columns": "inherit",
+        "layout_mobile_columns": "inherit",
+        "layout_media_fit": "inherit",
+        "layout_media_ratio": "inherit",
+        "layout_media_order": "inherit",
+        "layout_media_order_mobile": "inherit"
       }
     },
     "product_real_life_videos": {
@@ -231,13 +286,36 @@
         "video_card_JCahVH"
       ],
       "settings": {
+        "video_fit": "cover",
         "eyebrow": "Real People. Real Setups.",
         "title": "See It In Real Life",
         "text": "Few quick videos showing how people actually use NoxRev.",
         "stat_text": "100,487+ Happy Users",
         "cta_label": "View More Real Setups",
         "cta_url": "",
-        "show_social_proof": false
+        "layout_width": "inherit",
+        "layout_alignment": "inherit",
+        "custom_spacing": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "use_section_scheme": false,
+        "color_scheme": "",
+        "device_visibility": "both",
+        "video_autoplay": false,
+        "video_muted": true,
+        "video_loop": false,
+        "video_controls": true,
+        "show_duration": true,
+        "show_social_proof": false,
+        "video_layout": "slider",
+        "video_columns": 4,
+        "video_ratio": "0.5625",
+        "layout_media_fit": "inherit",
+        "layout_media_ratio": "inherit",
+        "layout_media_order": "inherit",
+        "layout_media_order_mobile": "inherit"
       }
     },
     "product_mode_showcase": {
@@ -283,7 +361,21 @@
         "title": "One Case. Every Angle. Endless Possibilities.",
         "text": "Rotate, flip, and adjust with ease. Whether you're working, creating, or streaming, find the perfect angle for every task.",
         "image": "shopify://shop_images/7_Unique_Modes_2_1_5831c898-f9c3-4efd-8dcd-7ce2fc4c1925.jpg",
-        "image_alt": "Keyboard case shown in multiple modes"
+        "image_alt": "Keyboard case shown in multiple modes",
+        "layout_width": "inherit",
+        "layout_alignment": "inherit",
+        "custom_spacing": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "use_section_scheme": false,
+        "color_scheme": "",
+        "device_visibility": "both",
+        "layout_media_fit": "inherit",
+        "layout_media_ratio": "inherit",
+        "layout_media_order": "inherit",
+        "layout_media_order_mobile": "inherit"
       }
     },
     "product_battery_showcase": {
@@ -304,7 +396,21 @@
         "primary_percent": 100,
         "secondary_label": "Others",
         "secondary_value": "7 Days",
-        "secondary_percent": 24
+        "secondary_percent": 24,
+        "layout_width": "inherit",
+        "layout_alignment": "inherit",
+        "custom_spacing": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "use_section_scheme": false,
+        "color_scheme": "",
+        "device_visibility": "both",
+        "layout_media_fit": "inherit",
+        "layout_media_ratio": "inherit",
+        "layout_media_order": "inherit",
+        "layout_media_order_mobile": "inherit"
       }
     },
     "product_feature_detail_grid": {
@@ -357,7 +463,25 @@
         "detail_mute",
         "detail_charge"
       ],
-      "settings": {}
+      "settings": {
+        "layout_width": "inherit",
+        "layout_alignment": "inherit",
+        "custom_spacing": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "use_section_scheme": false,
+        "color_scheme": "",
+        "device_visibility": "both",
+        "layout_gap": 0,
+        "layout_columns": "inherit",
+        "layout_mobile_columns": "inherit",
+        "layout_media_fit": "inherit",
+        "layout_media_ratio": "inherit",
+        "layout_media_order": "inherit",
+        "layout_media_order_mobile": "inherit"
+      }
     },
     "product_unique_modes_strip": {
       "type": "product-unique-modes-strip",
@@ -431,7 +555,19 @@
       "disabled": true,
       "settings": {
         "title": "7 Unique Modes",
-        "text": "360 swivel. 180 flip. Infinite possibilities."
+        "text": "360 swivel. 180 flip. Infinite possibilities.",
+        "layout_width": "inherit",
+        "layout_alignment": "inherit",
+        "custom_spacing": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "use_section_scheme": false,
+        "color_scheme": "",
+        "device_visibility": "both",
+        "layout_media_fit": "inherit",
+        "layout_media_ratio": "inherit"
       }
     },
     "product_typing_feature": {
@@ -477,7 +613,22 @@
         "title": "Built For Speed, Accuracy, And Comfort.",
         "text": "Scissor-switch keys, responsive tracking pad, and smart gestures built for speed, accuracy, and comfort.",
         "image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_02_05_30_PM.png",
-        "image_alt": "Hands typing on keyboard case"
+        "image_alt": "Hands typing on keyboard case",
+        "layout_width": "inherit",
+        "layout_alignment": "inherit",
+        "custom_spacing": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "use_section_scheme": false,
+        "color_scheme": "",
+        "device_visibility": "both",
+        "paired_feature": "left",
+        "layout_media_fit": "inherit",
+        "layout_media_ratio": "inherit",
+        "layout_media_order": "inherit",
+        "layout_media_order_mobile": "inherit"
       }
     },
     "product_precision_feature": {
@@ -531,7 +682,22 @@
         "title": "Trackpad Gestures That Feel Natural.",
         "text": "The precision trackpad supports all the multi-touch gestures you already know.",
         "image": "shopify://shop_images/ChatGPT_Image_Jul_1_2026_01_54_11_PM_1.jpg",
-        "image_alt": "Close-up of precision trackpad and keyboard"
+        "image_alt": "Close-up of precision trackpad and keyboard",
+        "layout_width": "inherit",
+        "layout_alignment": "inherit",
+        "custom_spacing": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "use_section_scheme": false,
+        "color_scheme": "",
+        "device_visibility": "both",
+        "paired_feature": "right",
+        "layout_media_fit": "inherit",
+        "layout_media_ratio": "inherit",
+        "layout_media_order": "inherit",
+        "layout_media_order_mobile": "inherit"
       }
     },
     "product_feature_icon_strip": {
@@ -585,7 +751,18 @@
         "strip_magnet",
         "strip_materials"
       ],
-      "settings": {}
+      "settings": {
+        "layout_width": "inherit",
+        "layout_alignment": "inherit",
+        "custom_spacing": false,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "use_section_scheme": false,
+        "color_scheme": "",
+        "device_visibility": "both"
+      }
     },
     "1783425997ca25e2c8": {
       "type": "apps",
